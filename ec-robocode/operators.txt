@@ -1,0 +1,27 @@
+functions:
+
+  turnRight
+  turnLeft
+  forward
+  backward
+  doneMoving
+
+  turnRadarRight
+  turnRadarLeft
+  doneRotatingRadar
+  
+  turnGunRight
+  turnGunLeft
+  centerGun
+  doneRotatingGun
+
+  lookAt
+
+  findEnemy
+  lookAtEnemy
+  trackEnemy
+  fire
+
+terminals?:
+
+  enemyAt

@@ -1,0 +1,235 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\begin_preamble
+\author{Ronald Bowers \& Jason Owens}
+\title{Coevolution of Human-Competitive Robocode Tanks Using Genetic Programming with Exogenous Fitness}
+\end_preamble
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 2
+\papersides 1
+\paperpagestyle default
+
+\layout Standard
+
+
+\begin_inset ERT
+status Collapsed
+
+\layout Standard
+
+\backslash 
+maketitle
+\end_inset 
+
+
+\layout Section
+
+Background
+\layout Section
+
+Abstract
+\layout Section
+
+Introduction 
+\layout Standard
+
+Coevolution appears to be a useful way of evolving game-playing agents.
+ Historically, not often successful in games where there is a cost to taking
+ action, or risk One issue that has consistently hindered the use of coevolution
+ in the development of combat game playing agents is that of the "mediocre
+ steady-state" [Ben-Gurion Guys], [Pollack], [Sheppard].
+ The "mediocre steady state" is a state where the population consists of
+ members who do absolutely nothing.
+ This phenemonen occurs because the...
+\layout Standard
+
+As was pointed out in [W/S], this phenomenon has been documented to occur
+ in real life - wwi story [are we gonna look up the reference for this?].
+ Interestingly, no such corollary could be found in WWII.
+ A reasonable theory as to why this might be the case is that the nature
+ of the conflicts, and thus the motivations of the soldiers who fought in
+ them were different.
+ In WWI, the war was an outgrowth of issues within the European aristocracy.
+ The common soldier saw no great need to win the war, nor did they have
+ any great fear of losing.
+ Survival was their primary concern.
+ On the other hand, WWII presented the Allied soldier with a 
+\layout Section
+
+Hypothesis
+\layout Standard
+
+We hypothesize that using GP and coevolution, and by applying an exogenous
+ fitness function based on victories, we can evolve Robocode players that
+ can compete successfully against the best human-designed robots.
+ So, the exogenous[?]
+\layout Section
+
+Related Work
+\layout Standard
+
+GP of game-players 
+\layout Standard
+
+Coevolution of game-players 
+\layout Standard
+
+Mediocre steady-state.
+ 
+\layout Standard
+
+Exogenous fitness as a motivator - overcoming the mediocre steady state.
+ 
+\layout Standard
+
+"Arms Race" 
+\layout Standard
+
+Previous robocode research 
+\layout Section
+
+Approach 
+\layout Standard
+
+"Forest of GP trees" 
+\layout Standard
+
+Each tree corresponding to one of the events that a robot listens for.
+ 
+\layout Subsection
+
+Examples 
+\layout Standard
+
+An additional tree will be generated for the main loop and the initialization
+ step.
+ Each event handler has different information available to it.
+ Therefore, the programs that are built for each handler have different
+ grammars.
+ The operators will be the set of methods that a Robocode robot has.
+ We might introduce some macro-operations...
+ 
+\layout Subsection
+
+Functions 
+\layout Enumerate
+
+turnRight
+\layout Enumerate
+
+turnLeft
+\layout Enumerate
+
+forward
+\layout Enumerate
+
+backward
+\layout Enumerate
+
+doneMoving
+\layout Enumerate
+
+turnRadarRight
+\layout Enumerate
+
+turnRadarLeft
+\layout Enumerate
+
+doneRotatingRadar
+\layout Enumerate
+
+turnGunRight
+\layout Enumerate
+
+turnGunLeft
+\layout Enumerate
+
+centerGun
+\layout Enumerate
+
+doneRotatingGun
+\layout Enumerate
+
+findEnemy
+\layout Enumerate
+
+lookAtEnemy
+\layout Enumerate
+
+trackEnemy
+\layout Enumerate
+
+fire 
+\layout Standard
+
+Require a Strongly-typed tree.
+ 
+\layout Standard
+
+Generating and executing the trees.
+ 
+\layout Standard
+
+Perfectly valid that a robot fight itself.
+ 
+\layout Standard
+
+Selection 
+\layout Standard
+
+Cross-over 
+\layout Standard
+
+Mutation.
+ Probably is a valid operator since it is unlikely that all valid operations
+ will exist in the initial population.
+ Will likely consist of random selection of an operator in the tree and
+ swapping it with a randomly selected type-compatible operator 
+\layout Subsection
+
+Execution environment 
+\layout Standard
+
+The battles can be fought in parallel and the results accumulated to enable
+ the next round of selection and reproduction.
+ Robocode will be slightly modified to enable it to consume battle specification
+s from a JavaSpace.
+ The results of the battle will then be posted back to the space.
+ This will enable us to use multiple computers fight the battles and evalute
+ the fitness.
+ If time permits, a control test will be run without...
+\layout Section
+
+Results
+\layout Standard
+
+We plan to collect the following results.
+ 
+\layout Standard
+
+
+\begin_inset LatexCommand \BibTeX[plain]{,refs}
+
+\end_inset 
+
+
+\the_end

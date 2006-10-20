@@ -1,5 +1,7 @@
-#LyX 1.3 created this file. For more info see http://www.lyx.org/
-\lyxformat 221
+#LyX 1.4.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 245
+\begin_document
+\begin_header
 \textclass article
 \begin_preamble
 \author{Ronald Bowers \& Jason Owens}
@@ -7,51 +9,60 @@
 \end_preamble
 \language english
 \inputencoding auto
-\fontscheme default
+\fontscheme ae
 \graphics default
 \paperfontsize default
-\spacing single 
-\papersize Default
-\paperpackage a4
-\use_geometry 0
-\use_amsmath 0
-\use_natbib 0
-\use_numerical_citations 0
+\spacing single
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\cite_engine basic
+\use_bibtopic false
 \paperorientation portrait
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
 \defskip medskip
 \quotes_language english
-\quotes_times 2
 \papercolumns 2
 \papersides 1
 \paperpagestyle default
+\tracking_changes true
+\output_changes true
+\author "Jason L Owens" 
+\end_header
 
-\layout Standard
+\begin_body
 
-
+\begin_layout Standard
 \begin_inset ERT
-status Collapsed
+status collapsed
 
-\layout Standard
+\begin_layout Standard
 
-\backslash 
+
+\backslash
 maketitle
-\end_inset 
+\end_layout
+
+\end_inset
 
 
-\layout Section
+\end_layout
 
+\begin_layout Section
 Background
-\layout Section
+\end_layout
 
+\begin_layout Section
 Abstract
-\layout Section
+\end_layout
 
+\begin_layout Section
 Introduction 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Coevolution appears to be a useful way of evolving game-playing agents.
  Historically, not often successful in games where there is a cost to taking
  action, or risk One issue that has consistently hindered the use of coevolution
@@ -60,8 +71,9 @@ Coevolution appears to be a useful way of evolving game-playing agents.
  The "mediocre steady state" is a state where the population consists of
  members who do absolutely nothing.
  This phenemonen occurs because the...
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 As was pointed out in [W/S], this phenomenon has been documented to occur
  in real life - wwi story [are we gonna look up the reference for this?].
  Interestingly, no such corollary could be found in WWII.
@@ -73,53 +85,135 @@ As was pointed out in [W/S], this phenomenon has been documented to occur
  any great fear of losing.
  Survival was their primary concern.
  On the other hand, WWII presented the Allied soldier with a 
-\layout Section
+\end_layout
 
+\begin_layout Section
 Hypothesis
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 We hypothesize that using GP and coevolution, and by applying an exogenous
  fitness function based on victories, we can evolve Robocode players that
  can compete successfully against the best human-designed robots.
  So, the exogenous[?]
-\layout Section
+\end_layout
 
+\begin_layout Section
 Related Work
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 GP of game-players 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Coevolution of game-players 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Mediocre steady-state.
  
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Exogenous fitness as a motivator - overcoming the mediocre steady state.
  
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 "Arms Race" 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Previous robocode research 
-\layout Section
+\end_layout
 
-Approach 
-\layout Standard
+\begin_layout Section
+Approach
+\end_layout
 
+\begin_layout Standard
+Ignoring the warnings of others, we plan to carry through and explore the
+ experiment using genetic programming and coevolution in this rather 
+\begin_inset Quotes eld
+\end_inset
+
+open-ended
+\begin_inset Quotes erd
+\end_inset
+
+ domain.
+ 
+\change_inserted 0 1161317719
+Previous research in evolving Robocode agents reported failure when pursuing
+ a coevolutionary model, and thus they resorted to training against known
+ quantities 
+\begin_inset LatexCommand \cite{Eisenstein:2003wd,Shichel:2005eu}
+
+\end_inset
+
+.
+ However, in doing this, the danger of evolving specialized players unable
+ to handle generalized situations (i.e.
+ new players with different tactics) is increased; in fact, [one of them
+ mentions this].
+ From our point of view, coevolution is obviously more exciting; we believe
+ that the lack of an appropriate exogenous fitness function is the primary
+ reason the previous ventures failed during coevolution.
+ As 
+\begin_inset LatexCommand \cite{ficici98challenges}
+
+\end_inset
+
+ states: 
+\begin_inset Quotes eld
+\end_inset
+
+[t]he key to successful coevolutionary learning is a competitive arms race
+ between opposed participants.
+ Competitors must be well-matched in skill to force each other to improve.
+\begin_inset Quotes erd
+\end_inset
+
+ We would like to add that competitors must also be sufficiently 
+\emph on
+motivated
+\emph default
+ in order to avoid the mediocre stable-states common to coevolution 
+\begin_inset LatexCommand \cite{angeline93competitive,ficici98challenges}
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+As discussed in 
+\begin_inset LatexCommand \cite{Luke:2002fk}
+
+\end_inset
+
+
+\change_inserted 0 1161317719
+, 
+\change_unchanged
+
+\end_layout
+
+\begin_layout Standard
 "Forest of GP trees" 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Each tree corresponding to one of the events that a robot listens for.
  
-\layout Subsection
+\end_layout
 
+\begin_layout Subsection
 Examples 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 An additional tree will be generated for the main loop and the initialization
  step.
  Each event handler has different information available to it.
@@ -128,87 +222,118 @@ An additional tree will be generated for the main loop and the initialization
  The operators will be the set of methods that a Robocode robot has.
  We might introduce some macro-operations...
  
-\layout Subsection
+\end_layout
 
+\begin_layout Subsection
+
+\change_deleted 0 1161317719
 Functions 
-\layout Enumerate
+\change_inserted 0 1161317719
+Non-terminals
+\change_unchanged
 
+\end_layout
+
+\begin_layout Enumerate
 turnRight
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 turnLeft
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 forward
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 backward
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 doneMoving
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 turnRadarRight
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 turnRadarLeft
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 doneRotatingRadar
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 turnGunRight
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 turnGunLeft
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 centerGun
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 doneRotatingGun
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 findEnemy
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 lookAtEnemy
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 trackEnemy
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 fire 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Require a Strongly-typed tree.
  
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Generating and executing the trees.
  
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Perfectly valid that a robot fight itself.
  
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Selection 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Cross-over 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Mutation.
  Probably is a valid operator since it is unlikely that all valid operations
  will exist in the initial population.
  Will likely consist of random selection of an operator in the tree and
  swapping it with a randomly selected type-compatible operator 
-\layout Subsection
+\end_layout
 
+\begin_layout Subsection
 Execution environment 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 The battles can be fought in parallel and the results accumulated to enable
  the next round of selection and reproduction.
  Robocode will be slightly modified to enable it to consume battle specification
@@ -217,19 +342,24 @@ s from a JavaSpace.
  This will enable us to use multiple computers fight the battles and evalute
  the fitness.
  If time permits, a control test will be run without...
-\layout Section
+\end_layout
 
+\begin_layout Section
 Results
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 We plan to collect the following results.
  
-\layout Standard
+\end_layout
+
+\begin_layout Standard
+\begin_inset LatexCommand \bibtex[plain]{refs}
+
+\end_inset
 
 
-\begin_inset LatexCommand \BibTeX[plain]{,refs}
+\end_layout
 
-\end_inset 
-
-
-\the_end
+\end_body
+\end_document

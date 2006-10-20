@@ -1,0 +1,24 @@
+Face Localizer
+--------------
+
+Goal: derive a GP that can determine the existence and location
+(i.e. the bounding box of) a human face in an image.
+
+Programming Environment: Java. Issue of GP representation.
+
+Decisions:
+
+  Representation
+    grammar? (ELF, TAG?)
+    operators - whoo boy.
+      standard ones ?
+
+    output: set of rectangles, possibly empty
+
+  Selection
+  
+  Crossover/Mutation
+
+  Population Size
+
+  Fitness

@@ -1,7 +1,5 @@
-#LyX 1.4.3 created this file. For more info see http://www.lyx.org/
-\lyxformat 245
-\begin_document
-\begin_header
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
 \textclass article
 \begin_preamble
 \author{Ronald Bowers \& Jason Owens}
@@ -12,145 +10,206 @@
 \fontscheme ae
 \graphics default
 \paperfontsize default
-\spacing single
-\papersize default
-\use_geometry false
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
 \use_amsmath 1
-\cite_engine basic
-\use_bibtopic false
+\use_natbib 0
+\use_numerical_citations 0
 \paperorientation portrait
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
 \defskip medskip
 \quotes_language english
+\quotes_times 2
 \papercolumns 2
 \papersides 1
 \paperpagestyle default
-\tracking_changes true
-\output_changes true
-\author "Jason L Owens" 
-\end_header
 
-\begin_body
+\layout Standard
 
-\begin_layout Standard
+
 \begin_inset ERT
-status collapsed
+status Collapsed
 
-\begin_layout Standard
+\layout Standard
 
-
-\backslash
+\backslash 
 maketitle
-\end_layout
-
-\end_inset
+\end_inset 
 
 
-\end_layout
+\layout Section
 
-\begin_layout Section
-Background
-\end_layout
-
-\begin_layout Section
-Abstract
-\end_layout
-
-\begin_layout Section
 Introduction 
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 Coevolution appears to be a useful way of evolving game-playing agents.
  Historically, not often successful in games where there is a cost to taking
  action, or risk One issue that has consistently hindered the use of coevolution
  in the development of combat game playing agents is that of the "mediocre
  steady-state" [Ben-Gurion Guys], [Pollack], [Sheppard].
- The "mediocre steady state" is a state where the population consists of
+ The "mediocre stable state" is a state where the population consists of
  members who do absolutely nothing.
  This phenemonen occurs because the...
-\end_layout
+\layout Section
 
-\begin_layout Standard
-As was pointed out in [W/S], this phenomenon has been documented to occur
- in real life - wwi story [are we gonna look up the reference for this?].
- Interestingly, no such corollary could be found in WWII.
- A reasonable theory as to why this might be the case is that the nature
- of the conflicts, and thus the motivations of the soldiers who fought in
- them were different.
- In WWI, the war was an outgrowth of issues within the European aristocracy.
- The common soldier saw no great need to win the war, nor did they have
- any great fear of losing.
- Survival was their primary concern.
- On the other hand, WWII presented the Allied soldier with a 
-\end_layout
-
-\begin_layout Section
 Hypothesis
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 We hypothesize that using GP and coevolution, and by applying an exogenous
  fitness function based on victories, we can evolve Robocode players that
  can compete successfully against the best human-designed robots.
  So, the exogenous[?]
-\end_layout
+\layout Section
 
-\begin_layout Section
 Related Work
-\end_layout
+\layout Subsection
 
-\begin_layout Standard
-GP of game-players 
-\end_layout
+Coevolution
+\layout Standard
 
-\begin_layout Standard
-Coevolution of game-players 
-\end_layout
+In general, coevolution refers to an evolutionary process that includes
+ two or more populations
+\begin_inset LatexCommand \cite{koza1991eac}
 
-\begin_layout Standard
-Mediocre steady-state.
+\end_inset 
+
+.
+ When determining the fitness of a member in one population, the environment
+ includes the members of the other population(s).
+ In EC, There are single population coevolution
+\layout Standard
+
+In 
+\begin_inset LatexCommand \cite{angeline93competitive}
+
+\end_inset 
+
+, Angeline and Pollock argue that competitive fitness functions are more
+ effective than independent fitness functions.
+ A competitive fitness function is considered to be any calculation of fitness
+ that is dependent on the current state of the population, rather than relative
+ to a global optimum.
+ Generally, competitive fitness is measured through competition between
+ population members.
+ These competitions can range from testing each member against each other
+ to a carefully structured tournament 
+\begin_inset LatexCommand \cite{angeline93competitive}
+
+\end_inset 
+
+.
  
-\end_layout
+\layout Standard
 
-\begin_layout Standard
-Exogenous fitness as a motivator - overcoming the mediocre steady state.
+Unfortunately, there are several potential drawbacks to a coevolutionary
+ approach.
+ The most frequently cited is the 
+\begin_inset Quotes eld
+\end_inset 
+
+mediocre stable state.
+\begin_inset Quotes erd
+\end_inset 
+
  
-\end_layout
+\layout Standard
 
-\begin_layout Standard
-"Arms Race" 
-\end_layout
+Must maintain balance in the arms race, otherwise one challenger will be
+ unable to offer continued opposition.
+ Mediocre steady state is a form of collusion.
+ WWI originally found in Axelrod? The environment should netirher be too
+ difficult nor too easy.
+ The population members must be stressed to improve, but not so overwhelmed
+ that they fail constantly.
+ They found the open-ended coevolution is not necessarily synomous with
+ a purely competive framework.
+ They found it necessary to provide a mixture of competitive and cooperative
+ pressures in order to avoid the mss
+\begin_inset LatexCommand \cite{ficici98challenges}
 
-\begin_layout Standard
-Previous robocode research 
-\end_layout
+\end_inset 
 
-\begin_layout Section
+.
+\layout Standard
+
+To avoid the 
+\layout Subsection
+
+Genetic Programming
+\layout Standard
+
+Automatic Programming of Robots using Genetic Programming
+\layout Standard
+
+In [] Koza and Rice lay out he fundamental approach to genetic programming.
+ 1.
+ Generate an initial population of random composistion, i.e.
+ programs.
+ 2.
+ Iterate until complete a.
+ execute each program b.
+ create a new population via reproduction and crossover.
+\layout Subsection
+
+Robocode-based Investigations
+\layout Standard
+
+There have been several projects which have attempted to evolve robocode
+ combatants 
+\begin_inset LatexCommand \cite{Eisenstein:2003wd,Hong:2004rr,Shichel:2005eu}
+
+\end_inset 
+
+.
+ 
+\layout Standard
+
+In 
+\begin_inset LatexCommand \cite{Hong:2004rr}
+
+\end_inset 
+
+, Hong and Cho used a GA that consisted of six chromosomes, each of which
+ had six genes.
+ The chromosomes were related to the behavior that the tank would exhibit
+ in the main loop, and in five of the event handlers.
+ Each gene corresponded to a specific action of the tank, for eample 
+\emph on 
+move
+\emph default 
+ and 
+\emph on 
+shoot
+\emph default 
+.
+ For each action, two or more strategies were developed.
+ The implementation of the strategies were hand-coded.
+ They were able to 
+\layout Section
+
 Approach
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 Ignoring the warnings of others, we plan to carry through and explore the
  experiment using genetic programming and coevolution in this rather 
 \begin_inset Quotes eld
-\end_inset
+\end_inset 
 
 open-ended
 \begin_inset Quotes erd
-\end_inset
+\end_inset 
 
  domain.
- 
-\change_inserted 0 1161318769
-Previous research in evolving Robocode agents reported failure when pursuing
+ Previous research in evolving Robocode agents reported failure when pursuing
  a coevolutionary model, and thus they resorted to training against known
  quantities 
 \begin_inset LatexCommand \cite{Eisenstein:2003wd,Shichel:2005eu}
 
-\end_inset
+\end_inset 
 
 .
  However, in doing this, the danger of evolving specialized players unable
@@ -163,73 +222,97 @@ Previous research in evolving Robocode agents reported failure when pursuing
  As 
 \begin_inset LatexCommand \cite{ficici98challenges}
 
-\end_inset
+\end_inset 
 
  states: 
 \begin_inset Quotes eld
-\end_inset
+\end_inset 
 
 [t]he key to successful coevolutionary learning is a competitive arms race
  between opposed participants.
  Competitors must be well-matched in skill to force each other to improve.
 \begin_inset Quotes erd
-\end_inset
+\end_inset 
 
  We would like to add that competitors must also be sufficiently 
-\emph on
+\emph on 
 motivated
-\emph default
+\emph default 
  in order to avoid the mediocre stable-states common to coevolution 
 \begin_inset LatexCommand \cite{angeline93competitive,ficici98challenges,waters1999gpa}
 
-\end_inset
+\end_inset 
 
 .
-\end_layout
+\layout Standard
 
-\begin_layout Standard
-
-\change_inserted 0 1161318769
 Our implementation of coevolution follows that of the model described in
  
 \begin_inset LatexCommand \cite{Luke:2002fk}
 
-\end_inset
+\end_inset 
 
 : one-population coevolution, where single individuals within that population
  are paired up and pitted against every other individual to obtain an overall
  fitness value.
-\change_deleted 0 1161319187
+\layout Standard
 
-\end_layout
-
-\begin_layout Standard
-
-\change_deleted 0 1161319187
 As discussed in 
 \begin_inset LatexCommand \cite{Luke:2002fk}
 
-\end_inset
+\end_inset 
 
 
-\change_unchanged
+\layout Standard
 
-\end_layout
-
-\begin_layout Standard
 "Forest of GP trees" 
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 Each tree corresponding to one of the events that a robot listens for.
  
-\end_layout
+\layout Standard
 
-\begin_layout Subsection
+Returning to koza and rice, they define the five major steps using GP as
+ determining:
+\layout Enumerate
+
+the set of terminals
+\layout Enumerate
+
+the set of functions 
+\layout Enumerate
+
+the fitness measure 
+\layout Enumerate
+
+the parameters and variables for controlling the run
+\layout Enumerate
+
+the criteria for designating a run and for terminating a run.
+ 
+\layout Standard
+
+As stated previously, our system is essentially open-ended, unless a member
+ of the population is able to always defeat all opposition, both evolved
+ and human-designed.
+ Since this is not likely, the experiment will be terminated after some
+ number of generations.
+ The exact number will depend on our processing speed.
+\layout Standard
+
+Although Koza generally dismisses the need for mutation in GP, we believe
+ that it is necessary to access some parts of the solution space.
+ Consider an operator that takes a value, such as turnRight(degrees).
+ The amount to turn is specified as an argument.
+ Crossover and reproduction cannot explore how far to turn unless all parameter
+ values are represented in the initial population.
+ It is more practical to allow mutation of such parameters.
+ 
+\layout Subsection
+
 Examples 
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 An additional tree will be generated for the main loop and the initialization
  step.
  Each event handler has different information available to it.
@@ -238,118 +321,87 @@ An additional tree will be generated for the main loop and the initialization
  The operators will be the set of methods that a Robocode robot has.
  We might introduce some macro-operations...
  
-\end_layout
+\layout Subsection
 
-\begin_layout Subsection
+Functions Non-terminals
+\layout Enumerate
 
-\change_deleted 0 1161318769
-Functions 
-\change_inserted 0 1161318769
-Non-terminals
-\change_unchanged
-
-\end_layout
-
-\begin_layout Enumerate
 turnRight
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 turnLeft
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 forward
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 backward
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 doneMoving
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 turnRadarRight
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 turnRadarLeft
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 doneRotatingRadar
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 turnGunRight
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 turnGunLeft
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 centerGun
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 doneRotatingGun
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 findEnemy
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 lookAtEnemy
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 trackEnemy
-\end_layout
+\layout Enumerate
 
-\begin_layout Enumerate
 fire 
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 Require a Strongly-typed tree.
  
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 Generating and executing the trees.
  
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 Perfectly valid that a robot fight itself.
  
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 Selection 
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 Cross-over 
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 Mutation.
  Probably is a valid operator since it is unlikely that all valid operations
  will exist in the initial population.
  Will likely consist of random selection of an operator in the tree and
  swapping it with a randomly selected type-compatible operator 
-\end_layout
+\layout Subsection
 
-\begin_layout Subsection
 Execution environment 
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 The battles can be fought in parallel and the results accumulated to enable
  the next round of selection and reproduction.
  Robocode will be slightly modified to enable it to consume battle specification
@@ -358,24 +410,19 @@ s from a JavaSpace.
  This will enable us to use multiple computers fight the battles and evalute
  the fitness.
  If time permits, a control test will be run without...
-\end_layout
+\layout Section
 
-\begin_layout Section
 Results
-\end_layout
+\layout Standard
 
-\begin_layout Standard
 We plan to collect the following results.
  
-\end_layout
-
-\begin_layout Standard
-\begin_inset LatexCommand \bibtex[plain]{refs}
-
-\end_inset
+\layout Standard
 
 
-\end_layout
+\begin_inset LatexCommand \BibTeX[plain]{refs}
 
-\end_body
-\end_document
+\end_inset 
+
+
+\the_end

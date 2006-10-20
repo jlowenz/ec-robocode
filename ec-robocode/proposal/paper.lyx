@@ -50,7 +50,12 @@ Coevolution appears to be a useful way of evolving game-playing agents.
  Historically, not often successful in games where there is a cost to taking
  action, or risk One issue that has consistently hindered the use of coevolution
  in the development of combat game playing agents is that of the "mediocre
- steady-state" [Ben-Gurion Guys], [Pollack], [Sheppard].
+ steady-state" 
+\begin_inset LatexCommand \cite{ficici98challenges,waters1999gpa,Shichel:2005eu}
+
+\end_inset 
+
+.
  The "mediocre stable state" is a state where the population consists of
  members who do absolutely nothing.
  This phenemonen occurs because the...
@@ -176,8 +181,9 @@ In
 , Hong and Cho used a GA that consisted of six chromosomes, each of which
  had six genes.
  The chromosomes were related to the behavior that the tank would exhibit
- in the main loop, and in five of the event handlers.
- Each gene corresponded to a specific action of the tank, for eample 
+ in the main loop and in five of the event handlers.
+ Each gene corresponded to a specific action-type of the tank, for eample
+ 
 \emph on 
 move
 \emph default 
@@ -186,9 +192,10 @@ move
 shoot
 \emph default 
 .
- For each action, two or more strategies were developed.
- The implementation of the strategies were hand-coded.
- They were able to 
+ For each action, two or more hand-coded strategies were developed.
+ They were able to evolve tanks that could compete successfully against
+ three of the basic tanks, but they had little success in defeating a more
+ advanced tank.
 \layout Section
 
 Approach

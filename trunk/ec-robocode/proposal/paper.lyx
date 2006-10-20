@@ -144,7 +144,7 @@ open-ended
 
  domain.
  
-\change_inserted 0 1161317719
+\change_inserted 0 1161318769
 Previous research in evolving Robocode agents reported failure when pursuing
  a coevolutionary model, and thus they resorted to training against known
  quantities 
@@ -180,7 +180,7 @@ Previous research in evolving Robocode agents reported failure when pursuing
 motivated
 \emph default
  in order to avoid the mediocre stable-states common to coevolution 
-\begin_inset LatexCommand \cite{angeline93competitive,ficici98challenges}
+\begin_inset LatexCommand \cite{angeline93competitive,ficici98challenges,waters1999gpa}
 
 \end_inset
 
@@ -188,14 +188,30 @@ motivated
 \end_layout
 
 \begin_layout Standard
+
+\change_inserted 0 1161318769
+Our implementation of coevolution follows that of the model described in
+ 
+\begin_inset LatexCommand \cite{Luke:2002fk}
+
+\end_inset
+
+: one-population coevolution, where single individuals within that population
+ are paired up and pitted against every other individual to obtain an overall
+ fitness value.
+\change_deleted 0 1161319187
+
+\end_layout
+
+\begin_layout Standard
+
+\change_deleted 0 1161319187
 As discussed in 
 \begin_inset LatexCommand \cite{Luke:2002fk}
 
 \end_inset
 
 
-\change_inserted 0 1161317719
-, 
 \change_unchanged
 
 \end_layout
@@ -226,9 +242,9 @@ An additional tree will be generated for the main loop and the initialization
 
 \begin_layout Subsection
 
-\change_deleted 0 1161317719
+\change_deleted 0 1161318769
 Functions 
-\change_inserted 0 1161317719
+\change_inserted 0 1161318769
 Non-terminals
 \change_unchanged
 

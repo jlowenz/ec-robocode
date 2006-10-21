@@ -22,3 +22,6 @@ Decisions:
   Population Size
 
   Fitness
+
+
+HAHA. we are not doing this one anymore. maybe should delete the file.

@@ -132,7 +132,7 @@ benefits
 
 \begin_layout Standard
 In general, coevolution refers to an evolutionary process that includes
- two or more populations
+ two or more populations 
 \begin_inset LatexCommand \cite{koza1991eac}
 
 \end_inset
@@ -140,7 +140,7 @@ In general, coevolution refers to an evolutionary process that includes
 .
  When determining the fitness of a member in one population, the environment
  includes the members of the other population(s).
- In EC, There are single population coevolution
+ In EC, there are single population coevolution strategies
 \end_layout
 
 \begin_layout Standard
@@ -173,7 +173,7 @@ In
 \begin_layout Standard
 Unfortunately, there are several potential drawbacks to a coevolutionary
  approach.
- The most frequently cited is the 
+ The most frequently cited drawback is the learned phenomenon called a 
 \begin_inset Quotes eld
 \end_inset
 

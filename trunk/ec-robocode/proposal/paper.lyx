@@ -1,5 +1,7 @@
-#LyX 1.3 created this file. For more info see http://www.lyx.org/
-\lyxformat 221
+#LyX 1.4.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 245
+\begin_document
+\begin_header
 \textclass article
 \begin_preamble
 \author{Ronald Bowers \& Jason Owens}
@@ -10,45 +12,52 @@
 \fontscheme ae
 \graphics default
 \paperfontsize default
-\spacing single 
-\papersize Default
-\paperpackage a4
-\use_geometry 0
-\use_amsmath 1
-\use_natbib 0
-\use_numerical_citations 0
+\spacing single
+\papersize default
+\use_geometry false
+\use_amsmath 2
+\cite_engine basic
+\use_bibtopic false
 \paperorientation portrait
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
 \defskip medskip
 \quotes_language english
-\quotes_times 2
 \papercolumns 2
 \papersides 1
 \paperpagestyle default
+\tracking_changes false
+\output_changes true
+\end_header
 
-\layout Standard
+\begin_body
 
-
+\begin_layout Standard
 \begin_inset ERT
-status Collapsed
+status collapsed
 
-\layout Standard
+\begin_layout Standard
 
-\backslash 
+
+\backslash
 maketitle
-\end_inset 
+\end_layout
+
+\end_inset
 
 
-\layout Abstract
+\end_layout
 
+\begin_layout Abstract
 We propose to perform an experiment to evolve 
-\layout Section
+\end_layout
 
+\begin_layout Section
 Introduction 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Coevolution appears to be a useful way of evolving game-playing agents.
  Historically, not often successful in games where there is a cost to taking
  action, or risk One issue that has consistently hindered the use of coevolution
@@ -56,69 +65,83 @@ Coevolution appears to be a useful way of evolving game-playing agents.
  steady-state" 
 \begin_inset LatexCommand \cite{ficici98challenges,waters1999gpa,Shichel:2005eu}
 
-\end_inset 
+\end_inset
 
 .
  The "mediocre stable state" is a state where the population consists of
  members who do absolutely nothing.
  This phenemonen occurs because the...
-\layout Section
+\end_layout
 
+\begin_layout Section
 Hypothesis
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 We hypothesize that using GP and coevolution, and by applying an exogenous
  fitness function based on victories, we can evolve Robocode players that
  can compete successfully against the best human-designed robots.
  So, the exogenous[?]
-\layout Itemize
+\end_layout
 
+\begin_layout Itemize
 definition of coevolution
-\layout Itemize
+\end_layout
 
+\begin_layout Itemize
 benefits of coev
-\layout Itemize
+\end_layout
 
+\begin_layout Itemize
 limitations and issues
-\layout Itemize
+\end_layout
 
+\begin_layout Itemize
 robocode overview
-\layout Itemize
+\end_layout
 
+\begin_layout Itemize
 hypothesis
-\layout Section
+\end_layout
 
+\begin_layout Section
 Related Work
-\layout Subsection
+\end_layout
 
+\begin_layout Subsection
 Coevolution
-\layout Itemize
+\end_layout
 
+\begin_layout Itemize
 definition
-\layout Itemize
+\end_layout
 
+\begin_layout Itemize
 benefits
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 In general, coevolution refers to an evolutionary process that includes
  two or more populations
 \begin_inset LatexCommand \cite{koza1991eac}
 
-\end_inset 
+\end_inset
 
 .
  When determining the fitness of a member in one population, the environment
  includes the members of the other population(s).
  In EC, There are single population coevolution
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Coevolution appears to be
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 In 
 \begin_inset LatexCommand \cite{angeline93competitive}
 
-\end_inset 
+\end_inset
 
 , Angeline and Pollock argue that competitive fitness functions are more
  effective than independent fitness functions.
@@ -131,25 +154,27 @@ In
  to a carefully structured tournament 
 \begin_inset LatexCommand \cite{angeline93competitive}
 
-\end_inset 
+\end_inset
 
 .
  
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Unfortunately, there are several potential drawbacks to a coevolutionary
  approach.
  The most frequently cited is the 
 \begin_inset Quotes eld
-\end_inset 
+\end_inset
 
 mediocre stable state.
 \begin_inset Quotes erd
-\end_inset 
+\end_inset
 
  The mediocre stable state arises when neither 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Must maintain balance in the arms race, otherwise one challenger will be
  unable to offer continued opposition.
  The environment should netirher be too difficult nor too easy.
@@ -161,24 +186,28 @@ Must maintain balance in the arms race, otherwise one challenger will be
  pressures in order to avoid the mss
 \begin_inset LatexCommand \cite{ficici98challenges}
 
-\end_inset 
+\end_inset
 
 .
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 There exist some approaches to try to avoid the MeSS.
-\layout Subsection
+\end_layout
 
+\begin_layout Subsection
 Genetic Programming
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Automatic Programming of Robots using Genetic Programming
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 In 
 \begin_inset LatexCommand \cite{Koza:1992bh}
 
-\end_inset 
+\end_inset
 
 Koza and Rice lay out he fundamental approach to genetic programming.
  1.
@@ -188,27 +217,30 @@ Koza and Rice lay out he fundamental approach to genetic programming.
  Iterate until complete a.
  execute each program b.
  create a new population via reproduction and crossover.
-\layout Subsection
+\end_layout
 
+\begin_layout Subsection
 Robocode-based Investigations
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 There have been several projects which have attempted to evolve robocode
  combatants.
  
 \begin_inset LatexCommand \cite{Eisenstein:2003wd,Hong:2004rr,Shichel:2005eu}
 
-\end_inset 
+\end_inset
 
 .
  Each of these efforts have used a different control architecture, and none
  has successfully used coevolution.
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Eisenstein 
 \begin_inset LatexCommand \cite{Eisenstein:2003wd}
 
-\end_inset 
+\end_inset
 
  built his Robocode tank using a subsumption architecture that was evolved
  using a GA.
@@ -216,57 +248,65 @@ Eisenstein
 ve robots.
  Indeed, he says 
 \begin_inset Quotes eld
-\end_inset 
+\end_inset
 
 after several generations, I found the population rife with catatonics.
 \begin_inset Quotes erd
-\end_inset 
+\end_inset
 
  The experiment proceeded using the standard Robocode robots plus one high-perfo
 rmance robot as the opposition.
  Eisenstein also explicitly points out that targeting behaviors were very
  hard to evolve.
  
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 The robots were evolved in four, increasingly complex, environments.
-\layout Itemize
+\end_layout
 
+\begin_layout Itemize
 Single adversary, single starting position
-\layout Itemize
+\end_layout
 
+\begin_layout Itemize
 Single adversary, multiple starting positions
-\layout Itemize
+\end_layout
 
+\begin_layout Itemize
 Multiple adversaries
 \begin_inset Foot
-collapsed false
+status collapsed
 
-\layout Standard
-
+\begin_layout Standard
 Multiple adversaries means that a combination of pre-defined tanks were
  faught.
  Combat was still one-on-one.
-\end_inset 
+\end_layout
+
+\end_inset
 
 , single starting position
-\layout Itemize
+\end_layout
 
+\begin_layout Itemize
 Multiple adversaries, multiple starting positions
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 For the single adversary, single starting position case, robots that could
  reliably defeat their opposition evolved quickly.
  However, as the complexity of the environment increased, success became
  less common.
  Hindering the process was the fact that the more complex simulations took
  much longer to run.
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 In 
 \begin_inset LatexCommand \cite{Hong:2004rr}
 
-\end_inset 
+\end_inset
 
 , Hong and Cho used a GA that consisted of six chromosomes, each of which
  had six genes.
@@ -274,34 +314,35 @@ In
  in the main loop and in five of the event handlers.
  Each gene corresponded to a specific action-type of the tank, for eample
  
-\emph on 
-\noun on 
+\emph on
+\noun on
 move
-\emph default 
-\noun default 
+\emph default
+\noun default
  and 
-\emph on 
-\noun on 
+\emph on
+\noun on
 shoot
-\emph default 
-\noun default 
+\emph default
+\noun default
 .
  For each action, two or more hand-coded strategies were developed.
  They were able to evolve tanks that could compete successfully against
  three of the basic tanks, but they had little success in defeating a more
  advanced tank.
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 A third experiment was performed by Shichel, Ziserman, and Sipper
 \begin_inset LatexCommand \cite{Shichel:2005eu}
 
-\end_inset 
+\end_inset
 
 .They chose to limit their investigation to a particular class of Robocode
  robot, the 
-\noun on 
+\noun on
 Haiku bot
-\noun default 
+\noun default
 .
  The Haiku bot is limited to four lines of custom code, where the number
  of lines is the number of semicolons.
@@ -313,8 +354,9 @@ Haiku bot
  entered into the Robocode Haiku Bot tournamemt.
  Remarkably, it finished third out of 27 contestants.
  
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Shichel, Ziserman, and Sipper also investigated coevolution, but found that
  the coevolved robots showed primitive behavior and were easily defeated
  by human-coded robots.
@@ -324,19 +366,21 @@ Shichel, Ziserman, and Sipper also investigated coevolution, but found that
  After a few generations in this configuration, they would switch to a coevoluti
 onary approach.
  
-\layout Section
+\end_layout
 
+\begin_layout Section
 Approach
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Ignoring the warnings of others, we plan to carry through and explore the
  experiment using genetic programming and coevolution in this rather 
 \begin_inset Quotes eld
-\end_inset 
+\end_inset
 
 open-ended
 \begin_inset Quotes erd
-\end_inset 
+\end_inset
 
  domain.
  Previous research in evolving Robocode agents reported failure when pursuing
@@ -344,7 +388,7 @@ open-ended
  quantities 
 \begin_inset LatexCommand \cite{Eisenstein:2003wd,Shichel:2005eu}
 
-\end_inset 
+\end_inset
 
 .
  However, in doing this, the danger of evolving specialized players unable
@@ -357,84 +401,66 @@ open-ended
  As 
 \begin_inset LatexCommand \cite{ficici98challenges}
 
-\end_inset 
+\end_inset
 
  states: 
 \begin_inset Quotes eld
-\end_inset 
+\end_inset
 
 [t]he key to successful coevolutionary learning is a competitive arms race
  between opposed participants.
  Competitors must be well-matched in skill to force each other to improve.
 \begin_inset Quotes erd
-\end_inset 
+\end_inset
 
  We would like to add that competitors must also be sufficiently 
-\emph on 
+\emph on
 motivated
-\emph default 
+\emph default
  in order to avoid the mediocre stable-states common to coevolution 
 \begin_inset LatexCommand \cite{angeline93competitive,ficici98challenges,waters1999gpa}
 
-\end_inset 
+\end_inset
 
 .
-\layout Standard
+\end_layout
 
-Our implementation of coevolution follows that of the model described in
- 
-\begin_inset LatexCommand \cite{Luke:2002fk}
-
-\end_inset 
-
-: one-population coevolution, where single individuals within that population
- are paired up and pitted against every other individual to obtain an overall
- fitness value.
-\layout Standard
-
-As discussed in 
-\begin_inset LatexCommand \cite{Luke:2002fk}
-
-\end_inset 
-
-
-\layout Standard
-
-"Forest of GP trees" 
-\layout Standard
-
-Each tree corresponding to one of the events that a robot listens for.
- 
-\layout Standard
-
+\begin_layout Standard
 Returning to koza and rice, they define the five major steps using GP as
  determining:
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 the set of terminals
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 the set of functions 
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 the fitness measure 
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 the parameters and variables for controlling the run
-\layout Enumerate
+\end_layout
 
+\begin_layout Enumerate
 the criteria for designating a run and for terminating a run.
  
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 As stated previously, our system is essentially open-ended, unless a member
  of the population is able to always defeat all opposition, both evolved
  and human-designed.
  Since this is not likely, the experiment will be terminated after some
  number of generations.
  The exact number will depend on our processing speed.
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 Although Koza generally dismisses the need for mutation in GP, we believe
  that it is necessary to access some parts of the solution space.
  Consider an operator that takes a value, such as turnRight(degrees).
@@ -443,11 +469,88 @@ Although Koza generally dismisses the need for mutation in GP, we believe
  values are represented in the initial population.
  It is more practical to allow mutation of such parameters.
  
-\layout Subsection
+\end_layout
 
+\begin_layout Subsection
+Representation
+\end_layout
+
+\begin_layout Standard
+Our implementation of coevolution follows that of the model described in
+ 
+\begin_inset LatexCommand \cite{Luke:2002fk}
+
+\end_inset
+
+: one-population coevolution, where single individuals within that population
+ are paired up and pitted against every other individual to obtain an overall
+ fitness value.
+\end_layout
+
+\begin_layout Standard
+Forest of GP trees, including one tree for the main agent loop and additional
+ trees for each event the robot is able to respond to.
+\end_layout
+
+\begin_layout Standard
+Require a Strongly-typed tree.
+ 
+\end_layout
+
+\begin_layout Standard
+Perfectly valid that a robot fight itself.
+ 
+\end_layout
+
+\begin_layout Standard
+Section\InsetSpace ~
+
+\begin_inset LatexCommand \ref{sub:Terminals-and-Non-terminals}
+
+\end_inset
+
+ lists the terminals and non-terminals available for the different tree
+ types.
+\end_layout
+
+\begin_layout Subsection
+Operators
+\end_layout
+
+\begin_layout Standard
+Generating and executing the trees.
+ 
+\end_layout
+
+\begin_layout Standard
+Selection 
+\end_layout
+
+\begin_layout Standard
+Cross-over 
+\end_layout
+
+\begin_layout Standard
+Mutation.
+ Probably is a valid operator since it is unlikely that all valid operations
+ will exist in the initial population.
+ Will likely consist of random selection of an operator in the tree and
+ swapping it with a randomly selected type-compatible operator 
+\end_layout
+
+\begin_layout Subsection
+Evaluation
+\end_layout
+
+\begin_layout Subsection
+GP Configuration
+\end_layout
+
+\begin_layout Subsection
 Examples 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 An additional tree will be generated for the main loop and the initialization
  step.
  Each event handler has different information available to it.
@@ -456,87 +559,806 @@ An additional tree will be generated for the main loop and the initialization
  The operators will be the set of methods that a Robocode robot has.
  We might introduce some macro-operations...
  
-\layout Subsection
+\end_layout
 
-Functions Non-terminals
-\layout Enumerate
+\begin_layout Subsection
+\begin_inset LatexCommand \label{sub:Terminals-and-Non-terminals}
 
-turnRight
-\layout Enumerate
+\end_inset
 
-turnLeft
-\layout Enumerate
+Terminals and Non-terminals
+\end_layout
 
-forward
-\layout Enumerate
+\begin_layout Standard
+\begin_inset Float table
+placement !t
+wide true
+sideways false
+status open
 
-backward
-\layout Enumerate
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="21" columns="3">
+<features>
+<column alignment="left" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="left" valignment="top" width="40page%">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-doneMoving
-\layout Enumerate
+\begin_layout Standard
 
-turnRadarRight
-\layout Enumerate
+\series bold
+Syntax
+\end_layout
 
-turnRadarLeft
-\layout Enumerate
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-doneRotatingRadar
-\layout Enumerate
+\begin_layout Standard
 
-turnGunRight
-\layout Enumerate
+\series bold
+Returns
+\end_layout
 
-turnGunLeft
-\layout Enumerate
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
 
-centerGun
-\layout Enumerate
+\begin_layout Standard
 
-doneRotatingGun
-\layout Enumerate
+\series bold
+Description
+\end_layout
 
-findEnemy
-\layout Enumerate
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-lookAtEnemy
-\layout Enumerate
+\begin_layout Standard
+turnRight 
+\begin_inset Formula $\theta$
+\end_inset
 
-trackEnemy
-\layout Enumerate
 
-fire 
-\layout Standard
+\end_layout
 
-Require a Strongly-typed tree.
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Rotates the entire robot to the right by the specified angle.
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+turnLeft 
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Rotates the entire robot to the left by the specified angle.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+forward 
+\begin_inset Formula $\Delta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\Delta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Moves the entire robot forward in the current direction.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+backward 
+\begin_inset Formula $\Delta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\Delta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Moves the entire robot backward in the current direction.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+ifDoneMoving 
+\begin_inset Formula $\tau_{1}$
+\end_inset
+
  
-\layout Standard
+\begin_inset Formula $\tau_{2}$
+\end_inset
 
-Generating and executing the trees.
  
-\layout Standard
+\end_layout
 
-Perfectly valid that a robot fight itself.
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+result of 
+\begin_inset Formula $\tau$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Allows further execution to be dependent on whether previously specified
+ movements are complete.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+turnRadarRight 
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\theta$ 
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Rotates the radar unit to the right by the specified angle.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+turnRadarLeft 
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Rotates the radar unit to the left by the specified angle.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+centerRadar
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Rotates the radar unit to align it with the gun turret.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+ifDoneRotatingRadar 
+\begin_inset Formula $\tau_{1}$
+\end_inset
+
  
-\layout Standard
+\begin_inset Formula $\tau_{2}$
+\end_inset
 
-Selection 
-\layout Standard
 
-Cross-over 
-\layout Standard
+\end_layout
 
-Mutation.
- Probably is a valid operator since it is unlikely that all valid operations
- will exist in the initial population.
- Will likely consist of random selection of an operator in the tree and
- swapping it with a randomly selected type-compatible operator 
-\layout Subsection
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
+\begin_layout Standard
+result of 
+\begin_inset Formula $\tau$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Allows further execution to be dependent on whether previously specified
+ radar movements are complete.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+turnGunRight 
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Rotates the gun turret to the right by the specified angle.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+turnGunLeft 
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Rotates the gun turret to the left by the specified angle.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Rotates the gun turret to align it with the body.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+ifDoneRotatingGun 
+\begin_inset Formula $\tau_{1}$
+\end_inset
+
+ 
+\begin_inset Formula $\tau_{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+result of 
+\begin_inset Formula $\tau$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Allows further execution to be dependent on whether previously specified
+ gun turret movements are complete.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Senses the enemies heading relative to gun turret.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+fireWeak
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\epsilon$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Fires a weak bullet, and returns the remaining energy level.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+fireMedium
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\epsilon$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Fires a medium bullet, and returns the remaining energy level.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+fireStrong
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\epsilon$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Fires a strong bullet, and returns the remaining energy level.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+energyLevel
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\epsilon$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Senses the agent's remaining energy.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+seq 
+\begin_inset Formula $\tau_{0}$
+\end_inset
+
+ \SpecialChar \ldots{}
+ 
+\begin_inset Formula $\tau_{n}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+result of 
+\begin_inset Formula $\tau_{n}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Execute a sequence of instructions.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+distanceToWall
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\Delta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Senses the distance to the wall in the direction the tracks are pointing.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Basic omnipresent terminals and non-terminals
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
 Execution environment 
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 The battles can be fought in parallel and the results accumulated to enable
  the next round of selection and reproduction.
  Robocode will be slightly modified to enable it to consume battle specification
@@ -545,19 +1367,24 @@ s from a JavaSpace.
  This will enable us to use multiple computers fight the battles and evalute
  the fitness.
  If time permits, a control test will be run without...
-\layout Section
+\end_layout
 
+\begin_layout Section
 Results
-\layout Standard
+\end_layout
 
+\begin_layout Standard
 We plan to collect the following results.
  
-\layout Standard
+\end_layout
+
+\begin_layout Standard
+\begin_inset LatexCommand \bibtex[plain]{refs}
+
+\end_inset
 
 
-\begin_inset LatexCommand \BibTeX[plain]{refs}
+\end_layout
 
-\end_inset 
-
-
-\the_end
+\end_body
+\end_document

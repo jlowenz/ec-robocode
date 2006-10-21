@@ -51,8 +51,17 @@ maketitle
 
 \begin_layout Abstract
 We propose to perform an experiment to evolve software agents that are able
- to compete successfully against human-coded agents in Robocode matches.
- To achieve this, we propose to use a genetic programming
+ to successfully compete against human-coded agents in Robocode matches.
+ To achieve this, we propose to use genetic programming and coevolution.
+ Previous research has explored the topics of coevolution, genetic programming
+ and Robocode agents thoroughly.
+ However, to date no one has successfully evolved competitive Robocode agents
+ using coevolution.
+ Previous attempts have resulted only in the mediocre stable state.
+ To coax the agents to avoid a mediocre stable state, we propose to use
+ an exogenous fitness function.
+ We hypothesize that we will be able to evolve agents that will be competitive
+ against non-trivial, human-coded Robocode agents.
 \end_layout
 
 \begin_layout Section

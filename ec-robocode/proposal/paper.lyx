@@ -41,6 +41,9 @@ maketitle
 \end_inset 
 
 
+\layout Abstract
+
+We propose to perform an experiment to evolve 
 \layout Section
 
 Introduction 
@@ -68,12 +71,33 @@ We hypothesize that using GP and coevolution, and by applying an exogenous
  fitness function based on victories, we can evolve Robocode players that
  can compete successfully against the best human-designed robots.
  So, the exogenous[?]
+\layout Itemize
+
+definition of coevolution
+\layout Itemize
+
+benefits of coev
+\layout Itemize
+
+limitations and issues
+\layout Itemize
+
+robocode overview
+\layout Itemize
+
+hypothesis
 \layout Section
 
 Related Work
 \layout Subsection
 
 Coevolution
+\layout Itemize
+
+definition
+\layout Itemize
+
+benefits
 \layout Standard
 
 In general, coevolution refers to an evolutionary process that includes
@@ -88,10 +112,7 @@ In general, coevolution refers to an evolutionary process that includes
  In EC, There are single population coevolution
 \layout Standard
 
-Coevolution appears to be 
-\layout Paragraph
-
-benefits of coev
+Coevolution appears to be
 \layout Standard
 
 In 
@@ -126,14 +147,12 @@ mediocre stable state.
 \begin_inset Quotes erd
 \end_inset 
 
- 
+ The mediocre stable state arises when neither 
 \layout Standard
 
 Must maintain balance in the arms race, otherwise one challenger will be
  unable to offer continued opposition.
- Mediocre steady state is a form of collusion.
- WWI originally found in Axelrod? The environment should netirher be too
- difficult nor too easy.
+ The environment should netirher be too difficult nor too easy.
  The population members must be stressed to improve, but not so overwhelmed
  that they fail constantly.
  They found the open-ended coevolution is not necessarily synomous with
@@ -147,7 +166,7 @@ Must maintain balance in the arms race, otherwise one challenger will be
 .
 \layout Standard
 
-To avoid the 
+There exist some approaches to try to avoid the MeSS.
 \layout Subsection
 
 Genetic Programming
@@ -156,7 +175,12 @@ Genetic Programming
 Automatic Programming of Robots using Genetic Programming
 \layout Standard
 
-In [] Koza and Rice lay out he fundamental approach to genetic programming.
+In 
+\begin_inset LatexCommand \cite{Koza:1992bh}
+
+\end_inset 
+
+Koza and Rice lay out he fundamental approach to genetic programming.
  1.
  Generate an initial population of random composistion, i.e.
  programs.
@@ -170,13 +194,73 @@ Robocode-based Investigations
 \layout Standard
 
 There have been several projects which have attempted to evolve robocode
- combatants 
+ combatants.
+ 
 \begin_inset LatexCommand \cite{Eisenstein:2003wd,Hong:2004rr,Shichel:2005eu}
 
 \end_inset 
 
 .
+ Each of these efforts have used a different control architecture, and none
+ has successfully used coevolution.
+\layout Standard
+
+Eisenstein 
+\begin_inset LatexCommand \cite{Eisenstein:2003wd}
+
+\end_inset 
+
+ built his Robocode tank using a subsumption architecture that was evolved
+ using a GA.
+ Coevolution was attempted, but failed to produce any progress towards competiti
+ve robots.
+ Indeed, he says 
+\begin_inset Quotes eld
+\end_inset 
+
+after several generations, I found the population rife with catatonics.
+\begin_inset Quotes erd
+\end_inset 
+
+ The experiment proceeded using the standard Robocode robots plus one high-perfo
+rmance robot as the opposition.
+ Eisenstein also explicitly points out that targeting behaviors were very
+ hard to evolve.
  
+\layout Standard
+
+The robots were evolved in four, increasingly complex, environments.
+\layout Itemize
+
+Single adversary, single starting position
+\layout Itemize
+
+Single adversary, multiple starting positions
+\layout Itemize
+
+Multiple adversaries
+\begin_inset Foot
+collapsed false
+
+\layout Standard
+
+Multiple adversaries means that a combination of pre-defined tanks were
+ faught.
+ Combat was still one-on-one.
+\end_inset 
+
+, single starting position
+\layout Itemize
+
+Multiple adversaries, multiple starting positions
+\layout Standard
+
+For the single adversary, single starting position case, robots that could
+ reliably defeat their opposition evolved quickly.
+ However, as the complexity of the environment increased, success became
+ less common.
+ Hindering the process was the fact that the more complex simulations took
+ much longer to run.
 \layout Standard
 
 In 
@@ -202,6 +286,8 @@ shoot
  They were able to evolve tanks that could compete successfully against
  three of the basic tanks, but they had little success in defeating a more
  advanced tank.
+\layout Standard
+
 \layout Section
 
 Approach

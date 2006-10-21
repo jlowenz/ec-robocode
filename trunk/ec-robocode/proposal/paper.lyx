@@ -59,18 +59,28 @@ Introduction
 
 \begin_layout Standard
 Coevolution appears to be a useful way of evolving game-playing agents.
- Historically, not often successful in games where there is a cost to taking
- action, or risk One issue that has consistently hindered the use of coevolution
- in the development of combat game playing agents is that of the "mediocre
- steady-state" 
+ Historically, however, it has not often been successful in games where
+ there is a cost or sufficient risk in taking action.
+ Thus, this issue of achieving a "mediocre steady-state
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+The "mediocre stable state" is a state where the population consists of
+ members who do absolutely nothing.
+ This phenemonen occurs because the...
+\end_layout
+
+\end_inset
+
+" 
 \begin_inset LatexCommand \cite{ficici98challenges,waters1999gpa,Shichel:2005eu}
 
 \end_inset
 
-.
- The "mediocre stable state" is a state where the population consists of
- members who do absolutely nothing.
- This phenemonen occurs because the...
+ has consistently hindered the use of coevolution in the development of
+ combat game playing agents.
+ However, all is not lost
 \end_layout
 
 \begin_layout Section

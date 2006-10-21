@@ -50,7 +50,9 @@ maketitle
 \end_layout
 
 \begin_layout Abstract
-We propose to perform an experiment to evolve 
+We propose to perform an experiment to evolve software agents that are able
+ to compete successfully against human-coded agents in Robocode matches.
+ To achieve this, we propose to use a genetic programming
 \end_layout
 
 \begin_layout Section
@@ -122,14 +124,6 @@ Related Work
 Coevolution
 \end_layout
 
-\begin_layout Itemize
-definition
-\end_layout
-
-\begin_layout Itemize
-benefits
-\end_layout
-
 \begin_layout Standard
 In general, coevolution refers to an evolutionary process that includes
  two or more populations 
@@ -168,6 +162,43 @@ In
 
 .
  
+\end_layout
+
+\begin_layout Standard
+In 
+\begin_inset LatexCommand \cite{angeline93competitive}
+
+\end_inset
+
+, Angeline and Pollock argue that competitive fitness functions are more
+ effective than independent fitness functions.
+ A competitive fitness function is considered to be any calculation of fitness
+ that is dependent on the current state of the population, rather than relative
+ to a global optimum.
+ Generally, competitive fitness is measured through competition between
+ population members.
+ These competitions can range from testing each member against each other
+ to a carefully structured tournament 
+\begin_inset LatexCommand \cite{angeline93competitive}
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Floreano, Nolfi and Mondada 
+\begin_inset LatexCommand \cite{Floreano:1999dq}
+
+\end_inset
+
+ found that competive coevolution can generate efficient chasing and escaping
+ strategies in a predator/prey environment.
+ They also found that this capability evolved even more quickly than "simple"
+ wall avoidance They postulate that competitive coevolution generates solutions
+ to difficult problems by generating a series of challenges of increasing
+ difficulty.
 \end_layout
 
 \begin_layout Standard

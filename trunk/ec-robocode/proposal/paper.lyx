@@ -476,32 +476,6 @@ motivated
 \end_layout
 
 \begin_layout Standard
-Returning to koza and rice, they define the five major steps using GP as
- determining:
-\end_layout
-
-\begin_layout Enumerate
-the set of terminals
-\end_layout
-
-\begin_layout Enumerate
-the set of functions 
-\end_layout
-
-\begin_layout Enumerate
-the fitness measure 
-\end_layout
-
-\begin_layout Enumerate
-the parameters and variables for controlling the run
-\end_layout
-
-\begin_layout Enumerate
-the criteria for designating a run and for terminating a run.
- 
-\end_layout
-
-\begin_layout Standard
 As stated previously, our system is essentially open-ended, unless a member
  of the population is able to always defeat all opposition, both evolved
  and human-designed.
@@ -620,16 +594,30 @@ Terminals and Non-terminals
 \end_layout
 
 \begin_layout Standard
+To account for the forest of trees approach, we have created a basic set
+ of nodes (terminals and non-terminals) and a specialized superset for each
+ event.
+ The basic nodes are listed in Table\InsetSpace ~
+
+\begin_inset LatexCommand \ref{tab:Basic-omnipresent-terminals}
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float table
 placement !t
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="21" columns="3">
+<lyxtabular version="3" rows="22" columns="3">
 <features>
 <column alignment="left" valignment="top" width="0">
 <column alignment="center" valignment="top" width="0">
@@ -678,10 +666,6 @@ turnRight
 \begin_inset Formula $\theta$
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 
 \end_layout
 
@@ -1088,7 +1072,7 @@ Rotates the gun turret to the left by the specified angle.
 \begin_inset Text
 
 \begin_layout Standard
-
+centerGun
 \end_layout
 
 \end_inset
@@ -1149,38 +1133,6 @@ result of
 \begin_layout Standard
 Allows further execution to be dependent on whether previously specified
  gun turret movements are complete.
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Standard
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Standard
-\begin_inset Formula $\theta$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Standard
-Senses the enemies heading relative to gun turret.
 \end_layout
 
 \end_inset
@@ -1356,7 +1308,7 @@ Execute a sequence of instructions.
 \end_inset
 </cell>
 </row>
-<row bottomline="true">
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -1388,6 +1340,71 @@ Senses the distance to the wall in the direction the tracks are pointing.
 \end_inset
 </cell>
 </row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+gunHeat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\lambda$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Senses the heat of the gun, can't fire unless 
+\begin_inset Formula $\lambda=0$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
 </lyxtabular>
 
 \end_inset
@@ -1396,7 +1413,203 @@ Senses the distance to the wall in the direction the tracks are pointing.
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{tab:Basic-omnipresent-terminals}
+
+\end_inset
+
 Basic omnipresent terminals and non-terminals
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide true
+sideways false
+status open
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features>
+<column alignment="left" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="left" valignment="top" width="0">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+Syntax
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+Returns
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+enemyBearing
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Senses an angle to the enemy relative to the robot's current heading.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+enemyDistance
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\Delta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Senses the distance to the enemy (center to center).
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+enemyEnergy
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\epsilon$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Senses the energy level of the enemy.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+enemyHeading
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Senses the direction the enemy is facing.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Scanned Robot node set
 \end_layout
 
 \end_inset
@@ -1414,7 +1627,7 @@ The battles can be fought in parallel and the results accumulated to enable
  Robocode will be slightly modified to enable it to consume battle specification
 s from a JavaSpace.
  The results of the battle will then be posted back to the space.
- This will enable us to use multiple computers fight the battles and evalute
+ This will enable us to use multiple computers fight the battles and evaluate
  the fitness.
  If time permits, a control test will be run without...
 \end_layout

@@ -275,12 +275,16 @@ In
  Each gene corresponded to a specific action-type of the tank, for eample
  
 \emph on 
+\noun on 
 move
 \emph default 
+\noun default 
  and 
 \emph on 
+\noun on 
 shoot
 \emph default 
+\noun default 
 .
  For each action, two or more hand-coded strategies were developed.
  They were able to evolve tanks that could compete successfully against
@@ -288,6 +292,38 @@ shoot
  advanced tank.
 \layout Standard
 
+A third experiment was performed by Shichel, Ziserman, and Sipper
+\begin_inset LatexCommand \cite{Shichel:2005eu}
+
+\end_inset 
+
+.They chose to limit their investigation to a particular class of Robocode
+ robot, the 
+\noun on 
+Haiku bot
+\noun default 
+.
+ The Haiku bot is limited to four lines of custom code, where the number
+ of lines is the number of semicolons.
+ After investigating and rejecting Strongly Typed Genetic Programming and
+ Automatically Defined Functions, they chose a Koza-style LISP implementation.
+ This had the extra benefit of allowing complex expressions since the the
+ Haiku bot class places no limit on the number of parentheses.
+ After completing the evolution process, the highest performing robot was
+ entered into the Robocode Haiku Bot tournamemt.
+ Remarkably, it finished third out of 27 contestants.
+ 
+\layout Standard
+
+Shichel, Ziserman, and Sipper also investigated coevolution, but found that
+ the coevolved robots showed primitive behavior and were easily defeated
+ by human-coded robots.
+ To overcome the medioce steady state that arose rapidly in Eisenstein's
+ work, they propose to bootstrap the evolutionary process with competition
+ against human-coded robots.
+ After a few generations in this configuration, they would switch to a coevoluti
+onary approach.
+ 
 \layout Section
 
 Approach

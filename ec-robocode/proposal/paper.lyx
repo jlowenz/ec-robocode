@@ -95,6 +95,10 @@ The "mediocre stable state" is a state where the population consists of
 \end_layout
 
 \begin_layout Section
+Problem!
+\end_layout
+
+\begin_layout Section
 Hypothesis
 \end_layout
 
@@ -529,7 +533,7 @@ advanced
 \begin_inset Quotes erd
 \end_inset
 
- sensors, no noise and a flat, finite, two dimensional world.
+ sensors, no noise, and a flat, finite, two dimensional world.
 \end_layout
 
 \begin_layout Standard
@@ -578,8 +582,7 @@ Representation
 \end_layout
 
 \begin_layout Standard
-The genome for an individual in the population consists of a forest of executabl
-e expression trees.
+The genome for an individual in the population consists of a forest of programs.
  There are a total of 7 trees: one tree for the base behavior, and one tree
  for each of the six events described above.
  We will perform some initial testing to determine the best maximum depth
@@ -613,7 +616,8 @@ e expression trees.
  Therefore, no tree requires a return value.
  However, the sequence node also provides the useful capability of representing
  a sequence of subtree executions.
- On creation, it will randomly choose to allocate 1--5 sequence 
+ On creation, it will randomly choose to allocate 1--5 [why 1 through 5?]
+ sequence 
 \begin_inset Quotes eld
 \end_inset
 
@@ -634,7 +638,416 @@ Section\InsetSpace ~
 
  lists the terminals and non-terminals available for the different tree
  types.
+ Tables 
+\begin_inset LatexCommand \ref{sub:Terminals-and-Non-terminals}
+
+\end_inset
+
+--
+\begin_inset LatexCommand \ref{tab:Bullet-Miss-node}
+
+\end_inset
+
+ list the domain specific nodes for each event tree.
+ Symbols present in the tables indicate the argument types and return types:
  
+\begin_inset Formula $\theta$
+\end_inset
+
+ is an angle in radians, 
+\begin_inset Formula $\Delta$
+\end_inset
+
+ is a distance, 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ is an energy level, 
+\begin_inset Formula $\beta$
+\end_inset
+
+ is a boolean value, and 
+\begin_inset Formula $\tau$
+\end_inset
+
+ is a generic type.
+ 
+\end_layout
+
+\begin_layout Standard
+In addition to the domain-specific nodes, there are a few 
+\begin_inset Quotes eld
+\end_inset
+
+standards
+\begin_inset Quotes erd
+\end_inset
+
+ that we include as well, described in Table\InsetSpace ~
+
+\begin_inset LatexCommand \ref{tab:Standard-non-terminals}
+
+\end_inset
+
+.
+ All of the number-related nodes are generic: i.e.
+ they can operate on any pair of numeric types (i.e.
+ angle, distance, energy level).
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="11" columns="2">
+<features>
+<column alignment="left" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+Syntax
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+Returns
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+add 
+\begin_inset Formula $\tau$
+\end_inset
+
+ 
+\begin_inset Formula $\tau$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\tau$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+sub 
+\begin_inset Formula $\tau$
+\end_inset
+
+ 
+\begin_inset Formula $\tau$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\tau$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+mult 
+\begin_inset Formula $\tau$
+\end_inset
+
+ 
+\begin_inset Formula $\tau$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\tau$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+div 
+\begin_inset Formula $\tau$
+\end_inset
+
+ 
+\begin_inset Formula $\tau$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\tau$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\tau<\tau$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\beta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\tau>\tau$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\beta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\beta\wedge\beta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\beta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\beta\vee\beta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\beta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\neg\beta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\beta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+if-then-else 
+\begin_inset Formula $\beta$
+\end_inset
+
+ 
+\begin_inset Formula $\tau_{1}$
+\end_inset
+
+ 
+\begin_inset Formula $\tau_{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\tau_{1}$
+\end_inset
+
+ if 
+\begin_inset Formula $\beta=T$
+\end_inset
+
+ else 
+\begin_inset Formula $\tau_{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+\begin_inset LatexCommand \label{tab:Standard-non-terminals}
+
+\end_inset
+
+Standard non-terminals
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -795,10 +1208,7 @@ turnRight
 \begin_inset Text
 
 \begin_layout Standard
-\begin_inset Formula $\theta$
-\end_inset
-
-
+void
 \end_layout
 
 \begin_layout Standard
@@ -839,10 +1249,7 @@ turnLeft
 \begin_inset Text
 
 \begin_layout Standard
-\begin_inset Formula $\theta$
-\end_inset
-
-
+void
 \end_layout
 
 \end_inset
@@ -875,10 +1282,7 @@ forward
 \begin_inset Text
 
 \begin_layout Standard
-\begin_inset Formula $\Delta$
-\end_inset
-
-
+void
 \end_layout
 
 \end_inset
@@ -911,10 +1315,7 @@ backward
 \begin_inset Text
 
 \begin_layout Standard
-\begin_inset Formula $\Delta$
-\end_inset
-
-
+void
 \end_layout
 
 \end_inset
@@ -934,15 +1335,7 @@ Moves the entire robot backward in the current direction.
 \begin_inset Text
 
 \begin_layout Standard
-ifDoneMoving 
-\begin_inset Formula $\tau_{1}$
-\end_inset
-
- 
-\begin_inset Formula $\tau_{2}$
-\end_inset
-
- 
+isDoneMoving
 \end_layout
 
 \end_inset
@@ -951,8 +1344,7 @@ ifDoneMoving
 \begin_inset Text
 
 \begin_layout Standard
-result of 
-\begin_inset Formula $\tau$
+\begin_inset Formula $\beta$
 \end_inset
 
 
@@ -964,8 +1356,7 @@ result of
 \begin_inset Text
 
 \begin_layout Standard
-Allows further execution to be dependent on whether previously specified
- movements are complete.
+Senses whether previously specified movements are complete.
 \end_layout
 
 \end_inset
@@ -989,11 +1380,7 @@ turnRadarRight
 \begin_inset Text
 
 \begin_layout Standard
-\begin_inset Formula $\theta$ 
-
-\end_inset
-
-
+void
 \end_layout
 
 \end_inset
@@ -1395,9 +1782,8 @@ seq
 \begin_inset Formula $\tau_{0}$
 \end_inset
 
- \SpecialChar \ldots{}
  
-\begin_inset Formula $\tau_{n}$
+\begin_inset Formula $\tau_{1}$
 \end_inset
 
 
@@ -1516,7 +1902,7 @@ Basic omnipresent terminals and non-terminals
 \begin_inset Float table
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -1713,7 +2099,7 @@ Scanned Robot node set
 \begin_inset Float table
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -1878,7 +2264,7 @@ Hit By Bullet node set
 \begin_inset Float table
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -1979,7 +2365,7 @@ Wall Collision node set
 \begin_inset Float table
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -2240,6 +2626,10 @@ Senses the enemy's energy level
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{tab:Bullet-Hit-node}
+
+\end_inset
+
 Bullet Hit node set
 \end_layout
 
@@ -2366,6 +2756,10 @@ Senses the bullet's absolute direction in degrees
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{tab:Bullet-Miss-node}
+
+\end_inset
+
 Bullet Miss node set
 \end_layout
 

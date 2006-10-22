@@ -69,17 +69,105 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-Coevolution appears to be a useful way of evolving game-playing agents.
- Historically, however, it has not often been successful in games where
- there is a cost or sufficient risk in taking action.
- Thus, this issue of achieving a "mediocre steady-state
+One of the most intriquing ideas in AI is that is that of learning through
+ self-play.
+ Self-play, or 
+\begin_inset Quotes eld
+\end_inset
+
+introspection
+\begin_inset Quotes erd
+\end_inset
+
+ is the idea that a machine learning program can come to master some domain
+ by repeatedly competing against itself and gradually improving
+\begin_inset LatexCommand \cite{pollack97coevolution}
+
+\end_inset
+
+.
+ Most efforts have been unsuccessful, however some, most notably Tesauro's
+ TD-Gammon have succeeded greatly.
+ The essential problem with self-play has been that the programs that develop
+ tend to be brittle.
+ They cannot compete when then opposition is changed.
+\end_layout
+
+\begin_layout Standard
+Within the evolutionary computation parardigm, the coevolutionary approach
+ provides a means to develop successful programs through self-play.
+ More precisely, play against other individuals who are also trying to improve.
+ Traditional self-play can be likened to the old man in the park playing
+ both sides of a chess board.
+ A coevolutionary approach is more like a chess club in which all start
+ as novices and, through competition with each other, gradually learn to
+ become masters.
+\end_layout
+
+\begin_layout Standard
+Note that there is disagreement in the literature as to the definition of
+ coevolution in the context of evolutionary computation.
+ In a biological sense, coevolution means two separate species evolving
+ together, e.g.
+ flowers and bees.
+ Many in the EC community hold to the multiple-population concept 
+\begin_inset LatexCommand \cite{Floreano:1999dq,koza1991eac}
+
+\end_inset
+
+, and refer to a self-competing population as a competitive fitness environment
+ 
+\begin_inset LatexCommand \cite{angeline93competitive}
+
+\end_inset
+
+.
+ Others in the field insist that it is valid to refer to a self-competing
+ single population as coevolutionary since each individual is evolving against
+ another evolving population, where the other population is the set of all
+ other members 
+\begin_inset LatexCommand \cite{Luke:2002fk}
+
+\end_inset
+
+.
+ Following Luke, we have chosen to use the term coevolution even though
+ we will have only one population of robots.
+\end_layout
+
+\begin_layout Standard
+The advantage coevolution provides is that because the members are competing
+ against each other, the fitness landscape is not static.
+ Rather it evolves along with the population.
+ A goal in coevolutionary systems is for the members to evolve in a such
+ a way that an 
+\begin_inset Quotes eld
+\end_inset
+
+arms race
+\begin_inset Quotes erd
+\end_inset
+
+ develops.
+ An arms race is when the members begin to develop ways to counter the oppositio
+n's strengths and exploit their vulnerabilities.
+\end_layout
+
+\begin_layout Standard
+Although coevolution appears to be a useful way of evolving game-playing
+ agents.
+ Historically, it has not often been successful in games where there is
+ a cost or risk in taking action.
+ Thus, the problem of the "mediocre stable state
 \begin_inset Foot
 status collapsed
 
 \begin_layout Standard
 The "mediocre stable state" is a state where the population consists of
  members who do absolutely nothing.
- This phenemonen occurs because the...
+ This phenemonen occurs because every action away from the initial condition
+ incurs a cost.
+ Thus, the starting state it is a local optima for all contestants.
 \end_layout
 
 \end_inset
@@ -89,44 +177,66 @@ The "mediocre stable state" is a state where the population consists of
 
 \end_inset
 
- has consistently hindered the use of coevolution in the development of
- combat game playing agents.
- However, all is not lost
-\end_layout
+.The mediocre stable state has consistently hindered the use of coevolution
+ in the development of combat game playing agents.
+ One approach to avoiding the mediocre stable state is through the use of
+ an exogenous fitness function
+\begin_inset LatexCommand \cite{waters1999gpa}
 
-\begin_layout Section
-Problem!
-\end_layout
+\end_inset
 
-\begin_layout Section
-Hypothesis
+.
+ In our experiment we hope to develop an exogenous fitness function that
+ can avoid the mediocre stable state and inspire evolution.
 \end_layout
 
 \begin_layout Standard
-We hypothesize that using GP and coevolution, and by applying an exogenous
- fitness function based on victories, we can evolve Robocode players that
- can compete successfully against the best human-designed robots.
- So, the exogenous[?]
+For our game environment, we have chosen Robocode.Robocode is a Java-based
+ robot battle simulator.
+ It provides a framework in which two or more software agents, representing
+ robotic tanks, can fight to the death.
+ Scoring is provided and is based on the robot's energy level.
+ Moving, shooting, and getting shot by an enemy cost energy.
+ Successfully hitting an enemy returns some energy.
+ A typical Robocode match consists of ten battles, with the contestants
+ starting a random positions.
+ The Robocode distribution comes with a set of relatively simple robots.
+ More advanced robots are available online.
+ There is also a tournament system that allows developers to compete against
+ other robots that have been submitted.
 \end_layout
 
-\begin_layout Itemize
-definition of coevolution
+\begin_layout Standard
+In order to provide the most flexible evolutionary mechanism, and because
+ it is the approach we find most interesting, we have chosen to use genetic
+ programming to evolve the robot logic.
+ Unlike most GP efforts, we will not be using LISP.
+ Rather, we intend to use a strongly-typed GP
+\begin_inset LatexCommand \cite{montana93strongly}
+
+\end_inset
+
+ approach implemented in Java.
+ This choice is based in no small part on our familiarity with Java, and
+ the fact that Robocode is a Java environment.
 \end_layout
 
-\begin_layout Itemize
-benefits of coev
+\begin_layout Standard
+We hypothesize that using genetic programming and coevolution and by applying
+ an exogenous fitness function we can evolve Robocode players that can compete
+ successfully against the best human-designed robots.
+ 
 \end_layout
 
-\begin_layout Itemize
-limitations and issues
+\begin_layout Section
+Problem and Hypothesis
 \end_layout
 
-\begin_layout Itemize
-robocode overview
-\end_layout
-
-\begin_layout Itemize
-hypothesis
+\begin_layout Standard
+Express problem.
+ We hypothesize that using GP and coevolution, and by applying an exogenous
+ fitness function, we can evolve Robocode players that can compete successfully
+ against the best human-designed robots.
 \end_layout
 
 \begin_layout Section

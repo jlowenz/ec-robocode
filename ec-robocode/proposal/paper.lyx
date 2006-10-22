@@ -186,13 +186,20 @@ The "mediocre stable state" is a state where the population consists of
 \end_inset
 
 .
- In our experiment we hope to develop an exogenous fitness function that
- can avoid the mediocre stable state and inspire evolution.
+ 
 \end_layout
 
 \begin_layout Standard
-For our game environment, we have chosen Robocode.Robocode is a Java-based
- robot battle simulator.
+An interesting 
+\begin_inset Quotes eld
+\end_inset
+
+game
+\begin_inset Quotes erd
+\end_inset
+
+ in which to test the efficacy of coevoloution is Robocode.
+ Robocode is a robot battle simulator.
  It provides a framework in which two or more software agents, representing
  robotic tanks, can fight to the death.
  Scoring is provided and is based on the robot's energy level.
@@ -204,28 +211,8 @@ For our game environment, we have chosen Robocode.Robocode is a Java-based
  More advanced robots are available online.
  There is also a tournament system that allows developers to compete against
  other robots that have been submitted.
-\end_layout
-
-\begin_layout Standard
-In order to provide the most flexible evolutionary mechanism, and because
- it is the approach we find most interesting, we have chosen to use genetic
- programming to evolve the robot logic.
- Unlike most GP efforts, we will not be using LISP.
- Rather, we intend to use a strongly-typed GP
-\begin_inset LatexCommand \cite{montana93strongly}
-
-\end_inset
-
- approach implemented in Java.
- This choice is based in no small part on our familiarity with Java, and
- the fact that Robocode is a Java environment.
-\end_layout
-
-\begin_layout Standard
-We hypothesize that using genetic programming and coevolution and by applying
- an exogenous fitness function we can evolve Robocode players that can compete
- successfully against the best human-designed robots.
- 
+ Robocode is a interesting environment for coevolution because its scoring
+ system favors inaction and, by extension, the mediocre stable state.
 \end_layout
 
 \begin_layout Section
@@ -233,10 +220,20 @@ Problem and Hypothesis
 \end_layout
 
 \begin_layout Standard
-Express problem.
- We hypothesize that using GP and coevolution, and by applying an exogenous
- fitness function, we can evolve Robocode players that can compete successfully
- against the best human-designed robots.
+The problem we propose to investigate is whether or not one can use coevolution
+ to develop agents that can compete successully against human-coded agents
+ in a Robocode battle.
+ An aspect of this problem is how can we avoid the mediocre stable state
+ problem.
+ Obviously failure to avoid the mediocre stable state will result in non-competi
+ve robots.
+\end_layout
+
+\begin_layout Standard
+We hypothesize that using genetic programming and coevolution, and by applying
+ an exogenous fitness function to motivate the robots to avoid the mediocre
+ stable state, we can evolve Robocode players that can compete successfully
+ against human-designed robots.
 \end_layout
 
 \begin_layout Section

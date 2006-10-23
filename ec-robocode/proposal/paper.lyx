@@ -368,6 +368,8 @@ In
  by the agent.
  The base endogenous score was then modified, positively for good acts,
  negatively for bad acts.
+ By using the exogenous fitness function, they were able to induce the aggresive
+ behavior that they desired.
 \end_layout
 
 \begin_layout Subsection
@@ -375,27 +377,72 @@ Genetic Programming
 \end_layout
 
 \begin_layout Standard
-Automatic Programming of Robots using Genetic Programming
-\end_layout
-
-\begin_layout Standard
-In 
+Genetic programming has been successfully used to develop software agents.
+ In 
 \begin_inset LatexCommand \cite{Koza:1992bh}
 
 \end_inset
 
-Koza and Rice lay out he fundamental approach to genetic programming.
- 1.
- Generate an initial population of random composistion, i.e.
- programs.
- 2.
- Iterate until complete a.
- execute each program b.
- create a new population via reproduction and crossover.
+, Koza and Rice describe the development of a robot that could move a box
+ around a room by bumping into it.
+ Their efforts were successful, as the robot eventual grew to be able to
+ move the box, and account for issues such as rotation of the box due to
+ an off-axis bump.
+ A
 \end_layout
 
 \begin_layout Standard
-Because Robocode is a Java-based application, 
+In 
+\begin_inset LatexCommand \cite{montana93strongly}
+
+\end_inset
+
+, Montana develops a strongly-typed genetic programming (STGP) system.
+ While still tree-base, his system differs from the Koza standard approach
+ in two primary respects.
+ With regard to representation, each variable and constant has a specified
+ type.
+ Also, all functions have specified parameter and return types.
+ This change in representation was used to ensure that all generated trees
+ were type-wise correct.
+ Another change was that the initial population could not be generated randomly,
+ rather, it had to adhere to the typing rules.
+ 
+\end_layout
+
+\begin_layout Standard
+Some research has been performed using genetic programming systems that
+ were not tree-based.
+ These efforts include 
+\begin_inset LatexCommand \cite{waters1999gpa}
+
+\end_inset
+
+ and 
+\begin_inset LatexCommand \cite{lucas:ero}
+
+\end_inset
+
+.
+ In 
+\begin_inset LatexCommand \cite{waters1999gpa}
+
+\end_inset
+
+, Waters and Sheppard experimented in the AI Wars environment.
+ AI Wars bugs are controlled by blocks of procedural code.
+ They used five mutation operators and a crossover operator to modify the
+ code blocks.
+ Finally, in 
+\begin_inset LatexCommand \cite{lucas:ero}
+
+\end_inset
+
+, Lucas begins the investigation of how one can use the plethora of existing
+ object-oriented class libraries in GP solutions.
+ He proposes to use reflection to allow GP programs to discover and use
+ existing software.
+ This work is in its earliest stages.
 \end_layout
 
 \begin_layout Subsection

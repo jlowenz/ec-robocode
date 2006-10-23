@@ -131,8 +131,8 @@ Note that there is disagreement in the literature as to the definition of
 \end_inset
 
 .
- Following Luke, we have chosen to use the term coevolution even though
- we will have only one population of robots.
+ Following Luke, we have chosen to use the term coevolution even if only
+ one population is involved.
 \end_layout
 
 \begin_layout Standard
@@ -245,42 +245,9 @@ Coevolution
 \end_layout
 
 \begin_layout Standard
-In general, coevolution refers to an evolutionary process that includes
- two or more populations 
-\begin_inset LatexCommand \cite{koza1991eac}
-
-\end_inset
-
-.
- When determining the fitness of a member in one population, the environment
- includes the members of the other population(s).
- In EC, there are single population coevolution strategies
-\end_layout
-
-\begin_layout Standard
-Coevolution appears to be
-\end_layout
-
-\begin_layout Standard
-In 
-\begin_inset LatexCommand \cite{angeline93competitive}
-
-\end_inset
-
-, Angeline and Pollock argue that competitive fitness functions are more
- effective than independent fitness functions.
- A competitive fitness function is considered to be any calculation of fitness
- that is dependent on the current state of the population, rather than relative
- to a global optimum.
- Generally, competitive fitness is measured through competition between
- population members.
- These competitions can range from testing each member against each other
- to a carefully structured tournament 
-\begin_inset LatexCommand \cite{angeline93competitive}
-
-\end_inset
-
-.
+There has been considerable study of coevolution in evolutionary computation.
+ The efforts include research into both multiple population and single populatio
+n coevolution.
  
 \end_layout
 
@@ -322,6 +289,16 @@ Floreano, Nolfi and Mondada
 \end_layout
 
 \begin_layout Standard
+Uchibe and Asasa 
+\begin_inset LatexCommand \cite{Uchibe:2006qe}
+
+\end_inset
+
+ were able to use coevolution use evolve both competitive and cooperative
+ behaviors in soccer playing robots.
+\end_layout
+
+\begin_layout Standard
 Unfortunately, there are several potential drawbacks to a coevolutionary
  approach.
  The most frequently cited drawback is the learned phenomenon called a 
@@ -332,28 +309,65 @@ mediocre stable state.
 \begin_inset Quotes erd
 \end_inset
 
- The mediocre stable state arises when neither 
-\end_layout
-
-\begin_layout Standard
-Must maintain balance in the arms race, otherwise one challenger will be
- unable to offer continued opposition.
- The environment should netirher be too difficult nor too easy.
- The population members must be stressed to improve, but not so overwhelmed
- that they fail constantly.
- They found the open-ended coevolution is not necessarily synomous with
- a purely competive framework.
- They found it necessary to provide a mixture of competitive and cooperative
- pressures in order to avoid the mss
+ Ficici and Pollack 
 \begin_inset LatexCommand \cite{ficici98challenges}
 
 \end_inset
 
-.
+ found that other difficulties include the need to maintain balance in the
+ arms race.
+ If the arms race becomes imbalanced, one challenger will be unable to offer
+ continued opposition.
+ This will slow down or halt the evolution.
+ Another issue is that the environment should neither be too easy nor too
+ diffiult.
+ If the environment is too easy, the population members will not be stressed
+ to improve.
+ On the other hand, if the environment is too hard members will.
+ They concluded that open-ended coevolution is not necessarily synomous
+ with a purely competive framework.
+ They found it necessary to provide a mixture of competitive and cooperative
+ pressures in order to avoid the medicre stable state.
 \end_layout
 
 \begin_layout Standard
-There exist some approaches to try to avoid the MeSS.
+Some research has indicated paths that might help us guide the coevolutionary
+ process and thus avoid some of the previously-mentioned problems.
+ De Jong and Pollack 
+\begin_inset LatexCommand \cite{dejong2004iec}
+
+\end_inset
+
+ investigated fitness evaluation in coevolutionary systems.
+ They found that multiple objectives might underlie a problem .
+ They also found that it was possible to determine the complete evaluation
+ set.
+ This set can be used as a 
+\begin_inset Quotes eld
+\end_inset
+
+perfect teacher
+\begin_inset Quotes erd
+\end_inset
+
+ that can determine whether one member is dominated by another.
+ 
+\end_layout
+
+\begin_layout Standard
+In 
+\begin_inset LatexCommand \cite{waters1999gpa}
+
+\end_inset
+
+, an exogenous fitness function was proposed.
+ Whereas an endogenous fitness function is one provided by the game, in
+ their case AI Wars, an exogenous fitness function is one that is specified
+ by the investigators in an effort to guide the evolutionary process.
+ Their exogenous fitness function looked for certain specific acts committed
+ by the agent.
+ The base endogenous score was then modified, positively for good acts,
+ negatively for bad acts.
 \end_layout
 
 \begin_layout Subsection
@@ -378,6 +392,10 @@ Koza and Rice lay out he fundamental approach to genetic programming.
  Iterate until complete a.
  execute each program b.
  create a new population via reproduction and crossover.
+\end_layout
+
+\begin_layout Standard
+Because Robocode is a Java-based application, 
 \end_layout
 
 \begin_layout Subsection
@@ -522,8 +540,8 @@ Shichel, Ziserman, and Sipper also investigated coevolution, but found that
  the coevolved robots showed primitive behavior and were easily defeated
  by human-coded robots.
  To overcome the medioce steady state that arose rapidly in Eisenstein's
- work, they propose to bootstrap the evolutionary process with competition
- against human-coded robots.
+ work, they propose in future work to bootstrap the evolutionary process
+ with competition against human-coded robots.
  After a few generations in this configuration, they would switch to a coevoluti
 onary approach.
  

@@ -2322,18 +2322,21 @@ Terminals and Non-terminals
 \end_layout
 
 \begin_layout Subsection
-Execution environment 
+Execution Environment 
 \end_layout
 
 \begin_layout Standard
-The battles can be fought in parallel and the results accumulated to enable
- the next round of selection and reproduction.
- Robocode will be slightly modified to enable it to consume battle specification
-s from a JavaSpace.
- The results of the battle will then be posted back to the space.
- This will enable us to use multiple computers fight the battles and evaluate
- the fitness.
- If time permits, a control test will be run without...
+In order to perform the large number of fitness evaluations that will be
+ required, we believe it will be necessary to execute the Robocode battles
+ in parallel on multiple computers.
+ To enable this, Robocode will be slightly modified to enable it to consume
+ battle specifications from a centralized server.
+ Each Robocode instance will pull a battle specification from the server,
+ execute the battle, and return the results to the server.
+ When all of the battles have been fought, the selection and reproduction
+ mechanism will generate a new population and produce a new set of battle
+ specifications.
+ 
 \end_layout
 
 \begin_layout Section

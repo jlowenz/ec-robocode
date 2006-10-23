@@ -2341,8 +2341,10 @@ Results
 \end_layout
 
 \begin_layout Standard
-We plan to collect the following results.
- 
+The primary result we intend to report is the performance of our evolved
+ agents against some set of human-coded Robocode agents.
+ We will evaluate our agents periodically and report their progress, or
+ lack thereof, as a function of generation count.
 \end_layout
 
 \begin_layout Standard

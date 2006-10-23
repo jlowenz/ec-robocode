@@ -780,25 +780,36 @@ Representation
 \begin_layout Standard
 The genome for an individual in the population consists of a forest of expressio
 n trees.
- Using our knowledge of the Robocode domain, we identified three primary
- tasks for the robot: manage movement, manage targeting, and manage firing;
- thus, we require three separate controllers.
+ Using our knowledge of the Robocode domain, we identified four primary
+ tasks for the robot: manage movement, manage the radar, manage turret/targeting
+, and manage firing; thus, we require four separate controllers.
  To reduce the complexity of the problem somewhat, we assume that the "robotic
  platform" we are "executing" on accepts the following input from our controller
 s: a vector indicating movement, an angle relative to the heading for the
- turret direction, and a boolean/energy pair indicating whether to fire
- and how much energy the bullet should have.
+ radar dir, an angle relative to the heading for the turret direction, and
+ a boolean/energy pair indicating whether to fire and how much energy the
+ bullet should have.
  We believe this assumption will allow the algorithm to converge more quickly
- since it constrains the hyperspace of possible solutions, and thus may
+ since it constrains the hyperspace of possible solutions; however, it may
  put an upper bound on the performance of the evolved agents; a deficiency
  that could hinder an agent's capability to beat a human-written robot.
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+diagram of robotic platform and inputs to existing controller from GP forest
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 Each executable tree is recursively constructed of functions (or non-terminals,
  as we prefer) of various arity, and non-terminals with 0 arity.
  The nodes (both terminals and non-terminals) are strongly typed, after
- an adaptation of 
+ an adaptation of strongly-typed genetic programming described in 
 \begin_inset LatexCommand \cite{montana93strongly}
 
 \end_inset
@@ -835,10 +846,14 @@ Tables
 \end_inset
 
  is an angle in radians, 
-\begin_inset Formula $\Delta$
+\begin_inset Formula $\delta$
 \end_inset
 
  is a distance, 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is an abstract level, 
 \begin_inset Formula $\epsilon$
 \end_inset
 
@@ -846,7 +861,11 @@ Tables
 \begin_inset Formula $\beta$
 \end_inset
 
- is a boolean value, and 
+ is a boolean value, 
+\begin_inset Formula $\vec{v}$
+\end_inset
+
+ is a two-dimensional vector, and 
 \begin_inset Formula $\tau$
 \end_inset
 
@@ -870,8 +889,8 @@ standards
 \end_inset
 
 .
- All of the number-related nodes are generic: i.e.
- they can operate on any pair of numeric types (i.e.
+ All of the generic arithmetic nodes can operate on any pair of scalar numeric
+ types (i.e.
  angle, distance, energy level).
  
 \end_layout
@@ -880,7 +899,7 @@ standards
 \begin_inset Float table
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -1279,7 +1298,7 @@ status collapsed
 
 \begin_layout Standard
 \begin_inset Tabular
-<lyxtabular version="3" rows="21" columns="3">
+<lyxtabular version="3" rows="22" columns="3">
 <features>
 <column alignment="left" valignment="top" width="30line%">
 <column alignment="center" valignment="top" leftline="true" width="10line%">
@@ -1840,6 +1859,38 @@ How much energy did the bullet have?
 \begin_inset Text
 
 \begin_layout Standard
+bulletSpeed
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+\begin_inset Formula $\omega$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+How fast are bullets?
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
 rammerBearing
 \end_layout
 
@@ -2253,37 +2304,206 @@ Operators
 \end_layout
 
 \begin_layout Standard
-Generating and executing the trees.
+We use two operators, crossover and mutation.
+ As noted earlier, the standard GP versions of these operators will not
+ work in our case, since any given node is may not be compatible with any
+ other node due to type mismatch.
+ Therefore, both operators are modified to explicitly support the strong
+ typing:
+\end_layout
+
+\begin_layout Subsubsection
+Crossover
+\end_layout
+
+\begin_layout Standard
+The crossover operator takes 2 parent trees and produces 2 offspring created
+ by swapping randomly chosen subtrees between parents.
+ As described in 
+\begin_inset LatexCommand \cite{montana93strongly}
+
+\end_inset
+
+, a random node is picked from tree A to serve as the root of the swapped
+ subtree 
+\begin_inset Formula $\alpha$
+\end_inset
+
+.
+ Now a subtree must picked from tree B.
+ However, due to the requirement of matching the parent type of subtree
+ 
+\begin_inset Formula $\alpha$
+\end_inset
+
+, subtree 
+\begin_inset Formula $\beta$
+\end_inset
+
+ cannot be chosen from any node.
+ It must be randomly chosen from the set of nodes having the appropriate
+ type.
+ If 1 or more matching nodes exist, one is chosen randomly as the root of
+ subtree 
+\begin_inset Formula $\beta$
+\end_inset
+
+, otherwise the operator returns the parents or nothing.
+\end_layout
+
+\begin_layout Subsubsection
+Mutation
+\end_layout
+
+\begin_layout Standard
+Even though mutation is typically omitted from a GP with the claim that
+ it adds little utility 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+cite lecture notes
+\end_layout
+
+\end_inset
+
+, we choose to include it for several reasons.
+ We like the idea that mutation helps us explore the entire search space
+ (which crossover just can't do), and since we will probably be using a
+ relatively small population size due to minimal computational resources,
+ mutation will help us since it's unlikely that all valid operations will
+ exist in the initial population.
+\end_layout
+
+\begin_layout Standard
+The mutation operator itself will consist of all four primary variations
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+cite lecture notes again
+\end_layout
+
+\end_inset
+
+ (grow, shrink, cycle and switch) as well as a custom variation to operate
+ on the constant numerical values that may be present in our trees.
+ As was the case with crossover, the 4 tree variations must be modified
+ to handle the strong typing constraints.
+ For example, the cycle variation may only choose node that match what the
+ existing parent node expects.
+ Since the custom variation only deals with numerical constants, it 
+\begin_inset Quotes eld
+\end_inset
+
+automatically
+\begin_inset Quotes erd
+\end_inset
+
+ handles the typing constraints.
+\end_layout
+
+\begin_layout Standard
+The custom variation will be based on real-valued mutation, where the general
+ form is 
+\begin_inset Formula $x'=x+m$
+\end_inset
+
+ and 
+\begin_inset Formula $m$
+\end_inset
+
+ is a random value such that 
+\begin_inset Formula $m\sim U(a,b)$
+\end_inset
+
+ where 
+\begin_inset Formula $a$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ are lower and upper bounds, 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+yet again, the lecture notes
+\end_layout
+
+\end_inset
+
+ configurable per type.
+\end_layout
+
+\begin_layout Subsection
+Evaluation and Fitness Function
+\end_layout
+
+\begin_layout Standard
+The evaluation of fitness for each individual will be calculated by pitting
+ that individual against all other individuals in the population, including
+ itself (we see no reason to exclude this self-play from the evaluation
+ stage).
+ The resulting fitness value will be calculated as the average fitness over
+ all matches.
+ A match consists of a set of 10 two player tank-to-tank combat scenarios,
+ with random starting orientations selected for each scenario.
+ The match score will be the median fitness value from the sequence of combat
+ scenarios.
+\end_layout
+
+\begin_layout Standard
+As mentioned previously, we believe the failures encountered with previous
+ explorations of genetically programming Robocode agents under coevolution
+ occurred due to the use of the natural endogenous fitness function: the
+ score provided by Robocode.
+ This score is based on the various factors, but it essentially boils down
+ to the energy expended during a match.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+check on the scoring system used
+\end_layout
+
+\end_inset
+
+ We have proposed the use of an exogenous fitness function in order to drive
+ the type of behavior we'd like to see from an agent: the ability to dodge
+ and accurately shoot the enemy while minimizing the damage incurred from
+ enemy shots, rams, and wall collisions.
+ Therefore\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Subsection
+GP Algorithm Configuration
+\end_layout
+
+\begin_layout Standard
+As described for traditional tree-based GP in 
+\begin_inset LatexCommand \cite{montana93strongly,Luke:2001kx}
+
+\end_inset
+
+, we will generate the trees using Koza's 
+\emph on
+ramped half-and-half
+\emph default
+ method, apparently the de facto standard.
+ However, it will be modified as discussed by Montana to handle the strong
+ typing.
  
 \end_layout
 
 \begin_layout Standard
-Selection 
-\end_layout
-
-\begin_layout Standard
-Cross-over 
-\end_layout
-
-\begin_layout Standard
-Mutation.
- Probably is a valid operator since it is unlikely that all valid operations
- will exist in the initial population.
- Will likely consist of random selection of an operator in the tree and
- swapping it with a randomly selected type-compatible operator 
-\end_layout
-
-\begin_layout Subsection
-Evaluation
-\end_layout
-
-\begin_layout Standard
-Perfectly valid that a robot fight itself.
- 
-\end_layout
-
-\begin_layout Subsection
-GP Configuration
+Selection will be performed with the rank-order method.
+ This operator 
 \end_layout
 
 \begin_layout Standard
@@ -2300,6 +2520,16 @@ Our implementation of coevolution follows that of the model described in
 
 \begin_layout Subsection
 Examples 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+what is this section for?
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2311,14 +2541,6 @@ An additional tree will be generated for the main loop and the initialization
  The operators will be the set of methods that a Robocode robot has.
  We might introduce some macro-operations...
  
-\end_layout
-
-\begin_layout Subsection
-\begin_inset LatexCommand \label{sub:Terminals-and-Non-terminals}
-
-\end_inset
-
-Terminals and Non-terminals
 \end_layout
 
 \begin_layout Subsection

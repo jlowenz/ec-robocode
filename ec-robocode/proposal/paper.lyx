@@ -4,6 +4,8 @@
 \begin_header
 \textclass article
 \begin_preamble
+\usepackage{footmisc}
+\usepackage{float}
 \author{Ronald Bowers \& Jason Owens}
 \title{Coevolution of Human-Competitive Robocode Tanks Using Genetic Programming with Exogenous Fitness}
 \end_preamble
@@ -33,20 +35,17 @@
 
 \begin_body
 
-\begin_layout Standard
-\begin_inset ERT
-status collapsed
-
-\begin_layout Standard
-
-
-\backslash
-maketitle
+\begin_layout Title
+Coevolution of Human-Competitive Robocode Tanks Using Genetic Programming
+ with Exogenous Fitness
 \end_layout
 
-\end_inset
+\begin_layout Author
+Ronald Bowers & Jason Owens
+\end_layout
 
-
+\begin_layout Date
+October 23, 2006
 \end_layout
 
 \begin_layout Abstract
@@ -69,8 +68,7 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-One of the most intriquing ideas in AI is that is that of learning through
- self-play.
+One of the most intriquing ideas in AI is that of learning through self-play.
  Self-play, or 
 \begin_inset Quotes eld
 \end_inset
@@ -80,33 +78,38 @@ introspection
 \end_inset
 
  is the idea that a machine learning program can come to master some domain
- by repeatedly competing against itself and gradually improving
+ by repeatedly competing against itself and gradually improving 
 \begin_inset LatexCommand \cite{pollack97coevolution}
 
 \end_inset
 
 .
  Most efforts have been unsuccessful, however some, most notably Tesauro's
- TD-Gammon have succeeded greatly.
+ TD-Gammon 
+\begin_inset LatexCommand \cite{Tesauro:1995vn}
+
+\end_inset
+
+, have greatly succeeded.
  The essential problem with self-play has been that the programs that develop
- tend to be brittle.
- They cannot compete when then opposition is changed.
+ tend to be brittle; they cannot compete when then opposition is changed.
 \end_layout
 
 \begin_layout Standard
-Within the evolutionary computation parardigm, the coevolutionary approach
- provides a means to develop successful programs through self-play.
- More precisely, play against other individuals who are also trying to improve.
+Within the evolutionary computation paradigm, the coevolutionary approach
+ provides a means to develop successful programs through self-play, or more
+ precisely, through play against other individuals who are also trying to
+ improve.
  Traditional self-play can be likened to the old man in the park playing
  both sides of a chess board.
  A coevolutionary approach is more like a chess club in which all start
- as novices and, through competition with each other, gradually learn to
- become masters.
+ as novices and through competition with each other gradually learn to become
+ masters.
 \end_layout
 
 \begin_layout Standard
-Note that there is disagreement in the literature as to the definition of
- coevolution in the context of evolutionary computation.
+There is disagreement in the literature as to the definition of coevolution
+ in the context of evolutionary computation.
  In a biological sense, coevolution means two separate species evolving
  together, e.g.
  flowers and bees.
@@ -136,9 +139,9 @@ Note that there is disagreement in the literature as to the definition of
 \end_layout
 
 \begin_layout Standard
-The advantage coevolution provides is that because the members are competing
- against each other, the fitness landscape is not static.
- Rather it evolves along with the population.
+Coevolution provides the advantage of a non-static fitness landscape: it
+ evolves along with the population because the members are competing against
+ each other.
  A goal in coevolutionary systems is for the members to evolve in a such
  a way that an 
 \begin_inset Quotes eld
@@ -149,16 +152,32 @@ arms race
 \end_inset
 
  develops.
- An arms race is when the members begin to develop ways to counter the oppositio
-n's strengths and exploit their vulnerabilities.
+ An arms race is when the opposing members of the population simultaneously
+ begin to develop ways to counter their opposition's strengths and exploit
+ their vulnerabilities, which ultimately leads to more rapid evolution of
+ the system as a whole.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+do we have references for this?
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 Although coevolution appears to be a useful way of evolving game-playing
- agents.
- Historically, it has not often been successful in games where there is
- a cost or risk in taking action.
- Thus, the problem of the "mediocre stable state
+ agents, historically it has not often been successful in games where there
+ is a cost or risk in taking action.
+ In this situation, a phenomenon called 
+\begin_inset Quotes eld
+\end_inset
+
+mediocre stable state
 \begin_inset Foot
 status collapsed
 
@@ -172,15 +191,16 @@ The "mediocre stable state" is a state where the population consists of
 
 \end_inset
 
-" 
+" can occur 
 \begin_inset LatexCommand \cite{ficici98challenges,waters1999gpa,Shichel:2005eu}
 
 \end_inset
 
-.The mediocre stable state has consistently hindered the use of coevolution
+.
+ The mediocre stable state has consistently hindered the use of coevolution
  in the development of combat game playing agents.
  One approach to avoiding the mediocre stable state is through the use of
- an exogenous fitness function
+ an appropriate exogenous fitness function
 \begin_inset LatexCommand \cite{waters1999gpa}
 
 \end_inset
@@ -189,30 +209,113 @@ The "mediocre stable state" is a state where the population consists of
  
 \end_layout
 
+\begin_layout Subsection
+Robocode
+\end_layout
+
 \begin_layout Standard
-An interesting 
+An interesting
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+At least it's interesting from our point of view: evolving autonomous robotic
+ agents on a simulated battlefield seems to be at least partially applicable
+ to our current positions at the Army Research Lab.
+\end_layout
+
+\end_inset
+
+ environment in which to test the efficacy of coevolution is Robocode.
+ Robocode is a robot battle simulation game.
+ From the SourceForge project page: 
+\end_layout
+
+\begin_layout Quote
+Robocode is a Java based programming game, where the goal is to develop
+ robot battle tanks to battle against competitor tanks.
+ The motto of Robocode is: Build the best, destroy the rest!
+\end_layout
+
+\begin_layout Standard
+It provides a framework in which two or more software agents representing
+ robotic tanks (usually hand-coded by a programmer), can fight to the death.
+ An objective fitness score is provided (a likely endogenous fitness measure)
+ in order to rank tanks in a match.
+ Moving, shooting, colliding with walls & tanks, and getting shot by an
+ enemy cost energy.
+ Successfully shooting an enemy returns some energy.
+ A typical Robocode match consists of ten combat scenarios with the contestants
+ starting in random orientations.
+ The Robocode distribution comes with a set of relatively simple robots,
+ with advanced robots available online.
+ There is also a tournament system that allows developers to compete against
+ other robots that have been submitted.
+\end_layout
+
+\begin_layout Standard
+Eisenstein describes the Robocode environment as a mixture of realism and
+ fantasy 
+\begin_inset LatexCommand \cite{Eisenstein:2003wd}
+
+\end_inset
+
+: it's a simulation, so there are complex time-dependent relationships between
+ actions and effects, but it's also a relatively 
+\emph on
+simple
+\emph default
+ simulation with 
 \begin_inset Quotes eld
 \end_inset
 
-game
+advanced
 \begin_inset Quotes erd
 \end_inset
 
- in which to test the efficacy of coevoloution is Robocode.
- Robocode is a robot battle simulator.
- It provides a framework in which two or more software agents, representing
- robotic tanks, can fight to the death.
- Scoring is provided and is based on the robot's energy level.
- Moving, shooting, and getting shot by an enemy cost energy.
- Successfully hitting an enemy returns some energy.
- A typical Robocode match consists of ten battles, with the contestants
- starting a random positions.
- The Robocode distribution comes with a set of relatively simple robots.
- More advanced robots are available online.
- There is also a tournament system that allows developers to compete against
- other robots that have been submitted.
- Robocode is a interesting environment for coevolution because its scoring
- system favors inaction and, by extension, the mediocre stable state.
+ sensors, no noise, and a flat, finite, two dimensional world surrounded
+ by walls.
+\end_layout
+
+\begin_layout Standard
+Each robot executes in its own thread and is event driven.
+ The Robocode system synchronizes robot actions and sends messages to a
+ robot when various events occur.
+ These events include:
+\end_layout
+
+\begin_layout Description
+ScannedRobot detecting an enemy tank
+\end_layout
+
+\begin_layout Description
+HitByBullet getting hit by a bullet
+\end_layout
+
+\begin_layout Description
+WallCollision running into a wall 
+\end_layout
+
+\begin_layout Description
+RobotCollision running into another robot 
+\end_layout
+
+\begin_layout Description
+BulletHit hitting another robot with your bullet 
+\end_layout
+
+\begin_layout Description
+BulletMiss missing any robot with your bullet
+\end_layout
+
+\begin_layout Standard
+A robot responds to an event with some combination of logic and action execution.
+ Any actions are enqueued and subsequently take some time to execute.
+ If another event occurs before the first set of actions is completed, the
+ actions inspired by the second event are layered on top of the previous
+ set and they execute together.
+ This interaction between actions, events and the executed response of the
+ robot makes designing Robocode robots by hand difficult.
 \end_layout
 
 \begin_layout Section
@@ -221,19 +324,21 @@ Problem and Hypothesis
 
 \begin_layout Standard
 The problem we propose to investigate is whether or not one can use coevolution
- to develop agents that can compete successully against human-coded agents
+ to develop agents that can compete successfully against human-coded agents
  in a Robocode battle.
- An aspect of this problem is how can we avoid the mediocre stable state
- problem.
- Obviously failure to avoid the mediocre stable state will result in non-competi
-ve robots.
+ One aspect of this problem is how we can avoid producing a mediocre stable
+ state; a failure in that respect will result in non-competive robots.
 \end_layout
 
 \begin_layout Standard
-We hypothesize that using genetic programming and coevolution, and by applying
- an exogenous fitness function to motivate the robots to avoid the mediocre
- stable state, we can evolve Robocode players that can compete successfully
- against human-designed robots.
+We hypothesize that by using genetic programming and coevolution with an
+ exogenous fitness function (to motivate the robots to avoid the mediocre
+ stable state), we 
+\emph on
+can
+\emph default
+ evolve Robocode players that compete successfully against human-designed
+ robots.
 \end_layout
 
 \begin_layout Section
@@ -294,7 +399,7 @@ Uchibe and Asasa
 
 \end_inset
 
- were able to use coevolution use evolve both competitive and cooperative
+ were able to use coevolution to evolve both competitive and cooperative
  behaviors in soccer playing robots.
 \end_layout
 
@@ -320,26 +425,27 @@ mediocre stable state.
  continued opposition.
  This will slow down or halt the evolution.
  Another issue is that the environment should neither be too easy nor too
- diffiult.
- If the environment is too easy, the population members will not be stressed
- to improve.
- On the other hand, if the environment is too hard members will.
+ difficult: if the environment is too easy, the population members will
+ not be stressed enough to improve; on the other hand, if the environment
+ is too hard members will be too stressed; this can lead to low fitness
+ and make it difficult to progress.
  They concluded that open-ended coevolution is not necessarily synomous
  with a purely competive framework.
- They found it necessary to provide a mixture of competitive and cooperative
- pressures in order to avoid the medicre stable state.
+ Instead, it's necessary to provide a mixture of competitive and cooperative
+ pressures in order to avoid the mediocre stable state.
 \end_layout
 
 \begin_layout Standard
-Some research has indicated paths that might help us guide the coevolutionary
- process and thus avoid some of the previously-mentioned problems.
+Some research has indicated promising techniques that might help to guide
+ the coevolutionary process and thus avoid some of the previously-mentioned
+ problems.
  De Jong and Pollack 
 \begin_inset LatexCommand \cite{dejong2004iec}
 
 \end_inset
 
  investigated fitness evaluation in coevolutionary systems.
- They found that multiple objectives might underlie a problem .
+ They found that a problem might consist of multiple competing objectives.
  They also found that it was possible to determine the complete evaluation
  set.
  This set can be used as a 
@@ -361,14 +467,15 @@ In
 \end_inset
 
 , an exogenous fitness function was proposed.
- Whereas an endogenous fitness function is one provided by the game, in
- their case AI Wars, an exogenous fitness function is one that is specified
- by the investigators in an effort to guide the evolutionary process.
- Their exogenous fitness function looked for certain specific acts committed
+ Whereas an endogenous fitness function is one provided by the environment
+ itself, in their case the programming game AI Wars, an exogenous fitness
+ function is one that is specified by the investigators (an example of inductive
+ bias) in an effort to guide the evolutionary process.
+ Their exogenous fitness function looked for certain specific acts performed
  by the agent.
- The base endogenous score was then modified, positively for good acts,
+ The base endogenous score was then modified: positively for good acts,
  negatively for bad acts.
- By using the exogenous fitness function, they were able to induce the aggresive
+ By using this exogenous fitness function they were able to induce the aggresive
  behavior that they desired.
 \end_layout
 
@@ -384,11 +491,10 @@ Genetic programming has been successfully used to develop software agents.
 \end_inset
 
 , Koza and Rice describe the development of a robot that could move a box
- around a room by bumping into it.
+ around a room by pushing it.
  Their efforts were successful, as the robot eventual grew to be able to
  move the box, and account for issues such as rotation of the box due to
  an off-axis bump.
- A
 \end_layout
 
 \begin_layout Standard
@@ -398,14 +504,13 @@ In
 \end_inset
 
 , Montana develops a strongly-typed genetic programming (STGP) system.
- While still tree-base, his system differs from the Koza standard approach
- in two primary respects.
- With regard to representation, each variable and constant has a specified
- type.
- Also, all functions have specified parameter and return types.
+ While still tree-base, his system differs from the Koza's standard approach
+ in two primary aspects.
+ First, the representation includes specified types for each variable and
+ constant as well as the parameters and return value for all functions.
  This change in representation was used to ensure that all generated trees
- were type-wise correct.
- Another change was that the initial population could not be generated randomly,
+ had no type-mismatch errors.
+ Second, the initial population cannot be generated completely randomly;
  rather, it had to adhere to the typing rules.
  
 \end_layout
@@ -414,6 +519,11 @@ In
 Some research has been performed using genetic programming systems that
  were not tree-based.
  These efforts include 
+\begin_inset LatexCommand \cite{Eisenstein:2003wd}
+
+\end_inset
+
+, 
 \begin_inset LatexCommand \cite{waters1999gpa}
 
 \end_inset
@@ -425,11 +535,18 @@ Some research has been performed using genetic programming systems that
 
 .
  In 
+\begin_inset LatexCommand \cite{Eisenstein:2003wd}
+
+\end_inset
+
+, Eisenstein evolves agents for Robocode using his own custom-designed TableRex
+ language based on Leslie Kaelbling's REX language.
+ In 
 \begin_inset LatexCommand \cite{waters1999gpa}
 
 \end_inset
 
-, Waters and Sheppard experimented in the AI Wars environment.
+, Waters and Sheppard experimented in the AI Wars game environment.
  AI Wars bugs are controlled by blocks of procedural code.
  They used five mutation operators and a crossover operator to modify the
  code blocks.
@@ -446,6 +563,10 @@ Some research has been performed using genetic programming systems that
 \end_layout
 
 \begin_layout Subsection
+\begin_inset LatexCommand \label{sub:Robocode-based-Investigations}
+
+\end_inset
+
 Robocode-based Investigations
 \end_layout
 
@@ -536,9 +657,9 @@ In
 
 , Hong and Cho used a GA that consisted of six chromosomes, each of which
  had six genes.
- The chromosomes were related to the behavior that the tank would exhibit
- in the main loop and in five of the event handlers.
- Each gene corresponded to a specific action-type of the tank, for eample
+ The chromosomes were related to the behavior the tank would exhibit in
+ the main loop and in five of the event handlers.
+ Each gene corresponded to a specific action-type of the tank, for example
  
 \emph on
 \noun on
@@ -571,14 +692,16 @@ Haiku bot
 \noun default
 .
  The Haiku bot is limited to four lines of custom code, where the number
- of lines is the number of semicolons.
+ of lines is indicated by the number of semicolons.
  After investigating and rejecting Strongly Typed Genetic Programming and
  Automatically Defined Functions, they chose a Koza-style LISP implementation.
  This had the extra benefit of allowing complex expressions since the the
- Haiku bot class places no limit on the number of parentheses.
+ Haiku bot class places no limit on the number of parentheses (and thus
+ the size of the expression).
  After completing the evolution process, the highest performing robot was
  entered into the Robocode Haiku Bot tournamemt.
- Remarkably, it finished third out of 27 contestants.
+ Remarkably, it finished third out of 27 contestants, where all other contestant
+s were hand-coded.
  
 \end_layout
 
@@ -586,7 +709,7 @@ Haiku bot
 Shichel, Ziserman, and Sipper also investigated coevolution, but found that
  the coevolved robots showed primitive behavior and were easily defeated
  by human-coded robots.
- To overcome the medioce steady state that arose rapidly in Eisenstein's
+ To overcome the mediocre steady state that arose rapidly in Eisenstein's
  work, they propose in future work to bootstrap the evolutionary process
  with competition against human-coded robots.
  After a few generations in this configuration, they would switch to a coevoluti
@@ -599,7 +722,7 @@ Approach
 \end_layout
 
 \begin_layout Standard
-Ignoring the warnings of others, we plan to carry through and explore the
+Ignoring the failures of others, we plan to carry through and explore the
  experiment using genetic programming and coevolution in this rather 
 \begin_inset Quotes eld
 \end_inset
@@ -609,7 +732,13 @@ open-ended
 \end_inset
 
  domain.
- Previous research in evolving Robocode agents reported failure when pursuing
+ As mentioned in Section\InsetSpace ~
+
+\begin_inset LatexCommand \ref{sub:Robocode-based-Investigations}
+
+\end_inset
+
+, previous research in evolving Robocode agents reported failure when pursuing
  a coevolutionary model, and thus they resorted to training against known
  quantities 
 \begin_inset LatexCommand \cite{Eisenstein:2003wd,Shichel:2005eu}
@@ -619,8 +748,12 @@ open-ended
 .
  However, in doing this, the danger of evolving specialized players unable
  to handle generalized situations (i.e.
- new players with different tactics) is increased; in fact, [one of them
- mentions this].
+ new players with different tactics) is increased; in fact, 
+\begin_inset LatexCommand \cite{Shichel:2005eu}
+
+\end_inset
+
+ mentions observing this exact problem.
  From our point of view, coevolution is obviously more exciting; we believe
  that the lack of an appropriate exogenous fitness function is the primary
  reason the previous ventures failed during coevolution.
@@ -652,125 +785,18 @@ motivated
 \end_layout
 
 \begin_layout Standard
+The following subsections describe the high-level aspects of our proposed
+ experiment, including the representation, operators, evaluation, initial
+ algorithm configuration, and some notes on the planned execution environment.
+\end_layout
+
+\begin_layout Standard
 As stated previously, our system is essentially open-ended, unless a member
  of the population is able to always defeat all opposition, both evolved
  and human-designed.
  Since this is not likely, the experiment will be terminated after some
  number of generations.
  The exact number will depend on our processing speed.
-\end_layout
-
-\begin_layout Standard
-Although Koza generally dismisses the need for mutation in GP, we believe
- that it is necessary to access some parts of the solution space.
- Consider an operator that takes a value, such as turnRight(degrees).
- The amount to turn is specified as an argument.
- Crossover and reproduction cannot explore how far to turn unless all parameter
- values are represented in the initial population.
- It is more practical to allow mutation of such parameters.
- 
-\end_layout
-
-\begin_layout Subsection
-Detailed Game Description
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-go back and modify references
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-From the SourceForge project page: 
-\end_layout
-
-\begin_layout Quote
-Robocode is a Java based programming game, where the goal is to develop
- robot battle tanks to battle against competitor tanks.
- The motto of Robocode is: Build the best, destroy the rest! 
-\end_layout
-
-\begin_layout Standard
-Eisenstein describes the Robocode environment as a mixture of realism and
- fantasy 
-\begin_inset LatexCommand \cite{Eisenstein:2003wd}
-
-\end_inset
-
-: it's a simulation, so there are complex time-dependent relationships between
- actions and effects, but it's also a relatively 
-\emph on
-simple
-\emph default
- simulation with 
-\begin_inset Quotes eld
-\end_inset
-
-advanced
-\begin_inset Quotes erd
-\end_inset
-
- sensors, no noise, and a flat, finite, two dimensional world surrounded
- by walls.
-\end_layout
-
-\begin_layout Standard
-Each robot executes in its own thread and is event driven.
- The Robocode system synchronizes robot actions and sends messages to a
- robot when various events occur.
- These events include:
-\end_layout
-
-\begin_layout Description
-ScannedRobot detecting an enemy tank
-\end_layout
-
-\begin_layout Description
-HitByBullet getting hit by a bullet
-\end_layout
-
-\begin_layout Description
-WallCollision running into a wall 
-\end_layout
-
-\begin_layout Description
-RobotCollision running into another robot 
-\end_layout
-
-\begin_layout Description
-BulletHit hitting another robot with your bullet 
-\end_layout
-
-\begin_layout Description
-BulletMiss missing any robot with your bullet
-\end_layout
-
-\begin_layout Standard
-A robot responds to an event with some combination of logic and action execution.
- Any actions are enqueued and subsequently take some time to execute.
- If another event occurs before the first set of actions is completed, the
- actions inspired by the second event are layered on top of the previous
- set and they execute together.
- This interaction between actions, events and the executed response of the
- robot makes designing Robocode robots by hand difficult.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-talk about scoring system, and other details mentioned in the introduction
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Subsection
@@ -792,9 +818,9 @@ s: a vector indicating movement, an angle relative to the heading for the
  We believe this assumption will allow the algorithm to converge more quickly
  since it constrains the hyperspace of possible solutions; however, it may
  put an upper bound on the performance of the evolved agents; a deficiency
- that could hinder an agent's capability to beat a human-written robot.
+ that could hinder an agent's capability to beat a human-coded robot.
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Standard
 diagram of robotic platform and inputs to existing controller from GP forest
@@ -2304,12 +2330,14 @@ Operators
 \end_layout
 
 \begin_layout Standard
-We use two operators, crossover and mutation.
+We use two reproductive operators: crossover and mutation.
  As noted earlier, the standard GP versions of these operators will not
- work in our case, since any given node is may not be compatible with any
- other node due to type mismatch.
+ work in our case, since any given node may not be compatible with any other
+ node due to a type mismatch.
  Therefore, both operators are modified to explicitly support the strong
- typing:
+ typing.
+ In addition, the operators will only operate between like chromosomes (e.g.
+ the movement tree).
 \end_layout
 
 \begin_layout Subsubsection
@@ -2358,12 +2386,7 @@ Mutation
 \begin_layout Standard
 Even though mutation is typically omitted from a GP with the claim that
  it adds little utility 
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-cite lecture notes
-\end_layout
+\begin_inset LatexCommand \cite{Sheppard:2006fk}
 
 \end_inset
 
@@ -2371,28 +2394,37 @@ cite lecture notes
  We like the idea that mutation helps us explore the entire search space
  (which crossover just can't do), and since we will probably be using a
  relatively small population size due to minimal computational resources,
- mutation will help us since it's unlikely that all valid operations will
- exist in the initial population.
+ mutation will help since it's unlikely that all valid operations will exist
+ in the initial population.
+ For example, consider an operator that takes a value, such as (add 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ 
+\begin_inset Formula $\beta$
+\end_inset
+
+).
+ The amount to add is specified as an argument.
+ Crossover and reproduction cannot explore how much to add unless all parameter
+ values are represented in the initial population.
+ It is more practical to allow mutation of such parameters.
+ 
 \end_layout
 
 \begin_layout Standard
 The mutation operator itself will consist of all four primary variations
  
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-cite lecture notes again
-\end_layout
+\begin_inset LatexCommand \cite{Sheppard:2006fk}
 
 \end_inset
 
  (grow, shrink, cycle and switch) as well as a custom variation to operate
- on the constant numerical values that may be present in our trees.
+ on the constant numerical values that can be present in our trees.
  As was the case with crossover, the 4 tree variations must be modified
  to handle the strong typing constraints.
- For example, the cycle variation may only choose node that match what the
- existing parent node expects.
+ For example, the cycle variation may only choose from nodes that match
+ what the existing parent node expects.
  Since the custom variation only deals with numerical constants, it 
 \begin_inset Quotes eld
 \end_inset
@@ -2426,84 +2458,16 @@ The custom variation will be based on real-valued mutation, where the general
 \begin_inset Formula $b$
 \end_inset
 
- are lower and upper bounds, 
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-yet again, the lecture notes
-\end_layout
+ are lower and upper bounds 
+\begin_inset LatexCommand \cite{Sheppard:2006fk}
 
 \end_inset
 
- configurable per type.
+, configurable per type.
 \end_layout
 
 \begin_layout Subsection
 Evaluation and Fitness Function
-\end_layout
-
-\begin_layout Standard
-The evaluation of fitness for each individual will be calculated by pitting
- that individual against all other individuals in the population, including
- itself (we see no reason to exclude this self-play from the evaluation
- stage).
- The resulting fitness value will be calculated as the average fitness over
- all matches.
- A match consists of a set of 10 two player tank-to-tank combat scenarios,
- with random starting orientations selected for each scenario.
- The match score will be the median fitness value from the sequence of combat
- scenarios.
-\end_layout
-
-\begin_layout Standard
-As mentioned previously, we believe the failures encountered with previous
- explorations of genetically programming Robocode agents under coevolution
- occurred due to the use of the natural endogenous fitness function: the
- score provided by Robocode.
- This score is based on the various factors, but it essentially boils down
- to the energy expended during a match.
- 
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-check on the scoring system used
-\end_layout
-
-\end_inset
-
- We have proposed the use of an exogenous fitness function in order to drive
- the type of behavior we'd like to see from an agent: the ability to dodge
- and accurately shoot the enemy while minimizing the damage incurred from
- enemy shots, rams, and wall collisions.
- Therefore\SpecialChar \ldots{}
-
-\end_layout
-
-\begin_layout Subsection
-GP Algorithm Configuration
-\end_layout
-
-\begin_layout Standard
-As described for traditional tree-based GP in 
-\begin_inset LatexCommand \cite{montana93strongly,Luke:2001kx}
-
-\end_inset
-
-, we will generate the trees using Koza's 
-\emph on
-ramped half-and-half
-\emph default
- method, apparently the de facto standard.
- However, it will be modified as discussed by Montana to handle the strong
- typing.
- 
-\end_layout
-
-\begin_layout Standard
-Selection will be performed with the rank-order method.
- This operator 
 \end_layout
 
 \begin_layout Standard
@@ -2513,18 +2477,374 @@ Our implementation of coevolution follows that of the model described in
 
 \end_inset
 
-: one-population coevolution, where single individuals within that population
- are paired up and pitted against every other individual to obtain an overall
- fitness value.
+: one-population coevolution, where single individuals compete with every
+ other individual to obtain an overall fitness value.
+ Thus, the evaluation of fitness for each individual will be calculated
+ by matching that individual against all other individuals in the population,
+ including itself (we see no reason to exclude this self-play from the evaluatio
+n stage) where the resulting fitness value will be calculated as the average
+ fitness over all matches.
+ A match consists of a set of 10 two player tank-to-tank combat scenarios,
+ with random starting orientations selected for each scenario.
+ The match score will be the median fitness value from the sequence of combat
+ scenarios.
+\end_layout
+
+\begin_layout Standard
+As mentioned previously, we believe the failures encountered with previous
+ explorations of genetically programmed Robocode agents under coevolution
+ occurred due to the use of the natural endogenous fitness function: the
+ score provided by Robocode.
+ This score is based on various factors including: survival relative to
+ other robots, last robot alive bonus, bullet damage to enemies, bullet
+ kill bonus, ram damage to enemies, and ram kill bonus 
+\begin_inset LatexCommand \cite{Nelson:2006kx}
+
+\end_inset
+
+.
+ Note that firing a bullet, getting hit by a bullet, ramming a robot (or
+ getting rammed), and colliding with a wall all cause 
+\begin_inset Quotes eld
+\end_inset
+
+damage
+\begin_inset Quotes erd
+\end_inset
+
+ in the form of reducing the overall energy level of the robot.
+ When the energy level drops to zero, the robot is dead.
+ Since robots in a coevolutionary environment start at about the same level
+ with very primitive movement, firing, targeting and scanning skills, the
+ most productive thing (i.e.
+ the one generating the highest relative score) to do is sit still.
+ Even though successfully shooting an enemy is rewarded, the primitive skills
+ prevent accuracy, and thus simply waste energy.
+ The best successful strategy in this situation is to do nothing: a mediocre
+ stable state.
+ 
+\end_layout
+
+\begin_layout Standard
+Previous work has abandoned coevolution in favor of training against external
+ opponents that provide motivation to at least dodge bullets (if not to
+ fire bullets themselves).
+ We, however, propose the use of coevolution with an exogenous fitness function
+ that will drive the type of behavior we'd like to see from an agent: the
+ ability to dodge and accurately shoot the enemy while minimizing the damage
+ incurred from enemy shots, rams, and wall collisions.
+ Therefore, we must balance the reward of staying alive (which is important
+ to winning, but can lead to stagnation), with actually firing bullets,
+ actively killing enemies (i.e.
+ by bullet or ram) and avoiding collisions in general (especially with walls).
+ In addition, we propose to adapt the fitness function over time to initially
+ emphasize firing bullets (accurate or not) and gradually transition to
+ emphasizing accuracy when firing, after the targeting and scanning systems
+ begin to mature.
 \end_layout
 
 \begin_layout Subsection
-Examples 
-\begin_inset Note Note
+GP Algorithm Configuration
+\end_layout
+
+\begin_layout Subsubsection
+Initial Tree Creation
+\end_layout
+
+\begin_layout Standard
+We will generate tree's using Koza's 
+\emph on
+ramped half-and-half
+\emph default
+ method (described in 
+\begin_inset LatexCommand \cite{Luke:2001kx}
+
+\end_inset
+
+), which is apparently the de facto standard for tree initialization.
+ This method generates trees by randomly choosing a depth from a pre-configured
+ depth range, then probabilistically choosing either the GROW or FULL generation
+ method.
+ The GROW algorithm is essentially the same as the grow mutation variation,
+ randomly choosing non-terminals and terminals to generate a tree up to
+ the depth range.
+ FULL differs from the GROW algorithm by always choosing non-terminals in
+ order to always generate full trees.
+ Each tree in our forest-based genome can have it's own set of parameters
+ (max/min depth), however in practice we will probably set them equal.
+\end_layout
+
+\begin_layout Subsubsection
+Selection and Replacement
+\end_layout
+
+\begin_layout Standard
+We will select individuals using the ranked-order method.
+ Replacement will be generational, with elitism 
+\begin_inset LatexCommand \cite{Sheppard:2006uq}
+
+\end_inset
+
+.
+ Specific parameters are shown in Table\InsetSpace ~
+
+\begin_inset LatexCommand \ref{tab:Algorithm-parameters}
+
+\end_inset
+
+.
+ We reserve the right to tweak these parameters once we run some initial
+ experiments.
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset LatexCommand \label{sub:Termination-Criteria}
+
+\end_inset
+
+Termination Criteria
+\end_layout
+
+\begin_layout Standard
+In our case, the termination criteria will be based on one of two conditions:
+ fitness stops changing significantly over a given period of time (i.e.
+ 20 generations), or we run out of time (lack of resources).
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Parameters
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement h
+wide false
+sideways false
 status open
 
 \begin_layout Standard
-what is this section for?
+\begin_inset Tabular
+<lyxtabular version="3" rows="9" columns="2">
+<features>
+<column alignment="left" valignment="top" rightline="true" width="50col%">
+<column alignment="center" valignment="top" width="40col%">
+<row bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+Parameter
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+Value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Population Size
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+100
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+footnotemark
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Maximum Generations
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+See Section\InsetSpace ~
+
+\begin_inset LatexCommand \ref{sub:Termination-Criteria}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Crossover rate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+0.6
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Mutation rate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+0.2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Reproduction rate (direct copy of parents)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+0.1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Elitism
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Top 10 percent
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Maximum initial tree depth
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+8
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Maximum tree depth after crossover/mutation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+10
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+\begin_inset LatexCommand \label{tab:Algorithm-parameters}
+
+\end_inset
+
+Algorithm parameters
 \end_layout
 
 \end_inset
@@ -2533,14 +2853,24 @@ what is this section for?
 \end_layout
 
 \begin_layout Standard
-An additional tree will be generated for the main loop and the initialization
- step.
- Each event handler has different information available to it.
- Therefore, the programs that are built for each handler have different
- grammars.
- The operators will be the set of methods that a Robocode robot has.
- We might introduce some macro-operations...
- 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+footnotetext{The population size is so small due to the nature of the evaluation
+: there will be $
+\backslash
+frac{n^2}{2}$ matches, where a match consists of 10 combat scenarios.
+ Thus, the total number of game "runs" per generation will be 50000, and
+ if each run takes .5 seconds, it's still 6.9 cpu hours per generation.}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -2550,14 +2880,14 @@ Execution Environment
 \begin_layout Standard
 In order to perform the large number of fitness evaluations that will be
  required, we believe it will be necessary to execute the Robocode battles
- in parallel on multiple computers.
- To enable this, Robocode will be slightly modified to enable it to consume
+ in parallel on as many computers as we can.
+ To achieve this, Robocode will be slightly modified to enable it to consume
  battle specifications from a centralized server.
  Each Robocode instance will pull a battle specification from the server,
  execute the battle, and return the results to the server.
  When all of the battles have been fought, the selection and reproduction
  mechanism will generate a new population and produce a new set of battle
- specifications.
+ specifications for the next generation.
  
 \end_layout
 
@@ -2568,8 +2898,8 @@ Results
 \begin_layout Standard
 The primary result we intend to report is the performance of our evolved
  agents against some set of human-coded Robocode agents.
- We will evaluate our agents periodically and report their progress, or
- lack thereof, as a function of generation count.
+ We will evaluate our agents periodically and report their progress (whether
+ positive or negative) as a function of generation count.
 \end_layout
 
 \begin_layout Standard

@@ -1,15 +1,13 @@
-package ec.gp;
+package com.imaginaryday.ec.gp;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Created by IntelliJ IDEA.
  * User: jlowens
  * Date: Oct 27, 2006
  * Time: 11:53:22 AM
- * To change this template use File | Settings | File Templates.
  */
 public class NodeTest extends TestCase {
 
@@ -22,8 +20,14 @@ public class NodeTest extends TestCase {
 
 	public void testNodes()
 	{
+        NodeFactory nf = NodeFactory.getInstance();
+        Node root = nf.create("add");
+        root.attach(0, nf.create("mul").attach(0, nf.create("const", 5))
+                                       .attach(1, nf.create("const", 12)))
+            .attach(1, nf.create("const", 42));
 
-	}
+        assertEquals(102.0, root.evaluate());
+    }
 
 	public static Test suite()
 	{

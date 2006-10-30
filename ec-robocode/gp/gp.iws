@@ -18,33 +18,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Subtract.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Multiply.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/com/imaginaryday/ec/gp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Add.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/AbstractNode.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ec/gp/Node.java" afterPath="" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Constant.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/functionalj-0.8-jdk15.jar" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ec/gp/Type.java" afterPath="" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/Type.java" afterPath="" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/com" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/junit-4.1.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/NodeFactory.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gp.iws" afterPath="$PROJECT_DIR$/gp.iws" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/com/imaginaryday/ec/gp/NodeTest.java" afterPath="$PROJECT_DIR$/test/com/imaginaryday/ec/gp/NodeTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Divide.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gp.iml" afterPath="$PROJECT_DIR$/gp.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/com/imaginaryday/ec" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ec/gp" afterPath="" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/com/imaginaryday" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/ec/gp/NodeTest.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/NodeFactory.java" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/NodeFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/AbstractNode.java" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/AbstractNode.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/TreeFactory.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/Node.java" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp/Node.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/ec/gp" afterPath="" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/imaginaryday/ec/gp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gp.ipr" afterPath="$PROJECT_DIR$/gp.ipr" />
     </list>
   </component>
   <component name="ChangeListSynchronizer" />
@@ -176,7 +155,7 @@
       <file leaf-file-name="Node.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/Node.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="28" selection-start="261" selection-end="261" vertical-scroll-proportion="0.15267175">
+            <state line="20" column="25" selection-start="337" selection-end="337" vertical-scroll-proportion="0.18365473">
               <folding />
             </state>
           </provider>
@@ -185,7 +164,7 @@
       <file leaf-file-name="NodeTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/com/imaginaryday/ec/gp/NodeTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="0" selection-start="194" selection-end="194" vertical-scroll-proportion="0.10905126">
+            <state line="34" column="42" selection-start="823" selection-end="823" vertical-scroll-proportion="0.31221303">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -193,10 +172,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RoboWorkerProxy.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/roboworker/impl/RoboWorkerProxy.java">
+      <file leaf-file-name="TreeFactory.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/TreeFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="13" selection-start="144" selection-end="144" vertical-scroll-proportion="0.07633588">
+            <state line="16" column="36" selection-start="270" selection-end="290" vertical-scroll-proportion="0.14692378">
               <folding />
             </state>
           </provider>
@@ -205,7 +184,7 @@
       <file leaf-file-name="NodeFactory.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/NodeFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="0" selection-start="492" selection-end="492" vertical-scroll-proportion="0.21810251">
+            <state line="124" column="61" selection-start="4576" selection-end="4576" vertical-scroll-proportion="0.91735536">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -213,10 +192,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Constant.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Constant.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Constant.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="16" selection-start="1229" selection-end="1229" vertical-scroll-proportion="0.66521263">
+            <state line="7" column="3" selection-start="149" selection-end="149" vertical-scroll-proportion="0.064279154">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -227,7 +206,7 @@
       <file leaf-file-name="AbstractNode.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/AbstractNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="18" selection-start="922" selection-end="922" vertical-scroll-proportion="0.3925845">
+            <state line="32" column="36" selection-start="745" selection-end="745" vertical-scroll-proportion="0.29384756">
               <folding />
             </state>
           </provider>
@@ -236,7 +215,7 @@
       <file leaf-file-name="Divide.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Divide.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="13" selection-start="228" selection-end="228" vertical-scroll-proportion="0.1308615">
+            <state line="12" column="13" selection-start="228" selection-end="228" vertical-scroll-proportion="0.110192835">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -247,7 +226,7 @@
       <file leaf-file-name="Add.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Add.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="13" selection-start="227" selection-end="227" vertical-scroll-proportion="0.1308615">
+            <state line="12" column="13" selection-start="227" selection-end="227" vertical-scroll-proportion="0.110192835">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -258,7 +237,7 @@
       <file leaf-file-name="Subtract.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Subtract.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="13" selection-start="228" selection-end="228" vertical-scroll-proportion="0.1308615">
+            <state line="12" column="13" selection-start="228" selection-end="228" vertical-scroll-proportion="0.110192835">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -269,7 +248,7 @@
       <file leaf-file-name="Multiply.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Multiply.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="0" selection-start="215" selection-end="215" vertical-scroll-proportion="0.1308615">
+            <state line="12" column="0" selection-start="215" selection-end="215" vertical-scroll-proportion="0.110192835">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -850,24 +829,24 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="25" y="22" width="1870" height="1540" extended-state="0" />
+    <frame x="25" y="22" width="1625" height="1554" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="-1" />
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="-1" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="7" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19253977" order="0" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22243346" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="1" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32982457" order="8" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25473684" order="8" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="6" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="-1" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="1" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="-1" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21894737" order="2" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21681723" order="2" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="2" />
       <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="4" />
@@ -983,7 +962,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Multiply.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="215" selection-end="215" vertical-scroll-proportion="0.1308615">
+        <state line="12" column="0" selection-start="215" selection-end="215" vertical-scroll-proportion="0.110192835">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -992,7 +971,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Divide.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="13" selection-start="228" selection-end="228" vertical-scroll-proportion="0.1308615">
+        <state line="12" column="13" selection-start="228" selection-end="228" vertical-scroll-proportion="0.110192835">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1001,7 +980,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Add.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="13" selection-start="227" selection-end="227" vertical-scroll-proportion="0.1308615">
+        <state line="12" column="13" selection-start="227" selection-end="227" vertical-scroll-proportion="0.110192835">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1010,7 +989,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Subtract.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="13" selection-start="228" selection-end="228" vertical-scroll-proportion="0.1308615">
+        <state line="12" column="13" selection-start="228" selection-end="228" vertical-scroll-proportion="0.110192835">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1019,21 +998,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/Node.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="28" selection-start="261" selection-end="261" vertical-scroll-proportion="0.15267175">
+        <state line="20" column="25" selection-start="337" selection-end="337" vertical-scroll-proportion="0.18365473">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/AbstractNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="18" selection-start="922" selection-end="922" vertical-scroll-proportion="0.3925845">
+        <state line="32" column="36" selection-start="745" selection-end="745" vertical-scroll-proportion="0.29384756">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Constant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="3" selection-start="149" selection-end="149" vertical-scroll-proportion="0.064279154">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/com/imaginaryday/ec/gp/NodeTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="194" selection-end="194" vertical-scroll-proportion="0.10905126">
+        <state line="34" column="42" selection-start="823" selection-end="823" vertical-scroll-proportion="0.31221303">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1042,19 +1030,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/NodeFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="492" selection-end="492" vertical-scroll-proportion="0.21810251">
+        <state line="124" column="61" selection-start="4576" selection-end="4576" vertical-scroll-proportion="0.91735536">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Constant.java">
+    <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/TreeFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="16" selection-start="1229" selection-end="1229" vertical-scroll-proportion="0.66521263">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="16" column="36" selection-start="270" selection-end="290" vertical-scroll-proportion="0.14692378">
+          <folding />
         </state>
       </provider>
     </entry>

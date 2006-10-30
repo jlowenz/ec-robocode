@@ -29,6 +29,10 @@ public abstract class AbstractNode implements Node {
     }
 
 
+    public boolean isTerminal() {
+        return getInputCount() == 0;
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("(").append(getName()).append(" ");

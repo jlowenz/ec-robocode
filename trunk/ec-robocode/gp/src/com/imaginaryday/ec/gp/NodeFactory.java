@@ -4,8 +4,7 @@ import com.imaginaryday.ec.gp.nodes.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: jlowens
@@ -16,21 +15,28 @@ public class NodeFactory {
     private static NodeFactory _instance;
 
     private Map<String, Class> nodesByName;
-    private Map<Class, Class> nodesByOutputType;
-    private Map<Class[], Class> nodesByInputType;
+    private Map<Class, List<Class>> nonterminalsByOutputType;
+    private Map<Class[], List<Class>> nonterminalsByInputType;
+    private Map<Class, List<Class>> terminalsByOutputType;
+    private Map<Class[], List<Class>> terminalsByInputType;
+    private List<Class> nodes;
+    private Random rand = new Random();
 
     private NodeFactory()
     {
         nodesByName = new HashMap<String, Class>();
-        nodesByOutputType = new HashMap<Class, Class>();
-        nodesByInputType = new HashMap<Class[], Class>();
+        nonterminalsByOutputType = new HashMap<Class, List<Class>>();
+        nonterminalsByInputType = new HashMap<Class[], List<Class>>();
+        terminalsByInputType = new HashMap<Class[], List<Class>>();
+        terminalsByOutputType = new HashMap<Class, List<Class>>();
+        nodes = new ArrayList<Class>();
 
         try {
-            loadType(Constant.class);
-            loadType(Add.class);
-            loadType(Divide.class);
-            loadType(Multiply.class);
-            loadType(Subtract.class);
+            loadNode(Constant.class);
+            loadNode(Add.class);
+            loadNode(Divide.class);
+            loadNode(Multiply.class);
+            loadNode(Subtract.class);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -38,11 +44,38 @@ public class NodeFactory {
         }
     }
 
-    private void loadType(Class<? extends Node> aClass) throws IllegalAccessException, InstantiationException {
+    public void loadNode(Class<? extends Node> aClass) throws IllegalAccessException, InstantiationException {
         Node n = aClass.newInstance();
-        nodesByName.put(n.getName(), aClass);
-        nodesByOutputType.put(n.getOutputType(), aClass);
-        nodesByInputType.put(n.getInputTypes(), aClass);
+        nodes.add(aClass);
+        nodesByName.put(n.getName(), aClass); // single namespace for nodes
+        putByOutputType(n.getOutputType(), aClass);
+        putByInputType(n.getInputTypes(), aClass);
+    }
+
+    private void putByInputType(Class[] inputTypes, Class<? extends Node> aClass) {
+        List<Class> allNodes;
+        Node n = create(aClass);
+        if (n.getInputCount() == 0) // is terminal
+            allNodes = getList(terminalsByInputType, inputTypes);
+        else
+            allNodes = getList(nonterminalsByInputType, inputTypes);      
+        allNodes.add(aClass);
+    }
+
+    private <T> List<Class> getList(Map<T, List<Class>> byInputType, T inputTypes) {
+        List<Class> allNodes = byInputType.get(inputTypes);
+        if (allNodes == null) { allNodes = new ArrayList<Class>(); byInputType.put(inputTypes, allNodes); }
+        return allNodes;
+    }
+
+    private void putByOutputType(Class outputType, Class<? extends Node> aClass) {
+        List<Class> allNodes;
+        Node n = create(aClass);
+        if (n.getInputCount() == 0) // is terminal
+            allNodes = getList(terminalsByOutputType, outputType);
+        else
+            allNodes = getList(nonterminalsByOutputType, outputType);       
+        allNodes.add(aClass);
     }
 
     public synchronized static NodeFactory getInstance() {
@@ -75,5 +108,20 @@ public class NodeFactory {
 
     public Node create(String s, Object val) {
         return create(nodesByName.get(s), val);
+    }
+
+    public Node randomTerminal(Class parentType) {
+        if (parentType == null) {
+            List<Class>[] all = terminalsByOutputType.values().toArray(new List[0]);
+            List<Class> sel = all[rand.nextInt(all.length)];
+            return create(sel.get(rand.nextInt(sel.size())));
+        } else {
+            List<Class> all = terminalsByOutputType.get(parentType);
+            return create(all.get(rand.nextInt(all.size())));
+        }
+    }
+
+    public Node randomNode(Class parentType) {
+        return create(nodes.get(rand.nextInt(nodes.size())));
     }
 }

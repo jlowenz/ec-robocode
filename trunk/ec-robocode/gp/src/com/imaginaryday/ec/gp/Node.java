@@ -17,4 +17,6 @@ public interface Node {
     Class getOutputType();
 
 	Object evaluate();
+
+    boolean isTerminal();
 }

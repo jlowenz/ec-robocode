@@ -29,10 +29,21 @@ public class NodeTest extends TestCase {
         assertEquals(102.0, root.evaluate());
     }
 
-	public static Test suite()
+    public void testTreeCreation()
+    {
+        NodeFactory nf = NodeFactory.getInstance();
+        TreeFactory tf = new TreeFactory(nf);
+
+        Node root = tf.generateRandomTree();
+        Object result = root.evaluate();
+        System.out.println(result);
+    }
+
+    public static Test suite()
 	{
 		TestSuite s = new TestSuite();
 		s.addTest(new NodeTest("testNodes"));
-		return s;
+        s.addTest(new NodeTest("testTreeCreation"));
+        return s;
 	}
 }

@@ -15,7 +15,15 @@ public abstract class AbstractNode implements Node {
 		for (Node n : children()) n.setOwner(this.owner);
 	}
 
-	public Node attach(int id, Node n) {
+
+    public Object getOwner() {
+        return owner;
+    }
+
+    public void induceOutputType(Class type) throws VetoTypeInduction {}
+
+    public Node attach(int id, Node n) throws VetoTypeInduction {
+        n.induceOutputType(getOutputType());
         children()[id] = n;
         return this;
     }

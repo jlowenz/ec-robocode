@@ -4,11 +4,9 @@ import com.imaginaryday.ec.gp.AbstractNode;
 import com.imaginaryday.ec.gp.Node;
 
 /**
- * Created by IntelliJ IDEA.
  * User: jlowens
  * Date: Oct 30, 2006
  * Time: 6:58:49 PM
- * To change this template use File | Settings | File Templates.
  */
 public class And extends AbstractNode {
 	private Node[] child = new Node[2];

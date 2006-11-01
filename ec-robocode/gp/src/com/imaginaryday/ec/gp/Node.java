@@ -8,11 +8,13 @@ package com.imaginaryday.ec.gp;
 public interface Node {
 
 	void setOwner(Object owner);
+    Object getOwner();
 
     String getName();
 
-    Node attach(int id, Node n);
-	int getInputCount();
+    Node attach(int id, Node n) throws VetoTypeInduction;
+    void induceOutputType(Class type) throws VetoTypeInduction;
+    int getInputCount();
 	Class getInputType(int id);
     Class[] getInputTypes();
 

@@ -7,6 +7,8 @@ package com.imaginaryday.ec.gp;
  */
 public interface Node {
 
+	void setOwner(Object owner);
+
     String getName();
 
     Node attach(int id, Node n);

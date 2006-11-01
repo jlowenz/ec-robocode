@@ -7,9 +7,15 @@ package com.imaginaryday.ec.gp;
  */
 public abstract class AbstractNode implements Node {
 
+	protected Object owner;
     protected abstract Node[] children();
 
-    public Node attach(int id, Node n) {
+	public void setOwner(Object owner) {
+		this.owner = owner;
+		for (Node n : children()) n.setOwner(this.owner);
+	}
+
+	public Node attach(int id, Node n) {
         children()[id] = n;
         return this;
     }
@@ -28,7 +34,6 @@ public abstract class AbstractNode implements Node {
         throw new RuntimeException("Unimplemented evaluate() method!");
     }
 
-
     public boolean isTerminal() {
         return getInputCount() == 0;
     }
@@ -36,7 +41,11 @@ public abstract class AbstractNode implements Node {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("(").append(getName()).append(" ");
-        for (Node n : children()) sb.append(sb.toString()).append(" ");
+	    Node children[] = children();
+	    for (int i = 0; i < children.length; i++) {
+            sb.append(children[i].toString());
+		    if (i < children.length-1) sb.append(" ");
+	    }
         sb.append(")");
         return sb.toString();
     }

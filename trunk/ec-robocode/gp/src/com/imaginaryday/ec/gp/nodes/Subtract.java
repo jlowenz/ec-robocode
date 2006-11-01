@@ -37,8 +37,4 @@ public class Subtract extends AbstractNode {
         return x - y;
     }
 
-
-    public String toString() {
-        return "(sub " + operands[0].toString() + " " + operands[1].toString() + ")";
-    }
 }

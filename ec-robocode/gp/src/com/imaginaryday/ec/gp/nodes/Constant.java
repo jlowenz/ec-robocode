@@ -82,4 +82,8 @@ public class Constant extends AbstractNode {
     public Object evaluate() {
         return val;
     }
+
+	public String toString() {
+		return val.toString();
+	}
 }

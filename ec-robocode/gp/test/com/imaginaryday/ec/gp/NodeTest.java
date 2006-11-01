@@ -34,8 +34,9 @@ public class NodeTest extends TestCase {
         NodeFactory nf = NodeFactory.getInstance();
         TreeFactory tf = new TreeFactory(nf);
 
-        Node root = tf.generateRandomTree();
+        Node root = tf.generateRandomTree(6, Number.class);
         Object result = root.evaluate();
+	    System.out.println(root);
         System.out.println(result);
     }
 

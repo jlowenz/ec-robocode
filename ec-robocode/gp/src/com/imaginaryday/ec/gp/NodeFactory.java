@@ -19,6 +19,8 @@ public class NodeFactory {
     private Map<Class[], List<Class>> nonterminalsByInputType;
     private Map<Class, List<Class>> terminalsByOutputType;
     private Map<Class[], List<Class>> terminalsByInputType;
+	private Map<Class, List<Class>> nodesByOutputType;
+	private Map<Class[], List<Class>> nodesByInputType;
     private List<Class> nodes;
     private Random rand = new Random();
 
@@ -29,6 +31,8 @@ public class NodeFactory {
         nonterminalsByInputType = new HashMap<Class[], List<Class>>();
         terminalsByInputType = new HashMap<Class[], List<Class>>();
         terminalsByOutputType = new HashMap<Class, List<Class>>();
+	    nodesByOutputType = new HashMap<Class, List<Class>>();
+	    nodesByInputType = new HashMap<Class[], List<Class>>();
         nodes = new ArrayList<Class>();
 
         try {
@@ -58,8 +62,9 @@ public class NodeFactory {
         if (n.getInputCount() == 0) // is terminal
             allNodes = getList(terminalsByInputType, inputTypes);
         else
-            allNodes = getList(nonterminalsByInputType, inputTypes);      
+            allNodes = getList(nonterminalsByInputType, inputTypes);
         allNodes.add(aClass);
+	    getList(nodesByInputType, inputTypes).add(aClass);
     }
 
     private <T> List<Class> getList(Map<T, List<Class>> byInputType, T inputTypes) {
@@ -76,6 +81,7 @@ public class NodeFactory {
         else
             allNodes = getList(nonterminalsByOutputType, outputType);       
         allNodes.add(aClass);
+	    getList(nodesByOutputType, outputType).add(aClass);
     }
 
     public synchronized static NodeFactory getInstance() {
@@ -111,7 +117,7 @@ public class NodeFactory {
     }
 
     public Node randomTerminal(Class parentType) {
-        if (parentType == null) {
+        if (parentType == null) { // TODO: refactor out this logic
             List<Class>[] all = terminalsByOutputType.values().toArray(new List[0]);
             List<Class> sel = all[rand.nextInt(all.length)];
             return create(sel.get(rand.nextInt(sel.size())));
@@ -124,4 +130,15 @@ public class NodeFactory {
     public Node randomNode(Class parentType) {
         return create(nodes.get(rand.nextInt(nodes.size())));
     }
+
+	public Node randomNonterminal(Class parentType) {
+		if (parentType == null) {
+			List<Class>[] all = nonterminalsByOutputType.values().toArray(new List[0]);
+			List<Class> sel = all[rand.nextInt(all.length)];
+			return create(sel.get(rand.nextInt(sel.size())));
+		} else {
+			List<Class> all = nonterminalsByOutputType.get(parentType);
+			return create(all.get(rand.nextInt(all.size())));
+		}
+	}
 }

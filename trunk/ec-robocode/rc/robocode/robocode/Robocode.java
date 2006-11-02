@@ -107,7 +107,7 @@ public class Robocode {
 			boolean minimize = false;
 			String battleFilename = null;
 			String resultsFilename = null;
-			int tps = 10000;
+			int tps = 1000000;
 
 			for (int i = 0; i < args.length; i++) {
 				if (args[i].equals("-cwd") && (i < args.length + 1)) {

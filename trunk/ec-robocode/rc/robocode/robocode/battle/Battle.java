@@ -1088,9 +1088,9 @@ public class Battle implements Runnable {
 						r.out.println("SYSTEM: Skipping robot: " + r.getName());
 						continue;
 					}
-					Robot bot = (Robot) robotClass.newInstance();
-
-					bot.out = r.getOut();
+					Robot bot = r.getRobotClassManager().getRobotInstance();
+                    
+                    bot.out = r.getOut();
 					r.setRobot(bot);
 					r.getRobot().setPeer(r);
 					r.getRobot().out = r.getOut();

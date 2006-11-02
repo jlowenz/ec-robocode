@@ -14,13 +14,16 @@
 package robocode.peer.robot;
 
 
-import java.util.*;
-
+import robocode.Robot;
+import robocode.manager.NameManager;
+import robocode.peer.TeamPeer;
+import robocode.repository.RobotSpecification;
 import robocode.security.RobocodeClassLoader;
-import robocode.repository.*;
-import robocode.manager.*;
-import robocode.peer.*;
 import robocode.util.Utils;
+
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 
 /**
@@ -28,153 +31,163 @@ import robocode.util.Utils;
  * @author Flemming N. Larsen (current)
  */
 public class RobotClassManager {
-	private RobotSpecification robotSpecification;
-	private Class robotClass;
-	private Hashtable<String, String> referencedClasses = new Hashtable<String, String>();
-	private RobocodeClassLoader robotClassLoader = null;
-	// only used if we're being controlled by RobocodeEngine:
-	private robocode.control.RobotSpecification controlRobotSpecification;
+    private RobotSpecification robotSpecification;
+    private Class robotClass;
+    private Hashtable<String, String> referencedClasses = new Hashtable<String, String>();
+    private RobocodeClassLoader robotClassLoader = null;
+    // only used if we're being controlled by RobocodeEngine:
+    private robocode.control.RobotSpecification controlRobotSpecification;
 
-	private String fullClassName;
-	private TeamPeer teamManager;
-	
-	private String uid = "";
-	
-	/**
-	 * RobotClassHandler constructor
-	 */
-	public RobotClassManager(RobotSpecification robotSpecification) {
-		this(robotSpecification, null);
-	}
+    private String fullClassName;
+    private TeamPeer teamManager;
 
-	public RobotClassManager(RobotSpecification robotSpecification, TeamPeer teamManager) {
-		this.robotSpecification = robotSpecification;
-		this.fullClassName = robotSpecification.getName();
-		this.teamManager = teamManager;
-	}
+    private String uid = "";
 
-	public String getRootPackage() {
-		return getClassNameManager().getRootPackage();
-	}
+    public RobotClassManager() {
+        this(null, null);
+    }
 
-	public NameManager getClassNameManager() {
-		return robotSpecification.getNameManager();
-	}
+    /**
+     * RobotClassHandler constructor
+     */
+    public RobotClassManager(RobotSpecification robotSpecification) {
+        this(robotSpecification, null);
+    }
 
-	public void addReferencedClasses(Vector<String> v) {
-		if (v == null) {
-			return;
-		}
-		for (int i = 0; i < v.size(); i++) {
-			String className = v.elementAt(i).replace('/', '.');
+    public RobotClassManager(RobotSpecification robotSpecification, TeamPeer teamManager) {
+        this.robotSpecification = robotSpecification;
+        this.fullClassName = robotSpecification.getName();
+        this.teamManager = teamManager;
+    }
 
-			if (getRootPackage() == null || (className.indexOf("java") != 0 && className.indexOf("robocode") != 0)) {
-				if (getRootPackage() == null && !className.equals(fullClassName)) {
-					continue;
-				}
-				if (!referencedClasses.containsKey(className)) {
-					referencedClasses.put(className, "false");
-				}
-			}
-		}
-	}
+    public String getRootPackage() {
+        return getClassNameManager().getRootPackage();
+    }
 
-	public void addResolvedClass(String className) {
-		if (!referencedClasses.containsKey(className)) {
-			Utils.log(fullClassName + ": Cannot set " + className + " to resolved, did not know it was referenced.");
-			return;
-		}
-		referencedClasses.put(className, "true");
-	}
+    public NameManager getClassNameManager() {
+        return robotSpecification.getNameManager();
+    }
 
-	public String getFullClassName() {
-		// Better not be null...
-		return fullClassName;
-	}
+    public void addReferencedClasses(Vector<String> v) {
+        if (v == null) {
+            return;
+        }
+        for (int i = 0; i < v.size(); i++) {
+            String className = v.elementAt(i).replace('/', '.');
 
-	public Enumeration getReferencedClasses() {
-		return referencedClasses.keys();
-	}
+            if (getRootPackage() == null || (className.indexOf("java") != 0 && className.indexOf("robocode") != 0)) {
+                if (getRootPackage() == null && !className.equals(fullClassName)) {
+                    continue;
+                }
+                if (!referencedClasses.containsKey(className)) {
+                    referencedClasses.put(className, "false");
+                }
+            }
+        }
+    }
 
-	public Class getRobotClass() {
-		return robotClass;
-	}
+    public void addResolvedClass(String className) {
+        if (!referencedClasses.containsKey(className)) {
+            Utils.log(fullClassName + ": Cannot set " + className + " to resolved, did not know it was referenced.");
+            return;
+        }
+        referencedClasses.put(className, "true");
+    }
 
-	public RobocodeClassLoader getRobotClassLoader() {
-		if (robotClassLoader == null) {
-			robotClassLoader = new RobocodeClassLoader(getClass().getClassLoader(), this);
-		}
-		return robotClassLoader;
-	}
+    public String getFullClassName() {
+        // Better not be null...
+        return fullClassName;
+    }
 
-	public RobotSpecification getRobotSpecification() {
-		return robotSpecification;
-	}
+    public Enumeration getReferencedClasses() {
+        return referencedClasses.keys();
+    }
 
-	public void loadUnresolvedClasses() throws ClassNotFoundException {
-		Enumeration keys = referencedClasses.keys();
+    public Class getRobotClass() {
+        return robotClass;
+    }
 
-		while (keys.hasMoreElements()) {
-			String s = (String) keys.nextElement();
+    public RobocodeClassLoader getRobotClassLoader() {
+        if (robotClassLoader == null) {
+            robotClassLoader = new RobocodeClassLoader(getClass().getClassLoader(), this);
+        }
+        return robotClassLoader;
+    }
 
-			if (referencedClasses.get(s).equals("false")) {
-				// resolve, then rebuild keys...
-				robotClassLoader.loadRobotClass(s, false);
-				keys = referencedClasses.keys();
-			}
-		}
-	}
+    public RobotSpecification getRobotSpecification() {
+        return robotSpecification;
+    }
 
-	public void setRobotClass(Class newRobotClass) {
-		robotClass = newRobotClass;
-	}
+    public void loadUnresolvedClasses() throws ClassNotFoundException {
+        Enumeration keys = referencedClasses.keys();
 
-	public String toString() {
-		return getRobotSpecification().getNameManager().getUniqueFullClassNameWithVersion();
-	}
+        while (keys.hasMoreElements()) {
+            String s = (String) keys.nextElement();
 
-	/**
-	 * Gets the robotSpecification.
-	 * 
-	 * @return Returns a RobotSpecification
-	 */
-	public robocode.control.RobotSpecification getControlRobotSpecification() {
-		return controlRobotSpecification;
-	}
+            if (referencedClasses.get(s).equals("false")) {
+                // resolve, then rebuild keys...
+                robotClassLoader.loadRobotClass(s, false);
+                keys = referencedClasses.keys();
+            }
+        }
+    }
 
-	/**
-	 * Sets the robotSpecification.
-	 * 
-	 * @param robotSpecification The robotSpecification to set
-	 */
-	public void setControlRobotSpecification(robocode.control.RobotSpecification controlRobotSpecification) {
-		this.controlRobotSpecification = controlRobotSpecification;
-	}
+    public void setRobotClass(Class newRobotClass) {
+        robotClass = newRobotClass;
+    }
 
-	/**
-	 * Gets the teamManager.
-	 * 
-	 * @return Returns a TeamManager
-	 */
-	public TeamPeer getTeamManager() {
-		return teamManager;
-	}
+    public String toString() {
+        return getRobotSpecification().getNameManager().getUniqueFullClassNameWithVersion();
+    }
 
-	/**
-	 * Gets the uid.
-	 * 
-	 * @return Returns a long
-	 */
-	public String getUid() {
-		return uid;
-	}
+    /**
+     * Gets the robotSpecification.
+     *
+     * @return Returns a RobotSpecification
+     */
+    public robocode.control.RobotSpecification getControlRobotSpecification() {
+        return controlRobotSpecification;
+    }
 
-	/**
-	 * Sets the uid.
-	 * 
-	 * @param uid The uid to set
-	 */
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
+    /**
+     * Sets the robotSpecification.
+     *
+     * @param robotSpecification The robotSpecification to set
+     */
+    public void setControlRobotSpecification(robocode.control.RobotSpecification controlRobotSpecification) {
+        this.controlRobotSpecification = controlRobotSpecification;
+    }
+
+    /**
+     * Gets the teamManager.
+     *
+     * @return Returns a TeamManager
+     */
+    public TeamPeer getTeamManager() {
+        return teamManager;
+    }
+
+    /**
+     * Gets the uid.
+     *
+     * @return Returns a long
+     */
+    public String getUid() {
+        return uid;
+    }
+
+    /**
+     * Sets the uid.
+     *
+     * @param uid The uid to set
+     */
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public Robot getRobotInstance() throws IllegalAccessException, InstantiationException {
+        Robot robot = null;
+        robot = (Robot) this.robotClass.newInstance();
+        return robot;
+    }
 }

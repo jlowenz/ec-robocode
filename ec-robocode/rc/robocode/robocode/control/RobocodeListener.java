@@ -11,6 +11,8 @@
  *******************************************************************************/
 package robocode.control;
 
+import robocode.gp.GPBattleTask;
+
 
 /**
  * RobocodeListener - Interface for receiving callbacks from RobocodeEngine
@@ -19,25 +21,26 @@ package robocode.control;
  */
 public interface RobocodeListener {
 
-	/**
-	 * Called when battle is complete.  Contains array of results.
-	 * 
-	 * @param battle Which battle completed
-	 * @param results Results for this battle
-	 */
-	void battleComplete(BattleSpecification battle, RobotResults[] results);
+    /**
+     * Called when battle is complete.  Contains array of results.
+     *
+     * @param battle Which battle completed
+     * @param results Results for this battle
+     */
+    void battleComplete(BattleSpecification battle, RobotResults[] results);
 
-	/**
-	 * Called when battle is aborted for any reason.
-	 * 
-	 * @param battle Which battle aborted
-	 */
-	void battleAborted(BattleSpecification battle);
+    /**
+     * Called when battle is aborted for any reason.
+     *
+     * @param battle Which battle aborted
+     */
+    void battleAborted(BattleSpecification battle);
 
-	/**
-	 * Called for messages that would normally go to the Java console
-	 * 
-	 * @param message
-	 */
-	void battleMessage(String message);
+    /**
+     * Called for messages that would normally go to the Java console
+     *
+     * @param message
+     */
+    void battleMessage(String message);
+    
 }

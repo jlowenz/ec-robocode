@@ -1,0 +1,16 @@
+Need to get ant set up.
+Need to get Jini set up.
+    - don't need rio, no service beans.
+    - java space
+    - use a script
+    - reggie, cl, js, driver,
+
+MUst set up a battle with the desired bots and settings.
+
+Need a driver program to put in space and take out.
+Need to test integration.
+Need to make certain canned robot load works.
+Pray heavily!
+
+Use 1 "core"
+    - driver

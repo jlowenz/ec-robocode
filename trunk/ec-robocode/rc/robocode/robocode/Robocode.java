@@ -151,8 +151,8 @@ public class Robocode {
 					manager.getBattleManager().setResultsFile(resultsFilename);
 				}
 				manager.getBattleManager().setBattleFilename(battleFilename);
-				manager.getBattleManager().loadBattleProperties();
-				manager.getBattleManager().startNewBattle(manager.getBattleManager().getBattleProperties(), true);
+				manager.getBattleManager().loadBattleProperties();                
+                manager.getBattleManager().startNewBattle(manager.getBattleManager().getBattleProperties());
 				manager.getBattleManager().getBattle().setDesiredTPS(tps);
 			}
 			if (!manager.isGUIEnabled()) {

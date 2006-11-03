@@ -42,6 +42,10 @@ public class RobotSpecification extends FileSpecification implements Serializabl
 	private boolean teamRobot;
 	private boolean droid;
 
+    protected RobotSpecification() {
+
+    }
+
     // Used in RobotRepositoryManager
 	protected RobotSpecification(File f, File rootDir, String prefix, boolean developmentVersion) {
 		valid = true;

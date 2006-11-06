@@ -206,7 +206,7 @@ public class BattleManager {
                     gpcm2.setShootProgram(task.shootProgram2);
                     alice = gpcm1;
                 }
-            rl.setBattleTask();
+            rl.setBattleTask(task);
             Vector<RobotClassManager> battlingRobotsVector = new Vector<RobotClassManager>();
             battlingRobotsVector.add(ralph);
             battlingRobotsVector.add(alice);
@@ -270,7 +270,6 @@ public class BattleManager {
             }
             return null;
         }
-
     }
 
 

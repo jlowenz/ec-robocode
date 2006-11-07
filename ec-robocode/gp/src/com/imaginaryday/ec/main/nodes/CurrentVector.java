@@ -14,7 +14,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
 public class CurrentVector extends RoboNode {
 
     protected Node[] children() {
-        return new Node[0];
+        return NONE;
     }
 
     public String getName() {
@@ -29,5 +29,7 @@ public class CurrentVector extends RoboNode {
         return VectorFloat64.class;
     }
 
-    
+	public Object evaluate() {
+		return getOwner().getCurrentVector();
+	}
 }

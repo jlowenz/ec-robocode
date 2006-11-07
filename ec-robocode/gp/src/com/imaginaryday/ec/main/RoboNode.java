@@ -1,6 +1,7 @@
 package com.imaginaryday.ec.main;
 
 import com.imaginaryday.ec.gp.AbstractNode;
+import com.imaginaryday.ec.gp.Node;
 import robocode.AdvancedRobot;
 
 /**
@@ -9,7 +10,10 @@ import robocode.AdvancedRobot;
  * Time: 6:25:30 PM
  */
 public abstract class RoboNode extends AbstractNode {
-	public AdvancedRobot getOwner() {
-		return (AdvancedRobot) owner;
+	static protected Node[] NONE = new Node[0];
+
+
+	public GPAgent getOwner() {
+		return (GPAgent) owner;
 	}
 }

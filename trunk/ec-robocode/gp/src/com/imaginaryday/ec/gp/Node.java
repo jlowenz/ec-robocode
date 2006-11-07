@@ -1,11 +1,13 @@
 package com.imaginaryday.ec.gp;
 
+import java.io.Serializable;
+
 /**
  * User: jlowens
  * Date: Oct 27, 2006
  * Time: 11:36:18 AM
  */
-public interface Node {
+public interface Node extends Serializable {
 
 	void setOwner(Object owner);
     Object getOwner();

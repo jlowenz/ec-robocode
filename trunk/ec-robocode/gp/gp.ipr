@@ -256,7 +256,7 @@
       <module fileurl="file://$PROJECT_DIR$/rc/rc.iml" filepath="$PROJECT_DIR$/rc/rc.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="Java 5 (1)" />
+  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" />
   <component name="ProjectRunConfigurationManager" />
   <component name="RMI Configuration">
     <Server />

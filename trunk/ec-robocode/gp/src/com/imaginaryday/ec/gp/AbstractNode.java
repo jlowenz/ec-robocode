@@ -7,7 +7,7 @@ package com.imaginaryday.ec.gp;
  */
 public abstract class AbstractNode implements Node {
 
-	protected Object owner;
+	protected transient Object owner;
     protected abstract Node[] children();
 
 	public void setOwner(Object owner) {

@@ -11,9 +11,9 @@ import com.imaginaryday.ec.gp.Node;
  * </b>
  */
 public class IsMoving extends RoboNode {
-
+	
     protected Node[] children() {
-        return new Node[0];
+        return NONE;
     }
 
     public String getName() {

@@ -12,18 +12,15 @@ import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import robocode.gp.GPBattleResults;
-import robocode.gp.GPBattleTask;
+import com.imaginaryday.ec.rcpatches.GPBattleResults;
+import com.imaginaryday.ec.rcpatches.GPBattleTask;
 
 /**
  * @author rbowers
@@ -40,6 +37,7 @@ public class Driver implements Runnable {
     private int numGenerations;
     private int generationCount;
     private int testFreq;
+    private int populationSize = 100;
 
 
     public Driver() {
@@ -48,12 +46,11 @@ public class Driver implements Runnable {
 
     }
 
-
     public static void main(String[] args) {
         Driver d = new Driver();
 
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-ed") && (i < args.length + 1)) {
+            if (args[i].equals("-e") && (i < args.length + 1)) {
                 try {
                     DateFormat df = new SimpleDateFormat();
                     d.setEndDate(df.parse(args[i + 1]));
@@ -62,11 +59,15 @@ public class Driver implements Runnable {
                     return;
                 }
                 i++;
-            } else if (args[i].equals("-ng") && (i < args.length + 1)) {
+            } else if (args[i].equals("-g") && (i < args.length + 1)) {
                 int ng = Integer.parseInt(args[i+1]);
                 d.setNumGenerations(ng);
                 i++;
-            } else if (args[i].equals("-tf") && (i < args.length + 1)) {
+            } else if (args[i].equals("-f") && (i < args.length + 1)) {
+                int tf = Integer.parseInt(args[i+1]);
+                d.setTestFreq(tf);
+                i++;
+            } else if (args[i].equals("-p") && (i < args.length + 1)) {
                 int tf = Integer.parseInt(args[i+1]);
                 d.setTestFreq(tf);
                 i++;
@@ -79,6 +80,10 @@ public class Driver implements Runnable {
 
         d.run();
 
+    }
+
+    public List<Member> genInitialPopulation() {
+        return new ArrayList<Member>();
     }
 
     public void run() {
@@ -94,6 +99,7 @@ public class Driver implements Runnable {
         /*
          * Generate initial population
          */
+        List<Member> population = genInitialPopulation();
 
         /*
          * Main loop of the evolutionary algorithm.
@@ -104,12 +110,12 @@ public class Driver implements Runnable {
             /*
              * Build coevolutionary battle set and submit
              */
-            int numBattles = submitBattles(null/* Todo Replace with real battle */);
+            int numBattles = submitBattles(population);
 
             /*
              * collect results.
              */
-            Set<GPBattleResults> results = collectResults(numBattles);
+            collectResults(population, numBattles);
 
             /*
              * Periodically measure against the canned bots
@@ -121,6 +127,8 @@ public class Driver implements Runnable {
             /*
              * Perform selection and generate the next generation
              */
+            population = selectAndBreed(population);
+
 
             currentDate = new Date();
         }
@@ -132,10 +140,36 @@ public class Driver implements Runnable {
 
     }
 
-    public Set<GPBattleResults> collectResults(int numBattles) {
-        Set<GPBattleResults> resultSet = new TreeSet<GPBattleResults>();
+
+    public List<Member> selectAndBreed(List<Member> oldPopulation) {
+
+
+
+
+
+
+    }
+
+    class FitnessComparator implements Comparator<Member> {
+
+            public int compare(Member one, Member two) {
+                if (one == null) throw new IllegalArgumentException("one is null");
+                if (two == null) throw new IllegalArgumentException("two is null");
+
+                if (one.getFitness() <= two.getFitness()) return -1;
+                else return 1;
+            }
+
+   }
+
+
+
+    public void collectResults(List<Member> population, int numBattles) {
+
+        int retrieved = 0;
         Entry template = new GPBattleResults();
-        while (resultSet.size()  < numBattles) {
+
+        while (retrieved  < numBattles) {
                  GPBattleResults res = null;
             try {
                res = (GPBattleResults) space.takeIfExists(template, null, 10000);
@@ -157,22 +191,33 @@ public class Driver implements Runnable {
                 }
             }
 
-            resultSet.add(res);
+            for (Member member : population) {
+
+                if (member.getName().equals(res.getRobot1())) {
+                    member.addFitness(res.getFitness1());
+                }
+                /*
+                 * use 2 ifs because it is possible for a robot
+                 * to compete against itself
+                 */
+                if (member.getName().equals(res.getRobot2())) {
+                    member.addFitness(res.getFitness2());
+                }
+            }
 
         }
-        return resultSet;
+
     }
 
-    public int submitBattles(List specifications) {
+    public int submitBattles(List<Member> population) {
 
         int battles = 0;
-        for (int i = 0; i < specifications.size(); ++i) {
+        for (int i = 0; i < population.size(); ++i) {
 
-            for (int j = i; j < specifications.size();  ++i) {
+            for (int j = i; j < population.size();  ++i) {
 
 
-                GPBattleTask task = new GPBattleTask();
-                // Todo Set parameters on Battle Task
+                GPBattleTask task = new GPBattleTask(population.get(i), population.get(j));
 
                 // submit
                 try {
@@ -187,16 +232,6 @@ public class Driver implements Runnable {
 
         }
         return battles;
-    }
-
-
-    public void compileResults() {
-
-
-
-
-
-
     }
 
 
@@ -241,4 +276,13 @@ public class Driver implements Runnable {
     public void setNumGenerations(int numGenerations) {
         this.numGenerations = numGenerations;
     }
+
+    public int getPopulationSize() {
+        return populationSize;
+    }
+
+    public void setPopulationSize(int populationSize) {
+        this.populationSize = populationSize;
+    }
+
 }

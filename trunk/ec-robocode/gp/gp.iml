@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4" relativePaths="true" type="JAVA_MODULE">
+  <component name="BuildJarSettings">
+    <containerInfo>
+      <containerElement type="module" name="gp">
+        <attribute name="method" value="5" />
+        <attribute name="URI" value="/gp.jar" />
+      </containerElement>
+      <containerElement type="module" name="rc">
+        <attribute name="method" value="6" />
+        <attribute name="URI" value="/rc.jar" />
+      </containerElement>
+    </containerInfo>
+    <setting name="jarPath" value="$MODULE_DIR$/gp.jar" />
+    <setting name="buildJar" value="true" />
+    <setting name="mainClass" value="com.imaginaryday.ec.rcpatches.GPRobocodeMain" />
+  </component>
   <component name="ModuleRootManager" />
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/build/classes" />
@@ -12,7 +27,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="junit-4.1" level="project" />
     <orderEntry type="library" name="functionalj-0.8-jdk15" level="project" />
-    <orderEntry type="module" module-name="rc" />
     <orderEntry type="library" name="jscience" level="project" />
     <orderEntry type="module-library">
       <library>
@@ -77,7 +91,12 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="rc" />
     <orderEntryProperties />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ACTIVE_VCS_NAME" value="svn" />
+    <option name="USE_PROJECT_VCS" value="false" />
   </component>
   <component name="copyright">
     <Base>

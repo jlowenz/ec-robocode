@@ -1094,14 +1094,19 @@ public class Battle implements Runnable {
 
 				try {
 					manager.getThreadManager().setLoadingRobot(r);
-					robotClass = r.getRobotClassManager().getRobotClass();
+                    /*
+                    robotClass = r.getRobotClassManager().getRobotClass();
 					if (robotClass == null) {
 						r.out.println("SYSTEM: Skipping robot: " + r.getName());
 						continue;
 					}
 					Robot bot = (Robot) robotClass.newInstance();
+					*/
 
-					bot.out = r.getOut();
+                    /* Modified from original */
+                    Robot bot = r.getRobotClassManager().getRobotInstance();
+
+                    bot.out = r.getOut();
 					r.setRobot(bot);
 					r.getRobot().setPeer(r);
 					r.getRobot().out = r.getOut();

@@ -4,6 +4,7 @@ import com.imaginaryday.ec.gp.Node;
 import robocode.Robot;
 import robocode.peer.TeamPeer;
 import robocode.peer.robot.RobotClassManager;
+
 import robocode.repository.RobotSpecification;
 
 /**
@@ -20,10 +21,9 @@ public class GPRobotClassManager extends RobotClassManager {
     private RobotSpecification robotSpecification;
 
     public GPRobotClassManager() {
-
+        super(new GPRobotSpecification("ECBot", "fred"));
         this.setRobotClass(GPRobot.class);
         robotSpecification = new GPRobotSpecification("No name yet", "Bob");
-
     }
 
     public GPRobotClassManager(RobotSpecification robotSpecification) {
@@ -57,6 +57,7 @@ public class GPRobotClassManager extends RobotClassManager {
     public void setMoveProgram(Node moveProgram) {
         this.moveProgram = moveProgram;
     }
+
 
     @Override
     public Robot getRobotInstance() throws IllegalAccessException, InstantiationException {

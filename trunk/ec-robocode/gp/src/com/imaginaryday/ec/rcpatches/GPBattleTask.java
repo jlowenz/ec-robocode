@@ -41,4 +41,8 @@ public class GPBattleTask implements Entry {
         radarProgram2 = member2.getRadarProgram();
         shootProgram2 = member2.getShootProgram();
     }
+
+    public GPBattleTask() {
+        
+    }
 }

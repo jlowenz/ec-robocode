@@ -21,7 +21,7 @@
  *     - Added debug step feature, including the nextTurn(), shouldStep(),
  *       startNewRound()
  *******************************************************************************/
-package robocode.manager;
+package com.imaginaryday.ec.rcpatches;
 
 
 import net.jini.core.entry.Entry;
@@ -39,6 +39,8 @@ import robocode.battlefield.DefaultBattleField;
 import robocode.control.BattleSpecification;
 import robocode.control.RobocodeListener;
 import robocode.control.RobotResults;
+import robocode.manager.BattleManager;
+import robocode.manager.RobocodeManager;
 import robocode.peer.RobotPeer;
 import robocode.peer.TeamPeer;
 import robocode.peer.robot.RobotClassManager;
@@ -49,7 +51,6 @@ import robocode.repository.TeamSpecification;
 import robocode.security.RobocodeSecurityManager;
 import robocode.util.Constants;
 import robocode.util.Utils;
-import robocode.manager.*;
 
 import javax.swing.*;
 import java.io.*;
@@ -98,7 +99,8 @@ public class GPBattleManager extends BattleManager {
         stepTurn = 0;
     }
 
-    public BattleManager(RobocodeManager manager) {
+    public GPBattleManager(RobocodeManager manager) {
+        super(manager);
         this.manager = manager;
     }
 
@@ -227,7 +229,9 @@ public class GPBattleManager extends BattleManager {
 
         public void battleComplete(BattleSpecification battle, RobotResults[] results) {
 
-            GPBattleResults res = new GPBattleResults(battleTask, results[0].getFitness(), results[1].getFitness());
+            GPBattleResults res = new GPBattleResults(battleTask,
+                    GPFitnessCalc.getFitness(results[0]),
+                    GPFitnessCalc.getFitness(results[1]));
 
             try {
                 space.write(res, null, 1000000);
@@ -628,7 +632,7 @@ public class GPBattleManager extends BattleManager {
                     (int) stats.getTotalScore(), (int) stats.getTotalSurvivalScore(), (int) stats.getTotalWinnerScore(),
                     (int) stats.getTotalBulletDamageScore(), (int) stats.getTotalKilledEnemyBulletScore(),
                     (int) stats.getTotalRammingDamageScore(), (int) stats.getTotalKilledEnemyRammingScore(),
-                    stats.getTotalFirsts(), stats.getTotalSeconds(), stats.getTotalThirds(), stats.getFitness());
+                    stats.getTotalFirsts(), stats.getTotalSeconds(), stats.getTotalThirds());
         }
         listener.battleComplete(battle.getBattleSpecification(), results);
     }

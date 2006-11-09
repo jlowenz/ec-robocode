@@ -20,6 +20,7 @@ public class GPRobotSpecification extends RobotSpecification {
     private String uid;
 
     public GPRobotSpecification(String name, String uid) {
+        super(name, uid);
     }
 
     public String getAuthorWebsite() {

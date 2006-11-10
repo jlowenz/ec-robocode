@@ -11,7 +11,7 @@ import com.imaginaryday.ec.gp.Node;
  * </b>
  */
 public class IsMoving extends RoboNode {
-	
+
     protected Node[] children() {
         return NONE;
     }
@@ -32,8 +32,8 @@ public class IsMoving extends RoboNode {
         // TODO: can the values be negative here?
         if (getOwner().getDistanceRemaining() < 0 ||
                 getOwner().getTurnRemaining() < 0) throw new RuntimeException("Negative values!");
-        
+
         return (getOwner().getDistanceRemaining() > 0.0) ||
-               (getOwner().getTurnRemaining() > 0.0);
+                (getOwner().getTurnRemaining() > 0.0);
     }
 }

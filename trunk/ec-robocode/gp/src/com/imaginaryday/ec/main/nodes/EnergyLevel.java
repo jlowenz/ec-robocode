@@ -4,20 +4,20 @@ import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
 
 /**
- * Created by IntelliJ IDEA.
- * User: jlowens
- * Date: Nov 6, 2006
- * Time: 5:47:55 PM
- * To change this template use File | Settings | File Templates.
+ * <b>
+ * User: jlowens<br>
+ * Date: Nov 9, 2006<br>
+ * Time: 9:32:32 PM<br>
+ * </b>
  */
-public class CurrentTurretHeading extends RoboNode {
+public class EnergyLevel extends RoboNode {
 
     protected Node[] children() {
         return NONE;
     }
 
     public String getName() {
-        return "currentTurretHeading";
+        return "energyLevel";
     }
 
     public Class getInputType(int id) {
@@ -29,6 +29,6 @@ public class CurrentTurretHeading extends RoboNode {
     }
 
     public Object evaluate() {
-        return getOwner().getGunHeadingRadians();
+        return getOwner().getEnergy();
     }
 }

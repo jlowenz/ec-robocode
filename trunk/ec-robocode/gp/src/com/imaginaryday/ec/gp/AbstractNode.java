@@ -11,10 +11,11 @@ public abstract class AbstractNode implements Node {
     protected abstract Node[] children();
 
 	public void setOwner(Object owner) {
-		this.owner = owner;
-		for (Node n : children()) n.setOwner(this.owner);
-	}
-
+        if (this.owner == null || !this.owner.equals(owner)) {
+            this.owner = owner;
+		    for (Node n : children()) n.setOwner(this.owner);
+        }
+    }
 
     public Object getOwner() {
         return owner;

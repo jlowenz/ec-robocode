@@ -12,23 +12,23 @@ import com.imaginaryday.ec.gp.Node;
  */
 public class IsTurretMoving extends RoboNode {
 
-	protected Node[] children() {
-		return NONE;
-	}
+    protected Node[] children() {
+        return NONE;
+    }
 
-	public String getName() {
-		return "isTurretMoving";
-	}
+    public String getName() {
+        return "isTurretMoving";
+    }
 
-	public Class getInputType(int id) {
-		return null;
-	}
+    public Class getInputType(int id) {
+        return null;
+    }
 
-	public Class getOutputType() {
-		return Boolean.class;
-	}
+    public Class getOutputType() {
+        return Boolean.class;
+    }
 
-	public Object evaluate() {
-		return getOwner().getGunTurnRemaining() != 0.0;
-	}
+    public Object evaluate() {
+        return getOwner().getGunTurnRemaining() != 0.0;
+    }
 }

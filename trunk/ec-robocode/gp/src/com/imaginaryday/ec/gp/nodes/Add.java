@@ -11,7 +11,7 @@ import com.imaginaryday.ec.gp.Node;
  * </b>
  */
 public class Add extends AbstractNode {
-
+    
     private Node[] operands = new Node[2];
 
 

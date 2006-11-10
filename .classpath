@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="ec-robocode/rc/robocode"/>
+	<classpathentry kind="src" path="ec-robocode/gp/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="ec-robocode/gp/lib/junit-4.1.jar"/>
+	<classpathentry kind="lib" path="ec-robocode/gp/lib/jscience.jar"/>
+	<classpathentry kind="lib" path="ec-robocode/gp/lib/functionalj-0.8-jdk15.jar"/>
+	<classpathentry kind="lib" path="ec-robocode/gp/lib/jini/jsk-resources.jar"/>
+	<classpathentry kind="lib" path="ec-robocode/gp/lib/jini/jsk-policy.jar"/>
+	<classpathentry kind="lib" path="ec-robocode/gp/lib/jini/jsk-platform.jar"/>
+	<classpathentry kind="lib" path="ec-robocode/gp/lib/jini/jsk-lib.jar"/>
+	<classpathentry kind="lib" path="ec-robocode/gp/lib/jini/jsk-dl.jar"/>
+	<classpathentry kind="lib" path="ec-robocode/gp/lib/jini/jsk-debug-policy.jar"/>
+	<classpathentry kind="lib" path="ec-robocode/gp/lib/rio/rio.jar"/>
+	<classpathentry kind="output" path="ec-robocode/gp/build"/>
+</classpath>

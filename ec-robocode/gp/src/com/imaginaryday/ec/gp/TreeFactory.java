@@ -19,12 +19,18 @@ public class TreeFactory {
 
     public Node generateRandomTree(int maxDepth, Class parentType) {
 	    Node root;
-	    if (rand.nextBoolean()) {
-		    root = grow(0, maxDepth, parentType);
-	    } else {
-		    root = full(0, maxDepth, parentType);
-	    }
-        return root;
+	    try {
+			if (rand.nextBoolean()) {
+			    root = grow(0, maxDepth, parentType);
+			} else {
+			    root = full(0, maxDepth, parentType);
+			}
+	        return root;
+		} catch (VetoTypeInduction e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
     }
 
     /**
@@ -35,12 +41,13 @@ public class TreeFactory {
      * @param maxDepth      the absolute "end" depth of this tree
      * @param parentType    the type of output the root node must provide. null is a wildcard (i.e. any output)
      * @return a randomly generated strongly-typed tree up to the maxDepth - depth
+     * @throws VetoTypeInduction 
      */
-    public Node grow(int depth, int maxDepth, Class parentType) {
+    public Node grow(int depth, int maxDepth, Class parentType) throws VetoTypeInduction {
 	    return _grow(depth, maxDepth, parentType, false);
     }
 
-	private Node _grow(int depth, int maxDepth, Class parentType, boolean full)
+	private Node _grow(int depth, int maxDepth, Class parentType, boolean full) throws VetoTypeInduction
 	{
 		if (depth == maxDepth) return nf.randomTerminal(parentType);
 		else {
@@ -59,8 +66,9 @@ public class TreeFactory {
 
 	/**
 	 * Grow a full tree
+	 * @throws VetoTypeInduction 
 	 */
-	public Node full(int depth, int maxDepth, Class parentType)
+	public Node full(int depth, int maxDepth, Class parentType) throws VetoTypeInduction
 	{
 		return _grow(depth, maxDepth, parentType, true);
 	}

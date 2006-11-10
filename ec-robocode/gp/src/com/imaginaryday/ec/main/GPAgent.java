@@ -1,11 +1,11 @@
 package com.imaginaryday.ec.main;
 
-import robocode.*;
-
+import static com.imaginaryday.util.VectorUtils.toAngle;
+import static com.imaginaryday.util.VectorUtils.vecFromDir;
+import info.javelot.functionalj.tuple.Pair;
 import org.jscience.mathematics.numbers.Float64;
 import org.jscience.mathematics.vectors.VectorFloat64;
-
-import info.javelot.functionalj.tuple.Pair;
+import robocode.*;
 
 /**
  * User: jlowens Date: Oct 30, 2006 Time: 6:13:08 PM
@@ -38,6 +38,18 @@ public class GPAgent extends AdvancedRobot {
     private double rammerBearing;
     private boolean scannedEnemy;
 
+    public GPAgent(RoboNode radarTree, RoboNode turretTree, RoboNode firingTree, RoboNode directionTree) {
+        this.radarTree = radarTree;
+        this.turretTree = turretTree;
+        this.firingTree = firingTree;
+        this.directionTree = directionTree;
+    }
+
+    public RoboNode getRadarTree() { return radarTree;}
+    public RoboNode getTurretTree() {return turretTree;}
+    public RoboNode getFiringTree() {return firingTree;}
+    public RoboNode getDirectionTree() {return directionTree;}
+
     public VectorFloat64 getCurrentVector() {return movementVector;}
 
     public VectorFloat64 getVectorToForwardWall() {return vectorToForwardWall;}
@@ -65,8 +77,8 @@ public class GPAgent extends AdvancedRobot {
     public double getEnemyEnergy() {return enemyEnergy;}
 
 
-    private static enum Wall { LEFT, BOTTOM, RIGHT, TOP;}
-    private static enum Turn {LEFT, RIGHT;}
+    private static enum Wall { LEFT, BOTTOM, RIGHT, TOP }
+    private static enum Turn { LEFT, RIGHT }
 
     private static class p<A, B> {
         public A first;
@@ -243,24 +255,6 @@ public class GPAgent extends AdvancedRobot {
         recentlyHitByBullet = false;
     }
 
-    private double toAngle(VectorFloat64 movementVector2) {
-        VectorFloat64 norm = movementVector2.times(Float64.valueOf(1.0 / movementVector2.normValue()));
-        final double x = norm.getValue(0);
-        final double y = norm.getValue(1);
-        if (x > 0) {
-            if (y > 0) {
-                return Math.atan2(x, y);
-            } else {
-                return Math.PI - Math.atan2(x, -y);
-            }
-        } else {
-            if (y > 0) {
-                return 2 * Math.PI - Math.atan2(-x, y);
-            } else {
-                return Math.PI + Math.atan2(-x, -y);
-            }
-        }
-    }
 
     private p<Double, Turn> calculateTurn(final double current, final double dest) {
         return (current < dest) ? pairmin(p.n(current - dest, Turn.LEFT), p.n(2 * Math.PI - current + dest, Turn.RIGHT)) :
@@ -319,9 +313,6 @@ public class GPAgent extends AdvancedRobot {
         return dir.times(Float64.valueOf(Math.sqrt(tx * tx + ty * ty) - robotRadius));
     }
 
-    private VectorFloat64 vecFromDir(double headingRadians) {
-        return VectorFloat64.valueOf(Math.sin(headingRadians), Math.cos(headingRadians));
-    }
 
 
     public void onScannedRobot(ScannedRobotEvent event) {

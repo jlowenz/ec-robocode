@@ -1,6 +1,7 @@
 package com.imaginaryday.ec.gp;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * User: jlowens
@@ -13,6 +14,8 @@ public interface Node extends Serializable {
     Object getOwner();
 
     String getName();
+    Node getChild(int i);
+    List<Node> childList();
 
     Node attach(int id, Node n) throws VetoTypeInduction;
     void induceOutputType(Class type) throws VetoTypeInduction;
@@ -25,4 +28,6 @@ public interface Node extends Serializable {
 	Object evaluate();
 
     boolean isTerminal();
+
+    <T extends Node> T copy();
 }

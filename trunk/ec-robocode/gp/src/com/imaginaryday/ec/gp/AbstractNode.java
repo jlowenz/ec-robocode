@@ -1,5 +1,9 @@
 package com.imaginaryday.ec.gp;
 
+import static com.imaginaryday.util.Collections.toList;
+
+import java.util.List;
+
 /**
  * User: jlowens
  * Date: Oct 28, 2006
@@ -10,7 +14,32 @@ public abstract class AbstractNode implements Node {
 	protected transient Object owner;
     protected abstract Node[] children();
 
-	public void setOwner(Object owner) {
+
+    public <T extends Node> T copy() {
+        // TODO: solve this with a new abstract method (e.g. create)
+        try {
+            //noinspection unchecked
+            T root = (T)getClass().newInstance();
+            copyChildren(root);
+            return root;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (VetoTypeInduction vetoTypeInduction) {
+            vetoTypeInduction.printStackTrace();
+        }
+        return null;
+    }
+
+    protected void copyChildren(Node n) throws VetoTypeInduction {
+        int i = 0;
+        for (Node c : children()) {
+            n.attach(i++, c.copy());
+        }
+    }
+
+    public void setOwner(Object owner) {
         if (this.owner == null || !this.owner.equals(owner)) {
             this.owner = owner;
 		    for (Node n : children()) n.setOwner(this.owner);
@@ -19,6 +48,13 @@ public abstract class AbstractNode implements Node {
 
     public Object getOwner() {
         return owner;
+    }
+
+    public Node getChild(int i) {
+        return children()[i];
+    }
+    public List<Node> childList() {
+        return toList(children());
     }
 
     public void induceOutputType(Class type) throws VetoTypeInduction {}

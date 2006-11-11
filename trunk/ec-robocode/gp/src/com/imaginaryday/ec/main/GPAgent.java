@@ -2,6 +2,8 @@ package com.imaginaryday.ec.main;
 
 import static com.imaginaryday.util.VectorUtils.toAngle;
 import static com.imaginaryday.util.VectorUtils.vecFromDir;
+import com.imaginaryday.ec.gp.NodeFactory;
+import com.imaginaryday.ec.main.nodes.*;
 import info.javelot.functionalj.tuple.Pair;
 import org.jscience.mathematics.numbers.Float64;
 import org.jscience.mathematics.vectors.VectorFloat64;
@@ -11,6 +13,47 @@ import robocode.*;
  * User: jlowens Date: Oct 30, 2006 Time: 6:13:08 PM
  */
 public class GPAgent extends AdvancedRobot {
+
+    static {
+        NodeFactory nf = NodeFactory.getInstance();
+        try {
+            nf.loadNode(BulletBearing.class);
+            nf.loadNode(BulletEnergy.class);
+            nf.loadNode(BulletSpeed.class);
+            nf.loadNode(CurrentRadarHeading.class);
+            nf.loadNode(CurrentTurretHeading.class);
+            nf.loadNode(CurrentVector.class);
+            nf.loadNode(EnemyEnergy.class);
+            nf.loadNode(EnemyHeading.class);
+            nf.loadNode(EnemySpeed.class);
+            nf.loadNode(EnergyLevel.class);
+            nf.loadNode(GunHeat.class);
+            nf.loadNode(HitByBullet.class);
+            nf.loadNode(HitByBulletAge.class);
+            nf.loadNode(HitWall.class);
+            nf.loadNode(HitWallAge.class);
+            nf.loadNode(IsMoving.class);
+            nf.loadNode(IsRadarMoving.class);
+            nf.loadNode(IsTurretMoving.class);
+            nf.loadNode(Rammed.class);
+            nf.loadNode(RammedAge.class);
+            nf.loadNode(RammerBearing.class);
+            nf.loadNode(RamMyFault.class);
+            nf.loadNode(RotateVector.class);
+            nf.loadNode(ScaleVector.class);
+            nf.loadNode(ScannedEnemy.class);
+            nf.loadNode(ScannedEnemyAge.class);
+            nf.loadNode(VectorHeading.class);
+            nf.loadNode(VectorLength.class);
+            nf.loadNode(VectorToEnemy.class);
+            nf.loadNode(VectorToForwardWall.class);
+            nf.loadNode(VectorToNearestWall.class);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+    }
 
     private RoboNode radarTree;
     private RoboNode turretTree;
@@ -270,8 +313,8 @@ public class GPAgent extends AdvancedRobot {
                                     double robotRadius,
                                     VectorFloat64 dir) {
         double m = dir.getValue(1) / dir.getValue(0);
-        double tx = 0.0;
-        double ty = 0.0;
+        double tx;
+        double ty;
 
         if (headingDegrees >= 0 && headingDegrees < 90) {
             // intersect top or right wall

@@ -2,6 +2,7 @@ package com.imaginaryday.ec.gp.nodes;
 
 import com.imaginaryday.ec.gp.AbstractNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.gp.VetoTypeInduction;
 
 import java.util.Random;
 
@@ -16,6 +17,18 @@ public class Constant extends AbstractNode {
     private static double min = -10, max = 10;
     private static Random rand = new Random();
     private Object val;
+
+
+    @SuppressWarnings({"unchecked"})
+    public <T extends Node> T copy() {
+        T c = (T)new Constant(val);
+        try {
+            copyChildren(c);
+        } catch (VetoTypeInduction vetoTypeInduction) {
+            vetoTypeInduction.printStackTrace();
+        }
+        return c;
+    }
 
     public Constant() {
         this.val = min + rand.nextDouble()*(max-min);

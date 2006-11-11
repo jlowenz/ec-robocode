@@ -41,6 +41,12 @@ public class NodeFactory {
             loadNode(Divide.class);
             loadNode(Multiply.class);
             loadNode(Subtract.class);
+            loadNode(And.class);
+            loadNode(GreaterThan.class);
+            loadNode(LessThan.class);
+            loadNode(IfThenElse.class);
+            loadNode(Not.class);
+            loadNode(Or.class);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -116,6 +122,7 @@ public class NodeFactory {
         return create(nodesByName.get(s), val);
     }
 
+    @SuppressWarnings({"unchecked"})
     public Node randomTerminal(Class parentType) {
         if (parentType == null) { // TODO: refactor out this logic
             List<Class>[] all = terminalsByOutputType.values().toArray(new List[0]);
@@ -131,7 +138,8 @@ public class NodeFactory {
         return create(nodes.get(rand.nextInt(nodes.size())));
     }
 
-	public Node randomNonterminal(Class parentType) {
+	@SuppressWarnings({"unchecked"})
+    public Node randomNonterminal(Class parentType) {
 		if (parentType == null) {
 			List<Class>[] all = nonterminalsByOutputType.values().toArray(new List[0]);
 			List<Class> sel = all[rand.nextInt(all.length)];

@@ -22,9 +22,14 @@ public class NodeTest extends TestCase {
 	{
         NodeFactory nf = NodeFactory.getInstance();
         Node root = nf.create("add");
-        root.attach(0, nf.create("mul").attach(0, nf.create("const", 5))
-                                       .attach(1, nf.create("const", 12)))
-            .attach(1, nf.create("const", 42));
+        try {
+            root.attach(0, nf.create("mul").attach(0, nf.create("const", 5))
+                                           .attach(1, nf.create("const", 12)))
+                .attach(1, nf.create("const", 42));
+        } catch (VetoTypeInduction vetoTypeInduction) {
+            fail("vetoed type induction");
+            vetoTypeInduction.printStackTrace();
+        }
 
         assertEquals(102.0, root.evaluate());
     }

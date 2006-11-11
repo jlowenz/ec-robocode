@@ -1,9 +1,11 @@
 package com.imaginaryday.ec.main;
 
-import net.jini.core.lookup.ServiceRegistrar;
-import net.jini.core.lookup.ServiceTemplate;
+import com.imaginaryday.ec.rcpatches.GPBattleResults;
+import com.imaginaryday.ec.rcpatches.GPBattleTask;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
+import net.jini.core.lookup.ServiceRegistrar;
+import net.jini.core.lookup.ServiceTemplate;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 import org.jini.rio.resources.client.JiniClient;
@@ -12,15 +14,15 @@ import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-
-import com.imaginaryday.ec.rcpatches.GPBattleResults;
-import com.imaginaryday.ec.rcpatches.GPBattleTask;
 
 /**
  * @author rbowers
@@ -43,7 +45,7 @@ public class Driver implements Runnable {
     public Driver() {
         executor = new ThreadPoolExecutor(4, 16, 20, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 
-
+        
     }
 
     public static void main(String[] args) {

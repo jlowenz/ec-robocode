@@ -1,6 +1,7 @@
 package com.imaginaryday.ec.gp;
 
 import static com.imaginaryday.util.Collections.toList;
+import info.javelot.functionalj.tuple.Pair;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public abstract class AbstractNode implements Node {
 
 	protected transient Object owner;
     protected abstract Node[] children();
-
+    protected Pair<Class,Class[]> type = new Pair<Class, Class[]>(getOutputType(), getInputTypes());
 
     public <T extends Node> T copy() {
         // TODO: solve this with a new abstract method (e.g. create)
@@ -69,6 +70,10 @@ public abstract class AbstractNode implements Node {
         Class[] types = new Class[getInputCount()];
         for (int i = 0; i < getInputCount(); i++) types[i] = getInputType(i);
         return types;
+    }
+
+    public Pair<Class,Class[]> getType() {
+        return type;
     }
 
     public int getInputCount() {

@@ -1,6 +1,7 @@
 package com.imaginaryday.ec.gp;
 
 import com.imaginaryday.ec.gp.nodes.*;
+import info.javelot.functionalj.tuple.Pair;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -21,6 +22,7 @@ public class NodeFactory {
     private Map<Class[], List<Class>> terminalsByInputType;
 	private Map<Class, List<Class>> nodesByOutputType;
 	private Map<Class[], List<Class>> nodesByInputType;
+    private Map<Pair<Class,Class[]>,List<Class>> nodesByType;
     private List<Class> nodes;
     private Random rand = new Random();
 
@@ -33,6 +35,7 @@ public class NodeFactory {
         terminalsByOutputType = new HashMap<Class, List<Class>>();
 	    nodesByOutputType = new HashMap<Class, List<Class>>();
 	    nodesByInputType = new HashMap<Class[], List<Class>>();
+        nodesByType = new HashMap<Pair<Class, Class[]>, List<Class>>();
         nodes = new ArrayList<Class>();
 
         try {
@@ -58,8 +61,14 @@ public class NodeFactory {
         Node n = aClass.newInstance();
         nodes.add(aClass);
         nodesByName.put(n.getName(), aClass); // single namespace for nodes
+        putByType(n, aClass);
         putByOutputType(n.getOutputType(), aClass);
         putByInputType(n.getInputTypes(), aClass);
+    }
+
+    private void putByType(Node n, Class aClass) {
+        List<Class> list = getList(nodesByType, new Pair<Class,Class[]>(n.getOutputType(),n.getInputTypes()));
+        list.add(aClass);
     }
 
     private void putByInputType(Class[] inputTypes, Class<? extends Node> aClass) {
@@ -149,4 +158,8 @@ public class NodeFactory {
 			return create(all.get(rand.nextInt(all.size())));
 		}
 	}
+    public Node randomReplacement(Node child) {
+        List<Class> nodes = getList(nodesByType, child.getType());
+        return create(nodes.get(rand.nextInt(nodes.size())));
+    }
 }

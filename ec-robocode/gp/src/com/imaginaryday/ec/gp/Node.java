@@ -1,5 +1,7 @@
 package com.imaginaryday.ec.gp;
 
+import info.javelot.functionalj.tuple.Pair;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -22,10 +24,10 @@ public interface Node extends Serializable {
     int getInputCount();
 	Class getInputType(int id);
     Class[] getInputTypes();
-
     Class getOutputType();
+    Pair<Class,Class[]> getType();
 
-	Object evaluate();
+    Object evaluate();
 
     boolean isTerminal();
 

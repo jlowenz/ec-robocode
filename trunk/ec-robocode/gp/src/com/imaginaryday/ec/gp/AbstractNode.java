@@ -4,6 +4,7 @@ import static com.imaginaryday.util.Collections.toList;
 import info.javelot.functionalj.tuple.Pair;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * User: jlowens
@@ -13,8 +14,9 @@ import java.util.List;
 public abstract class AbstractNode implements Node {
 
 	protected transient Object owner;
+    static protected Node[] NONE = new Node[0];
     protected abstract Node[] children();
-    protected Pair<Class,Class[]> type = new Pair<Class, Class[]>(getOutputType(), getInputTypes());
+    protected Pair<Class,List<Class>> type;
 
     public <T extends Node> T copy() {
         // TODO: solve this with a new abstract method (e.g. create)
@@ -66,13 +68,14 @@ public abstract class AbstractNode implements Node {
         return this;
     }
 
-    public Class[] getInputTypes() {
-        Class[] types = new Class[getInputCount()];
-        for (int i = 0; i < getInputCount(); i++) types[i] = getInputType(i);
+    public List<Class> getInputTypes() {
+        List<Class> types = new ArrayList<Class>();
+        for (int i = 0; i < getInputCount(); i++) types.add(getInputType(i));
         return types;
     }
 
-    public Pair<Class,Class[]> getType() {
+    public Pair<Class,List<Class>> getType() {
+        if (type == null) type = new Pair<Class, List<Class>>(getOutputType(), getInputTypes());
         return type;
     }
 
@@ -93,9 +96,11 @@ public abstract class AbstractNode implements Node {
         sb.append("(").append(getName()).append(" ");
 	    Node children[] = children();
 	    for (int i = 0; i < children.length; i++) {
-            sb.append(children[i].toString());
-		    if (i < children.length-1) sb.append(" ");
-	    }
+            if (children[i] != null) {
+                sb.append(children[i].toString());
+                if (i < children.length-1) sb.append(" ");
+            }
+        }
         sb.append(")");
         return sb.toString();
     }

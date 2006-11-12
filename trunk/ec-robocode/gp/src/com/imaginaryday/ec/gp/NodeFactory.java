@@ -17,12 +17,12 @@ public class NodeFactory {
 
     private Map<String, Class> nodesByName;
     private Map<Class, List<Class>> nonterminalsByOutputType;
-    private Map<Class[], List<Class>> nonterminalsByInputType;
+    private Map<List<Class>, List<Class>> nonterminalsByInputType;
     private Map<Class, List<Class>> terminalsByOutputType;
-    private Map<Class[], List<Class>> terminalsByInputType;
+    private Map<List<Class>, List<Class>> terminalsByInputType;
 	private Map<Class, List<Class>> nodesByOutputType;
-	private Map<Class[], List<Class>> nodesByInputType;
-    private Map<Pair<Class,Class[]>,List<Class>> nodesByType;
+	private Map<List<Class>, List<Class>> nodesByInputType;
+    private Map<Pair<Class,List<Class>>,List<Class>> nodesByType;
     private List<Class> nodes;
     private Random rand = new Random();
 
@@ -30,16 +30,17 @@ public class NodeFactory {
     {
         nodesByName = new HashMap<String, Class>();
         nonterminalsByOutputType = new HashMap<Class, List<Class>>();
-        nonterminalsByInputType = new HashMap<Class[], List<Class>>();
-        terminalsByInputType = new HashMap<Class[], List<Class>>();
+        nonterminalsByInputType = new HashMap<List<Class>, List<Class>>();
+        terminalsByInputType = new HashMap<List<Class>, List<Class>>();
         terminalsByOutputType = new HashMap<Class, List<Class>>();
 	    nodesByOutputType = new HashMap<Class, List<Class>>();
-	    nodesByInputType = new HashMap<Class[], List<Class>>();
-        nodesByType = new HashMap<Pair<Class, Class[]>, List<Class>>();
+	    nodesByInputType = new HashMap<List<Class>, List<Class>>();
+        nodesByType = new HashMap<Pair<Class, List<Class>>, List<Class>>();
         nodes = new ArrayList<Class>();
 
         try {
             loadNode(Constant.class);
+            loadNode(BooleanConstant.class);
             loadNode(Add.class);
             loadNode(Divide.class);
             loadNode(Multiply.class);
@@ -67,11 +68,11 @@ public class NodeFactory {
     }
 
     private void putByType(Node n, Class aClass) {
-        List<Class> list = getList(nodesByType, new Pair<Class,Class[]>(n.getOutputType(),n.getInputTypes()));
+        List<Class> list = getList(nodesByType, new Pair<Class,List<Class>>(n.getOutputType(),n.getInputTypes()));
         list.add(aClass);
     }
 
-    private void putByInputType(Class[] inputTypes, Class<? extends Node> aClass) {
+    private void putByInputType(List<Class> inputTypes, Class<? extends Node> aClass) {
         List<Class> allNodes;
         Node n = create(aClass);
         if (n.getInputCount() == 0) // is terminal
@@ -144,7 +145,12 @@ public class NodeFactory {
     }
 
     public Node randomNode(Class parentType) {
-        return create(nodes.get(rand.nextInt(nodes.size())));
+        if (parentType == null) {
+            return create(nodes.get(rand.nextInt(nodes.size())));
+        } else {
+            List<Class> all = nodesByOutputType.get(parentType);
+            return create(all.get(rand.nextInt(all.size())));  
+        }
     }
 
 	@SuppressWarnings({"unchecked"})

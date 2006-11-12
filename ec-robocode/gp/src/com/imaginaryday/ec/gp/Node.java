@@ -23,9 +23,9 @@ public interface Node extends Serializable {
     void induceOutputType(Class type) throws VetoTypeInduction;
     int getInputCount();
 	Class getInputType(int id);
-    Class[] getInputTypes();
+    List<Class> getInputTypes();
     Class getOutputType();
-    Pair<Class,Class[]> getType();
+    Pair<Class,List<Class>> getType();
 
     Object evaluate();
 

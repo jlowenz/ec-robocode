@@ -30,7 +30,6 @@ public class Not extends AbstractNode {
         return Boolean.class;
     }
 
-
     public Object evaluate() {
         return !((Boolean)child[0].evaluate());
     }

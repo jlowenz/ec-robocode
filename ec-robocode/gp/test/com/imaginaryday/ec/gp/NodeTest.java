@@ -43,6 +43,11 @@ public class NodeTest extends TestCase {
         Object result = root.evaluate();
 	    System.out.println(root);
         System.out.println(result);
+
+        root = tf.generateRandomTree(6, Boolean.class);
+        result = root.evaluate();
+	    System.out.println(root);
+        System.out.println(result);     
     }
 
     public static Test suite()

@@ -43,6 +43,11 @@ public class GPAgent extends AdvancedRobot {
         this.turretTree = turretTree;
         this.firingTree = firingTree;
         this.directionTree = directionTree;
+
+        this.radarTree.setOwner(this);
+        this.turretTree.setOwner(this);
+        this.firingTree.setOwner(this);
+        this.directionTree.setOwner(this);
     }
 
     public RoboNode getRadarTree() { return radarTree;}

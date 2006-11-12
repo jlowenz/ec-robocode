@@ -1,11 +1,15 @@
 package com.imaginaryday.ec.rcpatches;
 
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.main.GPAgent;
 import robocode.Robot;
 import robocode.peer.TeamPeer;
 import robocode.peer.robot.RobotClassManager;
 
 import robocode.repository.RobotSpecification;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author rbowers
@@ -22,7 +26,7 @@ public class GPRobotClassManager extends RobotClassManager {
 
     public GPRobotClassManager() {
         super(new GPRobotSpecification("ECBot", "fred"));
-        this.setRobotClass(GPRobot.class);
+        this.setRobotClass(GPAgent.class);
         robotSpecification = new GPRobotSpecification("No name yet", "Bob");
     }
 
@@ -61,14 +65,22 @@ public class GPRobotClassManager extends RobotClassManager {
 
     @Override
     public Robot getRobotInstance() throws IllegalAccessException, InstantiationException {
-        GPRobot robot = null;
+        GPAgent robot = null;
 
-        robot = (GPRobot) (getRobotClass().newInstance());
-        robot.setMoveProgram(moveProgram);
-        robot.setTurretProgram(turretProgram);
-        robot.setShootProgram(shootProgram);
-        robot.setRadarProgram(radarProgram);
-        robot.initialize();
+        Class<GPAgent> c = getRobotClass();
+        try {
+            Constructor<GPAgent> ctor = c.getConstructor(Node.class, Node.class, Node.class, Node.class);
+            robot = ctor.newInstance(radarProgram, turretProgram, shootProgram, moveProgram);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+//        robot.setMoveProgram(moveProgram);
+//        robot.setTurretProgram(turretProgram);
+//        robot.setShootProgram(shootProgram);
+//        robot.setRadarProgram(radarProgram);
+//        robot.initialize();
         return robot;
     }
 

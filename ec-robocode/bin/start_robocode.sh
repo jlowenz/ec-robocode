@@ -14,6 +14,7 @@ for JAR in 	gp.jar rc.jar jsk-dl.jar rio.jar jscience.jar \
 do
 	export CLASSPATH="${CLASSPATH}:${GP_HOME}/build/${JAR}"
 done
+export CLASSPATH="${CLASSPATH}:${GP_HOME}/rc/classes/"
 echo $CLASSPATH
 
 java -Djava.security.policy=/home/rbowers/.java.policy \

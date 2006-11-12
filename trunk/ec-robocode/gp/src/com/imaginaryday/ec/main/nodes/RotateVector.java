@@ -14,7 +14,7 @@ import org.jscience.mathematics.numbers.Float64;
  * </b>
  */
 public class RotateVector extends RoboNode {
-    private RoboNode child[] = new RoboNode[1];
+    private Node child[] = new Node[2];
 
     protected Node[] children() {
         return child;
@@ -36,7 +36,7 @@ public class RotateVector extends RoboNode {
     public Object evaluate() {
         VectorFloat64 vec = (VectorFloat64)child[0].evaluate();
         double len = VectorUtils.vecLength(vec);
-        double angle = (Double)child[1].evaluate();
+        double angle = ((Number)child[1].evaluate()).doubleValue();
         double curAngle = VectorUtils.toAngle(vec);
         double newAngle = (curAngle + angle) % (2.0*Math.PI);
         return VectorUtils.vecFromDir(newAngle).times(Float64.valueOf(len));

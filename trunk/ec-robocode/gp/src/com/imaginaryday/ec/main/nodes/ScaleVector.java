@@ -13,7 +13,7 @@ import org.jscience.mathematics.numbers.Float64;
  * </b>
  */
 public class ScaleVector extends RoboNode {
-    private RoboNode child[] = new RoboNode[2];
+    private Node child[] = new Node[2];
 
     protected Node[] children() {
         return child;
@@ -33,7 +33,7 @@ public class ScaleVector extends RoboNode {
     }
 
     public Object evaluate() {
-        double val = (Double)child[1].evaluate();
+        double val = ((Number)child[1].evaluate()).doubleValue();
         VectorFloat64 vec = (VectorFloat64)child[0].evaluate();
         return vec.times(Float64.valueOf(val));
     }

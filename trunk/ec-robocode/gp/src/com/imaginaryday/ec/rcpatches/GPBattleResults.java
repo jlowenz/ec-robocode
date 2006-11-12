@@ -9,24 +9,21 @@ import net.jini.core.entry.Entry;
  */
 public class GPBattleResults implements Entry {
 
-    public int generation;
+    public Integer generation;
     private String robot1;
     private String robot2;
-    private double fitness1;
-    private double fitness2;
+    private Double fitness1;
+    private Double fitness2;
 
     public GPBattleResults() {
     }
 
     public GPBattleResults(GPBattleTask task, double fitness1, double fitness2) {
         this.generation = task.generation;
-
         this.robot1 = task.robot1;
         this.robot2 = task.robot2;
-
         this.fitness1 = fitness1;
         this.fitness2 = fitness2;
-
     }
 
     public int getGeneration() {

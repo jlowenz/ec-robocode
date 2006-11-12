@@ -2,14 +2,13 @@ package com.imaginaryday.ec.main;
 
 import com.imaginaryday.ec.rcpatches.GPBattleResults;
 import com.imaginaryday.ec.rcpatches.GPBattleTask;
+import com.imaginaryday.util.SpaceFinder;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
-import net.jini.core.lookup.ServiceRegistrar;
-import net.jini.core.lookup.ServiceTemplate;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
-import org.jini.rio.resources.client.JiniClient;
 
+import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -38,17 +37,20 @@ public class Driver implements Runnable {
     private Date endDate;
     private int numGenerations;
     private int generationCount;
-    private int testFreq;
-    private int populationSize = 100;
-
+    private int testFreq = 5;
+    private int populationSize = 11;
+    private String[] sampleBots = new String[]{"sample.Corners", "sample.Crazy",
+            "sample.Fire", "sample.MyFirstRobot",
+            "sample.RamFire", "sample.SittingDuck", "sample.SpinBot",
+            "sample.Target", "sample.Tracker", "sample.TrackFire", "sample.Walls"};
 
     public Driver() {
         executor = new ThreadPoolExecutor(4, 16, 20, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 
-        
     }
 
     public static void main(String[] args) {
+        System.setSecurityManager(new RMISecurityManager());
         Driver d = new Driver();
 
         for (int i = 0; i < args.length; i++) {
@@ -62,16 +64,16 @@ public class Driver implements Runnable {
                 }
                 i++;
             } else if (args[i].equals("-g") && (i < args.length + 1)) {
-                int ng = Integer.parseInt(args[i+1]);
+                int ng = Integer.parseInt(args[i + 1]);
                 d.setNumGenerations(ng);
                 i++;
             } else if (args[i].equals("-f") && (i < args.length + 1)) {
-                int tf = Integer.parseInt(args[i+1]);
+                int tf = Integer.parseInt(args[i + 1]);
                 d.setTestFreq(tf);
                 i++;
             } else if (args[i].equals("-p") && (i < args.length + 1)) {
-                int tf = Integer.parseInt(args[i+1]);
-                d.setTestFreq(tf);
+                int pop = Integer.parseInt(args[i + 1]);
+                d.setPopulationSize(pop);
                 i++;
             } else {
                 System.out.println("Not understood: " + args[i]);
@@ -85,13 +87,25 @@ public class Driver implements Runnable {
     }
 
     public List<Member> genInitialPopulation() {
-        return new ArrayList<Member>();
+        List<Member> initialPop = new ArrayList<Member>();
+        int counter = 0;
+        for (String bot : sampleBots) {
+            Member m = new Member(generationCount, counter++);
+            m.setName(bot);
+            initialPop.add(m);
+        }
+
+        return initialPop;
     }
 
     public void run() {
 
         try {
             space = new SpaceFinder().getSpace();
+
+            if (space == null) {
+                return;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe("Could not find space");
@@ -107,7 +121,7 @@ public class Driver implements Runnable {
          * Main loop of the evolutionary algorithm.
          */
         Date currentDate = new Date();
-        while (endDate.compareTo(currentDate) > 0 && generationCount <= numGenerations) {
+        while (/* endDate.compareTo(currentDate) > 0 && */ generationCount <= numGenerations) {
 
             /*
              * Build coevolutionary battle set and submit
@@ -136,16 +150,10 @@ public class Driver implements Runnable {
         }
 
 
-
-
-
-
     }
 
 
     public List<Member> selectAndBreed(List<Member> oldPopulation) {
-
-
 
 
         return new ArrayList<Member>();
@@ -154,16 +162,15 @@ public class Driver implements Runnable {
 
     class FitnessComparator implements Comparator<Member> {
 
-            public int compare(Member one, Member two) {
-                if (one == null) throw new IllegalArgumentException("one is null");
-                if (two == null) throw new IllegalArgumentException("two is null");
+        public int compare(Member one, Member two) {
+            if (one == null) throw new IllegalArgumentException("one is null");
+            if (two == null) throw new IllegalArgumentException("two is null");
 
-                if (one.getFitness() <= two.getFitness()) return -1;
-                else return 1;
-            }
+            if (one.getFitness() <= two.getFitness()) return -1;
+            else return 1;
+        }
 
-   }
-
+    }
 
 
     public void collectResults(List<Member> population, int numBattles) {
@@ -171,10 +178,13 @@ public class Driver implements Runnable {
         int retrieved = 0;
         Entry template = new GPBattleResults();
 
-        while (retrieved  < numBattles) {
-                 GPBattleResults res = null;
+
+        while (retrieved < numBattles) {
+
+            GPBattleResults res = null;
             try {
-               res = (GPBattleResults) space.takeIfExists(template, null, 10000);
+                while (res == null)
+                    res = (GPBattleResults) space.takeIfExists(template, null, 120000);
             } catch (UnusableEntryException e) {
                 e.printStackTrace();
             } catch (TransactionException e) {
@@ -184,31 +194,22 @@ public class Driver implements Runnable {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+            if (res != null) {
+                for (Member member : population) {
 
-            if (res == null)  {
-                try {
-                    Thread.sleep(20000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    if (member.getName().equals(res.getRobot1())) {
+                        member.addFitness(res.getFitness1());
+                    }
+                    /*
+                    * use 2 ifs because it is possible for a robot
+                    * to compete against itself
+                    */
+                    if (member.getName().equals(res.getRobot2())) {
+                        member.addFitness(res.getFitness2());
+                    }
                 }
             }
-
-            for (Member member : population) {
-
-                if (member.getName().equals(res.getRobot1())) {
-                    member.addFitness(res.getFitness1());
-                }
-                /*
-                 * use 2 ifs because it is possible for a robot
-                 * to compete against itself
-                 */
-                if (member.getName().equals(res.getRobot2())) {
-                    member.addFitness(res.getFitness2());
-                }
-            }
-
         }
-
     }
 
     public int submitBattles(List<Member> population) {
@@ -216,13 +217,14 @@ public class Driver implements Runnable {
         int battles = 0;
         for (int i = 0; i < population.size(); ++i) {
 
-            for (int j = i; j < population.size();  ++i) {
+            for (int j = i; j < population.size(); ++j) {
 
 
                 GPBattleTask task = new GPBattleTask(population.get(i), population.get(j));
 
-                // submit
+// submit
                 try {
+                    logger.info("Submitting: " + task.toString());
                     space.write(task, null, Long.MAX_VALUE);
                     battles ++;
                 } catch (TransactionException e) {
@@ -239,28 +241,6 @@ public class Driver implements Runnable {
 
     public void setTestFreq(int testFreq) {
         this.testFreq = testFreq;
-    }
-
-    class SpaceFinder extends JiniClient {
-
-        public SpaceFinder() throws Exception {
-            super();
-        }
-
-        public JavaSpace getSpace() {
-            ServiceTemplate template = new ServiceTemplate(null, new Class[]{JavaSpace.class}, null);
-
-            for (ServiceRegistrar r : this.getRegistrars()) {
-                JavaSpace js = null;
-                try {
-                    js = (JavaSpace) r.lookup(template);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-                if (js != null) return js;
-            }
-            return null;
-        }
     }
 
     public Date getEndDate() {

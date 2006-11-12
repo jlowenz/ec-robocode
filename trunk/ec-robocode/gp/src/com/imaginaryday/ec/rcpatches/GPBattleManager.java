@@ -24,13 +24,11 @@
 package com.imaginaryday.ec.rcpatches;
 
 
+import com.imaginaryday.util.SpaceFinder;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
-import net.jini.core.lookup.ServiceRegistrar;
-import net.jini.core.lookup.ServiceTemplate;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
-import org.jini.rio.resources.client.JiniClient;
 import robocode.battle.Battle;
 import robocode.battle.BattleProperties;
 import robocode.battle.BattleResultsTableModel;
@@ -47,7 +45,6 @@ import robocode.peer.robot.RobotStatistics;
 import robocode.repository.FileSpecification;
 import robocode.repository.RobotSpecification;
 import robocode.repository.TeamSpecification;
-import robocode.security.RobocodeSecurityManager;
 import robocode.util.Constants;
 import robocode.util.Utils;
 
@@ -55,6 +52,7 @@ import javax.swing.*;
 import java.io.*;
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.logging.Logger;
 
 
 /**
@@ -71,6 +69,7 @@ public class GPBattleManager extends BattleManager {
     private String resultsFile;
     private RobocodeManager manager;
     private int stepTurn;
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     /**
      * Steps for a single turn, then goes back to paused
@@ -121,18 +120,25 @@ public class GPBattleManager extends BattleManager {
         GPRobotClassManager gpcm1 = new GPRobotClassManager();
         GPRobotClassManager gpcm2 = new GPRobotClassManager();
 
+         
+
         /*
         * Get prebuilts from the system and build a map of them
         */
         Vector<FileSpecification> robotSpecificationsVector = manager.getRobotRepositoryManager().getRobotRepository().getRobotSpecificationsVector(
                 false, false, false, false, false, false);
+        Utils.log("num fs: " + robotSpecificationsVector.size());
+        for (FileSpecification fs : robotSpecificationsVector) fs.toString();
 
         Map<String, RobotClassManager> standardBots = new HashMap<String, RobotClassManager>();
 
 
         if (battleProperties.getSelectedRobots() != null) {
             StringTokenizer tokenizer;
+            String sr =  battleProperties.getSelectedRobots();
+            Utils.log("Selected robots = " + battleProperties.getSelectedRobots());
             tokenizer = new StringTokenizer(battleProperties.getSelectedRobots(), ",");
+
             while (tokenizer.hasMoreTokens()) {
                 String bot = tokenizer.nextToken();
 
@@ -148,9 +154,17 @@ public class GPBattleManager extends BattleManager {
                         } else if (currentFileSpecification instanceof TeamSpecification) {
                             System.err.println("Teams not supported");
                         }
+                    } else {
+                        Utils.log(currentFileSpecification.getNameManager().getUniqueFullClassNameWithVersion() +
+                        " != " + bot);
                     }
                 }
             }
+            Utils.log("Standard bots");
+            Utils.log(standardBots.toString());
+        } else {
+            Utils.log("Selected robots = null!");
+            return;
         }
 
         JavaSpace space = null;
@@ -170,12 +184,12 @@ public class GPBattleManager extends BattleManager {
 
         boolean done = false;
         while (!done) {
-            System.err.println("Looking for task");
+            Utils.log("Looking for task");
             Entry taskTemplate = new GPBattleTask();
             GPBattleTask task = null;
             try {
-                task = (GPBattleTask) space.take(taskTemplate, null, 10000);
-                System.err.println((task == null) ? "null" : task.toString());
+                task = (GPBattleTask) space.take(taskTemplate, null, 120000);
+                Utils.log((task == null) ? "null" : task.toString());
             } catch (UnusableEntryException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             } catch (TransactionException e) {
@@ -188,25 +202,29 @@ public class GPBattleManager extends BattleManager {
 
             if (task == null) continue;
 
-            if (task.done) done = true;
+            if (task.done != null && task.done) done = true;
             else {
                 RobotClassManager ralph;
                 RobotClassManager alice;
 
+                Utils.log("robot1 = " + task.robot1);
                 if (standardBots.keySet().contains(task.robot1)) {
                     ralph = standardBots.get(task.robot1);
                 } else {
                     gpcm1.setMoveProgram(task.moveProgram1);
                     gpcm1.setTurretProgram(task.turretProgram1);
+                    gpcm1.setRadarProgram(task.radarProgram1);
                     gpcm1.setShootProgram(task.shootProgram1);
                     ralph = gpcm1;
                 }
 
+                Utils.log("robot2 = " + task.robot2);
                 if (standardBots.keySet().contains(task.robot2)) {
                     alice = standardBots.get(task.robot2);
                 } else {
                     gpcm2.setMoveProgram(task.moveProgram2);
                     gpcm2.setTurretProgram(task.turretProgram2);
+                    gpcm2.setRadarProgram(task.radarProgram1);
                     gpcm2.setShootProgram(task.shootProgram2);
                     alice = gpcm1;
                 }
@@ -234,16 +252,21 @@ public class GPBattleManager extends BattleManager {
 
         public void battleComplete(BattleSpecification battle, RobotResults[] results) {
 
-            GPBattleResults res = new GPBattleResults(battleTask,
-                    GPFitnessCalc.getFitness(results[0]),
-                    GPFitnessCalc.getFitness(results[1]));
+            if (results != null && results.length == 2) {
+                GPBattleResults res = new GPBattleResults(battleTask,
+                        GPFitnessCalc.getFitness(results[0]),
+                        GPFitnessCalc.getFitness(results[1]));
 
-            try {
-                space.write(res, null, 1000000);
-            } catch (TransactionException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (RemoteException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+
+                try {
+                    space.write(res, null, 1000000);
+                } catch (TransactionException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (RemoteException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            } else {
+                Utils.log("Bad results array");
             }
 
         }
@@ -261,76 +284,6 @@ public class GPBattleManager extends BattleManager {
         }
     }
 
-    class SpaceFinder extends JiniClient {
-
-        public SpaceFinder() throws Exception {
-            super();
-        }
-
-        public JavaSpace getSpace() {
-            long startTime = System.currentTimeMillis();
-            ServiceTemplate template = new ServiceTemplate(null, new Class[]{JavaSpace.class}, null);
-            while (System.currentTimeMillis() - startTime < 60000) {
-                for (ServiceRegistrar r : this.getRegistrars()) {
-                    JavaSpace js = null;
-                    try {
-                        js = (JavaSpace) r.lookup(template);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                    if (js != null) return js;
-                }
-            }
-            return null;
-        }
-    }
-
-
-    public void startNewBattle(robocode.control.BattleSpecification battleSpecification) {
-        this.battleProperties = battleSpecification.getBattleProperties();
-        Vector<FileSpecification> robotSpecificationsVector = manager.getRobotRepositoryManager().getRobotRepository().getRobotSpecificationsVector(
-                false, false, false, false, false, false);
-        Vector<RobotClassManager> battlingRobotsVector = new Vector<RobotClassManager>();
-
-        robocode.control.RobotSpecification[] robotSpecs = battleSpecification.getRobots();
-
-        for (int i = 0; i < robotSpecs.length; i++) {
-            if (robotSpecs[i] == null) {
-                break;
-            }
-
-            String bot;
-
-            if (robotSpecs[i].getVersion() != null && !robotSpecs[i].getVersion().equals("")) {
-                bot = robotSpecs[i].getClassName() + " " + robotSpecs[i].getVersion();
-            } else {
-                bot = robotSpecs[i].getClassName();
-            }
-
-            boolean found = false;
-
-            for (int j = 0; j < robotSpecificationsVector.size(); j++) {
-                if (((FileSpecification) robotSpecificationsVector.elementAt(j)).getNameManager().getUniqueFullClassNameWithVersion().equals(
-                        bot)) {
-                    RobotSpecification robotSpec = (RobotSpecification) robotSpecificationsVector.elementAt(j);
-                    RobotClassManager rcm = new RobotClassManager(robotSpec);
-
-                    rcm.setControlRobotSpecification(robotSpecs[i]);
-                    battlingRobotsVector.add(rcm);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                Utils.log("Aborting battle, could not find robot: " + bot);
-                if (manager.getListener() != null) {
-                    manager.getListener().battleAborted(battleSpecification);
-                }
-                return;
-            }
-        }
-        startNewBattle(battlingRobotsVector, false, battleSpecification);
-    }
 
     private void startNewBattle(Vector<RobotClassManager> battlingRobotsVector, boolean exitOnComplete,
                                 robocode.control.BattleSpecification battleSpecification) {
@@ -360,12 +313,12 @@ public class GPBattleManager extends BattleManager {
         battleThread.setPriority(Thread.NORM_PRIORITY);
         battleThread.setName("Battle Thread");
         battle.setBattleThread(battleThread);
-
+        /*
         if (!System.getProperty("NOSECURITY", "false").equals("true")) {
             ((RobocodeSecurityManager) System.getSecurityManager()).addSafeThread(battleThread);
             ((RobocodeSecurityManager) System.getSecurityManager()).setBattleThread(battleThread);
         }
-
+        */
         if (manager.isGUIEnabled()) {
             manager.getWindowManager().getRobocodeFrame().getBattleView().setVisible(true);
             manager.getWindowManager().getRobocodeFrame().getBattleView().setInitialized(false);
@@ -561,6 +514,11 @@ public class GPBattleManager extends BattleManager {
     }
 
     public void sendResultsToListener(Battle battle, robocode.control.RobocodeListener listener) {
+
+        for (RobotPeer r : battle.getRobots()) {
+            Utils.log("robot " + r.getName());
+        }
+
         Vector<RobotPeer> orderedRobots = new Vector<RobotPeer>(battle.getRobots());
 
         Collections.sort(orderedRobots);

@@ -45,4 +45,17 @@ public class GPBattleTask implements Entry {
     public GPBattleTask() {
         
     }
+
+
+    @Override
+    public String toString() {
+        return new StringBuilder().append("GPBattleTask{").append("battle=").append(battle)
+                .append(", generation=").append(generation).append(", robot1='").append(robot1)
+                .append('\'').append(", robot2='").append(robot2).append('\'').append(", moveProgram1=")
+                .append(moveProgram1).append(", turretProgram1=").append(turretProgram1).append(", radarProgram1=")
+                .append(radarProgram1).append(", shootProgram1=").append(shootProgram1).append(", moveProgram2=")
+                .append(moveProgram2).append(", turretProgram2=").append(turretProgram2).append(", radarProgram2=")
+                .append(radarProgram2).append(", shootProgram2=").append(shootProgram2).append(", done=")
+                .append(done).append('}').toString();
+    }
 }

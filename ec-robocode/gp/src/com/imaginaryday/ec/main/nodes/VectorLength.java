@@ -13,7 +13,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  * </b>
  */
 public class VectorLength extends RoboNode {
-    private RoboNode child[] = new RoboNode[1];
+    private Node child[] = new Node[1];
 
     protected Node[] children() {
         return child;

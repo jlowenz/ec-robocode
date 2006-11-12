@@ -28,8 +28,8 @@ public class LessThan extends AbstractNode {
     }
 
     public Object evaluate() {
-        double x = (Double) children[0].evaluate();
-        double y = (Double) children[1].evaluate();
+        double x = ((Number) children[0].evaluate()).doubleValue();
+        double y = ((Number) children[1].evaluate()).doubleValue();
         return x < y;
     }
 }

@@ -14,6 +14,6 @@ public class RammerBearing extends RoboNode {
     protected Node[] children() {return NONE;}
     public String getName() {return "rammerBearing";}
     public Class getInputType(int id) {return null;}
-    public Class getOutputType() {return Double.class;}
+    public Class getOutputType() {return Number.class;}
     public Object evaluate() {return getOwner().getRammerBearing();}
 }

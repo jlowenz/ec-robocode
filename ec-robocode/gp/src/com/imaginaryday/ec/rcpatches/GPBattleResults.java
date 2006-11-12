@@ -54,4 +54,10 @@ public class GPBattleResults implements Entry {
         this.fitness2 = fitness2;
     }
 
+
+    public String toString() {
+        return new StringBuilder().append("GPBattleResults [").append(generation).append("] ")
+                .append(robot1).append(":").append(fitness1).append("    ").append(robot2).append(":")
+                .append(fitness2).toString();                
+    }
 }

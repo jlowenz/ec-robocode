@@ -96,10 +96,8 @@ public class Driver implements Runnable {
     private double mutationProbability = .1;
     private int testFreq = 5;
     private int populationSize = 11;
-    private String[] sampleBots = new String[]{"sample.Corners", "sample.Crazy",
-            "sample.Fire", "sample.MyFirstRobot",
-            "sample.RamFire", "sample.SittingDuck", "sample.SpinBot",
-            "sample.Target", "sample.Tracker", "sample.TrackFire", "sample.Walls"};
+    private String[] sampleBots = new String[]{"Corners", "Crazy", "Fire", "MyFirstRobot",
+            "RamFire", "SittingDuck", "SpinBot", "Target", "Tracker", "TrackFire", "Walls"};
 
 
     public Driver() {

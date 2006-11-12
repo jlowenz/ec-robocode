@@ -10,8 +10,8 @@ import net.jini.core.entry.Entry;
  *         Time: 9:59:10 PM
  */
 public class GPBattleTask implements Entry {
-    public int generation;
-    public int battle;
+    public Integer generation;
+    public Integer battle;
 
     public String robot1;
     public String robot2;
@@ -26,7 +26,7 @@ public class GPBattleTask implements Entry {
     public Node radarProgram2;
     public Node shootProgram2;
 
-    public boolean done;
+    public Boolean done;
 
     public GPBattleTask(Member member1, Member member2) {
         robot1 = member1.getName();

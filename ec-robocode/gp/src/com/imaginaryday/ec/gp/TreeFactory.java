@@ -57,7 +57,7 @@ public class TreeFactory {
 		        for (int i = 0; i < n.getInputCount(); i++) {
 		            Class type = n.getInputType(i);
 		            Node child = grow(depth+1, maxDepth, type);
-		            n.attach(i, child);
+		            //n.attach(i, child);
 		        }
 		        return n;
 		    }

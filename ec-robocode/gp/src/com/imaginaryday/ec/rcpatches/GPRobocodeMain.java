@@ -35,6 +35,7 @@ import robocode.util.Utils;
 import javax.swing.*;
 import java.io.File;
 import java.security.Policy;
+import java.rmi.RMISecurityManager;
 
 
 /**
@@ -77,9 +78,9 @@ public class GPRobocodeMain {
 
             Thread.currentThread().setName("Application Thread");
 
-            RobocodeSecurityPolicy securityPolicy = new RobocodeSecurityPolicy(Policy.getPolicy());
+            //RobocodeSecurityPolicy securityPolicy = new RobocodeSecurityPolicy(Policy.getPolicy());
 
-            Policy.setPolicy(securityPolicy);
+            //Policy.setPolicy(securityPolicy);
 
             // For John Burkey at Apple
             boolean securityOn = true;
@@ -90,6 +91,7 @@ public class GPRobocodeMain {
                                 + "You should only run robots which you trust!");
                 securityOn = false;
             }
+            /*
             if (securityOn) {
                 System.setSecurityManager(
                         new RobocodeSecurityManager(Thread.currentThread(), manager.getThreadManager(), true));
@@ -103,6 +105,8 @@ public class GPRobocodeMain {
                     tg = tg.getParent();
                 }
             }
+            */
+            System.setSecurityManager(new RMISecurityManager());
 
             SecurePrintStream sysout = new SecurePrintStream(System.out, true, "System.out");
             SecurePrintStream syserr = new SecurePrintStream(System.err, true, "System.err");
@@ -162,7 +166,7 @@ public class GPRobocodeMain {
                 }
                 manager.getBattleManager().setBattleFilename(battleFilename);
                 manager.getBattleManager().loadBattleProperties();
-                manager.getBattleManager().startNewBattle(manager.getBattleManager().getBattleProperties(), true);
+                manager.getBattleManager().startNewBattle(manager.getBattleManager().getBattleProperties(), false);
                 manager.getBattleManager().getBattle().setDesiredTPS(tps);
             }
             if (!manager.isGUIEnabled()) {

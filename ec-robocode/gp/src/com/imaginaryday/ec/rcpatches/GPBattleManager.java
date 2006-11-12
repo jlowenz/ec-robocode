@@ -42,7 +42,6 @@ import robocode.control.RobotResults;
 import robocode.manager.BattleManager;
 import robocode.manager.RobocodeManager;
 import robocode.peer.RobotPeer;
-import robocode.peer.TeamPeer;
 import robocode.peer.robot.RobotClassManager;
 import robocode.peer.robot.RobotStatistics;
 import robocode.repository.FileSpecification;
@@ -115,7 +114,7 @@ public class GPBattleManager extends BattleManager {
         startNewBattle(battleProperties, false);
     }
 
-    public void startNewBattle(BattleProperties battleProperties) {
+    public void startNewBattle(BattleProperties battleProperties, boolean exit) {
         this.battleProperties = battleProperties;
 
         // Load ClassManagers need 2 GPRobots.
@@ -161,16 +160,22 @@ public class GPBattleManager extends BattleManager {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
+        if (space == null) {
+            System.err.println("Frak");
+            return;
+        }
+
         ResultForwarder rl = new ResultForwarder(space);
         manager.setListener(rl);
 
         boolean done = false;
         while (!done) {
-
+            System.err.println("Looking for task");
             Entry taskTemplate = new GPBattleTask();
             GPBattleTask task = null;
             try {
-                task = (GPBattleTask) space.take(taskTemplate, null, 3600);
+                task = (GPBattleTask) space.take(taskTemplate, null, 10000);
+                System.err.println((task == null) ? "null" : task.toString());
             } catch (UnusableEntryException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             } catch (TransactionException e) {
@@ -263,85 +268,23 @@ public class GPBattleManager extends BattleManager {
         }
 
         public JavaSpace getSpace() {
+            long startTime = System.currentTimeMillis();
             ServiceTemplate template = new ServiceTemplate(null, new Class[]{JavaSpace.class}, null);
-
-            for (ServiceRegistrar r : this.getRegistrars()) {
-                JavaSpace js = null;
-                try {
-                    js = (JavaSpace) r.lookup(template);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
+            while (System.currentTimeMillis() - startTime < 60000) {
+                for (ServiceRegistrar r : this.getRegistrars()) {
+                    JavaSpace js = null;
+                    try {
+                        js = (JavaSpace) r.lookup(template);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    if (js != null) return js;
                 }
-                if (js != null) return js;
             }
             return null;
         }
     }
 
-
-    public void startNewBattle(BattleProperties battleProperties, boolean exitOnComplete) {
-        this.battleProperties = battleProperties;
-
-        Vector<FileSpecification> robotSpecificationsVector = manager.getRobotRepositoryManager().getRobotRepository().getRobotSpecificationsVector(
-                false, false, false, false, false, false);
-        Vector<RobotClassManager> battlingRobotsVector = new Vector<RobotClassManager>();
-
-        StringTokenizer tokenizer;
-
-        if (battleProperties.getSelectedRobots() != null) {
-            tokenizer = new StringTokenizer(battleProperties.getSelectedRobots(), ",");
-            while (tokenizer.hasMoreTokens()) {
-                String bot = tokenizer.nextToken();
-
-                for (int i = 0; i < robotSpecificationsVector.size(); i++) {
-                    FileSpecification currentFileSpecification = (FileSpecification) robotSpecificationsVector.elementAt(
-                            i);
-
-                    if (currentFileSpecification.getNameManager().getUniqueFullClassNameWithVersion().equals(bot)) {
-                        if (currentFileSpecification instanceof RobotSpecification) {
-                            RobotSpecification current = (RobotSpecification) currentFileSpecification;
-
-                            battlingRobotsVector.add(new RobotClassManager(current));
-                            break;
-                        } else if (currentFileSpecification instanceof TeamSpecification) {
-                            TeamSpecification currentTeam = (TeamSpecification) currentFileSpecification;
-                            TeamPeer teamManager = new TeamPeer(currentTeam.getName());
-                            StringTokenizer teamTokenizer;
-
-                            teamTokenizer = new StringTokenizer(currentTeam.getMembers(), ",");
-                            while (teamTokenizer.hasMoreTokens()) {
-                                bot = teamTokenizer.nextToken();
-                                RobotSpecification match = null;
-
-                                for (int j = 0; j < robotSpecificationsVector.size(); j++) {
-                                    currentFileSpecification = (FileSpecification) robotSpecificationsVector.elementAt(j);
-
-                                    // Teams cannot include teams
-                                    if (currentFileSpecification instanceof TeamSpecification) {
-                                        continue;
-                                    }
-                                    if (currentFileSpecification.getNameManager().getUniqueFullClassNameWithVersion().equals(
-                                            bot)) {
-                                        // Found team member
-                                        match = (RobotSpecification) currentFileSpecification;
-                                        if (currentTeam.getRootDir().equals(currentFileSpecification.getRootDir())
-                                                || currentTeam.getRootDir().equals(
-                                                currentFileSpecification.getRootDir().getParentFile())) {
-                                            break;
-                                        }
-                                        // else, still looking
-                                    }
-                                }
-                                battlingRobotsVector.add(new RobotClassManager(match, teamManager));
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        startNewBattle(battlingRobotsVector, exitOnComplete, null);
-    }
 
     public void startNewBattle(robocode.control.BattleSpecification battleSpecification) {
         this.battleProperties = battleSpecification.getBattleProperties();

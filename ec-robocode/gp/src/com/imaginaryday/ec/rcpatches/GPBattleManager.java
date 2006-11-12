@@ -52,6 +52,7 @@ import javax.swing.*;
 import java.io.*;
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 
@@ -113,6 +114,36 @@ public class GPBattleManager extends BattleManager {
         startNewBattle(battleProperties, false);
     }
 
+    private Map<String, RobotClassManager> loadStandardBots() {
+        Map<String, RobotClassManager> map = new ConcurrentHashMap<String, RobotClassManager>();
+
+        map.put("Corners", new StandardRobotClassManager(new GPRobotSpecification("Corners", "1"),
+                sample.Corners.class));
+        map.put("Crazy", new StandardRobotClassManager(new GPRobotSpecification("Crazy", "2"),
+                sample.Crazy.class));
+        map.put("Fire", new StandardRobotClassManager(new GPRobotSpecification("Fire", "3"),
+                sample.Fire.class));
+        map.put("MyFirstRobot", new StandardRobotClassManager(new GPRobotSpecification("MyFirstRobot", "4"),
+                sample.MyFirstRobot.class));
+        map.put("RamFire", new StandardRobotClassManager(new GPRobotSpecification("RamFire", "5"),
+                sample.RamFire.class));
+        map.put("SittingDuck", new StandardRobotClassManager(new GPRobotSpecification("SittingDuck", "6"),
+                sample.SittingDuck.class));
+        map.put("SpinBot", new StandardRobotClassManager(new GPRobotSpecification("SpinBot", "7"),
+                sample.SpinBot.class));
+        map.put("Target", new StandardRobotClassManager(new GPRobotSpecification("Target", "8"),
+                sample.Target.class));
+        map.put("Tracker", new StandardRobotClassManager(new GPRobotSpecification("Tracker", "9"),
+                sample.Tracker.class));
+        map.put("TrackFire", new StandardRobotClassManager(new GPRobotSpecification("TrackFire", "10"),
+                sample.TrackFire.class));
+        map.put("Walls", new StandardRobotClassManager(new GPRobotSpecification("Walls", "11"),
+                sample.Walls.class));
+
+        return map;
+    }
+
+
     public void startNewBattle(BattleProperties battleProperties, boolean exit) {
         this.battleProperties = battleProperties;
 
@@ -120,17 +151,15 @@ public class GPBattleManager extends BattleManager {
         GPRobotClassManager gpcm1 = new GPRobotClassManager();
         GPRobotClassManager gpcm2 = new GPRobotClassManager();
 
-         
+        Map<String, RobotClassManager> standardBots = loadStandardBots();
 
         /*
         * Get prebuilts from the system and build a map of them
-        */
+        *
         Vector<FileSpecification> robotSpecificationsVector = manager.getRobotRepositoryManager().getRobotRepository().getRobotSpecificationsVector(
                 false, false, false, false, false, false);
         Utils.log("num fs: " + robotSpecificationsVector.size());
         for (FileSpecification fs : robotSpecificationsVector) fs.toString();
-
-        Map<String, RobotClassManager> standardBots = new HashMap<String, RobotClassManager>();
 
 
         if (battleProperties.getSelectedRobots() != null) {
@@ -166,6 +195,8 @@ public class GPBattleManager extends BattleManager {
             Utils.log("Selected robots = null!");
             return;
         }
+        */
+
 
         JavaSpace space = null;
         try {
@@ -339,6 +370,11 @@ public class GPBattleManager extends BattleManager {
             manager.getRobotDialogManager().setActiveBattle(battle);
         }
         battleThread.start();
+        try {
+            battleThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
     public String getBattleFilename() {

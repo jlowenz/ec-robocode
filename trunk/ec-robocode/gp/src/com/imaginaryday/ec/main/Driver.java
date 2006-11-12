@@ -393,6 +393,7 @@ public class Driver implements Runnable {
             try {
                 while (res == null)
                     res = (GPBattleResults) space.takeIfExists(template, null, 120000);
+                logger.info(res.toString());
             } catch (UnusableEntryException e) {
                 e.printStackTrace();
             } catch (TransactionException e) {

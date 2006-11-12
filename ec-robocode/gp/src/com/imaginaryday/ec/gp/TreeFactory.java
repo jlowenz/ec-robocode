@@ -26,8 +26,7 @@ public class TreeFactory {
 			    root = full(0, maxDepth, parentType);
 			}
 	        return root;
-		} catch (VetoTypeInduction e) {
-			// TODO Auto-generated catch block
+		} catch (VetoTypeInduction e) {	
 			e.printStackTrace();
 		}
 		return null;

@@ -9,7 +9,7 @@ import com.imaginaryday.ec.gp.Node;
  * Time: 1:56:59 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Member {
+public class Member implements Comparable<Member> {
 
     private int generation;
     private int id;
@@ -26,6 +26,10 @@ public class Member {
     public Member(int generation, int id) {
         this.generation = generation;
         this.id = id;
+    }
+
+    public int compareTo(Member member) {
+        return Double.valueOf(getFitness()).compareTo(member.getFitness());
     }
 
     public void addFitness(double fitness) {

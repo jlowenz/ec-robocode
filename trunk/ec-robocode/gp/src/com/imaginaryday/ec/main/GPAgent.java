@@ -2,6 +2,7 @@ package com.imaginaryday.ec.main;
 
 import static com.imaginaryday.util.VectorUtils.toAngle;
 import static com.imaginaryday.util.VectorUtils.vecFromDir;
+import com.imaginaryday.ec.gp.Node;
 import info.javelot.functionalj.tuple.Pair;
 import org.jscience.mathematics.numbers.Float64;
 import org.jscience.mathematics.vectors.VectorFloat64;
@@ -12,10 +13,10 @@ import robocode.*;
  */
 public class GPAgent extends AdvancedRobot {
 
-    private RoboNode radarTree;
-    private RoboNode turretTree;
-    private RoboNode firingTree;
-    private RoboNode directionTree;
+    private Node radarTree;
+    private Node turretTree;
+    private Node firingTree;
+    private Node directionTree;
     private VectorFloat64 movementVector = VectorFloat64.valueOf(0, 1);
     private boolean alive = true;
     private VectorFloat64 vectorToEnemy = VectorFloat64.valueOf(0, 1);
@@ -38,7 +39,7 @@ public class GPAgent extends AdvancedRobot {
     private double rammerBearing = 0.0;
     private boolean scannedEnemy = true;
 
-    public GPAgent(RoboNode radarTree, RoboNode turretTree, RoboNode firingTree, RoboNode directionTree) {
+    public GPAgent(Node radarTree, Node turretTree, Node firingTree, Node directionTree) {
         this.radarTree = radarTree;
         this.turretTree = turretTree;
         this.firingTree = firingTree;
@@ -50,10 +51,10 @@ public class GPAgent extends AdvancedRobot {
         if (directionTree != null) this.directionTree.setOwner(this);
     }
 
-    public RoboNode getRadarTree() { return radarTree;}
-    public RoboNode getTurretTree() {return turretTree;}
-    public RoboNode getFiringTree() {return firingTree;}
-    public RoboNode getDirectionTree() {return directionTree;}
+    public Node getRadarTree() { return radarTree;}
+    public Node getTurretTree() {return turretTree;}
+    public Node getFiringTree() {return firingTree;}
+    public Node getDirectionTree() {return directionTree;}
 
     public VectorFloat64 getCurrentVector() {return movementVector;}
 

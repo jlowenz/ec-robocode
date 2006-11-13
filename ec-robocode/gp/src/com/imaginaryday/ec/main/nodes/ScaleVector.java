@@ -35,6 +35,7 @@ public class ScaleVector extends RoboNode {
     public Object evaluate() {
         double val = ((Number)child[1].evaluate()).doubleValue();
         VectorFloat64 vec = (VectorFloat64)child[0].evaluate();
+        if (val == 0.0) return vec; // sanitize - can't scale a vector to zero! 
         return vec.times(Float64.valueOf(val));
     }
 }

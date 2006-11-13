@@ -15,14 +15,14 @@ public class VectorUtils {
         VectorFloat64 norm = movementVector2.times(Float64.valueOf(1.0 / movementVector2.normValue()));
         final double x = norm.getValue(0);
         final double y = norm.getValue(1);
-        if (x > 0) {
-            if (y > 0) {
+        if (x >= 0) {
+            if (y >= 0) {
                 return Math.atan2(x, y);
             } else {
                 return Math.PI - Math.atan2(x, -y);
             }
         } else {
-            if (y > 0) {
+            if (y >= 0) {
                 return 2 * Math.PI - Math.atan2(-x, y);
             } else {
                 return Math.PI + Math.atan2(-x, -y);
@@ -39,6 +39,6 @@ public class VectorUtils {
     }
 
     public static VectorFloat64 normalize(VectorFloat64 vec) {
-        return vec.times(Float64.valueOf(1/vec.normValue()));
+        return vec.times(Float64.valueOf(1.0/vec.normValue()));
     }
 }

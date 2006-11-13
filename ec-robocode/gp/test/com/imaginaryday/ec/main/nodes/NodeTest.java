@@ -4,6 +4,7 @@ import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.ec.gp.NodeFactory;
 import com.imaginaryday.ec.gp.TreeFactory;
 import com.imaginaryday.ec.gp.VetoTypeInduction;
+import com.imaginaryday.ec.gp.nodes.Constant;
 import com.imaginaryday.ec.main.GPAgent;
 import info.javelot.functionalj.tuple.Pair;
 import junit.framework.Test;
@@ -125,11 +126,59 @@ public class NodeTest extends TestCase {
         }
     }
 
+    public void testRotateVector() {
+        RotateVector rv = new RotateVector();
+        try {
+            rv.attach(0,new VectorConstant(VectorFloat64.valueOf(0,1)));
+            rv.attach(1,new Constant(Math.PI/2.0));
+        } catch (VetoTypeInduction vetoTypeInduction) {
+            vetoTypeInduction.printStackTrace();
+        }
+        VectorFloat64 vec = (VectorFloat64) rv.evaluate();
+        assertEquals(1.0, vec.getValue(0), 0.00001);
+        assertEquals(0.0, vec.getValue(1), 0.00001);
+    }
+
+    public void testVectorHeading() {
+        VectorHeading up = new VectorHeading();
+        VectorHeading down = new VectorHeading();
+        VectorHeading left = new VectorHeading();
+        VectorHeading right = new VectorHeading();
+        try {
+            up.attach(0,new VectorConstant(VectorFloat64.valueOf(0,1)));
+            down.attach(0,new VectorConstant(VectorFloat64.valueOf(0,-1)));
+            left.attach(0,new VectorConstant(VectorFloat64.valueOf(-1,0)));
+            right.attach(0,new VectorConstant(VectorFloat64.valueOf(1,0)));
+        } catch (VetoTypeInduction vetoTypeInduction) {
+            vetoTypeInduction.printStackTrace();
+        }
+        assertEquals(0.0, ((Number)up.evaluate()).doubleValue(), 0.00001);
+        assertEquals(Math.PI, ((Number)down.evaluate()).doubleValue(), 0.00001);
+        assertEquals(Math.PI*1.5, ((Number)left.evaluate()).doubleValue(), 0.00001);
+        assertEquals(Math.PI/2.0, ((Number)right.evaluate()).doubleValue(), 0.00001);
+    }
+
+    public void testScaleVector() {
+        ScaleVector sv = new ScaleVector();
+        try {
+            sv.attach(0, new VectorConstant(VectorFloat64.valueOf(0,1)));
+            sv.attach(1, new Constant(5.0));
+        } catch (VetoTypeInduction vetoTypeInduction) {
+            vetoTypeInduction.printStackTrace();
+        }
+        VectorFloat64 vec = (VectorFloat64) sv.evaluate();
+        assertEquals(0.0, vec.getValue(0), 0.000001);
+        assertEquals(5.0, vec.getValue(1), 0.000001);
+    }
+
     public static Test suite()
 	{
 		TestSuite s = new TestSuite();
 		s.addTest(new NodeTest("testNodes"));
         s.addTest(new NodeTest("testTreeCreation"));
+        s.addTest(new NodeTest("testRotateVector"));
+        s.addTest(new NodeTest("testVectorHeading"));
+        s.addTest(new NodeTest("testScaleVector"));
         return s;
 	}
 
@@ -381,11 +430,11 @@ public class NodeTest extends TestCase {
         }
         @Override
         public double getX() {
-            return rand.nextDouble();
+            return rand.nextDouble() * (1024 - 80) + 40;
         }
         @Override
         public double getY() {
-            return rand.nextDouble();
+            return rand.nextDouble() * (1024 - 80) + 40;
         }
         @Override
         public void turnLeft(double degrees) {

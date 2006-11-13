@@ -8,10 +8,13 @@ import org.jscience.mathematics.numbers.Float64;
 import org.jscience.mathematics.vectors.VectorFloat64;
 import robocode.*;
 
+import java.util.logging.Logger;
+
 /**
  * User: jlowens Date: Oct 30, 2006 Time: 6:13:08 PM
  */
 public class GPAgent extends AdvancedRobot {
+    private static Logger log = Logger.getLogger(GPAgent.class.getName());
 
     private Node radarTree;
     private Node turretTree;
@@ -119,132 +122,144 @@ public class GPAgent extends AdvancedRobot {
         return _min;
     }
 
+    
+
     @SuppressWarnings("unchecked")
     public void run() {
+        log.fine("run()");
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
         while (alive) {
-            // gather instantaneous sensor data
-            double bfheight = getBattleFieldHeight();
-            double bfwidth = getBattleFieldWidth();
+            log.fine("starting pseudo-infinite loop");
 
-            double x = getX();
-            double y = getY();
-            double toRight = bfwidth - x;
-            double toTop = bfheight - y;
+            try {
+// gather instantaneous sensor data
+                double bfheight = getBattleFieldHeight();
+                double bfwidth = getBattleFieldWidth();
 
-            double rwidth = getWidth();
-            double rwidth2 = rwidth / 2.0;
-            double rheight = getHeight();
-            double rheight2 = rheight / 2.0;
-            double robotRadius = Math.sqrt(rheight2 * rheight2 / (rwidth2 * rwidth2));
+                double x = getX();
+                double y = getY();
+                double toRight = bfwidth - x;
+                double toTop = bfheight - y;
 
-            // find vector to nearest wall
-            switch (argmin(p.n(x, Wall.LEFT), p.n(y, Wall.BOTTOM), p.n(toRight,
-                    Wall.RIGHT), p.n(toTop, Wall.TOP))) {
-                case LEFT:
-                    vectorToNearestWall = VectorFloat64.valueOf(-1, 0).times(Float64.valueOf(x - robotRadius));
-                    break;
-                case RIGHT:
-                    vectorToNearestWall = VectorFloat64.valueOf(1, 0).times(Float64.valueOf(toRight - robotRadius));
-                    break;
-                case TOP:
-                    vectorToNearestWall = VectorFloat64.valueOf(0, 1).times(Float64.valueOf(toTop - robotRadius));
-                    break;
-                case BOTTOM:
-                    vectorToNearestWall = VectorFloat64.valueOf(0, -1).times(Float64.valueOf(y - robotRadius));
-                    break;
+                double rwidth = getWidth();
+                double rwidth2 = rwidth / 2.0;
+                double rheight = getHeight();
+                double rheight2 = rheight / 2.0;
+                double robotRadius = Math.sqrt(rheight2 * rheight2 / (rwidth2 * rwidth2));
+
+                // find vector to nearest wall
+                switch (argmin(p.n(x, Wall.LEFT), p.n(y, Wall.BOTTOM), p.n(toRight,
+                        Wall.RIGHT), p.n(toTop, Wall.TOP))) {
+                    case LEFT:
+                        vectorToNearestWall = VectorFloat64.valueOf(-1, 0).times(Float64.valueOf(x - robotRadius));
+                        break;
+                    case RIGHT:
+                        vectorToNearestWall = VectorFloat64.valueOf(1, 0).times(Float64.valueOf(toRight - robotRadius));
+                        break;
+                    case TOP:
+                        vectorToNearestWall = VectorFloat64.valueOf(0, 1).times(Float64.valueOf(toTop - robotRadius));
+                        break;
+                    case BOTTOM:
+                        vectorToNearestWall = VectorFloat64.valueOf(0, -1).times(Float64.valueOf(y - robotRadius));
+                        break;
+                }
+
+                // find the vector to the forward wall
+                vectorToForwardWall = vecToWall(x, y, bfwidth, bfheight, getHeading(), robotRadius, vecFromDir(getHeadingRadians()));
+
+                // get absolute radar heading
+                double radarDirection = (Double) radarTree.evaluate();
+
+                // get absolute turret heading
+                double turretDirection = (Double) turretTree.evaluate();
+
+                // determine if we need to fire
+                Pair<Boolean, Double> firing = (Pair<Boolean, Double>) firingTree.evaluate();
+
+                // get absolute robot heading and velocity
+                movementVector = (VectorFloat64) directionTree.evaluate();
+
+                // process firing directive
+                if (firing.getFirst()) {
+                    setFire(firing.getSecond());
+                }
+
+                // process radar directive
+                p<Double, Turn> r = calculateTurn(getRadarHeadingRadians(), radarDirection);
+                switch (r.second) {
+                    case LEFT:
+                        setTurnRadarLeftRadians(r.first);
+                        break;
+                    case RIGHT:
+                        setTurnRadarRightRadians(r.first);
+                        break;
+                }
+
+                // process turret directive
+                r = calculateTurn(getGunHeadingRadians(), turretDirection);
+                switch (r.second) {
+                    case LEFT:
+                        setTurnGunLeftRadians(r.first);
+                        break;
+                    case RIGHT:
+                        setTurnGunRightRadians(r.first);
+                        break;
+                }
+
+                // process heading/speed directive
+                r = calculateTurn(getHeadingRadians(), toAngle(movementVector));
+                switch (r.second) {
+                    case LEFT:
+                        setTurnLeftRadians(r.first);
+                        break;
+                    case RIGHT:
+                        setTurnRightRadians(r.first);
+                        break;
+                }
+                // set speed
+                double scale;
+                double turnRemaining = getTurnRemaining();
+                if (turnRemaining < 15) {
+                    scale = 1.0;
+                } else if (turnRemaining < 30) {
+                    scale = 0.9;
+                } else if (turnRemaining < 45) {
+                    scale = 0.8;
+                } else if (turnRemaining < 60) {
+                    scale = 0.7;
+                } else if (turnRemaining < 75) {
+                    scale = 0.6;
+                } else if (turnRemaining < 90) {
+                    scale = 0.5;
+                } else if (turnRemaining < 105) {
+                    scale = 0.4;
+                } else if (turnRemaining < 120) {
+                    scale = 0.3;
+                } else if (turnRemaining < 135) {
+                    scale = 0.2;
+                } else {
+                    scale = 0.1;
+                }
+                setMaxVelocity(scale * 8.0);
+                setAhead(movementVector.normValue());
+
+                execute();
+
+                if (bulletHitAge > 100) resetBulletHit();
+                if (wallHitAge > 100) resetWallHit();
+                if (rammedAge > 100) resetRammed();
+
+                if (recentlyHitByBullet) bulletHitAge++;
+                if (recentlyHitWall) wallHitAge++;
+                if (recentlyRammed) rammedAge++;
+            } catch (Throwable e) {
+                e.printStackTrace();
+                log.severe("EXCEPTION in GPAgent: " + e.toString());
+            } finally {
+                execute();
             }
-
-            // find the vector to the forward wall
-            vectorToForwardWall = vecToWall(x, y, bfwidth, bfheight, getHeading(), robotRadius, vecFromDir(getHeadingRadians()));
-
-            // get absolute radar heading
-            double radarDirection = (Double) radarTree.evaluate();
-
-            // get absolute turret heading
-            double turretDirection = (Double) turretTree.evaluate();
-
-            // determine if we need to fire
-            Pair<Boolean, Double> firing = (Pair<Boolean, Double>) firingTree.evaluate();
-
-            // get absolute robot heading and velocity
-            movementVector = (VectorFloat64) directionTree.evaluate();
-
-            // process firing directive
-            if (firing.getFirst()) {
-                setFire(firing.getSecond());
-            }
-
-            // process radar directive
-            p<Double, Turn> r = calculateTurn(getRadarHeadingRadians(), radarDirection);
-            switch (r.second) {
-                case LEFT:
-                    setTurnRadarLeftRadians(r.first);
-                    break;
-                case RIGHT:
-                    setTurnRadarRightRadians(r.first);
-                    break;
-            }
-
-            // process turret directive
-            r = calculateTurn(getGunHeadingRadians(), turretDirection);
-            switch (r.second) {
-                case LEFT:
-                    setTurnGunLeftRadians(r.first);
-                    break;
-                case RIGHT:
-                    setTurnGunRightRadians(r.first);
-                    break;
-            }
-
-            // process heading/speed directive
-            r = calculateTurn(getHeadingRadians(), toAngle(movementVector));
-            switch (r.second) {
-                case LEFT:
-                    setTurnLeftRadians(r.first);
-                    break;
-                case RIGHT:
-                    setTurnRightRadians(r.first);
-                    break;
-            }
-            // set speed
-            double scale;
-            double turnRemaining = getTurnRemaining();
-            if (turnRemaining < 15) {
-                scale = 1.0;
-            } else if (turnRemaining < 30) {
-                scale = 0.9;
-            } else if (turnRemaining < 45) {
-                scale = 0.8;
-            } else if (turnRemaining < 60) {
-                scale = 0.7;
-            } else if (turnRemaining < 75) {
-                scale = 0.6;
-            } else if (turnRemaining < 90) {
-                scale = 0.5;
-            } else if (turnRemaining < 105) {
-                scale = 0.4;
-            } else if (turnRemaining < 120) {
-                scale = 0.3;
-            } else if (turnRemaining < 135) {
-                scale = 0.2;
-            } else {
-                scale = 0.1;
-            }
-            setMaxVelocity(scale * 8.0);
-            setAhead(movementVector.normValue());
-
-            execute();
-
-            if (bulletHitAge > 100) resetBulletHit();
-            if (wallHitAge > 100) resetWallHit();
-            if (rammedAge > 100) resetRammed();
-
-            if (recentlyHitByBullet) bulletHitAge++;
-            if (recentlyHitWall) wallHitAge++;
-            if (recentlyRammed) rammedAge++;
         }
     }
     private void resetRammed() {

@@ -16,10 +16,10 @@ public class GPAgent extends AdvancedRobot {
     private RoboNode turretTree;
     private RoboNode firingTree;
     private RoboNode directionTree;
-    private VectorFloat64 movementVector = VectorFloat64.valueOf(0, 0);
+    private VectorFloat64 movementVector = VectorFloat64.valueOf(0, 1);
     private boolean alive = true;
-    private VectorFloat64 vectorToEnemy = VectorFloat64.valueOf(0, 0);
-    private int scannedEnemyAge;
+    private VectorFloat64 vectorToEnemy = VectorFloat64.valueOf(0, 1);
+    private int scannedEnemyAge = 0;
     private double enemyHeading = 0.0;
     private double enemySpeed = 0.0;
     private double enemyEnergy = 0.0;
@@ -31,12 +31,12 @@ public class GPAgent extends AdvancedRobot {
     private double bulletSpeed = 0.0;
     private boolean recentlyHitWall = false;
     private int wallHitAge = 0;
-    private VectorFloat64 vectorToForwardWall = VectorFloat64.valueOf(0, 0);
-    private VectorFloat64 vectorToNearestWall = VectorFloat64.valueOf(0, 0);
-    private int rammedAge;
-    private boolean myFault;
-    private double rammerBearing;
-    private boolean scannedEnemy;
+    private VectorFloat64 vectorToForwardWall = VectorFloat64.valueOf(0, 1);
+    private VectorFloat64 vectorToNearestWall = VectorFloat64.valueOf(0, 1);
+    private int rammedAge = 0;
+    private boolean myFault = false;
+    private double rammerBearing = 0.0;
+    private boolean scannedEnemy = true;
 
     public GPAgent(RoboNode radarTree, RoboNode turretTree, RoboNode firingTree, RoboNode directionTree) {
         this.radarTree = radarTree;

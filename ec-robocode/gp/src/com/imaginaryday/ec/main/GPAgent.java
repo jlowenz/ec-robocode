@@ -122,8 +122,6 @@ public class GPAgent extends AdvancedRobot {
         return _min;
     }
 
-    
-
     @SuppressWarnings("unchecked")
     public void run() {
         log.fine("run()");
@@ -176,14 +174,14 @@ public class GPAgent extends AdvancedRobot {
                 double turretDirection = (Double) turretTree.evaluate();
 
                 // determine if we need to fire
-                Pair<Boolean, Double> firing = (Pair<Boolean, Double>) firingTree.evaluate();
+                Pair<Boolean, Number> firing = (Pair<Boolean, Number>) firingTree.evaluate();
 
                 // get absolute robot heading and velocity
                 movementVector = (VectorFloat64) directionTree.evaluate();
 
                 // process firing directive
                 if (firing.getFirst()) {
-                    setFire(firing.getSecond());
+                    setFire(firing.getSecond().doubleValue());
                 }
 
                 // process radar directive

@@ -288,7 +288,7 @@ public class GPBattleManager extends BattleManager {
                         GPFitnessCalc.getFitness(results[0]),
                         GPFitnessCalc.getFitness(results[1]));
 
-
+                Utils.log(res.toString());
                 try {
                     space.write(res, null, 1000000);
                 } catch (TransactionException e) {
@@ -369,6 +369,8 @@ public class GPBattleManager extends BattleManager {
 
             manager.getRobotDialogManager().setActiveBattle(battle);
         }
+
+        battleThread.setUncaughtExceptionHandler(new ExceptionHandler());
         battleThread.start();
         try {
             battleThread.join();
@@ -607,5 +609,14 @@ public class GPBattleManager extends BattleManager {
      */
     public RobocodeManager getManager() {
         return manager;
+    }
+
+    class ExceptionHandler implements Thread.UncaughtExceptionHandler {
+
+        public void uncaughtException(Thread thread, Throwable throwable) {
+            System.err.println("Exception in thread " + thread.toString());
+            System.err.println("Stack trace:");
+            throwable.printStackTrace();
+        }
     }
 }

@@ -28,7 +28,10 @@ public class GPBattleTask implements Entry {
 
     public Boolean done;
 
-    public GPBattleTask(Member member1, Member member2) {
+    public GPBattleTask(int generation, int battle, Member member1, Member member2) {
+        this.generation = generation;
+        this.battle = battle;
+
         robot1 = member1.getName();
         moveProgram1 = member1.getMoveProgram();
         turretProgram1 = member1.getTurretProgram();

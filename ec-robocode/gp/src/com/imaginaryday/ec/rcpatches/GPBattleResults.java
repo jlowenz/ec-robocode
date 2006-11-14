@@ -10,20 +10,23 @@ import net.jini.core.entry.Entry;
 public class GPBattleResults implements Entry {
 
     public Integer generation;
-    private String robot1;
-    private String robot2;
-    private Double fitness1;
-    private Double fitness2;
+    public Integer battle;
+    public String robot1;
+    public String robot2;
+    public Double fitness1;
+    public Double fitness2;
 
     public GPBattleResults() {
     }
 
     public GPBattleResults(GPBattleTask task, double fitness1, double fitness2) {
         this.generation = task.generation;
+        this.battle = task.battle;
         this.robot1 = task.robot1;
         this.robot2 = task.robot2;
         this.fitness1 = fitness1;
         this.fitness2 = fitness2;
+        System.err.println(this);
     }
 
     public int getGeneration() {
@@ -56,8 +59,9 @@ public class GPBattleResults implements Entry {
 
 
     public String toString() {
-        return new StringBuilder().append("GPBattleResults [").append(generation).append("] ")
+        return new StringBuilder().append("GPBattleResults [").append(generation).append(":")
+                .append(battle).append("] ")
                 .append(robot1).append(":").append(fitness1).append("    ").append(robot2).append(":")
-                .append(fitness2).toString();                
+                .append(fitness2).toString();
     }
 }

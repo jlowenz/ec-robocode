@@ -6,10 +6,8 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$" />
     <content url="file://$MODULE_DIR$/../../rc">
-      <sourceFolder url="file://$MODULE_DIR$/../../rc/build/build/compilers" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../rc/robocode" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../rc/robocodeextract/compilers" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../rc/robocodeextract/robots" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../rc/robots" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

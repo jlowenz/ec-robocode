@@ -423,19 +423,19 @@ public class Driver implements Runnable {
 
     public int submitBattles(List<Member> population) {
 
-        int battles = 0;
+        int battle = 0;
         for (int i = 0; i < population.size(); ++i) {
 
             for (int j = i; j < population.size(); ++j) {
 
 
-                GPBattleTask task = new GPBattleTask(population.get(i), population.get(j));
+                GPBattleTask task = new GPBattleTask(generationCount, battle, population.get(i), population.get(j));
 
 // submit
                 try {
                     logger.info("Submitting: " + task.toString());
                     space.write(task, null, Long.MAX_VALUE);
-                    battles ++;
+                    battle ++;
                 } catch (TransactionException e) {
                     e.printStackTrace();
                 } catch (RemoteException e) {
@@ -444,7 +444,7 @@ public class Driver implements Runnable {
             }
 
         }
-        return battles;
+        return battle;
     }
 
 

@@ -30,6 +30,8 @@ public class LessThan extends AbstractNode {
     public Object evaluate() {
         double x = ((Number) children[0].evaluate()).doubleValue();
         double y = ((Number) children[1].evaluate()).doubleValue();
+	    assert (!Double.isNaN(x) && !Double.isInfinite(x)) : "x was bad! from: " + children[0];
+	    assert (!Double.isNaN(y) && !Double.isInfinite(y)) : "y was bad! from: " + children[1];	    
         return x < y;
     }
 }

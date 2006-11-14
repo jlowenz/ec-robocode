@@ -29,11 +29,9 @@ public class IsMoving extends RoboNode {
     }
 
     public Object evaluate() {
-        // TODO: can the values be negative here?
-        if (getOwner().getDistanceRemaining() < 0 ||
-                getOwner().getTurnRemaining() < 0) throw new RuntimeException("Negative values!");
-
-        return (getOwner().getDistanceRemaining() > 0.0) ||
-                (getOwner().getTurnRemaining() > 0.0);
+	    double dr = getOwner().getDistanceRemaining();
+	    double tr = getOwner().getTurnRemainingRadians();
+	    if (Math.abs(dr) < 0.0001) return false;
+	    return Math.abs(tr) >= 0.0001;
     }
 }

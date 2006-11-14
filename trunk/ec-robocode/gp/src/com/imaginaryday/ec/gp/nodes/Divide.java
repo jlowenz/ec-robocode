@@ -34,8 +34,11 @@ public class Divide extends AbstractNode {
     public Object evaluate() {
         double x = ((Number)operands[0].evaluate()).doubleValue();
         double y = ((Number)operands[1].evaluate()).doubleValue();
-        if (Double.isNaN(x) || Double.isNaN(y) || Double.isInfinite(x) || Double.isInfinite(y)) throw new IllegalArgumentException();
+	    assert !(Double.isNaN(x) || Double.isInfinite(x)) : "x is bad. from: " + operands[0];
+	    assert !(Double.isNaN(y) || Double.isInfinite(y)) : "y is bad. from: " + operands[1];
         if (y == 0.0 || y == -0.0) return 0.0;
-        return x / y;
+        double result = x / y;
+	    assert !(Double.isNaN(result) || Double.isInfinite(result)) : "division result is bad";
+	    return x / y;
     }
 }

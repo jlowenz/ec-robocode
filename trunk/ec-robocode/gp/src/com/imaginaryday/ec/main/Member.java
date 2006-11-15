@@ -28,6 +28,19 @@ public class Member implements Comparable<Member> {
         this.id = id;
     }
 
+    public Member(Member old) {
+        this.generation = old.generation;
+        this.id = old.id;
+        this.name = old.name;
+        this.moveProgram = old.moveProgram;
+        this.turretProgram = old.turretProgram;
+        this.radarProgram = old.radarProgram;
+        this.shootProgram = old.shootProgram;
+
+        this.numBattles = 0;
+        this.cumulativeFitness = 0.0;
+    }
+
     public int compareTo(Member member) {
         return Double.valueOf(getFitness()).compareTo(member.getFitness());
     }

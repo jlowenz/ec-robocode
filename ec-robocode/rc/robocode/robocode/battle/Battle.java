@@ -1,10 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2001-2006 Mathew A. Nelson and Robocode contributors
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Common Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.robocode.net/license/CPLv1.0.html
- * 
+ *
  * Contributors:
  *     Mathew A. Nelson
  *     - Initial API and implementation
@@ -28,20 +28,27 @@
 package robocode.battle;
 
 
-import java.util.Vector;
-import static java.lang.Math.*;
-
-import robocode.*;
+import robocode.MessageEvent;
+import robocode.Robot;
+import robocode.RobotDeathEvent;
+import robocode.SkippedTurnEvent;
 import robocode.battlefield.BattleField;
 import robocode.battleview.BattleView;
 import robocode.control.BattleSpecification;
 import robocode.dialog.RobotButton;
-import robocode.manager.*;
-import robocode.peer.*;
+import robocode.manager.BattleManager;
+import robocode.manager.RobocodeManager;
+import robocode.peer.BulletPeer;
+import robocode.peer.ContestantPeer;
+import robocode.peer.RobotPeer;
+import robocode.peer.TeamPeer;
 import robocode.peer.robot.RobotClassManager;
 import robocode.security.RobocodeClassLoader;
 import robocode.sound.SoundManager;
 import robocode.util.Utils;
+
+import static java.lang.Math.*;
+import java.util.Vector;
 
 
 /**
@@ -56,7 +63,7 @@ public class Battle implements Runnable {
 	private BattleManager battleManager;
 	private RobocodeManager manager;
 
-	// Battle items	
+	// Battle items
 	private Thread battleThread;
 	private boolean running;
 	private boolean abortBattles;
@@ -73,7 +80,7 @@ public class Battle implements Runnable {
 	private int desiredTPS = 30;
 	private long startTimeThisSec = 0;
 
-	// Turn skip related items	
+	// Turn skip related items
 	private int maxSkippedTurns = 30;
 	private int maxSkippedTurnsWithIO = 240;
 	private String nonDeterministicRobots;
@@ -89,9 +96,9 @@ public class Battle implements Runnable {
 	private Vector<RobotPeer> deathEvents = new Vector<RobotPeer>();
 
 	// Objects in the battle
-	private Vector<RobotPeer> robots; 
+	private Vector<RobotPeer> robots;
 	private Vector<ContestantPeer> contestants;
-	private Vector<BulletPeer> bullets; 
+	private Vector<BulletPeer> bullets;
 
 	// Results related items
 	private boolean exitOnComplete;
@@ -127,17 +134,17 @@ public class Battle implements Runnable {
 		this.battleManager = manager.getBattleManager();
 		this.soundManager = new SoundManager(manager.getProperties());
 		this.robots = new Vector<RobotPeer>();
-		this.bullets = new Vector<BulletPeer>(); 
+		this.bullets = new Vector<BulletPeer>();
 		this.contestants = new Vector<ContestantPeer>();
 	}
 
 	/**
-	 * When an object implementing interface <code>Runnable</code> is used 
-	 * to create a thread, starting the thread causes the object's 
-	 * <code>run</code> method to be called in that separately executing 
-	 * thread. 
+	 * When an object implementing interface <code>Runnable</code> is used
+	 * to create a thread, starting the thread causes the object's
+	 * <code>run</code> method to be called in that separately executing
+	 * thread.
 	 * <p>
-	 * The general contract of the method <code>run</code> is that it may 
+	 * The general contract of the method <code>run</code> is that it may
 	 * take any action whatsoever.
 	 *
 	 * @see     java.lang.Thread#run()
@@ -165,22 +172,22 @@ public class Battle implements Runnable {
 		nonDeterministicRobots = null;
 
 		boolean soundInitialized = false;
-		
+
 		if (manager.isSoundEnabled()) {
 			soundManager.init();
 			soundInitialized = true;
 		}
 
-		setRoundNum(0);
-		while (!abortBattles && getRoundNum() < getNumRounds()) {
+		setRoundNum(1);
+		while (!abortBattles && getRoundNum() <= getNumRounds()) {
 			if (battleView != null) {
-				battleView.setTitle("Robocode: Starting Round " + (roundNum + 1) + " of " + numRounds);
+				battleView.setTitle("Robocode: Starting Round " + (roundNum) + " of " + numRounds);
 			}
 			try {
 				setupRound();
 				battleManager.setBattleRunning(true);
 				if (battleView != null) {
-					battleView.setTitle("Robocode: Round " + (roundNum + 1) + " of " + numRounds);
+					battleView.setTitle("Robocode: Round " + (roundNum) + " of " + numRounds);
 				}
 				runRound();
 				battleManager.setBattleRunning(false);
@@ -316,7 +323,7 @@ public class Battle implements Runnable {
 		return battleThread;
 	}
 
-	public Vector<BulletPeer> getBullets() { 
+	public Vector<BulletPeer> getBullets() {
 		return bullets;
 	}
 
@@ -407,9 +414,9 @@ public class Battle implements Runnable {
 			try {
 				Class c;
 
-				RobotClassManager classManager = r.getRobotClassManager(); 
+				RobotClassManager classManager = r.getRobotClassManager();
 				String className = classManager.getFullClassName();
-				
+
 				RobocodeClassLoader classLoader = classManager.getRobotClassLoader();
 
 				if (RobotClassManager.isSecutityOn()) {
@@ -436,7 +443,9 @@ public class Battle implements Runnable {
 					y = RobotPeer.HEIGHT + random() * (battleField.getHeight() - 2 * RobotPeer.HEIGHT);
 					heading = 2 * PI * random();
 					r.initialize(x, y, heading);
-					if (validSpot(r) == true) {
+                    System.err.println(new StringBuilder().append(battleField.getWidth()).append(" ").append(battleField.getHeight()).toString());
+                    System.err.println(new StringBuilder().append("Putting robot at ").append(x).append(" ").append(y).append(" ").append(heading).toString());
+                    if (validSpot(r) == true) {
 						break;
 					}
 				}
@@ -516,7 +525,7 @@ public class Battle implements Runnable {
 		int estimatedTurnMillisThisSec;
 
 		int delay = 0;
-		
+
 		boolean resetThisSec = true;
 
 		battleManager.startNewRound();
@@ -528,7 +537,7 @@ public class Battle implements Runnable {
 			}
 
 			long turnStartTime = System.currentTimeMillis();
-			
+
 			if (resetThisSec) {
 				resetThisSec = false;
 
@@ -589,7 +598,7 @@ public class Battle implements Runnable {
 			frameStartTime = System.currentTimeMillis();
 
 			if (battleView != null) {
-				
+
 				// Update the battle view if the frame has not been painted yet this second
 				// or if it's time to paint the next frame
 				if ((totalFrameMillisThisSec == 0)
@@ -621,7 +630,7 @@ public class Battle implements Runnable {
 			// Estimate the time remaining this second to spend on frame updates
 			estFrameTimeThisSec = max(0, 1000f - desiredTPS * (float) totalTurnMillisThisSec / turnsThisSec);
 
-			// Estimate the possible FPS based on the estimated frame time 
+			// Estimate the possible FPS based on the estimated frame time
 			estimatedFPS = max(1, framesThisSec * estFrameTimeThisSec / totalFrameMillisThisSec);
 
 			// Estimate the time that will be used on the total turn this second
@@ -654,7 +663,7 @@ public class Battle implements Runnable {
 
 				if (dispTps | dispFps) {
 					titleBuf.append(" (");
-					
+
 					if (dispTps) {
 						titleBuf.append(turnsThisSec).append(" TPS");
 					}
@@ -674,7 +683,7 @@ public class Battle implements Runnable {
 		}
 		bullets.clear();
 	}
-	
+
 	private boolean shouldPause() {
 		if (battleManager.isPaused() && abortBattles == false) {
 			if (!wasPaused) {
@@ -702,7 +711,7 @@ public class Battle implements Runnable {
 		}
 		return false;
 	}
-	
+
 	private void computeActiveRobots() {
 		int ar = 0;
 
@@ -1016,7 +1025,7 @@ public class Battle implements Runnable {
 				r.setEnergy(0);
 			}
 		}
-		
+
 		activeRobots = robots.size();
 		manager.getThreadManager().reset();
 
@@ -1154,7 +1163,7 @@ public class Battle implements Runnable {
 
 	/**
 	 * Gets the activeRobots.
-	 * 
+	 *
 	 * @return Returns a int
 	 */
 	public int getActiveRobots() {
@@ -1189,7 +1198,7 @@ public class Battle implements Runnable {
 
 	/**
 	 * Sets the activeRobots.
-	 * 
+	 *
 	 * @param activeRobots The activeRobots to set
 	 */
 	private synchronized void setActiveRobots(int activeRobots) {
@@ -1198,7 +1207,7 @@ public class Battle implements Runnable {
 
 	/**
 	 * Gets the roundNum.
-	 * 
+	 *
 	 * @return Returns a int
 	 */
 	public int getRoundNum() {
@@ -1207,7 +1216,7 @@ public class Battle implements Runnable {
 
 	/**
 	 * Sets the roundNum.
-	 * 
+	 *
 	 * @param roundNum The roundNum to set
 	 */
 	public void setRoundNum(int roundNum) {
@@ -1216,7 +1225,7 @@ public class Battle implements Runnable {
 
 	/**
 	 * Gets the unsafeLoaderThreadRunning.
-	 * 
+	 *
 	 * @return Returns a boolean
 	 */
 	public boolean isUnsafeLoaderThreadRunning() {
@@ -1225,7 +1234,7 @@ public class Battle implements Runnable {
 
 	/**
 	 * Sets the unsafeLoaderThreadRunning.
-	 * 
+	 *
 	 * @param unsafeLoaderThreadRunning The unsafeLoaderThreadRunning to set
 	 */
 	public synchronized void setUnsafeLoaderThreadRunning(boolean unsafeLoaderThreadRunning) {
@@ -1234,7 +1243,7 @@ public class Battle implements Runnable {
 
 	/**
 	 * Gets the battleSpecification.
-	 * 
+	 *
 	 * @return Returns a BattleSpecification
 	 */
 	public BattleSpecification getBattleSpecification() {
@@ -1243,7 +1252,7 @@ public class Battle implements Runnable {
 
 	/**
 	 * Sets the battleSpecification.
-	 * 
+	 *
 	 * @param battleSpecification The battleSpecification to set
 	 */
 	public void setBattleSpecification(BattleSpecification battleSpecification) {
@@ -1252,7 +1261,7 @@ public class Battle implements Runnable {
 
 	/**
 	 * Gets the manager.
-	 * 
+	 *
 	 * @return Returns a RobocodeManager
 	 */
 	public RobocodeManager getManager() {
@@ -1283,7 +1292,7 @@ public class Battle implements Runnable {
 
 	/**
 	 * Informs on whether the battle is running or not.
-	 * 
+	 *
 	 * @return true if the battle is running, false otherwise
 	 */
 	public boolean isRunning() {

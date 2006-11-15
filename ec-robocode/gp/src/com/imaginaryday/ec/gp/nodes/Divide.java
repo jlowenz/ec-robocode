@@ -33,7 +33,7 @@ public class Divide extends AbstractNode {
     }
 
     private boolean closeToZero(double val) {
-        if (Math.abs(val) < 0.000001) return true;
+        if (Math.abs(val) < 0.00001) return true;
         return false;
     }
 
@@ -42,7 +42,7 @@ public class Divide extends AbstractNode {
         double y = ((Number)operands[1].evaluate()).doubleValue();
         assert !(Double.isNaN(x) || Double.isInfinite(x)) : "x is bad. from: " + operands[0];
         assert !(Double.isNaN(y) || Double.isInfinite(y)) : "y is bad. from: " + operands[1];
-        if (closeToZero(y)) return (rand.nextBoolean()) ? 1.0 : 0.0; // Ha Ha - I'm an idiot :-)
+        if (closeToZero(y)) return 1.0;
         double result = x / y;
         assert !(Double.isNaN(result) || Double.isInfinite(result)) : "division result is bad";
         return x / y;

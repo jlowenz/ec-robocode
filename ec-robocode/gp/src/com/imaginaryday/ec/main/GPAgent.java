@@ -151,16 +151,16 @@ public class GPAgent extends AdvancedRobot {
                 switch (argmin(p.n(x, Wall.LEFT), p.n(y, Wall.BOTTOM), p.n(toRight,
                         Wall.RIGHT), p.n(toTop, Wall.TOP))) {
                     case LEFT:
-                        vectorToNearestWall = VectorFloat64.valueOf(-1, 0).times(Float64.valueOf(Math.abs(x - robotRadius)));
+                        vectorToNearestWall = VectorFloat64.valueOf(-1, 0).times(Float64.valueOf(Math.abs(x - rwidth2)));
                         break;
                     case RIGHT:
-                        vectorToNearestWall = VectorFloat64.valueOf(1, 0).times(Float64.valueOf(toRight - robotRadius));
+                        vectorToNearestWall = VectorFloat64.valueOf(1, 0).times(Float64.valueOf(toRight - rwidth2));
                         break;
                     case TOP:
-                        vectorToNearestWall = VectorFloat64.valueOf(0, 1).times(Float64.valueOf(toTop - robotRadius));
+                        vectorToNearestWall = VectorFloat64.valueOf(0, 1).times(Float64.valueOf(toTop - rheight2));
                         break;
                     case BOTTOM:
-                        vectorToNearestWall = VectorFloat64.valueOf(0, -1).times(Float64.valueOf(y - robotRadius));
+                        vectorToNearestWall = VectorFloat64.valueOf(0, -1).times(Float64.valueOf(y - rheight2));
                         break;
                 }
 

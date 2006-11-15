@@ -18,6 +18,7 @@ public class BulletBearing extends RoboNode {
     public Object evaluate() {
         double b = getOwner().getBulletBearing();
         assert !(Double.isNaN(b) || Double.isInfinite(b)) : "bearing is bad!";
-        return b; 
+        assert (b >= 0.0 && b <= 2*Math.PI) : "bearing is out of bounds!";
+        return b;
     }
 }

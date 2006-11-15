@@ -3,15 +3,62 @@
   <component name="BuildJarSettings">
     <containerInfo>
       <containerElement type="module" name="gp">
-        <attribute name="method" value="5" />
-        <attribute name="URI" value="/gp.jar" />
+        <attribute name="method" value="1" />
+        <attribute name="URI" value="/" />
       </containerElement>
       <containerElement type="module" name="rc">
-        <attribute name="method" value="6" />
-        <attribute name="URI" value="/rc.jar" />
+        <attribute name="method" value="1" />
+        <attribute name="URI" value="/" />
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/jsk-debug-policy.jar" />
+        <url>jar://$MODULE_DIR$/lib/jini/jsk-debug-policy.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/jsk-dl.jar" />
+        <url>jar://$MODULE_DIR$/lib/jini/jsk-dl.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/jsk-lib.jar" />
+        <url>jar://$MODULE_DIR$/lib/jini/jsk-lib.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/jsk-platform.jar" />
+        <url>jar://$MODULE_DIR$/lib/jini/jsk-platform.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/jsk-policy.jar" />
+        <url>jar://$MODULE_DIR$/lib/jini/jsk-policy.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/jsk-resources.jar" />
+        <url>jar://$MODULE_DIR$/lib/jini/jsk-resources.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="module">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/rio.jar" />
+        <url>jar://$MODULE_DIR$/lib/rio/rio.jar!/</url>
+      </containerElement>
+      <containerElement type="library" level="project" name="functionalj-0.8-jdk15">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/" />
+      </containerElement>
+      <containerElement type="library" level="project" name="jscience">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/" />
+      </containerElement>
+      <containerElement type="library" level="project" name="junit-4.1">
+        <attribute name="method" value="2" />
+        <attribute name="URI" value="/" />
       </containerElement>
     </containerInfo>
-    <setting name="jarPath" value="$MODULE_DIR$/gp.jar" />
+    <setting name="jarPath" value="$MODULE_DIR$/../build/gp.jar" />
     <setting name="buildJar" value="true" />
     <setting name="mainClass" value="com.imaginaryday.ec.rcpatches.GPRobocodeMain" />
   </component>

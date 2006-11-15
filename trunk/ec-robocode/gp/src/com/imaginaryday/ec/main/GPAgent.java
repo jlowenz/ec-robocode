@@ -145,13 +145,13 @@ public class GPAgent extends AdvancedRobot {
                 double rwidth2 = rwidth / 2.0;
                 double rheight = getHeight();
                 double rheight2 = rheight / 2.0;
-                double robotRadius = Math.sqrt(rheight2 * rheight2 / (rwidth2 * rwidth2));
+                double robotRadius = Math.sqrt(rheight2 * rheight2 + rwidth2 * rwidth2);
 
                 // find vector to nearest wall
                 switch (argmin(p.n(x, Wall.LEFT), p.n(y, Wall.BOTTOM), p.n(toRight,
                         Wall.RIGHT), p.n(toTop, Wall.TOP))) {
                     case LEFT:
-                        vectorToNearestWall = VectorFloat64.valueOf(-1, 0).times(Float64.valueOf(x - robotRadius));
+                        vectorToNearestWall = VectorFloat64.valueOf(-1, 0).times(Float64.valueOf(Math.abs(x - robotRadius)));
                         break;
                     case RIGHT:
                         vectorToNearestWall = VectorFloat64.valueOf(1, 0).times(Float64.valueOf(toRight - robotRadius));
@@ -276,7 +276,8 @@ public class GPAgent extends AdvancedRobot {
 
 
     private p<Double, Turn> calculateTurn(final double current, final double dest) {
-        return (current < dest) ? pairmin(p.n(current - dest, Turn.LEFT), p.n(2 * Math.PI - current + dest, Turn.RIGHT)) :
+        return (current > dest) ?
+                pairmin(p.n(current - dest, Turn.LEFT), p.n(2 * Math.PI - current + dest, Turn.RIGHT)) :
                 pairmin(p.n(2 * Math.PI - dest + current, Turn.LEFT), p.n(dest - current, Turn.RIGHT));
     }
 

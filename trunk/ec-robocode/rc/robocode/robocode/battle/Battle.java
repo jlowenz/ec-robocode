@@ -178,16 +178,16 @@ public class Battle implements Runnable {
 			soundInitialized = true;
 		}
 
-		setRoundNum(1);
-		while (!abortBattles && getRoundNum() <= getNumRounds()) {
+		setRoundNum(0);
+		while (!abortBattles && getRoundNum() < getNumRounds()) {
 			if (battleView != null) {
-				battleView.setTitle("Robocode: Starting Round " + (roundNum) + " of " + numRounds);
+				battleView.setTitle("Robocode: Starting Round " + (roundNum+1) + " of " + numRounds);
 			}
 			try {
 				setupRound();
 				battleManager.setBattleRunning(true);
 				if (battleView != null) {
-					battleView.setTitle("Robocode: Round " + (roundNum) + " of " + numRounds);
+					battleView.setTitle("Robocode: Round " + (roundNum+1) + " of " + numRounds);
 				}
 				runRound();
 				battleManager.setBattleRunning(false);
@@ -1127,7 +1127,7 @@ public class Battle implements Runnable {
 					r.out.println("SYSTEM: " + e);
 					e.printStackTrace(r.out);
 				}
-				if (getRoundNum() > 0) {
+				if (getRoundNum() >= 0) {
 					double x = 0, y = 0, heading = 0;
 
 					for (int j = 0; j < 1000; j++) {

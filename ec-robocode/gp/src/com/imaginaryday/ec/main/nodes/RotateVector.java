@@ -40,7 +40,7 @@ public class RotateVector extends RoboNode {
         assert !(Double.isNaN(vec.getValue(1)) || Double.isInfinite(vec.getValue(1))) : "vec.y was bad!";
 
         double len = VectorUtils.vecLength(vec);
-        assert !(Double.isNaN(len) || Double.isInfinite(len)) : "vector length was bad!";
+        assert !(Double.isNaN(len) || Double.isInfinite(len)) : "vector length was bad! vec was: " + vec;
 
         double angle = ((Number)child[1].evaluate()).doubleValue();
         assert !(Double.isNaN(angle) || Double.isInfinite(angle)) : "angle parameter was bad!";

@@ -29,6 +29,8 @@ public class CurrentTurretHeading extends RoboNode {
     }
 
     public Object evaluate() {
-        return getOwner().getGunHeadingRadians();
+        double gun = getOwner().getGunHeadingRadians();
+        assert !(Double.isNaN(gun) || Double.isInfinite(gun)) : "gun heading was bad!";
+        return gun;
     }
 }

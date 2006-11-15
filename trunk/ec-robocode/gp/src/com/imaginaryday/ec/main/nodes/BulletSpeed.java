@@ -15,5 +15,9 @@ public class BulletSpeed extends RoboNode {
     public String getName() { return "bulletSpeed"; }
     public Class getInputType(int id) {return null;}
     public Class getOutputType() {return Number.class;}
-    public Object evaluate() { return getOwner().getBulletSpeed(); }
+    public Object evaluate() {
+        double speed = getOwner().getBulletSpeed();
+        assert !(Double.isNaN(speed) || Double.isInfinite(speed)) : "speed was bad!";
+        return speed;
+    }
 }

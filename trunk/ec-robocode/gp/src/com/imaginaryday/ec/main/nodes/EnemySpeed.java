@@ -25,6 +25,8 @@ public class EnemySpeed extends RoboNode {
     }
 
     public Object evaluate() {
-        return getOwner().getEnemySpeed();
+        double speed = getOwner().getEnemySpeed();
+        assert !(Double.isNaN(speed) || Double.isInfinite(speed)) : "enemy speed was bad!";
+        return speed;
     }
 }

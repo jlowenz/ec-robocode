@@ -29,6 +29,11 @@ public class VectorLength extends RoboNode {
     }
     public Object evaluate() {
         VectorFloat64 vec = (VectorFloat64)child[0].evaluate();
-        return VectorUtils.vecLength(vec);
+        assert !(Double.isNaN(vec.getValue(0)) || Double.isInfinite(vec.getValue(0))) : "vec.x was bad!";
+        assert !(Double.isNaN(vec.getValue(1)) || Double.isInfinite(vec.getValue(1))) : "vec.y was bad!";
+
+        double length = VectorUtils.vecLength(vec);
+        assert !(Double.isNaN(length) || Double.isInfinite(length)) : "length was bad!";
+        return length;
     }
 }

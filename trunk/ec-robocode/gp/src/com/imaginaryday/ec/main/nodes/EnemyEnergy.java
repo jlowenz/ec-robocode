@@ -26,6 +26,8 @@ public class EnemyEnergy extends RoboNode {
     }
 
     public Object evaluate() {
-        return getOwner().getEnemyEnergy();
+        double energy = getOwner().getEnemyEnergy();
+        assert !(Double.isNaN(energy) || Double.isInfinite(energy)) : "energy was bad!";
+        return energy;
     }
 }

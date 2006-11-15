@@ -3,6 +3,7 @@ package com.imaginaryday.ec.main.nodes;
 import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.ec.main.RoboNode;
 import org.jscience.mathematics.vectors.Vector;
+import org.jscience.mathematics.vectors.VectorFloat64;
 
 /**
  * <b>
@@ -29,6 +30,9 @@ public class VectorToForwardWall extends RoboNode {
     }
 
     public Object evaluate() {
-        return getOwner().getVectorToForwardWall();
+        VectorFloat64 vec = getOwner().getVectorToForwardWall();
+        assert !(Double.isNaN(vec.getValue(0)) || Double.isInfinite(vec.getValue(0))) : "vecToFwdWall.x was bad!";
+        assert !(Double.isNaN(vec.getValue(1)) || Double.isInfinite(vec.getValue(1))) : "vecToFwdWall.y was bad!";
+        return vec;
     }
 }

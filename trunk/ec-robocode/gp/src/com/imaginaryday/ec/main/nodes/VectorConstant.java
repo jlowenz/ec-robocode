@@ -23,6 +23,9 @@ public class VectorConstant extends RoboNode {
     }
     public VectorConstant() {
         this.val = VectorFloat64.valueOf(rand.nextInt(3)-1, rand.nextInt(3)-1);
+        while (this.val.getValue(0) == 0.0 && this.val.getValue(1) == 0.0) {
+            this.val = VectorFloat64.valueOf(rand.nextInt(3)-1, rand.nextInt(3)-1);
+        }
         this.val = this.val.times(Float64.valueOf(1.0/this.val.normValue()));
     }
     @Override

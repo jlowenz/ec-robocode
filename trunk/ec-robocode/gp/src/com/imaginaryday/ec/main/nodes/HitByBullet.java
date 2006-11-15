@@ -15,5 +15,7 @@ public class HitByBullet extends RoboNode {
     public Class getInputType(int id) {  return null; }
     public Class getOutputType() { return Boolean.class; }
     protected Node[] children() { return NONE; }
-    public Object evaluate() { return getOwner().getHitByBullet(); }
+    public Object evaluate() {
+        return getOwner().getHitByBullet(); 
+    }
 }

@@ -30,6 +30,9 @@ public class CurrentVector extends RoboNode {
     }
 
     public Object evaluate() {
-        return getOwner().getCurrentVector();
+        VectorFloat64 vec = getOwner().getCurrentVector();
+        assert !(Double.isNaN(vec.getValue(0)) || Double.isInfinite(vec.getValue(0))) : "x was bad!";
+        assert !(Double.isNaN(vec.getValue(1)) || Double.isInfinite(vec.getValue(1))) : "y was bad!";
+        return vec;
     }
 }

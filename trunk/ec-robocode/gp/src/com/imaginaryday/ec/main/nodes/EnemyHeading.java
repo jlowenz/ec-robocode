@@ -26,6 +26,8 @@ public class EnemyHeading extends RoboNode {
     }
 
     public Object evaluate() {
-        return getOwner().getEnemyHeading();
+        double heading = getOwner().getEnemyHeading();
+        assert !(Double.isNaN(heading) || Double.isInfinite(heading)) : "heading was bad!";
+        return heading;
     }
 }

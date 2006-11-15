@@ -15,5 +15,9 @@ public class RammerBearing extends RoboNode {
     public String getName() {return "rammerBearing";}
     public Class getInputType(int id) {return null;}
     public Class getOutputType() {return Number.class;}
-    public Object evaluate() {return getOwner().getRammerBearing();}
+    public Object evaluate() {
+        double bearing = getOwner().getRammerBearing();
+        assert !(Double.isNaN(bearing) || Double.isInfinite(bearing)) : "rammer bearing was bad!";
+        return bearing;
+    }
 }

@@ -20,7 +20,8 @@ package robocode.control;
  */
 public class RobotResults {
 	private RobotSpecification robot;
-	private int rank;
+    private String name;
+    private int rank;
 	private int score;
 	private int survival;
 	private int lastSurvivorBonus;
@@ -34,7 +35,8 @@ public class RobotResults {
 	
 	public RobotResults(
 			RobotSpecification robot,
-			int rank,
+            String name,
+            int rank,
 			int score,
 			int survival,
 			int lastSurvivorBonus,
@@ -68,8 +70,12 @@ public class RobotResults {
 	public RobotSpecification getRobot() {
 		return robot;
 	}
-	
-	/**
+
+    public String getName() {
+            return name;
+        }    
+
+    /**
 	 * Gets the rank of this robot in the results.
 	 * 
 	 * @return the rank of this robot in the results.

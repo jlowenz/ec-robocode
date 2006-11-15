@@ -15,5 +15,9 @@ public class BulletBearing extends RoboNode {
     public String getName() { return "bulletBearing"; }
     public Class getInputType(int id) { return null; }
     public Class getOutputType() { return Number.class; }
-    public Object evaluate() { return getOwner().getBulletBearing(); }
+    public Object evaluate() {
+        double b = getOwner().getBulletBearing();
+        assert !(Double.isNaN(b) || Double.isInfinite(b)) : "bearing is bad!";
+        return b; 
+    }
 }

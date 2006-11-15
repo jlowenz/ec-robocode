@@ -15,5 +15,9 @@ public class BulletEnergy extends RoboNode {
     public String getName() { return "bulletEnergy"; }
     public Class getInputType(int id) { return null; }
     public Class getOutputType() { return Number.class; }
-    public Object evaluate() {return getOwner().getBulletEnergy();}
+    public Object evaluate() {
+        double d = getOwner().getBulletEnergy();
+        assert !(Double.isNaN(d) || Double.isInfinite(d)) : "energy was bad!";
+        return d;
+    }
 }

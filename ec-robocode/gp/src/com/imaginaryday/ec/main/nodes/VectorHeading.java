@@ -29,8 +29,14 @@ public class VectorHeading extends RoboNode {
     }
 
     public Object evaluate() {
-        double d = VectorUtils.toAngle((VectorFloat64)child[0].evaluate());
-        if (Double.isNaN(d) || Double.isInfinite(d)) throw new IllegalStateException();
+        VectorFloat64 vecIn = (VectorFloat64)child[0].evaluate();
+
+        assert !(Double.isNaN(vecIn.getValue(0)) || Double.isInfinite(vecIn.getValue(0))) : "x is bad: " + vecIn;
+        assert !(Double.isNaN(vecIn.getValue(1)) || Double.isInfinite(vecIn.getValue(1))) : "y is bad: " + vecIn;
+
+        double d = VectorUtils.toAngle(vecIn);
+        assert !(Double.isNaN(d) || Double.isInfinite(d)) : "angle is bad! from: " + child[0].evaluate();
+
         return d;
     }
 }

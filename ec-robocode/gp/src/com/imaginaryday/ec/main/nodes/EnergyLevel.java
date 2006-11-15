@@ -29,6 +29,8 @@ public class EnergyLevel extends RoboNode {
     }
 
     public Object evaluate() {
-        return getOwner().getEnergy();
+        double energy = getOwner().getEnergy();
+        assert !(Double.isNaN(energy) || Double.isInfinite(energy)) : "energy was bad!";
+        return energy;               
     }
 }

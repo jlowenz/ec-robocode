@@ -24,6 +24,8 @@ public class CurrentRadarHeading extends RoboNode {
 
     @Override
     public Object evaluate() {
-        return getOwner().getRadarHeadingRadians();
+        double heading = getOwner().getRadarHeadingRadians();
+        assert !(Double.isNaN(heading) || Double.isInfinite(heading)) : "heading was bad!";
+        return heading;
     }
 }

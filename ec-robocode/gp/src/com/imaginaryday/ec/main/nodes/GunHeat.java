@@ -29,6 +29,8 @@ public class GunHeat extends RoboNode {
     }
 
     public Object evaluate() {
-        return getOwner().getGunHeat();
+        double heat = getOwner().getGunHeat();
+        assert !(Double.isNaN(heat) || Double.isInfinite(heat)) : "heat was bad!";
+        return heat;
     }
 }

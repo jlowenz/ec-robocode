@@ -35,10 +35,26 @@ public class RotateVector extends RoboNode {
 
     public Object evaluate() {
         VectorFloat64 vec = (VectorFloat64)child[0].evaluate();
+
+        assert !(Double.isNaN(vec.getValue(0)) || Double.isInfinite(vec.getValue(0))) : "vec.x was bad!";
+        assert !(Double.isNaN(vec.getValue(1)) || Double.isInfinite(vec.getValue(1))) : "vec.y was bad!";
+
         double len = VectorUtils.vecLength(vec);
+        assert !(Double.isNaN(len) || Double.isInfinite(len)) : "vector length was bad!";
+
         double angle = ((Number)child[1].evaluate()).doubleValue();
+        assert !(Double.isNaN(angle) || Double.isInfinite(angle)) : "angle parameter was bad!";
+
         double curAngle = VectorUtils.toAngle(vec);
+        assert !(Double.isNaN(curAngle) || Double.isInfinite(curAngle)) : "curAngle was bad!";
+
         double newAngle = (curAngle + angle) % (2.0*Math.PI);
-        return VectorUtils.vecFromDir(newAngle).times(Float64.valueOf(len));
+        assert !(Double.isNaN(newAngle) || Double.isInfinite(newAngle)) : "newAngle was bad!";
+
+        VectorFloat64 newVec = VectorUtils.vecFromDir(newAngle).times(Float64.valueOf(len));
+        assert !(Double.isNaN(newVec.getValue(0)) || Double.isInfinite(newVec.getValue(0))) : "newVec.x was bad!";
+        assert !(Double.isNaN(newVec.getValue(1)) || Double.isInfinite(newVec.getValue(1))) : "newVec.y was bad!";
+
+        return newVec;
     }
 }

@@ -3,6 +3,7 @@ package com.imaginaryday.ec.main.nodes;
 import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
 import org.jscience.mathematics.vectors.Vector;
+import org.jscience.mathematics.vectors.VectorFloat64;
 
 /**
  * <b>
@@ -28,8 +29,10 @@ public class VectorToNearestWall extends RoboNode {
         return NONE;
     }
 
-
     public Object evaluate() {
-        return getOwner().getVectorToNearWall();
+        VectorFloat64 vec = getOwner().getVectorToNearWall();
+        assert !(Double.isNaN(vec.getValue(0)) || Double.isInfinite(vec.getValue(0))) : "vecToNearWall.x was bad!";
+        assert !(Double.isNaN(vec.getValue(1)) || Double.isInfinite(vec.getValue(1))) : "vecToNearWall.y was bad!";
+        return vec;
     }
 }

@@ -117,7 +117,7 @@ public class GPRobocodeMain {
             boolean minimize = false;
             String battleFilename = null;
             String resultsFilename = null;
-            int tps = 10000;
+            int tps = 100000;
 
             for (int i = 0; i < args.length; i++) {
                 if (args[i].equals("-cwd") && (i < args.length + 1)) {

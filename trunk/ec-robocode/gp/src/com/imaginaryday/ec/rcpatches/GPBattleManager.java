@@ -42,16 +42,15 @@ import robocode.manager.RobocodeManager;
 import robocode.peer.RobotPeer;
 import robocode.peer.robot.RobotClassManager;
 import robocode.peer.robot.RobotStatistics;
-import robocode.repository.FileSpecification;
-import robocode.repository.RobotSpecification;
-import robocode.repository.TeamSpecification;
 import robocode.util.Constants;
 import robocode.util.Utils;
 
 import javax.swing.*;
 import java.io.*;
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -71,6 +70,7 @@ public class GPBattleManager extends BattleManager {
     private RobocodeManager manager;
     private int stepTurn;
     private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Map<String, RobotClassManager> standardBots;
 
     /**
      * Steps for a single turn, then goes back to paused
@@ -152,51 +152,6 @@ public class GPBattleManager extends BattleManager {
         GPRobotClassManager gpcm2 = new GPRobotClassManager();
 
         Map<String, RobotClassManager> standardBots = loadStandardBots();
-
-        /*
-        * Get prebuilts from the system and build a map of them
-        *
-        Vector<FileSpecification> robotSpecificationsVector = manager.getRobotRepositoryManager().getRobotRepository().getRobotSpecificationsVector(
-                false, false, false, false, false, false);
-        Utils.log("num fs: " + robotSpecificationsVector.size());
-        for (FileSpecification fs : robotSpecificationsVector) fs.toString();
-
-
-        if (battleProperties.getSelectedRobots() != null) {
-            StringTokenizer tokenizer;
-            String sr =  battleProperties.getSelectedRobots();
-            Utils.log("Selected robots = " + battleProperties.getSelectedRobots());
-            tokenizer = new StringTokenizer(battleProperties.getSelectedRobots(), ",");
-
-            while (tokenizer.hasMoreTokens()) {
-                String bot = tokenizer.nextToken();
-
-                for (int i = 0; i < robotSpecificationsVector.size(); i++) {
-                    FileSpecification currentFileSpecification = (FileSpecification) robotSpecificationsVector.elementAt(
-                            i);
-
-                    if (currentFileSpecification.getNameManager().getUniqueFullClassNameWithVersion().equals(bot)) {
-                        if (currentFileSpecification instanceof RobotSpecification) {
-                            RobotSpecification current = (RobotSpecification) currentFileSpecification;
-                            standardBots.put(current.getName(), new RobotClassManager(current));
-                            break;
-                        } else if (currentFileSpecification instanceof TeamSpecification) {
-                            System.err.println("Teams not supported");
-                        }
-                    } else {
-                        Utils.log(currentFileSpecification.getNameManager().getUniqueFullClassNameWithVersion() +
-                        " != " + bot);
-                    }
-                }
-            }
-            Utils.log("Standard bots");
-            Utils.log(standardBots.toString());
-        } else {
-            Utils.log("Selected robots = null!");
-            return;
-        }
-        */
-
 
         JavaSpace space = null;
         try {
@@ -286,7 +241,8 @@ public class GPBattleManager extends BattleManager {
             if (results != null && results.length == 2) {
                 GPBattleResults res = new GPBattleResults(battleTask,
                         GPFitnessCalc.getFitness(results[0]),
-                        GPFitnessCalc.getFitness(results[1]));
+                        GPFitnessCalc.getFitness(results[1]),
+                        results[0], results[1]);
 
                 Utils.log(res.toString());
                 try {
@@ -567,7 +523,8 @@ public class GPBattleManager extends BattleManager {
             RobotStatistics stats = ((RobotPeer) orderedRobots.elementAt(i)).getRobotStatistics();
 
             results[i] = new robocode.control.RobotResults(
-                    ((RobotPeer) orderedRobots.elementAt(i)).getRobotClassManager().getControlRobotSpecification(), (i + 1),
+                    ((RobotPeer) orderedRobots.elementAt(i)).getRobotClassManager().getControlRobotSpecification(),
+                    ((RobotPeer) orderedRobots.elementAt(i)).getName(), (i + 1),
                     (int) stats.getTotalScore(), (int) stats.getTotalSurvivalScore(), (int) stats.getTotalWinnerScore(),
                     (int) stats.getTotalBulletDamageScore(), (int) stats.getTotalKilledEnemyBulletScore(),
                     (int) stats.getTotalRammingDamageScore(), (int) stats.getTotalKilledEnemyRammingScore(),

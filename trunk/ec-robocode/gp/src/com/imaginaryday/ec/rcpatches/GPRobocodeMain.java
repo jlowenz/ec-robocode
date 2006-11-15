@@ -23,10 +23,7 @@
 package com.imaginaryday.ec.rcpatches;
 
 
-import robocode.RobocodeFileOutputStream;
 import robocode.manager.RobocodeManager;
-import robocode.security.RobocodeSecurityManager;
-import robocode.security.RobocodeSecurityPolicy;
 import robocode.security.SecureInputStream;
 import robocode.security.SecurePrintStream;
 import robocode.util.Constants;
@@ -34,7 +31,6 @@ import robocode.util.Utils;
 
 import javax.swing.*;
 import java.io.File;
-import java.security.Policy;
 import java.rmi.RMISecurityManager;
 
 

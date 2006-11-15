@@ -9,7 +9,6 @@ import robocode.repository.RobotSpecification;
  */
 public class GPRobotSpecification extends RobotSpecification {
 
-    private String name;
     private String robotDescription = "GPRobot";
     private String robotAuthorName = "GPRobocode!";
     private String robotAuthorEmail = "jlowens@gmail.com";
@@ -29,10 +28,6 @@ public class GPRobotSpecification extends RobotSpecification {
 
     public void setAuthorWebsite(String authorWebsite) {
         this.authorWebsite = authorWebsite;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {

@@ -5,7 +5,6 @@ import com.imaginaryday.ec.main.GPAgent;
 import robocode.Robot;
 import robocode.peer.TeamPeer;
 import robocode.peer.robot.RobotClassManager;
-
 import robocode.repository.RobotSpecification;
 
 import java.lang.reflect.Constructor;

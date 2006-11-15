@@ -429,7 +429,7 @@ public class BattleManager {
 			RobotStatistics stats = orderedRobots.elementAt(i).getRobotStatistics();
 
 			results[i] = new robocode.control.RobotResults(
-					orderedRobots.elementAt(i).getRobotClassManager().getControlRobotSpecification(), (i + 1),
+					orderedRobots.elementAt(i).getRobotClassManager().getControlRobotSpecification(), "bob", (i + 1),
 					(int) stats.getTotalScore(), (int) stats.getTotalSurvivalScore(), (int) stats.getTotalWinnerScore(),
 					(int) stats.getTotalBulletDamageScore(), (int) stats.getTotalKilledEnemyBulletScore(),
 					(int) stats.getTotalRammingDamageScore(), (int) stats.getTotalKilledEnemyRammingScore(),

@@ -168,10 +168,10 @@ public class GPAgent extends AdvancedRobot {
                 vectorToForwardWall = vecToWall(x, y, bfwidth, bfheight, getHeading(), robotRadius, vecFromDir(getHeadingRadians()));
 
                 // get absolute radar heading
-                double radarDirection = (Double) radarTree.evaluate();
+                double radarDirection = ((Number) radarTree.evaluate()).doubleValue();
 
                 // get absolute turret heading
-                double turretDirection = (Double) turretTree.evaluate();
+                double turretDirection = ((Number) turretTree.evaluate()).doubleValue();
 
                 // determine if we need to fire
                 Pair<Boolean, Number> firing = (Pair<Boolean, Number>) firingTree.evaluate();

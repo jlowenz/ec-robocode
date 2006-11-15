@@ -51,7 +51,13 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 	private double rammingDamageReceived;
 	private double totalRammingDamageReceived;
 
-	private int totalFirsts;
+    private double distanceTravelled; // TODO
+    private int numScanEvents; // TODO
+    private int numBulletsFired; // TODO: jason
+    private int numTimesHit; // TODO: jason
+    private int numWallsHit; // TODO
+
+    private int totalFirsts;
 	private int totalSeconds;
 	private int totalThirds;
 
@@ -74,7 +80,11 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 		rammingDamageReceived += damage;
 	}
 
-	public void generateTotals() {
+    public int getNumTimesHit() {
+        return numTimesHit;
+    }
+
+    public void generateTotals() {
 		totalBulletDamageScore += bulletDamageScore;
 		totalRammingDamageScore += rammingDamageScore;
 		totalSurvivalScore += survivalScore;
@@ -186,7 +196,8 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 			bulletDamageScore += damage;
 		}
 		bulletDamageDealt += damage;
-	}
+        numTimesHit++;
+    }
 
 	public void scoreDeath(int enemiesRemaining) {
 		if (enemiesRemaining == 0 && !robotPeer.isWinner()) {

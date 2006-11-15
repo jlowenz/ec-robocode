@@ -96,8 +96,7 @@ public class Driver implements Runnable {
     private double mutationProbability = .1;
     private int testFreq = 5;
     private int populationSize = 11;
-    private String[] sampleBots = new String[]{"Corners", "Crazy", "Fire", "MyFirstRobot",
-            "RamFire", "SittingDuck", "SpinBot", "Target", "Tracker", "TrackFire", "Walls"};
+
 
 
     public Driver() {
@@ -172,13 +171,15 @@ public class Driver implements Runnable {
     }
 
     public void run() {
-
+        ProgressTester progressTester;
         try {
             space = new SpaceFinder().getSpace();
 
             if (space == null) {
                 return;
             }
+
+            progressTester = new ProgressTester(space);
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe("Could not find space");
@@ -209,8 +210,8 @@ public class Driver implements Runnable {
             /*
              * Periodically measure against the canned bots
              */
-            if (generationCount % testFreq == 0) {
-                testAndDisplayProgress();
+            if (generationCount > 0 && generationCount % testFreq == 0) {
+                progressTester.testProgress(population, generationCount);
             }
 
             /*
@@ -223,9 +224,6 @@ public class Driver implements Runnable {
         }
     }
 
-    private void testAndDisplayProgress()
-    {
-    }
 
     private static class Rank {
         public Member member;

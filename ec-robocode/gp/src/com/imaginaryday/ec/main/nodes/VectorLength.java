@@ -33,7 +33,7 @@ public class VectorLength extends RoboNode {
         assert !(Double.isNaN(vec.getValue(1)) || Double.isInfinite(vec.getValue(1))) : "vec.y was bad!";
 
         double length = VectorUtils.vecLength(vec);
-        assert !(Double.isNaN(length) || Double.isInfinite(length)) : "length was bad!";
+        assert !(Double.isNaN(length) || Double.isInfinite(length)) : "length was bad! vec: " + vec;
         return length;
     }
 }

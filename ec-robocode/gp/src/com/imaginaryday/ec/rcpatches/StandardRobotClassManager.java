@@ -1,10 +1,8 @@
 package com.imaginaryday.ec.rcpatches;
 
-import robocode.peer.robot.RobotClassManager;
-import robocode.peer.TeamPeer;
-import robocode.repository.RobotSpecification;
 import robocode.Robot;
-import robocode.AdvancedRobot;
+import robocode.peer.robot.RobotClassManager;
+import robocode.repository.RobotSpecification;
 
 /**
  * @author rbowers

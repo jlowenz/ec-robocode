@@ -10,6 +10,8 @@ import net.jini.space.JavaSpace;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -29,11 +31,13 @@ public class ProgressTester {
         this.space = space;
     }
 
+
+
     public void testProgress(final List<Member> population, final int generation) {
         List<Member> newPop = clonePopulation(population);
         int battles = submitBattles(newPop, generation);
-        collectResults(newPop, battles);
-        printResults(newPop);
+        Map<Member, List<GPBattleResults>> results = collectResults(newPop, battles);
+        printResults(results, generation);
     }
 
     private List<Member> clonePopulation(final List<Member> population) {
@@ -68,13 +72,17 @@ public class ProgressTester {
         return battle;
     }
 
-    private void collectResults(List<Member> population, int numBattles) {
+    private Map<Member, List<GPBattleResults>> collectResults(List<Member> population, int numBattles) {
 
         int retrieved = 0;
         Entry template = new GPBattleResults();
 
-
+        Map<Member, List<GPBattleResults>> results = null;
         while (retrieved < numBattles) {
+            results = new HashMap<Member, List<GPBattleResults>>();
+            for(Member m : population) {
+                results.put(m, new ArrayList<GPBattleResults>());
+            }
 
             GPBattleResults res = null;
             try {
@@ -91,25 +99,47 @@ public class ProgressTester {
                 e.printStackTrace();
             }
             if (res != null) {
-                for (Member member : population) {
-
-                    if (member.getName().equals(res.getRobot1())) {
-                        member.addFitness(res.getFitness1());
-                    }
-                    /*
-                    * use 2 ifs because it is possible for a robot
-                    * to compete against itself
-                    */
-                    if (member.getName().equals(res.getRobot2())) {
-                        member.addFitness(res.getFitness2());
+                // determine member;
+                Member member = null;
+                for(Member m : results.keySet()) {
+                    if (m.getName().equals(res.robot1)) {
+                        member = m;
+                        break;
                     }
                 }
+                List<GPBattleResults> r2 = results.get(member);
+                r2.add(res);
+                ++retrieved;
+            }
+        }
+        return results;
+    }
+
+    private void printResults(Map<Member, List<GPBattleResults>> results, int generation) {
+        StringBuffer output = new StringBuffer();
+
+        // Header
+        output.append('\n').append("Results for generation ").append(generation).append('\n');
+
+        for (java.util.Map.Entry<Member, List<GPBattleResults>> e : results.entrySet() ) {
+
+            output.append("Robot ").append(e.getKey().getName()).append('\n');
+            output.append("------------------------------MOVE PROGRAM--------------------------------\n");
+            output.append(e.getKey().getMoveProgram().toString());
+            output.append("------------------------------TURRET PROGRAM------------------------------\n");
+            output.append(e.getKey().getTurretProgram().toString());
+            output.append("------------------------------SHOOT PROGRAM-------------------------------\n");
+            output.append(e.getKey().getShootProgram().toString());
+            output.append("------------------------------RADAR PROGRAM-------------------------------\n");
+            output.append(e.getKey().getRadarProgram().toString());
+            output.append("--------------------------------------------------------------------------\n");
+
+            for (GPBattleResults r : e.getValue()) {
+                output.append(r.getSummary()).append('\n');
             }
         }
 
-    }
-
-    private void printResults(List<Member> population, int generation) {
+        logger.info(output.toString());
 
     }
 }

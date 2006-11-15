@@ -9,7 +9,7 @@ import robocode.control.RobotResults;
  */
 public class GPFitnessCalc {
 
-    public static double getFitness(RobotResults res) {        
-        return (double)res.getBulletDamageBonus();
+    public static double getFitness(RobotResults res) {
+        return (double) res.getBulletDamageBonus();
     }
 }

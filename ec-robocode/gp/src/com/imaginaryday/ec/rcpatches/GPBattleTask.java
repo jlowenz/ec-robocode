@@ -46,25 +46,25 @@ public class GPBattleTask implements Entry {
     }
 
     public GPBattleTask() {
-        
+
     }
 
     public GPBattleTask(int generation, int battle, Member member1, String standardBotName) {
-            this.generation = generation;
-            this.battle = battle;
+        this.generation = generation;
+        this.battle = battle;
 
-            robot1 = member1.getName();
-            moveProgram1 = member1.getMoveProgram();
-            turretProgram1 = member1.getTurretProgram();
-            radarProgram1 = member1.getRadarProgram();
-            shootProgram1 = member1.getShootProgram();
+        robot1 = member1.getName();
+        moveProgram1 = member1.getMoveProgram();
+        turretProgram1 = member1.getTurretProgram();
+        radarProgram1 = member1.getRadarProgram();
+        shootProgram1 = member1.getShootProgram();
 
-            robot2 = standardBotName;
-            moveProgram2 = null;
-            turretProgram2 = null;
-            radarProgram2 = null;
-            shootProgram2 = null;
-        }
+        robot2 = standardBotName;
+        moveProgram2 = null;
+        turretProgram2 = null;
+        radarProgram2 = null;
+        shootProgram2 = null;
+    }
 
 
     @Override

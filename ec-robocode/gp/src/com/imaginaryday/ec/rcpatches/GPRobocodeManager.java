@@ -15,10 +15,9 @@
 package com.imaginaryday.ec.rcpatches;
 
 
-import java.io.*;
-import robocode.util.*;
-import robocode.control.*;
-import robocode.manager.*;
+import robocode.control.RobocodeListener;
+import robocode.manager.BattleManager;
+import robocode.manager.RobocodeManager;
 
 
 /**
@@ -30,21 +29,21 @@ public class GPRobocodeManager extends RobocodeManager {
     private BattleManager gpBattleManager;
 
     public GPRobocodeManager(boolean slave, RobocodeListener listener) {
-		super(slave,listener);
+        super(slave, listener);
         setEnableGUI(false);
         setEnableSound(false);
     }
-		
-	/**
-	 * Gets the battleManager.
-	 * 
-	 * @return Returns a BattleManager
-	 */
-	public BattleManager getBattleManager() {
-		if (this.gpBattleManager == null) {
-			gpBattleManager = new GPBattleManager(this);
-		}
-		return gpBattleManager;
-	}
+
+    /**
+     * Gets the battleManager.
+     *
+     * @return Returns a BattleManager
+     */
+    public BattleManager getBattleManager() {
+        if (this.gpBattleManager == null) {
+            gpBattleManager = new GPBattleManager(this);
+        }
+        return gpBattleManager;
+    }
 
 }

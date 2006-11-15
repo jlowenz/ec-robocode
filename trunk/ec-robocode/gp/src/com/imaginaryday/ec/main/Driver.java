@@ -415,6 +415,8 @@ public class Driver implements Runnable {
                         member.addFitness(res.getFitness2());
                     }
                 }
+                ++retrieved;
+                logger.info("Collected " + retrieved + " of " + numBattles + " results");
             }
         }
     }

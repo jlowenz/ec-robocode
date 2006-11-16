@@ -48,4 +48,16 @@ public interface ContestantStatistics {
 	public double getTotalWinnerScore();
 
 	public double getCurrentScore();
+
+    public void addScanEvent();
+
+    public void addDistanceTravelled(double distance);
+
+    public double getDistanceTravelled();
+
+    public int getScanEvents();
+
+    public void addWallHit();
+
+    public int getNumWallsHit();
 }

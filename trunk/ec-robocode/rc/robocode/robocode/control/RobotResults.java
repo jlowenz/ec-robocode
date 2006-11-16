@@ -11,6 +11,8 @@
  *******************************************************************************/
 package robocode.control;
 
+import robocode.peer.robot.RobotStatistics;
+
 
 /**
  * Contains results for a robot when a battle completes.
@@ -34,158 +36,189 @@ public class RobotResults {
 	private int thirds;
     private int numBulletsFired;
     private int numBulletHits;
+    private double distanceTravelled;
+    private int numScanEvents;
+    private int numWallsHit;
+
+    public int getNumWallsHit() {
+        return numWallsHit;
+    }
+
+    public double getDistanceTravelled() {
+        return distanceTravelled;
+    }
+
+    public int getNumBulletHits() {
+        return numBulletHits;
+    }
+
+    public int getNumBulletsFired() {
+        return numBulletsFired;
+    }
+
+    public int getNumScanEvents() {
+        return numScanEvents;
+    }
 
     public RobotResults(
 			RobotSpecification robot,
             String name,
             int rank,
-			int score,
-			int survival,
-			int lastSurvivorBonus,
-			int bulletDamage,
-			int bulletDamageBonus,
-			int ramDamage,
-			int ramDamageBonus,
-			int firsts,
-			int seconds,
-			int thirds,
-            int numBulletsFired,
-            int numBulletHits
+            int score,
+            int survival,
+            int lastSurvivorBonus,
+            int bulletDamage,
+            int bulletDamageBonus,
+            int ramDamage,
+            int ramDamageBonus,
+            int firsts,
+            int seconds,
+            int thirds
             ) {
-        this.name = name;
         this.robot = robot;
-		this.rank = rank;
-		this.score = score;
-		this.survival = survival;
-		this.lastSurvivorBonus = lastSurvivorBonus;
-		this.bulletDamage = bulletDamage;
-		this.bulletDamageBonus = bulletDamageBonus;
-		this.ramDamage = ramDamage;
-		this.ramDamageBonus = ramDamageBonus;
-		this.firsts = firsts;
-		this.seconds = seconds;
-		this.thirds = thirds;
-        this.numBulletsFired = numBulletsFired;
-        this.numBulletHits = numBulletHits;
+        this.rank = rank;
+        this.score = score;
+        this.survival = survival;
+        this.lastSurvivorBonus = lastSurvivorBonus;
+        this.bulletDamage = bulletDamage;
+        this.bulletDamageBonus = bulletDamageBonus;
+        this.ramDamage = ramDamage;
+        this.ramDamageBonus = ramDamageBonus;
+        this.firsts = firsts;
+        this.seconds = seconds;
+        this.thirds = thirds;
     }
 
-
-    public int getNumBulletsFired() {
-        return numBulletsFired;
-    }
-    public int getNumBulletHits() {
-        return numBulletHits;
+    public RobotResults(RobotSpecification robot, String name, int rank, RobotStatistics stats) {
+        this.robot = robot;
+        this.name = name;
+        this.rank = rank;
+        this.score = (int)stats.getTotalScore();
+        this.survival = (int)stats.getTotalSurvivalScore();
+        this.lastSurvivorBonus = (int) stats.getTotalWinnerScore();
+        this.bulletDamage = (int) stats.getTotalBulletDamageScore();
+        this.bulletDamageBonus = (int) stats.getTotalKilledEnemyBulletScore();
+        this.ramDamage = (int) stats.getTotalRammingDamageScore();
+        this.ramDamageBonus = (int) stats.getTotalKilledEnemyRammingScore();
+        this.firsts = stats.getTotalFirsts();
+        this.seconds = stats.getTotalSeconds();
+        this.thirds = stats.getTotalThirds();
+        this.numBulletsFired = stats.getNumBulletsFired();
+        this.numBulletHits = stats.getNumBulletHits();
+        this.distanceTravelled = stats.getDistanceTravelled();
+        this.numScanEvents = stats.getScanEvents();
+        this.numWallsHit = stats.getNumWallsHit();
     }
 
     /**
-	 * Gets the robot these results are for.
-	 * 
-	 * @return the robot these results are for.
-	 */
-	public RobotSpecification getRobot() {
-		return robot;
-	}
+     * Gets the robot these results are for.
+     *
+     * @return the robot these results are for.
+     */
+    public RobotSpecification getRobot() {
+        return robot;
+    }
 
     public String getName() {
             return name;
-        }    
+        }
 
     /**
-	 * Gets the rank of this robot in the results.
-	 * 
-	 * @return the rank of this robot in the results.
-	 */
-	public int getRank() {
-		return rank;
-	}
+     * Gets the rank of this robot in the results.
+     *
+     * @return the rank of this robot in the results.
+     */
+    public int getRank() {
+        return rank;
+    }
 
-	/**
-	 * Gets the total score of this robot.
-	 * 
-	 * @return the total score of this robot.
-	 */
-	public int getScore() {
-		return score;
-	}
+    /**
+     * Gets the total score of this robot.
+     *
+     * @return the total score of this robot.
+     */
+    public int getScore() {
+        return score;
+    }
 
-	/**
-	 * Gets the survival score of this robot.
-	 * 
-	 * @return the survival score of this robot.
-	 */
-	public int getSurvival() {
-		return survival;
-	}
+    /**
+     * Gets the survival score of this robot.
+     *
+     * @return the survival score of this robot.
+     */
+    public int getSurvival() {
+        return survival;
+    }
 
-	/**
-	 * Gets the last survivor bonus of this robot.
-	 * 
-	 * @return the last survivor bonus of this robot.
-	 */
-	public int getLastSurvivorBonus() {
-		return lastSurvivorBonus;
-	}
+    /**
+     * Gets the last survivor bonus of this robot.
+     *
+     * @return the last survivor bonus of this robot.
+     */
+    public int getLastSurvivorBonus() {
+        return lastSurvivorBonus;
+    }
 
-	/**
-	 * Gets the bullet damage score of this robot.
-	 * 
-	 * @return the bullet damage score of this robot.
-	 */
-	public int getBulletDamage() {
-		return bulletDamage;
-	}
+    /**
+     * Gets the bullet damage score of this robot.
+     *
+     * @return the bullet damage score of this robot.
+     */
+    public int getBulletDamage() {
+        return bulletDamage;
+    }
 
-	/**
-	 * Gets the bullet damage bonus of this robot.
-	 * 
-	 * @return the bullet damage bonus of this robot.
-	 */
-	public int getBulletDamageBonus() {
-		return bulletDamageBonus;
-	}
+    /**
+     * Gets the bullet damage bonus of this robot.
+     *
+     * @return the bullet damage bonus of this robot.
+     */
+    public int getBulletDamageBonus() {
+        return bulletDamageBonus;
+    }
 
-	/**
-	 * Gets the ram damage score of this robot.
-	 * 
-	 * @return the ram damage score of this robot.
-	 */
-	public int getRamDamage() {
-		return ramDamage;
-	}
+    /**
+     * Gets the ram damage score of this robot.
+     *
+     * @return the ram damage score of this robot.
+     */
+    public int getRamDamage() {
+        return ramDamage;
+    }
 
-	/**
-	 * Gets the ram damage bonus of this robot.
-	 * 
-	 * @return the ram damage bonus of this robot.
-	 */
-	public int getRamDamageBonus() {
-		return ramDamageBonus;
-	}
+    /**
+     * Gets the ram damage bonus of this robot.
+     *
+     * @return the ram damage bonus of this robot.
+     */
+    public int getRamDamageBonus() {
+        return ramDamageBonus;
+    }
 
-	/**
-	 * Gets the number of times this robot placed first.
-	 * 
-	 * @return the number of times this robot placed first.
-	 */
-	public int getFirsts() {
-		return firsts;
-	}
+    /**
+     * Gets the number of times this robot placed first.
+     *
+     * @return the number of times this robot placed first.
+     */
+    public int getFirsts() {
+        return firsts;
+    }
 
-	/**
-	 * Gets the number of times this robot placed second.
-	 * 
-	 * @return the number of times this robot placed second.
-	 */
-	public int getSeconds() {
-		return seconds;
-	}
+    /**
+     * Gets the number of times this robot placed second.
+     *
+     * @return the number of times this robot placed second.
+     */
+    public int getSeconds() {
+        return seconds;
+    }
 
-	/**
-	 * Gets the number of times this robot placed third.
-	 * 
-	 * @return the number of times this robot placed third.
-	 */
-	public int getThirds() {
-		return thirds;
-	}
+    /**
+     * Gets the number of times this robot placed third.
+     *
+     * @return the number of times this robot placed third.
+     */
+    public int getThirds() {
+        return thirds;
+    }
 }

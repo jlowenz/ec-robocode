@@ -32,8 +32,10 @@ public class RobotResults {
 	private int firsts;
 	private int seconds;
 	private int thirds;
-	
-	public RobotResults(
+    private int numBulletsFired;
+    private int numBulletHits;
+
+    public RobotResults(
 			RobotSpecification robot,
             String name,
             int rank,
@@ -46,9 +48,12 @@ public class RobotResults {
 			int ramDamageBonus,
 			int firsts,
 			int seconds,
-			int thirds
-			) {
-		this.robot = robot;
+			int thirds,
+            int numBulletsFired,
+            int numBulletHits
+            ) {
+        this.name = name;
+        this.robot = robot;
 		this.rank = rank;
 		this.score = score;
 		this.survival = survival;
@@ -60,9 +65,19 @@ public class RobotResults {
 		this.firsts = firsts;
 		this.seconds = seconds;
 		this.thirds = thirds;
-	}
-	
-	/**
+        this.numBulletsFired = numBulletsFired;
+        this.numBulletHits = numBulletHits;
+    }
+
+
+    public int getNumBulletsFired() {
+        return numBulletsFired;
+    }
+    public int getNumBulletHits() {
+        return numBulletHits;
+    }
+
+    /**
 	 * Gets the robot these results are for.
 	 * 
 	 * @return the robot these results are for.

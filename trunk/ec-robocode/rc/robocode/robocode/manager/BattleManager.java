@@ -24,18 +24,27 @@
 package robocode.manager;
 
 
+import robocode.battle.Battle;
+import robocode.battle.BattleProperties;
+import robocode.battle.BattleResultsTableModel;
+import robocode.battlefield.BattleField;
+import robocode.battlefield.DefaultBattleField;
+import robocode.peer.RobotPeer;
+import robocode.peer.TeamPeer;
+import robocode.peer.robot.RobotClassManager;
+import robocode.peer.robot.RobotStatistics;
+import robocode.repository.FileSpecification;
+import robocode.repository.RobotSpecification;
+import robocode.repository.TeamSpecification;
+import robocode.security.RobocodeSecurityManager;
+import robocode.util.Constants;
+import robocode.util.Utils;
+
 import javax.swing.*;
 import java.io.*;
-import java.util.*;
-
-import robocode.util.*;
-import robocode.battle.*;
-import robocode.battlefield.*;
-import robocode.repository.*;
-import robocode.peer.RobotPeer;
-import robocode.peer.robot.*;
-import robocode.security.RobocodeSecurityManager;
-import robocode.peer.*;
+import java.util.Collections;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 
 /**
@@ -429,11 +438,21 @@ public class BattleManager {
 			RobotStatistics stats = orderedRobots.elementAt(i).getRobotStatistics();
 
 			results[i] = new robocode.control.RobotResults(
-					orderedRobots.elementAt(i).getRobotClassManager().getControlRobotSpecification(), "bob", (i + 1),
-					(int) stats.getTotalScore(), (int) stats.getTotalSurvivalScore(), (int) stats.getTotalWinnerScore(),
-					(int) stats.getTotalBulletDamageScore(), (int) stats.getTotalKilledEnemyBulletScore(),
-					(int) stats.getTotalRammingDamageScore(), (int) stats.getTotalKilledEnemyRammingScore(),
-					stats.getTotalFirsts(), stats.getTotalSeconds(), stats.getTotalThirds());
+					orderedRobots.elementAt(i).getRobotClassManager().getControlRobotSpecification(),
+                    "bob",
+                    (i + 1),
+					(int) stats.getTotalScore(),
+                    (int) stats.getTotalSurvivalScore(),
+                    (int) stats.getTotalWinnerScore(),
+					(int) stats.getTotalBulletDamageScore(),
+                    (int) stats.getTotalKilledEnemyBulletScore(),
+					(int) stats.getTotalRammingDamageScore(),
+                    (int) stats.getTotalKilledEnemyRammingScore(),
+					stats.getTotalFirsts(),
+                    stats.getTotalSeconds(),
+                    stats.getTotalThirds(),
+                    stats.getNumBulletsFired(),
+                    stats.getNumBulletHits());
 		}
 		listener.battleComplete(battle.getBattleSpecification(), results);
 	}

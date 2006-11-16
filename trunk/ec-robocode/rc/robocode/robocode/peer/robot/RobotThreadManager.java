@@ -197,8 +197,7 @@ public class RobotThreadManager {
 
 	/**
 	 * Sets the cpuTime.
-	 * 
-	 * @param cpuTime The cpuTime to set
+	 *
 	 */
 	public void resetCpuTime() {
 		this.cpuTime = 0;

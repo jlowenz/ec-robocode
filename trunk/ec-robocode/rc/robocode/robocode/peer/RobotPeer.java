@@ -29,19 +29,25 @@
 package robocode.peer;
 
 
-import java.awt.geom.*;
-import java.awt.Color;
-import static java.lang.Math.*;
-
 import robocode.*;
-import robocode.exception.*;
+import robocode.Robot;
 import robocode.battle.Battle;
 import robocode.battlefield.BattleField;
-import robocode.util.*;
-import robocode.peer.BulletPeer;
+import robocode.exception.DeathException;
+import robocode.exception.DisabledException;
+import robocode.exception.RobotException;
+import robocode.exception.WinException;
+import robocode.manager.NameManager;
+import robocode.manager.RobotRepositoryManager;
 import robocode.peer.robot.*;
-import robocode.manager.*;
+import robocode.util.BoundingRectangle;
+import static robocode.util.Utils.log;
 import static robocode.util.Utils.*;
+
+import java.awt.*;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Rectangle2D;
+import static java.lang.Math.*;
 
 
 /**
@@ -1250,7 +1256,9 @@ public class RobotPeer implements Runnable, ContestantPeer {
 			return null;
 		}
 
-		double firePower = min(energy, min(max(power, Rules.MIN_BULLET_POWER), Rules.MAX_BULLET_POWER));
+        statistics.scoreBulletFired();
+
+        double firePower = min(energy, min(max(power, Rules.MIN_BULLET_POWER), Rules.MAX_BULLET_POWER));
 
 		this.setEnergy(energy - firePower);
 

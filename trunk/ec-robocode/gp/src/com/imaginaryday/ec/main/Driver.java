@@ -85,7 +85,7 @@ public class Driver implements Runnable {
     private Date endDate;
 
     private int numGenerations = 2;
-    private int generationCount; // ??
+    private int generationCount = 0; // ??
     private int treeDepth = 8;
     private final int alpha = 0;
     private final int beta = 2;
@@ -93,7 +93,7 @@ public class Driver implements Runnable {
     private double crossoverProbability = .6;
     private double mutationProbability = .1;
     private int testFreq = 5;
-    private int populationSize = 2;
+    private int populationSize = 4; // KEEP THIS EVEN! yeah, it's a hack, deal with it :-/
     private boolean readPopulation = false;
     private String popFile = "";
     private String progLogFile = "progressLog";
@@ -212,7 +212,7 @@ public class Driver implements Runnable {
          * Main loop of the evolutionary algorithm.
          */
         Date currentDate = new Date();
-        while (/* endDate.compareTo(currentDate) > 0 && */ generationCount <= numGenerations) {
+        while (/* endDate.compareTo(currentDate) > 0 && */ generationCount < numGenerations) {
 
             resultMap = new HashMap<Member, List<GPBattleResults>>();
             for (Member m : population) {
@@ -240,7 +240,7 @@ public class Driver implements Runnable {
             /*
              * Perform selection and generate the next generation
              */
-            // population = selectAndBreed(population);
+             population = selectAndBreed(population);
             ++generationCount;
         }
     }
@@ -310,8 +310,11 @@ public class Driver implements Runnable {
         // mutation
         newPopulation = mutate(newPopulation);
 
+
         // elitism (top elitismPercentage)
-        for (int i = populationSize - (int) (populationSize * elitismPercentage) - 1; i < populationSize; i++) {
+        int start = populationSize-(int)(populationSize*elitismPercentage)-1;
+        start = (start < 1) ? populationSize-1 : start;
+        for (int i = start; i < populationSize; i++) {
             newPopulation.add(oldPopulation.get(i));
         }
 

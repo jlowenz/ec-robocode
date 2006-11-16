@@ -167,20 +167,10 @@ public class Driver implements Runnable {
             m.setRadarProgram(tf.generateRandomTree(treeDepth, Number.class));
             m.setShootProgram(tf.generateRandomTree(treeDepth, Pair.class));
             m.setTurretProgram(tf.generateRandomTree(treeDepth, Number.class));
-            m.setName(new StringBuilder().append("Bot.").append(generationCount).append(".").append(i).toString());
+//            m.setName(new StringBuilder().append("Bot.").append(generationCount).append(".").append(i).toString());
             members.add(m);
         }
         return members;
-
-//        List<Member> initialPop = new ArrayList<Member>();
-//        int counter = 0;
-//        for (String bot : sampleBots) {
-//            Member m = new Member(generationCount, counter++);
-//            m.setName(bot);
-//            initialPop.add(m);
-//        }
-//
-//        return initialPop;
     }
 
     public void run() {
@@ -233,7 +223,7 @@ public class Driver implements Runnable {
             /*
              * Periodically measure against the canned bots
              */
-            if (generationCount % testFreq == 0) {
+            if (generationCount != 0 && (generationCount % testFreq == 0)) {
                 progressTester.testProgress(population, generationCount);
             }
             persistPopulation(generationCount, population);
@@ -303,8 +293,14 @@ public class Driver implements Runnable {
         };
         // rank members
         List<Rank> rankedPopulation = rankMembers(oldPopulation);
+
+        double P = populationSize;
+        int count = (int)(Math.ceil(P-(P*elitismPercentage)));
         // sample members
-        List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, populationSize - (int) (populationSize * elitismPercentage));
+        List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, populationSize - count);
+        for (Member m : newPopulation) {
+            m.setGeneration(m.getGeneration()+1);
+        }
         // crossover/recombine
         newPopulation = crossover(newPopulation);
         // mutation
@@ -312,12 +308,12 @@ public class Driver implements Runnable {
 
 
         // elitism (top elitismPercentage)
-        int start = populationSize-(int)(populationSize*elitismPercentage)-1;
-        start = (start < 1) ? populationSize-1 : start;
+        int start = populationSize - count;
         for (int i = start; i < populationSize; i++) {
-            newPopulation.add(oldPopulation.get(i));
+            newPopulation.add(new Member(oldPopulation.get(i)));
         }
 
+        if (newPopulation.size() != oldPopulation.size()) throw new RuntimeException("Bad population size!");
         return newPopulation;
     }
 
@@ -346,15 +342,15 @@ public class Driver implements Runnable {
 
         List<Member> replacements = new ArrayList<Member>();
 
-        int count = selection.size() / 2;
+        int count = (int)Math.floor((double)selection.size() / 2.0);
         for (int i = 0; i < count; i++) {
             // pick 2 random parents
             Member m = selection.get(rand.nextInt(selection.size()));
+            selection.remove(m);
             Member n = selection.get(rand.nextInt(selection.size()));
             while (n.equals(m)) {
                 n = selection.get(rand.nextInt(selection.size()));
             }
-            selection.remove(m);
             selection.remove(n);
 
             if (rand.nextDouble() < crossoverProbability) {
@@ -387,7 +383,10 @@ public class Driver implements Runnable {
             }
         }
 
-        assert replacements.size() == selection.size();
+        if (selection.size() == 1) {
+            replacements.add(selection.get(0));
+        }
+
         return replacements;
     }
 
@@ -420,7 +419,7 @@ public class Driver implements Runnable {
                 c++;
                 u = u + 1.0 / (double) count;
             }
-            for (int j = 0; j < c; j++) samples.add(r.member);
+            for (int j = 0; j < c; j++) samples.add(new Member(r.member));
         }
         return samples;
     }

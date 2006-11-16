@@ -62,6 +62,7 @@ public class Member implements Comparable<Member>, Serializable {
 
     public void setGeneration(int generation) {
         this.generation = generation;
+        name = null;
     }
 
     public int getId() {
@@ -70,6 +71,7 @@ public class Member implements Comparable<Member>, Serializable {
 
     public void setId(int id) {
         this.id = id;
+        name = null;
     }
 
     public String getName() {
@@ -80,10 +82,6 @@ public class Member implements Comparable<Member>, Serializable {
             this.name = sb.toString();
         }
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Node getMoveProgram() {

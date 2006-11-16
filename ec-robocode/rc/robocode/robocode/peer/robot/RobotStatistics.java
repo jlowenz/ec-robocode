@@ -84,7 +84,7 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
     public int getNumBulletsFired() {
         return numBulletsFired;
     }
-    
+
     public int getNumBulletHits() {
         return numBulletHits;
     }
@@ -114,7 +114,31 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 		return robotDamage;
 	}
 
-	public double getTotalBulletDamageDealt() {
+    public void addDistanceTravelled(double distance) {
+        distanceTravelled += distance;
+    }
+
+    public double getDistanceTravelled() {
+        return distanceTravelled;
+    }
+
+    public void addScanEvent() {
+        ++numScanEvents;
+    }
+
+    public int getScanEvents() {
+        return numScanEvents;
+    }
+
+    public void addWallHit() {
+        ++numWallsHit;
+    }
+
+    public int getNumWallsHit() {
+        return numWallsHit;
+    }
+
+    public double getTotalBulletDamageDealt() {
 		return totalBulletDamageDealt;
 	}
 
@@ -230,7 +254,7 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 					bonus += teamPeer.elementAt(i).getRobotStatistics().getRobotDamage()[robot] * .2;
 				}
 			}
-				
+
 			robotPeer.out.println(
 					"SYSTEM: Bonus for killing " + ((RobotPeer) robotPeer.getBattle().getRobots().elementAt(robot)).getName()
 					+ ": " + (int) (bonus + .5));

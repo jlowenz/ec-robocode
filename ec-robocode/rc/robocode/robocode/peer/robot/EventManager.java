@@ -113,14 +113,12 @@ public class EventManager {
 	 * @see #onBulletHitBullet
 	 * @see #onBulletMissed
 	 * @see #onHitByBullet
-	 * @see #onHitByRobot
 	 * @see #onHitRobot
 	 * @see #onHitWall
 	 * @see #onSkippedTurn
 	 * @see robocode.BulletHitEvent
 	 * @see robocode.BulletMissedEvent
 	 * @see robocode.HitByBulletEvent
-	 * @see robocode.HitByRobotEvent
 	 * @see robocode.HitRobotEvent
 	 * @see robocode.HitWallEvent
 	 * @see robocode.SkippedTurnEvent
@@ -363,7 +361,8 @@ public class EventManager {
 		for (Object e : eventQueue) {
 			if (e instanceof HitWallEvent) {
 				events.add((HitWallEvent) e);
-			}
+                robotPeer.getStatistics().addWallHit();
+            }
 		}
 		return events;
 	}
@@ -434,9 +433,10 @@ public class EventManager {
 		for (Object e : eventQueue) {
 			if (e instanceof ScannedRobotEvent) {
 				events.add((ScannedRobotEvent) e);
-			}
+                robotPeer.getStatistics().addScanEvent();
+            }
 		}
-		return events;
+        return events;
 	}
 
 	public long getTime() {

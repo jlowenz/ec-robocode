@@ -520,15 +520,24 @@ public class GPBattleManager extends BattleManager {
         robocode.control.RobotResults results[] = new robocode.control.RobotResults[orderedRobots.size()];
 
         for (int i = 0; i < results.length; i++) {
-            RobotStatistics stats = ((RobotPeer) orderedRobots.elementAt(i)).getRobotStatistics();
+            RobotStatistics stats = orderedRobots.elementAt(i).getRobotStatistics();
 
             results[i] = new robocode.control.RobotResults(
-                    ((RobotPeer) orderedRobots.elementAt(i)).getRobotClassManager().getControlRobotSpecification(),
-                    ((RobotPeer) orderedRobots.elementAt(i)).getName(), (i + 1),
-                    (int) stats.getTotalScore(), (int) stats.getTotalSurvivalScore(), (int) stats.getTotalWinnerScore(),
-                    (int) stats.getTotalBulletDamageScore(), (int) stats.getTotalKilledEnemyBulletScore(),
-                    (int) stats.getTotalRammingDamageScore(), (int) stats.getTotalKilledEnemyRammingScore(),
-                    stats.getTotalFirsts(), stats.getTotalSeconds(), stats.getTotalThirds());
+                    orderedRobots.elementAt(i).getRobotClassManager().getControlRobotSpecification(),
+                    orderedRobots.elementAt(i).getName(),
+                    (i + 1),
+                    (int) stats.getTotalScore(),
+                    (int) stats.getTotalSurvivalScore(),
+                    (int) stats.getTotalWinnerScore(),
+                    (int) stats.getTotalBulletDamageScore(),
+                    (int) stats.getTotalKilledEnemyBulletScore(),
+                    (int) stats.getTotalRammingDamageScore(),
+                    (int) stats.getTotalKilledEnemyRammingScore(),
+                    stats.getTotalFirsts(),
+                    stats.getTotalSeconds(),
+                    stats.getTotalThirds(),
+                    stats.getNumBulletsFired(),
+                    stats.getNumBulletHits());
         }
         listener.battleComplete(battle.getBattleSpecification(), results);
     }

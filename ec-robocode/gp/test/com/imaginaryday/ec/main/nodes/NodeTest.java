@@ -99,7 +99,7 @@ public class NodeTest extends TestCase {
 
         GPAgent robot = new robot();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10000; i++) {
             Node root = tf.generateRandomTree(6, Number.class);
             root.setOwner(robot);
             Object result = root.evaluate();

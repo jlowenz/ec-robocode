@@ -138,9 +138,12 @@ public class GPBattleResults implements Entry {
         sb.append(" Bdb: ").append(bulletDamageBonus1).append("|").append(bulletDamageBonus2);
         sb.append(" Rd: ").append(ramDamage1).append("|").append(ramDamage2);
         sb.append(" Rdb: ").append(ramDamageBonus1).append("|").append(ramDamageBonus2);
-        
+        sb.append(" Bf: ").append(numBulletsFired1).append("|").append(numBulletsFired2);
+        sb.append(" Bh: ").append(numBulletHits1).append("|").append(numBulletHits2);
+        sb.append(" Dt: ").append(distanceTravelled1).append("|").append(distanceTravelled2);
+        sb.append(" Se: ").append(numScanEvents1).append("|").append(numScanEvents2);
+        sb.append(" Wh: ").append(numWallsHit1).append("|").append(numWallsHit2);
         return sb.toString();
-
 
     }
 }

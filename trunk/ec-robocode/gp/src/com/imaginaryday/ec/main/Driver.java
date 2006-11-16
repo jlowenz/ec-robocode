@@ -18,18 +18,14 @@ import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 import org.jscience.mathematics.vectors.VectorFloat64;
 
+import java.io.*;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-import java.io.*;
 
 /**
  * @author rbowers
@@ -85,7 +81,7 @@ public class Driver implements Runnable {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private Random rand = new Random();
-    private final ExecutorService executor;
+
     private Date endDate;
 
     private int numGenerations = 2;
@@ -101,11 +97,16 @@ public class Driver implements Runnable {
     private boolean readPopulation = false;
     private String popFile = "";
     private String progLogFile = "progressLog";
-
+    private String generationLogFile = "generationLog";
+    private FileOutputStream output = null;
+    private Map<Member, List<GPBattleResults>> resultMap = null;
 
     public Driver() {
-        executor = new ThreadPoolExecutor(4, 16, 20, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
-
+        try {
+            output = new FileOutputStream(generationLogFile, false);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+        }
     }
 
     public static void main(String[] args) {
@@ -138,15 +139,17 @@ public class Driver implements Runnable {
                 d.popFile = args[i + 1];
                 d.readPopulation = true;
                 i++;
-            } else if (args[i].equals("-l") && (i < args.length + 1)) {
+            } else if (args[i].equals("-pl") && (i < args.length + 1)) {
                 d.progLogFile = args[i + 1];
+                i++;
+            } else if (args[i].equals("-pl") && (i < args.length + 1)) {
+                d.generationLogFile = args[i + 1];
                 i++;
             } else {
                 System.out.println("Not understood: " + args[i]);
                 return;
             }
         }
-
 
         d.run();
 
@@ -158,8 +161,7 @@ public class Driver implements Runnable {
         NodeFactory nf = NodeFactory.getInstance();
         TreeFactory tf = new TreeFactory(nf);
 
-        for (int i = 0; i < populationSize; i++)
-        {
+        for (int i = 0; i < populationSize; i++) {
             Member m = new Member(0, i);
             m.setMoveProgram(tf.generateRandomTree(treeDepth, VectorFloat64.class));
             m.setRadarProgram(tf.generateRandomTree(treeDepth, Number.class));
@@ -212,15 +214,21 @@ public class Driver implements Runnable {
         Date currentDate = new Date();
         while (/* endDate.compareTo(currentDate) > 0 && */ generationCount <= numGenerations) {
 
+            resultMap = new HashMap<Member, List<GPBattleResults>>();
+            for (Member m : population) {
+                resultMap.put(m, new ArrayList<GPBattleResults>());
+            }
+
             /*
-             * Build coevolutionary battle set and submit
-             */
+            * Build coevolutionary battle set and submit
+            */
             int numBattles = submitBattles(population);
 
             /*
              * collect results.
              */
             collectResults(population, numBattles);
+            printResults();
 
             /*
              * Periodically measure against the canned bots
@@ -232,7 +240,7 @@ public class Driver implements Runnable {
             /*
              * Perform selection and generate the next generation
              */
-            population = selectAndBreed(population);
+            // population = selectAndBreed(population);
             ++generationCount;
         }
     }
@@ -242,7 +250,7 @@ public class Driver implements Runnable {
             logger.info("reading " + filename);
             InputStream is = new FileInputStream(filename);
             ObjectInputStream ois = new ObjectInputStream(is);
-            Snapshot snapshot = (Snapshot)ois.readObject();
+            Snapshot snapshot = (Snapshot) ois.readObject();
             this.generationCount = snapshot.getGeneration();
             this.populationSize = snapshot.getPopSize();
             return snapshot.getPopulation();
@@ -255,7 +263,7 @@ public class Driver implements Runnable {
     }
 
     private void persistPopulation(int generation, List<Member> population) {
-        logger.info ("Persisting population for generation " + generation);
+        logger.info("Persisting population for generation " + generation);
         StringBuilder sb = new StringBuilder().append("population").append(generation).append(".objs");
 
         OutputStream os = null;
@@ -273,6 +281,7 @@ public class Driver implements Runnable {
     }
 
     private static class Rank {
+
         public Member member;
         public int rank;
 
@@ -283,26 +292,26 @@ public class Driver implements Runnable {
     }
 
     public List<Member> selectAndBreed(List<Member> oldPopulation) {
-        Function1<Double,Rank> probDist = new Function1Impl<Double, Rank>() {
+        Function1<Double, Rank> probDist = new Function1Impl<Double, Rank>() {
             public Double call(Rank rank) throws FunctionException {
                 double a = alpha;
                 double b = beta;
                 double r = rank.rank;
                 double P = populationSize;
-                return (a + (r/(P-1)*(b-a)))/P;
+                return (a + (r / (P - 1) * (b - a))) / P;
             }
         };
         // rank members
         List<Rank> rankedPopulation = rankMembers(oldPopulation);
         // sample members
-        List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, populationSize - (int)(populationSize*elitismPercentage));
+        List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, populationSize - (int) (populationSize * elitismPercentage));
         // crossover/recombine
         newPopulation = crossover(newPopulation);
         // mutation
         newPopulation = mutate(newPopulation);
 
         // elitism (top elitismPercentage)
-        for (int i = populationSize-(int)(populationSize*elitismPercentage)-1; i < populationSize; i++) {
+        for (int i = populationSize - (int) (populationSize * elitismPercentage) - 1; i < populationSize; i++) {
             newPopulation.add(oldPopulation.get(i));
         }
 
@@ -334,7 +343,7 @@ public class Driver implements Runnable {
 
         List<Member> replacements = new ArrayList<Member>();
 
-        int count = selection.size()/2;
+        int count = selection.size() / 2;
         for (int i = 0; i < count; i++) {
             // pick 2 random parents
             Member m = selection.get(rand.nextInt(selection.size()));
@@ -356,10 +365,10 @@ public class Driver implements Runnable {
                 Node radarB = n.getRadarProgram();
                 Node firingB = n.getShootProgram();
 
-                Pair<Node,Node> move = ops.crossover(moveA, moveB);
-                Pair<Node,Node> turret = ops.crossover(turretA, turretB);
-                Pair<Node,Node> radar = ops.crossover(radarA, radarB);
-                Pair<Node,Node> firing = ops.crossover(firingA, firingB);
+                Pair<Node, Node> move = ops.crossover(moveA, moveB);
+                Pair<Node, Node> turret = ops.crossover(turretA, turretB);
+                Pair<Node, Node> radar = ops.crossover(radarA, radarB);
+                Pair<Node, Node> firing = ops.crossover(firingA, firingB);
 
                 m.setMoveProgram(move.getFirst());
                 n.setMoveProgram(move.getSecond());
@@ -391,15 +400,15 @@ public class Driver implements Runnable {
 
     /**
      * Sample the population for parents to be used during recombination/mutation.
-     * @param pr a probability function
+     *
+     * @param pr    a probability function
      * @param count the number of parents to sample from the population
+     * @param p     the current population
      * @return a list of sampled parents based on the probability function
-     * @param p the current population
      */
-    private List<Member> stochasticUniversalSampling(List<Rank> p, Function1<Double,Rank> pr, int count)
-    {
+    private List<Member> stochasticUniversalSampling(List<Rank> p, Function1<Double, Rank> pr, int count) {
         List<Member> samples = new ArrayList<Member>();
-        double u = rand.nextDouble() * (1.0/(double)count);
+        double u = rand.nextDouble() * (1.0 / (double) count);
         double sum = 0.0;
         for (Rank r : p) {
             int c = 0; // # of children assigned to indiv i
@@ -431,13 +440,14 @@ public class Driver implements Runnable {
         int retrieved = 0;
         Entry template = new GPBattleResults();
 
-
         while (retrieved < numBattles) {
 
             GPBattleResults res = null;
             try {
-                while (res == null)
-                    res = (GPBattleResults) space.takeIfExists(template, null, 120000);
+                while (res == null) {
+                    res = (GPBattleResults) space.takeIfExists(template, null, 0);
+                    if (res == null) Thread.sleep(2000);
+                }
                 logger.info(res.toString());
             } catch (UnusableEntryException e) {
                 e.printStackTrace();
@@ -450,14 +460,12 @@ public class Driver implements Runnable {
             }
             if (res != null) {
                 for (Member member : population) {
-
                     if (member.getName().equals(res.getRobot1())) {
                         member.addFitness(res.getFitness1());
+                        // only add once
+                        List<GPBattleResults> r2 = resultMap.get(member);
+                        r2.add(res);
                     }
-                    /*
-                    * use 2 ifs because it is possible for a robot
-                    * to compete against itself
-                    */
                     if (member.getName().equals(res.getRobot2())) {
                         member.addFitness(res.getFitness2());
                     }
@@ -468,13 +476,31 @@ public class Driver implements Runnable {
         }
     }
 
+    private void printResults() {
+        StringBuffer sb = new StringBuffer();
+
+        for (java.util.Map.Entry<Member, List<GPBattleResults>> e : resultMap.entrySet()) {
+
+            for (GPBattleResults r : e.getValue()) {
+                sb.append(r.getSummary_CSV()).append('\n');
+            }
+        }
+
+        try {
+            output.write(sb.toString().getBytes());
+            output.flush();
+        } catch (IOException e) {
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+        }
+
+    }
+
     public int submitBattles(List<Member> population) {
 
         int battle = 0;
         for (int i = 0; i < population.size(); ++i) {
 
             for (int j = i; j < population.size(); ++j) {
-
 
                 GPBattleTask task = new GPBattleTask(generationCount, battle, population.get(i), population.get(j));
 

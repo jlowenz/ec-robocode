@@ -524,20 +524,7 @@ public class GPBattleManager extends BattleManager {
 
             results[i] = new robocode.control.RobotResults(
                     orderedRobots.elementAt(i).getRobotClassManager().getControlRobotSpecification(),
-                    orderedRobots.elementAt(i).getName(),
-                    (i + 1),
-                    (int) stats.getTotalScore(),
-                    (int) stats.getTotalSurvivalScore(),
-                    (int) stats.getTotalWinnerScore(),
-                    (int) stats.getTotalBulletDamageScore(),
-                    (int) stats.getTotalKilledEnemyBulletScore(),
-                    (int) stats.getTotalRammingDamageScore(),
-                    (int) stats.getTotalKilledEnemyRammingScore(),
-                    stats.getTotalFirsts(),
-                    stats.getTotalSeconds(),
-                    stats.getTotalThirds(),
-                    stats.getNumBulletsFired(),
-                    stats.getNumBulletHits());
+                    orderedRobots.elementAt(i).getName(), (i + 1), stats);                    
         }
         listener.battleComplete(battle.getBattleSpecification(), results);
     }

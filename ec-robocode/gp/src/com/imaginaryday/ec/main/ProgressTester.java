@@ -111,20 +111,17 @@ public class ProgressTester {
                 e.printStackTrace();
             }
             if (res != null) {
-                // determine member;
-                Member member = null;
-                for (Member m : results.keySet()) {
-                    if (m.getName().equals(res.robot1)) {
-                        member = m;
+                for (Member member : results.keySet()) {
+                    if (member.getName().equals(res.robot1)) {
+                        List<GPBattleResults> r2 = results.get(member);
+                        r2.add(res);
                         break;
                     }
                 }
-                List<GPBattleResults> r2 = results.get(member);
-                r2.add(res);
-                logger.info(member.getName() + " has " + r2.size() + " results");
-                ++retrieved;
                 logger.info("Collected " + retrieved + " of " + numBattles + " results");
+                ++retrieved;
             }
+
         }
         return results;
     }

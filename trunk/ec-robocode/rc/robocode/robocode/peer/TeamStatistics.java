@@ -204,4 +204,28 @@ public class TeamStatistics implements ContestantStatistics {
 		}
 		return d;
 	}
+
+    public void addScanEvent() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void addDistanceTravelled(double distance) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public double getDistanceTravelled() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int getScanEvents() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void addWallHit() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int getNumWallsHit() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

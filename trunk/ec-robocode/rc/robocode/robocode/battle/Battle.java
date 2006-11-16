@@ -35,7 +35,6 @@ import robocode.SkippedTurnEvent;
 import robocode.battlefield.BattleField;
 import robocode.battleview.BattleView;
 import robocode.control.BattleSpecification;
-import robocode.dialog.RobotButton;
 import robocode.manager.BattleManager;
 import robocode.manager.RobocodeManager;
 import robocode.peer.BulletPeer;
@@ -124,11 +123,6 @@ public class Battle implements Runnable {
 	 */
 	public Battle(BattleField battleField, RobocodeManager manager) {
 		super();
-
-		if (manager.isGUIEnabled()) {
-			this.battleView = manager.getWindowManager().getRobocodeFrame().getBattleView();
-			this.battleView.setBattle(this);
-		}
 		this.battleField = battleField;
 		this.manager = manager;
 		this.battleManager = manager.getBattleManager();
@@ -221,8 +215,6 @@ public class Battle implements Runnable {
 				} else {
 					manager.getListener().battleAborted(battleSpecification);
 				}
-			} else if (manager.isGUIEnabled() && manager.getProperties().getOptionsCommonShowResults()) {
-				manager.getWindowManager().showResultsDialog(this);
 			}
 			if (battleView != null) {
 				battleView.setTitle("Robocode");
@@ -388,19 +380,9 @@ public class Battle implements Runnable {
 		if (battleView != null) {
 			battleView.setPaintMode(BattleView.PAINTROBOCODELOGO);
 		}
-		if (manager.isGUIEnabled()) {
-			manager.getWindowManager().getRobocodeFrame().clearRobotButtons();
-		}
 
 		for (RobotPeer r : robots) {
 			r.preInitialize();
-			if (manager.isGUIEnabled()) {
-				manager.getWindowManager().getRobocodeFrame().addRobotButton(
-						new RobotButton(manager.getRobotDialogManager(), r));
-			}
-		}
-		if (manager.isGUIEnabled()) {
-			manager.getWindowManager().getRobocodeFrame().validate();
 		}
 
 		if (battleView != null) {
@@ -637,22 +619,18 @@ public class Battle implements Runnable {
 			estimatedTurnMillisThisSec = desiredTPS * totalTurnMillisThisSec / turnsThisSec;
 
 			// Calculate delay needed for keeping the desired TPS (Turns Per Second)
-			if (manager.isGUIEnabled() && manager.getWindowManager().getRobocodeFrame().isVisible()
-					&& !manager.getWindowManager().getRobocodeFrame().isIconified()) {
-				delay = (estimatedTurnMillisThisSec >= 1000) ? 0 : (1000 - estimatedTurnMillisThisSec) / desiredTPS;
-			} else {
-				delay = 0;
-			}
+
 
 			// Set flag for if the second has passed
 			resetThisSec = ((desiredTPS - turnsThisSec == 0)
 					|| ((System.currentTimeMillis() - startTimeThisSec) >= 1000));
 
 			// Delay to match desired TPS
-			try {
+			/*
+            try {
 				Thread.sleep(delay);
 			} catch (InterruptedException e) {}
-
+            */
 			if (resetThisSec && battleView != null) {
 				StringBuffer titleBuf = new StringBuffer("Robocode: Round ");
 
@@ -695,9 +673,11 @@ public class Battle implements Runnable {
 					}
 				}
 			}
-			try {
+            /*
+            try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {}
+			*/
 			return true;
 		}
 		if (wasPaused) {

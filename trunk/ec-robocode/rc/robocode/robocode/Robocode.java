@@ -1,10 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2001-2006 Mathew A. Nelson and Robocode contributors
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Common Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.robocode.net/license/CPLv1.0.html
- * 
+ *
  * Contributors:
  *     Mathew A. Nelson
  *     - Initial API and implementation
@@ -19,13 +19,17 @@
 package robocode;
 
 
-import javax.swing.*;
-import java.io.*;
-import java.security.*;
+import robocode.manager.RobocodeManager;
+import robocode.security.RobocodeSecurityManager;
+import robocode.security.RobocodeSecurityPolicy;
+import robocode.security.SecureInputStream;
+import robocode.security.SecurePrintStream;
+import robocode.util.Constants;
+import robocode.util.Utils;
 
-import robocode.util.*;
-import robocode.manager.*;
-import robocode.security.*;
+import javax.swing.*;
+import java.io.File;
+import java.security.Policy;
 
 
 /**
@@ -48,7 +52,7 @@ public class Robocode {
 	 */
 	public static void main(String[] args) {
 		Robocode robocode = new Robocode();
-	
+
 		robocode.initialize(args);
 	}
 
@@ -57,20 +61,20 @@ public class Robocode {
 	private boolean initialize(String args[]) {
 		try {
 			manager = new RobocodeManager(false, null);
-		
+
 			// Set native look and feel
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 			if (System.getProperty("WORKINGDIRECTORY") != null) {
 				Constants.setWorkingDirectory(new File(System.getProperty("WORKINGDIRECTORY")));
 			}
-		
+
 			Thread.currentThread().setName("Application Thread");
-		
+
 			RobocodeSecurityPolicy securityPolicy = new RobocodeSecurityPolicy(Policy.getPolicy());
 
 			Policy.setPolicy(securityPolicy);
-		
+
 			// For John Burkey at Apple
 			boolean securityOn = true;
 
@@ -103,7 +107,7 @@ public class Robocode {
 				System.setErr(syserr);
 			}
 			System.setIn(sysin);
-			
+
 			boolean minimize = false;
 			String battleFilename = null;
 			String resultsFilename = null;
@@ -155,9 +159,7 @@ public class Robocode {
 				manager.getBattleManager().startNewBattle(manager.getBattleManager().getBattleProperties(), true);
 				manager.getBattleManager().getBattle().setDesiredTPS(tps);
 			}
-			if (!manager.isGUIEnabled()) {
-				return true;
-			}
+			
 
 			if (!minimize && battleFilename == null) {
 				manager.getWindowManager().showSplashScreen();
@@ -175,7 +177,7 @@ public class Robocode {
 				manager.saveProperties();
 				manager.runIntroBattle();
 			}
-			
+
 			return true;
 		} catch (Throwable e) {
 			Utils.log(e);

@@ -19,4 +19,4 @@ echo $CLASSPATH
 java -Djava.security.policy=/home/rbowers/.java.policy \
 	-DGP_HOME="${GP_HOME}"  \
 	-Dorg.jini.rio.groups="GPRobocode"  \
-	-cp "${CLASSPATH}"  com.imaginaryday.ec.main.Driver
+	-cp "${CLASSPATH}"  com.imaginaryday.ec.main.Driver $*

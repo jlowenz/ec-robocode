@@ -19,5 +19,6 @@ echo $CLASSPATH
 
 java -Djava.security.policy=/home/rbowers/.java.policy \
 	-DGP_HOME="${GP_HOME}"  \
+	-ea -server \
 	-Dorg.jini.rio.groups="GPRobocode"  \
 	-cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -battle ${GP_HOME}/config/sample.battle

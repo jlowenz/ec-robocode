@@ -88,7 +88,7 @@ public class Driver implements Runnable {
     private final ExecutorService executor;
     private Date endDate;
 
-    private int numGenerations;
+    private int numGenerations = 2;
     private int generationCount; // ??
     private int treeDepth = 8;
     private final int alpha = 0;
@@ -97,9 +97,10 @@ public class Driver implements Runnable {
     private double crossoverProbability = .6;
     private double mutationProbability = .1;
     private int testFreq = 5;
-    private int populationSize = 11;
+    private int populationSize = 2;
     private boolean readPopulation = false;
     private String popFile = "";
+    private String progLogFile = "progressLog";
 
 
     public Driver() {
@@ -136,6 +137,9 @@ public class Driver implements Runnable {
             } else if (args[i].equals("-r") && (i < args.length + 1)) {
                 d.popFile = args[i + 1];
                 d.readPopulation = true;
+                i++;
+            } else if (args[i].equals("-l") && (i < args.length + 1)) {
+                d.progLogFile = args[i + 1];
                 i++;
             } else {
                 System.out.println("Not understood: " + args[i]);
@@ -186,7 +190,7 @@ public class Driver implements Runnable {
                 return;
             }
 
-            progressTester = new ProgressTester(space);
+            progressTester = new ProgressTester(space, progLogFile);
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe("Could not find space");
@@ -213,8 +217,6 @@ public class Driver implements Runnable {
              */
             int numBattles = submitBattles(population);
 
-
-
             /*
              * collect results.
              */
@@ -223,7 +225,7 @@ public class Driver implements Runnable {
             /*
              * Periodically measure against the canned bots
              */
-            if (generationCount > 0 && generationCount % testFreq == 0) {
+            if (generationCount % testFreq == 0) {
                 progressTester.testProgress(population, generationCount);
             }
             persistPopulation(generationCount, population);

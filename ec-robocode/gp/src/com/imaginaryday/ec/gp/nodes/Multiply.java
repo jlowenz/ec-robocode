@@ -2,6 +2,7 @@ package com.imaginaryday.ec.gp.nodes;
 
 import com.imaginaryday.ec.gp.AbstractNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.util.Stuff;
 
 /**
  * <b>
@@ -33,11 +34,13 @@ public class Multiply extends AbstractNode {
     public Object evaluate() {
         double x = ((Number)operands[0].evaluate()).doubleValue();
         double y = ((Number)operands[1].evaluate()).doubleValue();
-	    assert (!Double.isNaN(x) && !Double.isInfinite(x)) : "x was bad! from: " + operands[0];
-	    assert (!Double.isNaN(y) && !Double.isInfinite(y)) : "y was bad! from: " + operands[1];
-
+//	    assert (!Double.isNaN(x) && !Double.isInfinite(x)) : "x was bad! from: " + operands[0];
+//	    assert (!Double.isNaN(y) && !Double.isInfinite(y)) : "y was bad! from: " + operands[1];
+        assert Stuff.isReasonable(x) : "unreasonable value: " + x;
+        assert Stuff.isReasonable(y) : "unreasonable value: " + y;
         double result = x * y;
-	    assert !(Double.isNaN(result) || Double.isInfinite(result)) : "multiply result was bad!";
+//	    assert !(Double.isNaN(result) || Double.isInfinite(result)) : "multiply result was bad!";
+        assert Stuff.isReasonable(result) : "unreasonable value: " + result;
         return result;
     }
 

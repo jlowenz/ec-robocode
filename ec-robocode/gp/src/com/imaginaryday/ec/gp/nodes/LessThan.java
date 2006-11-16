@@ -2,6 +2,7 @@ package com.imaginaryday.ec.gp.nodes;
 
 import com.imaginaryday.ec.gp.AbstractNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.util.Stuff;
 
 /**
  * Created by IntelliJ IDEA. User: jlowens Date: Oct 30, 2006 Time: 6:30:22 PM
@@ -30,8 +31,10 @@ public class LessThan extends AbstractNode {
     public Object evaluate() {
         double x = ((Number) children[0].evaluate()).doubleValue();
         double y = ((Number) children[1].evaluate()).doubleValue();
-	    assert (!Double.isNaN(x) && !Double.isInfinite(x)) : "x was bad! from: " + children[0];
-	    assert (!Double.isNaN(y) && !Double.isInfinite(y)) : "y was bad! from: " + children[1];	    
+//	    assert (!Double.isNaN(x) && !Double.isInfinite(x)) : "x was bad! from: " + children[0];
+//	    assert (!Double.isNaN(y) && !Double.isInfinite(y)) : "y was bad! from: " + children[1];
+        assert Stuff.isReasonable(x) : "unreasonable value: " + x;
+        assert Stuff.isReasonable(y) : "unreasonable value: " + y;
         return x < y;
     }
 }

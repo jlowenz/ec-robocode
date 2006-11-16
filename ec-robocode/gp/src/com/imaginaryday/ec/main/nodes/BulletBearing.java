@@ -2,6 +2,7 @@ package com.imaginaryday.ec.main.nodes;
 
 import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.util.Stuff;
 
 /**
  * <b>
@@ -18,7 +19,10 @@ public class BulletBearing extends RoboNode {
     public Object evaluate() {
         double b = getOwner().getBulletBearing();
         assert !(Double.isNaN(b) || Double.isInfinite(b)) : "bearing is bad!";
-        assert (b >= 0.0 && b <= 2*Math.PI) : "bearing is out of bounds!";
-        return b;
+        assert Stuff.isReasonable(b) : "unreasonable value: " + b;
+        assert (Math.abs(b) >= -0.0 && Math.abs(b) <= 2*Math.PI) : "bearing " + b + " is out of bounds!";
+        double val = Stuff.modHeading(b + getOwner().getHeadingRadians());
+        assert Stuff.isReasonable(val) : "unreasonable value: " + val;
+        return val; 
     }
 }

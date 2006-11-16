@@ -3,6 +3,7 @@ package com.imaginaryday.ec.main.nodes;
 import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.util.VectorUtils;
+import com.imaginaryday.util.Stuff;
 import org.jscience.mathematics.vectors.VectorFloat64;
 
 /**
@@ -31,9 +32,12 @@ public class VectorLength extends RoboNode {
         VectorFloat64 vec = (VectorFloat64)child[0].evaluate();
         assert !(Double.isNaN(vec.getValue(0)) || Double.isInfinite(vec.getValue(0))) : "vec.x was bad!";
         assert !(Double.isNaN(vec.getValue(1)) || Double.isInfinite(vec.getValue(1))) : "vec.y was bad!";
+        assert Stuff.isReasonable(vec.getValue(0)) : "unreasonable value: " + vec;
+        assert Stuff.isReasonable(vec.getValue(1)) : "unreasonable value: " + vec;
 
         double length = VectorUtils.vecLength(vec);
         assert !(Double.isNaN(length) || Double.isInfinite(length)) : "length was bad! vec: " + vec;
+        assert Stuff.isReasonable(length) : "unreasonable value: " + length;
         return length;
     }
 }

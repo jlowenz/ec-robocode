@@ -3,6 +3,7 @@ package com.imaginaryday.ec.main.nodes;
 import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.util.VectorUtils;
+import com.imaginaryday.util.Stuff;
 import org.jscience.mathematics.vectors.VectorFloat64;
 import org.jscience.mathematics.numbers.Float64;
 
@@ -38,22 +39,31 @@ public class RotateVector extends RoboNode {
 
         assert !(Double.isNaN(vec.getValue(0)) || Double.isInfinite(vec.getValue(0))) : "vec.x was bad!";
         assert !(Double.isNaN(vec.getValue(1)) || Double.isInfinite(vec.getValue(1))) : "vec.y was bad!";
+        assert Stuff.isReasonable(vec.getValue(0)) : "unreasonable value: " + vec;
+        assert Stuff.isReasonable(vec.getValue(1)) : "unreasonable value: " + vec;
+
 
         double len = VectorUtils.vecLength(vec);
         assert !(Double.isNaN(len) || Double.isInfinite(len)) : "vector length was bad! vec was: " + vec;
+        assert Stuff.isReasonable(len) : "unreasonable value: " + len;
 
         double angle = ((Number)child[1].evaluate()).doubleValue();
         assert !(Double.isNaN(angle) || Double.isInfinite(angle)) : "angle parameter was bad!";
+        assert Stuff.isReasonable(angle) : "unreasonable value: " + angle;
 
         double curAngle = VectorUtils.toAngle(vec);
         assert !(Double.isNaN(curAngle) || Double.isInfinite(curAngle)) : "curAngle was bad!";
+        assert Stuff.isReasonable(curAngle) : "unreasonable value: " + curAngle;
 
         double newAngle = (curAngle + angle) % (2.0*Math.PI);
         assert !(Double.isNaN(newAngle) || Double.isInfinite(newAngle)) : "newAngle was bad!";
+        assert Stuff.isReasonable(newAngle) : "unreasonable value: " + newAngle;
 
         VectorFloat64 newVec = VectorUtils.vecFromDir(newAngle).times(Float64.valueOf(len));
         assert !(Double.isNaN(newVec.getValue(0)) || Double.isInfinite(newVec.getValue(0))) : "newVec.x was bad!";
         assert !(Double.isNaN(newVec.getValue(1)) || Double.isInfinite(newVec.getValue(1))) : "newVec.y was bad!";
+        assert Stuff.isReasonable(newVec.getValue(0)) : "unreasonable value: " + newVec;
+        assert Stuff.isReasonable(newVec.getValue(1)) : "unreasonable value: " + newVec;
 
         return newVec;
     }

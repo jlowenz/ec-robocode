@@ -3,6 +3,7 @@ package com.imaginaryday.ec.gp.nodes;
 import com.imaginaryday.ec.gp.AbstractNode;
 import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.ec.gp.VetoTypeInduction;
+import com.imaginaryday.util.Stuff;
 
 import java.util.Random;
 
@@ -31,7 +32,9 @@ public class Constant extends AbstractNode {
     }
 
     public Constant() {
-        this.val = min + rand.nextDouble()*(max-min);
+        double v = min + rand.nextDouble()*(max-min);
+        if (Stuff.nearZero(v)) v = 0.0;
+        this.val = v;
     }
 
     public Constant(Object val)

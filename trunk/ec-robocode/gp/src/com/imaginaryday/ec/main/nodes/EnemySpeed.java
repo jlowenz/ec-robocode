@@ -2,6 +2,7 @@ package com.imaginaryday.ec.main.nodes;
 
 import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.util.Stuff;
 
 /**
  * <b>
@@ -27,6 +28,8 @@ public class EnemySpeed extends RoboNode {
     public Object evaluate() {
         double speed = getOwner().getEnemySpeed();
         assert !(Double.isNaN(speed) || Double.isInfinite(speed)) : "enemy speed was bad!";
+        assert Stuff.isReasonable(speed) : "unreasonable value: " + speed;
+
         return speed;
     }
 }

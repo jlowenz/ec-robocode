@@ -2,6 +2,7 @@ package com.imaginaryday.ec.main.nodes;
 
 import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.util.Stuff;
 import org.jscience.mathematics.vectors.VectorFloat64;
 import org.jscience.mathematics.numbers.Float64;
 
@@ -22,12 +23,17 @@ public class VectorConstant extends RoboNode {
         this.val = val;
     }
     public VectorConstant() {
-        this.val = VectorFloat64.valueOf(rand.nextInt(3)-1, rand.nextInt(3)-1);
+        this.val = VectorFloat64.valueOf(filterZero(rand.nextInt(3)-1), filterZero(rand.nextInt(3)-1));
         while (this.val.getValue(0) == 0.0 && this.val.getValue(1) == 0.0) {
-            this.val = VectorFloat64.valueOf(rand.nextInt(3)-1, rand.nextInt(3)-1);
+            this.val = VectorFloat64.valueOf(filterZero(rand.nextInt(3)-1), filterZero(rand.nextInt(3)-1));
         }
         this.val = this.val.times(Float64.valueOf(1.0/this.val.normValue()));
     }
+
+    private double filterZero(double v) {
+        return (Stuff.nearZero(v)) ? 0.0 : v;
+    }
+
     @Override
     public <T extends Node> T copy() {
         return (T) new VectorConstant(val);

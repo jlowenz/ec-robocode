@@ -2,6 +2,7 @@ package com.imaginaryday.ec.main.nodes;
 
 import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.util.Stuff;
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,6 +32,8 @@ public class CurrentTurretHeading extends RoboNode {
     public Object evaluate() {
         double gun = getOwner().getGunHeadingRadians();
         assert !(Double.isNaN(gun) || Double.isInfinite(gun)) : "gun heading was bad!";
+        assert Stuff.isReasonable(gun) : "unreasonable value: " + gun;
+
         return gun;
     }
 }

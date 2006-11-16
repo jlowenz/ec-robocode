@@ -2,6 +2,7 @@ package com.imaginaryday.ec.main.nodes;
 
 import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.util.Stuff;
 
 /**
  * <b>
@@ -18,6 +19,7 @@ public class BulletEnergy extends RoboNode {
     public Object evaluate() {
         double d = getOwner().getBulletEnergy();
         assert !(Double.isNaN(d) || Double.isInfinite(d)) : "energy was bad!";
+        assert Stuff.isReasonable(d) : "unreasonable value: " + d;
         return d;
     }
 }

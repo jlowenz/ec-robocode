@@ -15,7 +15,8 @@ public class VectorUtils {
         VectorFloat64 norm = movementVector2.times(Float64.valueOf(1.0 / movementVector2.normValue()));
         final double x = norm.getValue(0);
         final double y = norm.getValue(1);
-        if (Double.isNaN(x) || Double.isNaN(y)) throw new IllegalStateException();
+        assert !(Double.isNaN(x) || Double.isInfinite(x)) : "x is bad! from: " + norm;
+        assert !(Double.isNaN(y) || Double.isInfinite(y)) : "y is bad! from: " + norm;
         if (x >= 0) {
             if (y >= 0) {
                 return Math.atan2(x, y);

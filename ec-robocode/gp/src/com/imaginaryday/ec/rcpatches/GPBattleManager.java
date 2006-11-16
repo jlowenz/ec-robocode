@@ -246,7 +246,7 @@ public class GPBattleManager extends BattleManager {
 
                 Utils.log(res.toString());
                 try {
-                    space.write(res, null, 1000000);
+                    space.write(res, null, Long.MAX_VALUE);
                 } catch (TransactionException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 } catch (RemoteException e) {

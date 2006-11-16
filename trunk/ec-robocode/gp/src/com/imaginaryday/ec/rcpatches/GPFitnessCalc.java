@@ -9,7 +9,12 @@ import robocode.control.RobotResults;
  */
 public class GPFitnessCalc {
 
-    public static double getFitness(RobotResults res) {
-        return (double) res.getBulletDamageBonus();
+    private static double numBulletsFiredFactor = 1.0;
+    private static double numBulletsDodgedFactor = 1.0;
+
+    public static double getFitness(RobotResults robot, RobotResults opponent) {
+        double numBulletsDodged = opponent.getNumBulletsFired() - robot.getNumBulletHits();
+        return (numBulletsDodgedFactor * numBulletsDodged) +
+               (numBulletsFiredFactor * robot.getNumBulletsFired());
     }
 }

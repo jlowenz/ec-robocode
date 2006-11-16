@@ -174,7 +174,7 @@ public class GPBattleManager extends BattleManager {
             Entry taskTemplate = new GPBattleTask();
             GPBattleTask task = null;
             try {
-                task = (GPBattleTask) space.take(taskTemplate, null, 120000);
+                task = (GPBattleTask) space.take(taskTemplate, null, 3000);
                 Utils.log((task == null) ? "null" : task.toString());
             } catch (UnusableEntryException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

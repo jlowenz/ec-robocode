@@ -13,6 +13,8 @@ import java.io.Serializable;
  */
 public class Member implements Comparable<Member>, Serializable {
 
+    private static final long serialVersionUID = 1L; 
+
     private int generation;
     private int id;
     private String  name;

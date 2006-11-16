@@ -79,7 +79,7 @@ public class GeneticOperators {
         Link la = null, lb = null;
         for (int i = 0; i < 3; i++) {
             la = randomSubtree(childA); // this may return EMPTY
-            if (la == Link.EMPTY) { la = null; break; }
+            if (la == Link.EMPTY) break;
             lb = randomSubtree(childB, la.child.getOutputType()); // this may return EMPTY
             if (lb != Link.EMPTY) break;
         }
@@ -99,6 +99,7 @@ public class GeneticOperators {
     }
 
     private static void swap(Link la, Link lb) throws VetoTypeInduction {
+        if (la == null || lb == null) throw new IllegalArgumentException("links cannot be null");
         la.parent.attach(la.childIndex, lb.child);
         lb.parent.attach(lb.childIndex, la.child);
     }
@@ -250,6 +251,7 @@ public class GeneticOperators {
         int i = 0;
         for (Node n : parent.childList()) {
             Link link = new Link(parent, i++, n);
+            if (n == null) throw new RuntimeException("node from childlist null!");
             if (pred.call(link, id)) l.add(link);
             id = filterLinks(l, n, id + 1, pred);
         }

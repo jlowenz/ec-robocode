@@ -29,6 +29,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import java.io.*;
 
 /**
  * @author rbowers
@@ -96,7 +97,8 @@ public class Driver implements Runnable {
     private double mutationProbability = .1;
     private int testFreq = 5;
     private int populationSize = 11;
-
+    private boolean readPopulation = false;
+    private String popFile = "";
 
 
     public Driver() {
@@ -130,6 +132,10 @@ public class Driver implements Runnable {
                 int pop = Integer.parseInt(args[i + 1]);
                 d.setPopulationSize(pop);
                 i++;
+            } else if (args[i].equals("-r") && (i < args.length + 1)) {
+                d.popFile = args[i + 1];
+                d.readPopulation = true;
+                i++;
             } else {
                 System.out.println("Not understood: " + args[i]);
                 return;
@@ -154,7 +160,7 @@ public class Driver implements Runnable {
             m.setRadarProgram(tf.generateRandomTree(treeDepth, Number.class));
             m.setShootProgram(tf.generateRandomTree(treeDepth, Pair.class));
             m.setTurretProgram(tf.generateRandomTree(treeDepth, Number.class));
-            m.setName("oogabooga");
+            m.setName(new StringBuilder().append("Bot:").append(generationCount).append(":").append(i).toString());
             members.add(m);
         }
         return members;
@@ -189,8 +195,12 @@ public class Driver implements Runnable {
         /*
          * Generate initial population
          */
-        List<Member> population = genInitialPopulation();
-
+        List<Member> population;
+        if (readPopulation) {
+            population = readPopulation(popFile);
+        } else {
+            population = genInitialPopulation();
+        }
         /*
          * Main loop of the evolutionary algorithm.
          */
@@ -201,6 +211,8 @@ public class Driver implements Runnable {
              * Build coevolutionary battle set and submit
              */
             int numBattles = submitBattles(population);
+
+
 
             /*
              * collect results.
@@ -213,17 +225,49 @@ public class Driver implements Runnable {
             if (generationCount > 0 && generationCount % testFreq == 0) {
                 progressTester.testProgress(population, generationCount);
             }
-
+            persistPopulation(generationCount, population);
             /*
              * Perform selection and generate the next generation
              */
             population = selectAndBreed(population);
-
-
-            currentDate = new Date();
+            ++generationCount;
         }
     }
 
+    private List<Member> readPopulation(String filename) {
+        try {
+            logger.info("reading " + filename);
+            InputStream is = new FileInputStream(filename);
+            ObjectInputStream ois = new ObjectInputStream(is);
+            Snapshot snapshot = (Snapshot)ois.readObject();
+            this.generationCount = snapshot.getGeneration();
+            this.populationSize = snapshot.getPopSize();
+            return snapshot.getPopulation();
+        } catch (IOException ie) {
+            ie.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return null;
+    }
+
+    private void persistPopulation(int generation, List<Member> population) {
+        logger.info ("Persisting population for generation " + generation);
+        StringBuilder sb = new StringBuilder().append("population").append(generation).append(".objs");
+
+        OutputStream os = null;
+        try {
+            os = new FileOutputStream(sb.toString());
+            ObjectOutputStream oos = new ObjectOutputStream(os);
+            Snapshot snapshot = new Snapshot(generation, population.size(), population);
+            oos.writeObject(snapshot);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private static class Rank {
         public Member member;

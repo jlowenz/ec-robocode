@@ -2,6 +2,8 @@ package com.imaginaryday.ec.main;
 
 import com.imaginaryday.ec.gp.Node;
 
+import java.io.Serializable;
+
 /**
  * Created by IntelliJ IDEA.
  * User: rbowers
@@ -9,7 +11,7 @@ import com.imaginaryday.ec.gp.Node;
  * Time: 1:56:59 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Member implements Comparable<Member> {
+public class Member implements Comparable<Member>, Serializable {
 
     private int generation;
     private int id;

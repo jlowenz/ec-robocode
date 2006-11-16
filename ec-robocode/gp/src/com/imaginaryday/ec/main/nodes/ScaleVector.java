@@ -34,7 +34,7 @@ public class ScaleVector extends RoboNode {
     }
 
     public Object evaluate() {
-        double val = ((Number)child[1].evaluate()).doubleValue();
+        double val = Stuff.clampZero(((Number)child[1].evaluate()).doubleValue());
         assert !(Double.isNaN(val) || Double.isInfinite(val)) : "scalar value was bad!";
         assert Stuff.isReasonable(val) : "unreasonable value: " + val;
 

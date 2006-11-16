@@ -30,7 +30,7 @@ public class EnergyLevel extends RoboNode {
     }
 
     public Object evaluate() {
-        double energy = getOwner().getEnergy();
+        double energy = Stuff.clampZero(getOwner().getEnergy());
         assert !(Double.isNaN(energy) || Double.isInfinite(energy)) : "energy was bad!";
         assert Stuff.isReasonable(energy) : "unreasonable value: " + energy;
 

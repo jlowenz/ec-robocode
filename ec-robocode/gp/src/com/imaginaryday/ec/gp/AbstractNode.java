@@ -12,8 +12,7 @@ import java.util.ArrayList;
  * Time: 4:22:09 PM
  */
 public abstract class AbstractNode implements Node {
-
-	protected transient Object owner;
+    protected transient Object owner;
     static protected Node[] NONE = new Node[0];
     protected abstract Node[] children();
     protected Pair<Class,List<Class>> type;
@@ -91,6 +90,8 @@ public abstract class AbstractNode implements Node {
         return getInputCount() == 0;
     }
 
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("(").append(getName()).append(" ");
@@ -103,5 +104,24 @@ public abstract class AbstractNode implements Node {
         }
         sb.append(")");
         return sb.toString();
+    }
+    
+    public String toStringEval() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("(").append(getName()).append(" ");
+	    Node children[] = children();
+	    for (int i = 0; i < children.length; i++) {
+            if (children[i] != null) {
+                sb.append(((AbstractNode)children[i]).toStringEval());
+                if (i < children.length-1) sb.append(" ");
+            }
+        }
+        sb.append(")");
+        try {
+            return sb.toString() + " ==> " + evaluate();
+        } catch (Throwable e) {
+            return sb.toString() + " ******* ";
+        }
+
     }
 }

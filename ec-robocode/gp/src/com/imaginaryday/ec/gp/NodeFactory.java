@@ -140,6 +140,7 @@ public class NodeFactory {
             return create(sel.get(rand.nextInt(sel.size())));
         } else {
             List<Class> all = terminalsByOutputType.get(parentType);
+            assert all != null : "no node for parentType: " + parentType;
             return create(all.get(rand.nextInt(all.size())));
         }
     }

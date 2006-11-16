@@ -27,7 +27,7 @@ public class EnemyHeading extends RoboNode {
     }
 
     public Object evaluate() {
-        double heading = getOwner().getEnemyHeading();
+        double heading = Stuff.clampZero(getOwner().getEnemyHeading());
         assert !(Double.isNaN(heading) || Double.isInfinite(heading)) : "heading was bad!";
         assert Stuff.isReasonable(heading) : "unreasonable value: " + heading;
 

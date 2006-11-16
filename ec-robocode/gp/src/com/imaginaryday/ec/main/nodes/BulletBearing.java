@@ -17,7 +17,7 @@ public class BulletBearing extends RoboNode {
     public Class getInputType(int id) { return null; }
     public Class getOutputType() { return Number.class; }
     public Object evaluate() {
-        double b = getOwner().getBulletBearing();
+        double b = Stuff.clampZero(getOwner().getBulletBearing());
         assert !(Double.isNaN(b) || Double.isInfinite(b)) : "bearing is bad!";
         assert Stuff.isReasonable(b) : "unreasonable value: " + b;
         assert (Math.abs(b) >= -0.0 && Math.abs(b) <= 2*Math.PI) : "bearing " + b + " is out of bounds!";

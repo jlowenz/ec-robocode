@@ -84,21 +84,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/GPRobocodeMain.java" line="154" class="com.imaginaryday.ec.rcpatches.GPRobocodeMain" package="com.imaginaryday.ec.rcpatches">
-        <option name="ENABLED" value="true" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-    </line_breakpoints>
     <breakpoint_any>
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -156,7 +141,7 @@
       <file leaf-file-name="GPBattleResults.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/GPBattleResults.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="38" selection-start="535" selection-end="535" vertical-scroll-proportion="0.33690658">
+            <state line="22" column="38" selection-start="535" selection-end="535" vertical-scroll-proportion="0.019490255">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -164,10 +149,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GPAgent.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="GPAgent.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/main/GPAgent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="173" column="88" selection-start="6801" selection-end="6801" vertical-scroll-proportion="0.4502297">
+            <state line="187" column="42" selection-start="7045" selection-end="7045" vertical-scroll-proportion="0.2923538">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Driver.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/main/Driver.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="299" column="93" selection-start="10916" selection-end="10916" vertical-scroll-proportion="0.46926537">
               <folding />
             </state>
           </provider>
@@ -176,7 +170,7 @@
       <file leaf-file-name="Add.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Add.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="13" selection-start="227" selection-end="227" vertical-scroll-proportion="0.16845329">
+            <state line="12" column="7" selection-start="318" selection-end="318" vertical-scroll-proportion="0.1754123">
               <folding />
             </state>
           </provider>
@@ -372,20 +366,6 @@
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
       </PATH_ELEMENT>
       <PATH_ELEMENT>
-        <option name="myItemId" value="com.imaginaryday.ec.gp.nodes" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-      </PATH_ELEMENT>
-    </PATH>
-    <PATH>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="gp.ipr" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="gp" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
         <option name="myItemId" value="com.imaginaryday.ec.gp" />
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
       </PATH_ELEMENT>
@@ -490,7 +470,7 @@
     </PATH>
   </component>
   <component name="ProjectReloadState">
-    <option name="STATE" value="2" />
+    <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
     <navigator currentView="PackagesPane" splitterProportion="0.5">
@@ -525,7 +505,7 @@
   </component>
   <component name="RecentsManager" />
   <component name="RestoreUpdateTree">
-    <UpdateInfo date="11/15/06 9:49 AM" ActionInfo="Update">
+    <UpdateInfo date="11/16/06 4:01 PM" ActionInfo="Update">
       <UpdatedFiles>
         <FILE-GROUP>
           <option name="myUpdateName" value="Updated from server" />
@@ -541,17 +521,16 @@
             <option name="myId" value="UPDATED" />
             <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/main/Member.java</PATH>
             <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/main/Driver.java</PATH>
+            <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/main/ProgressTester.java</PATH>
+            <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/gp/GeneticOperators.java</PATH>
             <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/GPBattleResults.java</PATH>
-            <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/GPBattleTask.java</PATH>
-            <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/GPFitnessCalc.java</PATH>
-            <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/StandardRobotClassManager.java</PATH>
             <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/GPRobocodeMain.java</PATH>
             <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/GPBattleManager.java</PATH>
-            <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/GPRobotClassManager.java</PATH>
-            <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/GPRobotSpecification.java</PATH>
-            <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/GPRobocodeManager.java</PATH>
-            <PATH>$PROJECT_DIR$/../rc/robocode/robocode/control/RobotResults.java</PATH>
+            <PATH>$PROJECT_DIR$/../rc/robocode/robocode/control/RobocodeEngine.java</PATH>
             <PATH>$PROJECT_DIR$/../rc/robocode/robocode/manager/BattleManager.java</PATH>
+            <PATH>$PROJECT_DIR$/../rc/robocode/robocode/manager/RobocodeManager.java</PATH>
+            <PATH>$PROJECT_DIR$/../rc/robocode/robocode/battle/Battle.java</PATH>
+            <PATH>$PROJECT_DIR$/../rc/robocode/robocode/Robocode.java</PATH>
           </FILE-GROUP>
           <FILE-GROUP>
             <option name="myUpdateName" value="Created" />
@@ -559,7 +538,6 @@
             <option name="mySupportsDeletion" value="false" />
             <option name="myCanBeAbsent" value="false" />
             <option name="myId" value="CREATED" />
-            <PATH>$PROJECT_DIR$/src/com/imaginaryday/ec/main/ProgressTester.java</PATH>
           </FILE-GROUP>
           <FILE-GROUP>
             <option name="myUpdateName" value="Deleted" />
@@ -623,34 +601,6 @@
   </component>
   <component name="RunManager">
     <activeType name="Application" />
-    <configuration selected="false" default="true" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <module name="" />
-    </configuration>
-    <configuration selected="false" default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
-    </configuration>
-    <configuration selected="false" default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-    </configuration>
     <configuration selected="false" default="true" type="JUnit" factoryName="JUnit">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -666,6 +616,34 @@
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="wholeProject" />
       </option>
+    </configuration>
+    <configuration selected="false" default="true" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <module name="" />
+    </configuration>
+    <configuration selected="false" default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+    </configuration>
+    <configuration selected="false" default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
     </configuration>
     <configuration selected="true" default="false" name="GPRobocodeMain" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.imaginaryday.ec.rcpatches.GPRobocodeMain" />
@@ -719,7 +697,7 @@
     <option name="USER" value="" />
     <option name="PASSWORD" value="" />
     <option name="PROCESS_UNRESOLVED" value="false" />
-    <configuration useDefault="false">/home/rbowers/.subversion</configuration>
+    <configuration useDefault="false">$PROJECT_DIR$/../../../../../rbowers/.subversion</configuration>
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -736,15 +714,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="6" y="22" width="1893" height="1148" extended-state="0" />
+    <frame x="-5" y="26" width="1608" height="1178" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="8" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="7" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.190914" order="0" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.19612904" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.32942328" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.24967575" order="1" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.32942328" order="8" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.328585" order="8" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.4" order="6" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="3" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="8" />
@@ -755,7 +733,7 @@
       <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="3" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.3998045" order="4" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="sliding" type="sliding" visible="false" weight="0.4" order="0" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.32848838" order="8" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.32763532" order="8" />
       <window_info id="SQL" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="8" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="0" />
       <window_info id="Code Outline" active="false" anchor="right" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="3" />
@@ -849,19 +827,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/main/Driver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="148" column="39" selection-start="5415" selection-end="5415" vertical-scroll-proportion="0.01001001">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/GPRobocodeMain.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="61" column="0" selection-start="2127" selection-end="2127" vertical-scroll-proportion="0.01001001">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -886,16 +855,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Add.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="13" selection-start="227" selection-end="227" vertical-scroll-proportion="0.16845329">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/rcpatches/GPBattleResults.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="38" selection-start="535" selection-end="535" vertical-scroll-proportion="0.33690658">
+        <state line="22" column="38" selection-start="535" selection-end="535" vertical-scroll-proportion="0.019490255">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -904,7 +866,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/main/GPAgent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="173" column="88" selection-start="6801" selection-end="6801" vertical-scroll-proportion="0.4502297">
+        <state line="187" column="42" selection-start="7045" selection-end="7045" vertical-scroll-proportion="0.2923538">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/gp/nodes/Add.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="7" selection-start="318" selection-end="318" vertical-scroll-proportion="0.1754123">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/imaginaryday/ec/main/Driver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="299" column="93" selection-start="10916" selection-end="10916" vertical-scroll-proportion="0.46926537">
           <folding />
         </state>
       </provider>

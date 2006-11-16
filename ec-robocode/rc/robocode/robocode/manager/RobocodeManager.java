@@ -1,10 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2001-2006 Mathew A. Nelson and Robocode contributors
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Common Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.robocode.net/license/CPLv1.0.html
- * 
+ *
  * Contributors:
  *     Mathew A. Nelson
  *     - Initial API and implementation
@@ -15,9 +15,13 @@
 package robocode.manager;
 
 
+import robocode.control.BattleSpecification;
+import robocode.control.RobocodeListener;
+import robocode.control.RobotResults;
+import robocode.util.Constants;
+import robocode.util.Utils;
+
 import java.io.*;
-import robocode.util.*;
-import robocode.control.*;
 
 
 /**
@@ -33,26 +37,26 @@ public class RobocodeManager {
 	private ThreadManager threadManager;
 	private WindowManager windowManager;
 	private VersionManager versionManager;
-	
+
 	private boolean slave;
-	
+
 	private RobocodeProperties properties;
 	private RobocodeListener listener;
 
-	private boolean isGUIEnabled = true;
-	private boolean isSoundEnabled = true;
+	private static final boolean isGUIEnabled = false;
+	private static final boolean isSoundEnabled = false;
 
 	// Must use slave constructor
 	private RobocodeManager() {}
-	
+
 	public RobocodeManager(boolean slave, RobocodeListener listener) {
 		this.slave = slave;
 		this.listener = listener;
 	}
-		
+
 	/**
 	 * Gets the battleManager.
-	 * 
+	 *
 	 * @return Returns a BattleManager
 	 */
 	public BattleManager getBattleManager() {
@@ -64,7 +68,7 @@ public class RobocodeManager {
 
 	/**
 	 * Gets the robotManager.
-	 * 
+	 *
 	 * @return Returns a RobotListManager
 	 */
 	public RobotRepositoryManager getRobotRepositoryManager() {
@@ -76,7 +80,7 @@ public class RobocodeManager {
 
 	/**
 	 * Gets the windowManager.
-	 * 
+	 *
 	 * @return Returns a WindowManager
 	 */
 	public WindowManager getWindowManager() {
@@ -88,7 +92,7 @@ public class RobocodeManager {
 
 	/**
 	 * Gets the threadManager.
-	 * 
+	 *
 	 * @return Returns a ThreadManager
 	 */
 	public ThreadManager getThreadManager() {
@@ -100,7 +104,7 @@ public class RobocodeManager {
 
 	/**
 	 * Gets the robotDialogManager.
-	 * 
+	 *
 	 * @return Returns a RobotDialogManager
 	 */
 	public RobotDialogManager getRobotDialogManager() {
@@ -143,7 +147,7 @@ public class RobocodeManager {
 
 	/**
 	 * Gets the imageManager.
-	 * 
+	 *
 	 * @return Returns a ImageManager
 	 */
 	public ImageManager getImageManager() {
@@ -155,7 +159,7 @@ public class RobocodeManager {
 
 	/**
 	 * Gets the versionManager.
-	 * 
+	 *
 	 * @return Returns a VersionManager
 	 */
 	public VersionManager getVersionManager() {
@@ -167,7 +171,7 @@ public class RobocodeManager {
 
 	/**
 	 * Gets the cpuManager.
-	 * 
+	 *
 	 * @return Returns a CpuManager
 	 */
 	public CpuManager getCpuManager() {
@@ -179,7 +183,7 @@ public class RobocodeManager {
 
 	/**
 	 * Gets the slave.
-	 * 
+	 *
 	 * @return Returns a boolean
 	 */
 	public boolean isSlave() {
@@ -219,7 +223,7 @@ public class RobocodeManager {
 	}
 
 	public void setEnableGUI(boolean enable) {
-		isGUIEnabled = enable;
+		// isGUIEnabled = enable;
 	}
 
 	public boolean isSoundEnabled() {
@@ -227,6 +231,6 @@ public class RobocodeManager {
 	}
 
 	public void setEnableSound(boolean enable) {
-		isSoundEnabled = enable;
+		//isSoundEnabled = enable;
 	}
 }

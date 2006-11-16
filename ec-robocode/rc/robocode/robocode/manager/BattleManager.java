@@ -1,10 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2001-2006 Mathew A. Nelson and Robocode contributors
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Common Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.robocode.net/license/CPLv1.0.html
- * 
+ *
  * Contributors:
  *     Mathew A. Nelson
  *     - Initial API and implementation
@@ -224,9 +224,6 @@ public class BattleManager {
         BattleField battleField = new DefaultBattleField(battleProperties.getBattlefieldWidth(),
                 battleProperties.getBattlefieldHeight());
 
-        if (manager.isGUIEnabled()) {
-            manager.getWindowManager().getRobocodeFrame().getBattleView().setBattleField(battleField);
-        }
         battle = new Battle(battleField, manager);
         battle.setExitOnComplete(exitOnComplete);
 
@@ -247,25 +244,11 @@ public class BattleManager {
             ((RobocodeSecurityManager) System.getSecurityManager()).setBattleThread(battleThread);
         }
 
-        if (manager.isGUIEnabled()) {
-            manager.getWindowManager().getRobocodeFrame().getBattleView().setVisible(true);
-            manager.getWindowManager().getRobocodeFrame().getBattleView().setInitialized(false);
-        }
 
         for (int i = 0; i < battlingRobotsVector.size(); i++) {
             battle.addRobot((RobotClassManager) battlingRobotsVector.elementAt(i));
         }
 
-        if (manager.isGUIEnabled()) {
-            manager.getWindowManager().getRobocodeFrame().getRobocodeMenuBar().getBattleSaveAsMenuItem().setEnabled(true);
-            manager.getWindowManager().getRobocodeFrame().getRobocodeMenuBar().getBattleSaveMenuItem().setEnabled(true);
-
-            if (manager.getWindowManager().getRobocodeFrame().getPauseResumeButton().getText().equals("Resume")) {
-                manager.getWindowManager().getRobocodeFrame().pauseResumeButtonActionPerformed();
-            }
-
-            manager.getRobotDialogManager().setActiveBattle(battle);
-        }
         battleThread.start();
     }
 

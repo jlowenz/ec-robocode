@@ -144,6 +144,25 @@ public class GPBattleResults implements Entry {
         sb.append(" Se: ").append(numScanEvents1).append("|").append(numScanEvents2);
         sb.append(" Wh: ").append(numWallsHit1).append("|").append(numWallsHit2);
         return sb.toString();
+    }
 
+    public String getSummary_CSV() {
+      StringBuilder sb = new StringBuilder();
+        sb.append(generation).append(',').append(robot1).append(',').append(robot2);
+        sb.append(',').append(fitness1).append(',').append(fitness2);
+        sb.append(',').append(rank1).append(',').append(rank2);
+        sb.append(',').append(score1).append(',').append(score2);
+        sb.append(',').append(survival1).append(',').append(survival2);
+        sb.append(',').append(lastSurvivorBonus1).append(',').append(lastSurvivorBonus2);
+        sb.append(',').append(bulletDamage1).append(',').append(bulletDamage2);
+        sb.append(',').append(bulletDamageBonus1).append(',').append(bulletDamageBonus2);
+        sb.append(',').append(ramDamage1).append(',').append(ramDamage2);
+        sb.append(',').append(ramDamageBonus1).append(',').append(ramDamageBonus2);
+        sb.append(',').append(numBulletsFired1).append(',').append(numBulletsFired2);
+        sb.append(',').append(numBulletHits1).append(',').append(numBulletHits2);
+        sb.append(',').append(distanceTravelled1).append(',').append(distanceTravelled2);
+        sb.append(',').append(numScanEvents1).append(',').append(numScanEvents2);
+        sb.append(',').append(numWallsHit1).append(',').append(numWallsHit2);
+        return sb.toString();
     }
 }

@@ -37,7 +37,7 @@ public class ProgressTester {
         List<Member> newPop = clonePopulation(population);
         int battles = submitBattles(newPop, generation);
         Map<Member, List<GPBattleResults>> results = collectResults(newPop, battles);
-        printResults(results, generation);
+        printResults(results);
     }
 
     private List<Member> clonePopulation(final List<Member> population) {
@@ -115,7 +115,7 @@ public class ProgressTester {
         return results;
     }
 
-    private void printResults(Map<Member, List<GPBattleResults>> results, int generation) {
+    private void printResults2(Map<Member, List<GPBattleResults>> results, int generation) {
         StringBuffer output = new StringBuffer();
 
         // Header
@@ -136,6 +136,20 @@ public class ProgressTester {
 
             for (GPBattleResults r : e.getValue()) {
                 output.append(r.getSummary()).append('\n');
+            }
+        }
+
+        logger.info(output.toString());
+
+    }
+
+    private void printResults(Map<Member, List<GPBattleResults>> results) {
+        StringBuffer output = new StringBuffer();
+
+        for (java.util.Map.Entry<Member, List<GPBattleResults>> e : results.entrySet() ) {
+
+            for (GPBattleResults r : e.getValue()) {
+                output.append(r.getSummary_CSV()).append('\n');
             }
         }
 

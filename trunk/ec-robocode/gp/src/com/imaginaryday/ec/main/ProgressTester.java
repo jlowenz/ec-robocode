@@ -7,10 +7,13 @@ import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -22,15 +25,21 @@ import java.util.logging.Logger;
  * To change this template use File | Settings | File Templates.
  */
 public class ProgressTester {
+
     private JavaSpace space;
     private Logger logger = Logger.getLogger(this.getClass().getName());
+    private FileOutputStream output;
 
 
-    public ProgressTester(JavaSpace space) {
+    public ProgressTester(JavaSpace space, String filename) {
 
         this.space = space;
+        try {
+            output = new FileOutputStream(filename, false);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+        }
     }
-
 
 
     public void testProgress(final List<Member> population, final int generation) {
@@ -59,7 +68,9 @@ public class ProgressTester {
                 GPBattleTask task = new GPBattleTask(generation, battle, m, s);
 
                 try {
-                    space.write(task, null, 120000);
+                    logger.info(task.toString());
+                    space.write(task, null, Long.MAX_VALUE);
+
                     battle ++;
                 } catch (TransactionException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -78,11 +89,12 @@ public class ProgressTester {
         Entry template = new GPBattleResults();
 
         Map<Member, List<GPBattleResults>> results = null;
+        results = new HashMap<Member, List<GPBattleResults>>();
+        for (Member m : population) {
+            results.put(m, new ArrayList<GPBattleResults>());
+        }
+
         while (retrieved < numBattles) {
-            results = new HashMap<Member, List<GPBattleResults>>();
-            for(Member m : population) {
-                results.put(m, new ArrayList<GPBattleResults>());
-            }
 
             GPBattleResults res = null;
             try {
@@ -101,7 +113,7 @@ public class ProgressTester {
             if (res != null) {
                 // determine member;
                 Member member = null;
-                for(Member m : results.keySet()) {
+                for (Member m : results.keySet()) {
                     if (m.getName().equals(res.robot1)) {
                         member = m;
                         break;
@@ -109,7 +121,9 @@ public class ProgressTester {
                 }
                 List<GPBattleResults> r2 = results.get(member);
                 r2.add(res);
+                logger.info(member.getName() + " has " + r2.size() + " results");
                 ++retrieved;
+                logger.info("Collected " + retrieved + " of " + numBattles + " results");
             }
         }
         return results;
@@ -121,7 +135,7 @@ public class ProgressTester {
         // Header
         output.append('\n').append("Results for generation ").append(generation).append('\n');
 
-        for (java.util.Map.Entry<Member, List<GPBattleResults>> e : results.entrySet() ) {
+        for (java.util.Map.Entry<Member, List<GPBattleResults>> e : results.entrySet()) {
 
             output.append("Robot ").append(e.getKey().getName()).append('\n');
             output.append("------------------------------MOVE PROGRAM--------------------------------\n");
@@ -144,16 +158,21 @@ public class ProgressTester {
     }
 
     private void printResults(Map<Member, List<GPBattleResults>> results) {
-        StringBuffer output = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
 
-        for (java.util.Map.Entry<Member, List<GPBattleResults>> e : results.entrySet() ) {
+        for (java.util.Map.Entry<Member, List<GPBattleResults>> e : results.entrySet()) {
 
             for (GPBattleResults r : e.getValue()) {
-                output.append(r.getSummary_CSV()).append('\n');
+                sb.append(r.getSummary_CSV()).append('\n');
             }
         }
-
-        logger.info(output.toString());
+        logger.info(sb.toString());
+        try {
+            output.write(sb.toString().getBytes());
+            output.flush();
+        } catch (IOException e) {
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+        }
 
     }
 }

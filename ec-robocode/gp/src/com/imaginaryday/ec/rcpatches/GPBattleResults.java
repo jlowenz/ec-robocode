@@ -25,6 +25,11 @@ public class GPBattleResults implements Entry {
     public Integer bulletDamageBonus1;
     public Integer ramDamage1;
     public Integer ramDamageBonus1;
+    public Integer numBulletsFired1;
+    public Integer numBulletHits1;
+    public Double distanceTravelled1;
+    public Integer numScanEvents1;
+    public Integer numWallsHit1;
 
     public Integer rank2;
     public Integer score2;
@@ -34,6 +39,12 @@ public class GPBattleResults implements Entry {
     public Integer bulletDamageBonus2;
     public Integer ramDamage2;
     public Integer ramDamageBonus2;
+    public Integer numBulletsFired2;
+    public Integer numBulletHits2;
+    public Double distanceTravelled2;
+    public Integer numScanEvents2;
+    public Integer numWallsHit2;
+
 
     public GPBattleResults() {
     }
@@ -55,6 +66,12 @@ public class GPBattleResults implements Entry {
         this.bulletDamageBonus1 = results1.getBulletDamageBonus();
         this.ramDamage1 = results1.getRamDamage();
         this.ramDamageBonus1 = results1.getRamDamageBonus();
+        this.numBulletsFired1 = results1.getNumBulletsFired();
+        this.numBulletHits1 = results1.getNumBulletHits();
+        this.distanceTravelled1 = results1.getDistanceTravelled();
+        this.numScanEvents1 = results1.getNumScanEvents();
+        this.numWallsHit1 = results1.getNumWallsHit();
+
 
         this.rank2 = results2.getRank();
         this.score2 = results2.getScore();
@@ -64,6 +81,11 @@ public class GPBattleResults implements Entry {
         this.bulletDamageBonus2 = results2.getBulletDamageBonus();
         this.ramDamage2 = results2.getRamDamage();
         this.ramDamageBonus2 = results2.getRamDamageBonus();
+        this.numBulletsFired2 = results2.getNumBulletsFired();
+        this.numBulletHits2 = results2.getNumBulletHits();
+        this.distanceTravelled2 = results2.getDistanceTravelled();
+        this.numScanEvents2 = results2.getNumScanEvents();
+        this.numWallsHit2 = results2.getNumWallsHit();
 
         System.err.println(this);
     }
@@ -116,6 +138,7 @@ public class GPBattleResults implements Entry {
         sb.append(" Bdb: ").append(bulletDamageBonus1).append("|").append(bulletDamageBonus2);
         sb.append(" Rd: ").append(ramDamage1).append("|").append(ramDamage2);
         sb.append(" Rdb: ").append(ramDamageBonus1).append("|").append(ramDamageBonus2);
+        
         return sb.toString();
 
 

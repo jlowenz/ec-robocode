@@ -161,7 +161,7 @@ public class Driver implements Runnable {
             m.setRadarProgram(tf.generateRandomTree(treeDepth, Number.class));
             m.setShootProgram(tf.generateRandomTree(treeDepth, Pair.class));
             m.setTurretProgram(tf.generateRandomTree(treeDepth, Number.class));
-            m.setName(new StringBuilder().append("Bot:").append(generationCount).append(":").append(i).toString());
+            m.setName(new StringBuilder().append("Bot.").append(generationCount).append(".").append(i).toString());
             members.add(m);
         }
         return members;

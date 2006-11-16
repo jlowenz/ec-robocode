@@ -84,7 +84,7 @@ public class Driver implements Runnable {
 
     private Date endDate;
 
-    private int numGenerations = 2;
+    private int numGenerations = 100;
     private int generationCount = 0; // ??
     private int treeDepth = 8;
     private final int alpha = 0;
@@ -93,7 +93,7 @@ public class Driver implements Runnable {
     private double crossoverProbability = .6;
     private double mutationProbability = .1;
     private int testFreq = 5;
-    private int populationSize = 4; // KEEP THIS EVEN! yeah, it's a hack, deal with it :-/
+    private int populationSize = 40; // KEEP THIS EVEN! yeah, it's a hack, deal with it :-/
     private boolean readPopulation = false;
     private String popFile = "";
     private String progLogFile = "progressLog";
@@ -308,8 +308,7 @@ public class Driver implements Runnable {
 
 
         // elitism (top elitismPercentage)
-        int start = populationSize - count;
-        for (int i = start; i < populationSize; i++) {
+        for (int i = count; i < populationSize; i++) {
             newPopulation.add(new Member(oldPopulation.get(i)));
         }
 

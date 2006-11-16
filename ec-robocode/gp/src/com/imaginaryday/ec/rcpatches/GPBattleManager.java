@@ -240,8 +240,8 @@ public class GPBattleManager extends BattleManager {
 
             if (results != null && results.length == 2) {
                 GPBattleResults res = new GPBattleResults(battleTask,
-                        GPFitnessCalc.getFitness(results[0]),
-                        GPFitnessCalc.getFitness(results[1]),
+                        GPFitnessCalc.getFitness(results[0], results[1]),
+                        GPFitnessCalc.getFitness(results[1], results[0]),
                         results[0], results[1]);
 
                 Utils.log(res.toString());

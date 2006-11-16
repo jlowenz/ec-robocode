@@ -2,7 +2,8 @@ package com.imaginaryday.ec.main.nodes;
 
 import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.ec.main.RoboNode;
-import com.imaginaryday.util.Stuff;
+import static com.imaginaryday.util.Stuff.clampZero;
+import static com.imaginaryday.util.Stuff.isReasonable;
 
 public class CurrentRadarHeading extends RoboNode {
 
@@ -16,7 +17,7 @@ public class CurrentRadarHeading extends RoboNode {
     }
 
     public String getName() {
-        return "currentRadarHeader";
+        return "currentRadarHeading";
     }
 
     public Class getOutputType() {
@@ -25,9 +26,9 @@ public class CurrentRadarHeading extends RoboNode {
 
     @Override
     public Object evaluate() {
-        double heading = getOwner().getRadarHeadingRadians();
+        double heading = clampZero(getOwner().getRadarHeadingRadians());
         assert !(Double.isNaN(heading) || Double.isInfinite(heading)) : "heading was bad!";
-        assert Stuff.isReasonable(heading) : "unreasonable value: " + heading;
+        assert isReasonable(heading) : "unreasonable value: " + heading;
 
         return heading;
     }

@@ -30,7 +30,7 @@ public class CurrentTurretHeading extends RoboNode {
     }
 
     public Object evaluate() {
-        double gun = getOwner().getGunHeadingRadians();
+        double gun = Stuff.clampZero(getOwner().getGunHeadingRadians());
         assert !(Double.isNaN(gun) || Double.isInfinite(gun)) : "gun heading was bad!";
         assert Stuff.isReasonable(gun) : "unreasonable value: " + gun;
 

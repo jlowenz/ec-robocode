@@ -1,5 +1,6 @@
 package com.imaginaryday.util;
 
+import static com.imaginaryday.util.Stuff.clampZero;
 import org.jscience.mathematics.vectors.VectorFloat64;
 import org.jscience.mathematics.numbers.Float64;
 
@@ -19,25 +20,25 @@ public class VectorUtils {
         assert !(Double.isNaN(y) || Double.isInfinite(y)) : "y is bad! from: " + norm;
         if (x >= 0) {
             if (y >= 0) {
-                return Math.atan2(x, y);
+                return clampZero(Math.atan2(x, y));
             } else {
-                return Math.PI - Math.atan2(x, -y);
+                return clampZero(Math.PI - Math.atan2(x, -y));
             }
         } else {
             if (y >= 0) {
-                return 2 * Math.PI - Math.atan2(-x, y);
+                return clampZero(2 * Math.PI - Math.atan2(-x, y));
             } else {
-                return Math.PI + Math.atan2(-x, -y);
+                return clampZero(Math.PI + Math.atan2(-x, -y));
             }
         }
     }
 
     public static VectorFloat64 vecFromDir(double headingRadians) {
-        return VectorFloat64.valueOf(Math.sin(headingRadians), Math.cos(headingRadians));
+        return VectorFloat64.valueOf(clampZero(Math.sin(headingRadians)), clampZero(Math.cos(headingRadians)));
     }
 
     public static double vecLength(VectorFloat64 vec) {
-        return vec.normValue();
+        return clampZero(vec.normValue());
     }
 
     public static VectorFloat64 normalize(VectorFloat64 vec) {

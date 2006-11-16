@@ -15,6 +15,11 @@ public class Stuff {
     public static boolean nearZero(double val) {
         return java.lang.Math.abs(val) < ZERO_TOLERANCE;
     }
+
+    public static double clampZero(double val) {
+        return (nearZero(val)) ? 0.0 : val;
+    }
+
     public static double modHeading(double v) {
         if (v > 2*Math.PI) v = v - Math.floor(v / 2*Math.PI)*2*Math.PI;
         else if (v < -2*Math.PI) v = v - Math.ceil(v / 2*Math.PI)*2*Math.PI;

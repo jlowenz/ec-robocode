@@ -46,7 +46,8 @@ public class Driver implements Runnable {
             nf.loadNode(BulletSpeed.class);
             nf.loadNode(CurrentRadarHeading.class);
             nf.loadNode(CurrentTurretHeading.class);
-            nf.loadNode(CurrentVector.class);
+//            nf.loadNode(CurrentVector.class);
+            nf.loadNode(VectorConstant.class);
             nf.loadNode(EnemyEnergy.class);
             nf.loadNode(EnemyHeading.class);
             nf.loadNode(EnemySpeed.class);

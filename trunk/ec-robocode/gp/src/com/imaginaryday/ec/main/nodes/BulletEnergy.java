@@ -17,7 +17,7 @@ public class BulletEnergy extends RoboNode {
     public Class getInputType(int id) { return null; }
     public Class getOutputType() { return Number.class; }
     public Object evaluate() {
-        double d = getOwner().getBulletEnergy();
+        double d = Stuff.clampZero(getOwner().getBulletEnergy());
         assert !(Double.isNaN(d) || Double.isInfinite(d)) : "energy was bad!";
         assert Stuff.isReasonable(d) : "unreasonable value: " + d;
         return d;

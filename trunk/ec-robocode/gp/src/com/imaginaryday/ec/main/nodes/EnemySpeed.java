@@ -26,7 +26,7 @@ public class EnemySpeed extends RoboNode {
     }
 
     public Object evaluate() {
-        double speed = getOwner().getEnemySpeed();
+        double speed = Stuff.clampZero(getOwner().getEnemySpeed());
         assert !(Double.isNaN(speed) || Double.isInfinite(speed)) : "enemy speed was bad!";
         assert Stuff.isReasonable(speed) : "unreasonable value: " + speed;
 

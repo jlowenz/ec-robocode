@@ -2,6 +2,7 @@ package com.imaginaryday.ec.main.nodes;
 
 import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.util.Stuff;
 
 /**
  * <b>
@@ -16,7 +17,7 @@ public class RammerBearing extends RoboNode {
     public Class getInputType(int id) {return null;}
     public Class getOutputType() {return Number.class;}
     public Object evaluate() {
-        double bearing = getOwner().getRammerBearing();
+        double bearing = Stuff.clampZero(getOwner().getRammerBearing());
         assert !(Double.isNaN(bearing) || Double.isInfinite(bearing)) : "rammer bearing was bad!";
         return bearing;
     }

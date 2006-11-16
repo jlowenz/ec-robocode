@@ -295,9 +295,9 @@ public class Driver implements Runnable {
         List<Rank> rankedPopulation = rankMembers(oldPopulation);
 
         double P = populationSize;
-        int count = (int)(Math.ceil(P-(P*elitismPercentage)));
+        int count = (int)(P-Math.ceil(P*elitismPercentage));
         // sample members
-        List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, populationSize - count);
+        List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, count);
         for (Member m : newPopulation) {
             m.setGeneration(m.getGeneration()+1);
         }

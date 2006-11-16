@@ -51,8 +51,8 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 	private double rammingDamageReceived;
 	private double totalRammingDamageReceived;
 
-    private double distanceTravelled; // TODO
-    private int numScanEvents; // TODO
+    private double distanceTravelled; // TODO ron
+    private int numScanEvents; // TODO ron
     private int numBulletsFired; // TODO: jason
     private int numTimesHit; // TODO: jason
     private int numWallsHit; // TODO
@@ -176,7 +176,7 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 		bulletDamageReceived = 0;
 		rammingDamageDealt = 0;
 		rammingDamageReceived = 0;
-	
+
 		noScoring = false;
 
 		robotDamage = null;

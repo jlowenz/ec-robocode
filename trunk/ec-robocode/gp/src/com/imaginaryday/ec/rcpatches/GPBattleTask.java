@@ -66,6 +66,12 @@ public class GPBattleTask implements Entry {
         shootProgram2 = null;
     }
 
+    public String shortString() {
+
+        return new StringBuilder().append("BattleTask[").append(generation).append(" | ")
+                .append(battle).append("] ").append(robot1).append(" vs ")
+                .append(robot2).toString();
+    }
 
     @Override
     public String toString() {

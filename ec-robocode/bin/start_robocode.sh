@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [[ -z ""{$GP_HOME} ]] 
+if [[ -z ""{$GP_HOME} ]]
 then
 	echo "Must set GP_HOME"
 	exit
@@ -19,6 +19,6 @@ echo $CLASSPATH
 
 java -Djava.security.policy=/home/rbowers/.java.policy \
 	-DGP_HOME="${GP_HOME}"  \
-	-ea -server \
+	-server \
 	-Dorg.jini.rio.groups="GPRobocode"  \
-	-cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -battle ${GP_HOME}/config/sample.battle
+	-cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -battle ${GP_HOME}/config/sample.battle $*

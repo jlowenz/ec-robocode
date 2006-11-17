@@ -5,6 +5,8 @@ import net.jini.core.entry.Entry;
 import com.imaginaryday.util.SpaceFinder;
 import com.imaginaryday.util.PoisonPill;
 
+import java.rmi.RMISecurityManager;
+
 /**
  * @author Ronald A. Bowers
  * @version 1.0
@@ -13,6 +15,7 @@ public class Killer {
 
 
     public static void main(String[] args) {
+        System.setSecurityManager(new RMISecurityManager());
         String id = null;
         if (args.length != 1) {
             System.out.println("Usage: com.imaginaryday.ec.main.killer worker_id");

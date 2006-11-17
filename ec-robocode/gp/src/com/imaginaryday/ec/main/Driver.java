@@ -294,10 +294,10 @@ public class Driver implements Runnable {
         // rank members
         List<Rank> rankedPopulation = rankMembers(oldPopulation);
 
-        double P = populationSize;
-        int count = (int)(P-Math.ceil(P*elitismPercentage));
+        double P = populationSize; // 40
+        int count = (int)(P-Math.ceil(P*elitismPercentage)); // 40 - 4.0 = 36
         // sample members
-        List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, count);
+        List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, count); // 36
         for (Member m : newPopulation) {
             m.setGeneration(m.getGeneration()+1);
         }
@@ -340,16 +340,17 @@ public class Driver implements Runnable {
         GeneticOperators ops = GeneticOperators.getInstance();
 
         List<Member> replacements = new ArrayList<Member>();
+        if (selection.size() % 2 == 1) { // this MAKES it even!
+            int which = rand.nextInt(selection.size());
+            replacements.add(selection.get(which));
+            selection.remove(which);
+        }
 
-        int count = (int)Math.floor((double)selection.size() / 2.0);
-        for (int i = 0; i < count; i++) {
+        while (selection.size() > 0) {
             // pick 2 random parents
             Member m = selection.get(rand.nextInt(selection.size()));
             selection.remove(m);
             Member n = selection.get(rand.nextInt(selection.size()));
-            while (n.equals(m)) {
-                n = selection.get(rand.nextInt(selection.size()));
-            }
             selection.remove(n);
 
             if (rand.nextDouble() < crossoverProbability) {
@@ -376,14 +377,9 @@ public class Driver implements Runnable {
                 n.setRadarProgram(radar.getSecond());
                 m.setShootProgram(firing.getFirst());
                 n.setShootProgram(firing.getSecond());
-
-                replacements.add(m);
-                replacements.add(n);
             }
-        }
-
-        if (selection.size() == 1) {
-            replacements.add(selection.get(0));
+            replacements.add(m);
+            replacements.add(n);
         }
 
         return replacements;

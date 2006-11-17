@@ -1,10 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2001-2006 Mathew A. Nelson and Robocode contributors
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Common Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.robocode.net/license/CPLv1.0.html
- * 
+ *
  * Contributors:
  *     Mathew A. Nelson
  *     - Initial API and implementation
@@ -20,7 +20,7 @@ package robocode.peer;
 public class TeamStatistics implements ContestantStatistics {
 
 	private TeamPeer teamPeer;
-	
+
 	public TeamStatistics(TeamPeer teamPeer) {
 		this.teamPeer = teamPeer;
 	}
@@ -205,11 +205,11 @@ public class TeamStatistics implements ContestantStatistics {
 		return d;
 	}
 
-    public void addScanEvent() {
+    public void scoreScanEvent() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void addDistanceTravelled(double distance) {
+    public void scoreDistanceTravelled(double distance) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -221,7 +221,7 @@ public class TeamStatistics implements ContestantStatistics {
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void addWallHit() {
+    public void scoreWallHit() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

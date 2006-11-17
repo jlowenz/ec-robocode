@@ -22,9 +22,9 @@ public class GPAgent extends AdvancedRobot {
     private static Logger log = Logger.getLogger(GPAgent.class.getName());
     static {
         Handler h = new ConsoleHandler();
-        h.setLevel(Level.FINEST);
+        h.setLevel(Level.INFO);
         log.addHandler(h);
-        log.setLevel(Level.FINEST);
+        log.setLevel(Level.INFO);
     }
 
     private static final boolean DEBUG = false;
@@ -199,7 +199,7 @@ public class GPAgent extends AdvancedRobot {
                 try {
                     turretDirection = ((Number) turretTree.evaluate()).doubleValue();
                 } catch (Throwable e) {
-                    log.finest(((AbstractNode) turretTree).toStringEval());    
+                    log.finest(((AbstractNode) turretTree).toStringEval());
                 }
 
                 // determine if we need to fire
@@ -209,12 +209,12 @@ public class GPAgent extends AdvancedRobot {
                     log.finest(((AbstractNode) firingTree).toStringEval());
                     firing = new Pair<Boolean, Number>(false, 0.0);
                 }
-                
+
                 // get absolute robot heading and velocity
                 try {
                     movementVector = (VectorFloat64) directionTree.evaluate();
                 } catch (Throwable t ) {
-                    log.finest(((AbstractNode) directionTree).toStringEval());                    
+                    log.finest(((AbstractNode) directionTree).toStringEval());
                 }
 
                 // process firing directive

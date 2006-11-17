@@ -3,6 +3,7 @@ package com.imaginaryday.ec.main;
 import com.imaginaryday.ec.gp.Node;
 
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,7 +14,9 @@ import java.io.Serializable;
  */
 public class Member implements Comparable<Member>, Serializable {
 
-    private static final long serialVersionUID = 1L; 
+    private static final long serialVersionUID = 1L;
+
+    private static AtomicInteger ID = new AtomicInteger(0);
 
     private int generation;
     private int id;
@@ -29,13 +32,14 @@ public class Member implements Comparable<Member>, Serializable {
 
     public Member(int generation, int id) {
         this.generation = generation;
-        this.id = id;
+        this.id = ID.getAndIncrement();
     }
 
     public Member(Member old) {
         this.generation = old.generation;
-        this.id = old.id;
-        this.name = old.name;
+        this.id = ID.getAndIncrement();
+        this.name = null;
+        getName();
         this.moveProgram = old.moveProgram;
         this.turretProgram = old.turretProgram;
         this.radarProgram = old.radarProgram;

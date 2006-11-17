@@ -16,5 +16,5 @@ tar czf ecdist.tgz ecdist
 for m in $MACHINES; do
     echo $m
     krcp ecdist.tgz $m:/tmp
-    krsh $m "cd /tmp; tar xzf ecdist.tgz; cd ecdist; chmod +x bin/start_robocode.sh; source ~/.bashrc; GP_HOME=/tmp/ecdist nice -n20 bin/start_robocode.sh 3 >> /tmp/robo.log" &
+    krsh $m "cd /tmp; tar xzf ecdist.tgz; cd ecdist; chmod +x bin/start_robocode.sh; source ~/.bashrc; GP_HOME=/tmp/ecdist nice -n20 bin/start_robocode.sh 4 $m$USER" &
 done

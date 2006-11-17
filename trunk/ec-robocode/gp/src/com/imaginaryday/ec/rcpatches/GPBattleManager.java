@@ -169,9 +169,9 @@ public class GPBattleManager extends BattleManager {
         manager.setListener(rl);
 
         boolean done = false;
+        Entry taskTemplate = new GPBattleTask();
         while (!done) {
-            Utils.log("Looking for task");
-            Entry taskTemplate = new GPBattleTask();
+            Utils.log("Looking for task");            
             GPBattleTask task = null;
             try {
                 task = (GPBattleTask) space.take(taskTemplate, null, 3000);

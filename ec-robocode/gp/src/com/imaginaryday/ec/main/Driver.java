@@ -98,14 +98,19 @@ public class Driver implements Runnable {
     private String popFile = "";
     private String progLogFile = "progressLog";
     private String generationLogFile = "generationLog";
+    private String robotLogFile = "robots.log";
     private FileOutputStream output = null;
+    private Writer robots = null;
     private Map<Member, List<GPBattleResults>> resultMap = null;
 
     public Driver() {
         try {
             output = new FileOutputStream(generationLogFile, false);
+            robots = new FileWriter(robotLogFile, false);
         } catch (FileNotFoundException e) {
             e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -232,6 +237,13 @@ public class Driver implements Runnable {
              */
              population = selectAndBreed(population);
             ++generationCount;
+        }
+
+        try {
+            output.close();
+            robots.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -446,15 +458,12 @@ public class Driver implements Runnable {
                     if (res == null) Thread.sleep(2000);
                 }
                 logger.info(res.toString());
-            } catch (UnusableEntryException e) {
-                e.printStackTrace();
-            } catch (TransactionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             } catch (RemoteException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
             if (res != null) {
                 for (Member member : population) {
                     if (member.getName().equals(res.getRobot1())) {
@@ -477,7 +486,7 @@ public class Driver implements Runnable {
         StringBuffer sb = new StringBuffer();
 
         for (java.util.Map.Entry<Member, List<GPBattleResults>> e : resultMap.entrySet()) {
-
+            sb.append(e.getKey().getFitness()).append(",");
             for (GPBattleResults r : e.getValue()) {
                 sb.append(r.getSummary_CSV()).append('\n');
             }
@@ -490,6 +499,21 @@ public class Driver implements Runnable {
             e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
         }
 
+        List<Member> l = new ArrayList<Member>(resultMap.keySet());
+        Collections.sort(l, new Comparator<Member>() {
+            public int compare(Member o, Member o1) {
+                return o.getName().compareTo(o1.getName());
+            }
+        });
+        try {
+            for (Member m : l) {
+                robots.append(Double.toString(m.getFitness())).append(",");
+            }
+            robots.write("\n");
+            robots.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public int submitBattles(List<Member> population) {

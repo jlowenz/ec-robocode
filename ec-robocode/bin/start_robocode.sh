@@ -1,5 +1,7 @@
 #!/bin/sh
 
+PARALLEL=$1
+
 if [[ -z ""{$GP_HOME} ]]
 then
 	echo "Must set GP_HOME"
@@ -17,8 +19,12 @@ done
 export CLASSPATH="${CLASSPATH}:${GP_HOME}/rc/classes/"
 echo $CLASSPATH
 
-java -Djava.security.policy=/home/rbowers/.java.policy \
-	-DGP_HOME="${GP_HOME}"  \
-	-server \
-	-Dorg.jini.rio.groups="GPRobocode"  \
-	-cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -battle ${GP_HOME}/config/sample.battle $*
+i=0
+while [ $i -lt $PARALLEL ]; do
+    java -Djava.security.policy=/home/rbowers/.java.policy \
+	    -DGP_HOME="${GP_HOME}"  \
+	    -server \
+	    -Dorg.jini.rio.groups="GPRobocode"  \
+	    -cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -battle ${GP_HOME}/config/sample.battle $* &
+	i=$(($i + 1))
+done

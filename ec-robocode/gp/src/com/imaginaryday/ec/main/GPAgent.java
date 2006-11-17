@@ -303,6 +303,7 @@ public class GPAgent extends AdvancedRobot {
             }
         }
     }
+    
     private void resetRammed() {
         rammedAge = 0;
         recentlyRammed = false;

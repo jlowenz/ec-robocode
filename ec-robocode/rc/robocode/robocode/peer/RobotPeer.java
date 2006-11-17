@@ -1,10 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2001-2006 Mathew A. Nelson and Robocode contributors
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Common Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.robocode.net/license/CPLv1.0.html
- * 
+ *
  * Contributors:
  *     Mathew A. Nelson
  *     - Initial API and implementation
@@ -573,7 +573,6 @@ public class RobotPeer implements Runnable, ContestantPeer {
 			moveDirection = -1;
 		}
 		slowingDown = false;
-        statistics.addDistanceTravelled(distance);
     }
 
 	public void setBattle(Battle newBattle) {
@@ -993,7 +992,9 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		x += dx;
 		y += dy;
 
-		boolean updateBounds = false;
+        statistics.addDistanceTravelled(Math.sqrt(dx*dx + dy*dy));
+
+        boolean updateBounds = false;
 
 		if (dx != 0 || dy != 0) {
 			updateBounds = true;
@@ -1279,7 +1280,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 
 		if (bullet != null) {
 			newBullet = bullet;
-		}	
+		}
 
 		return bullet.getBullet();
 	}
@@ -1404,7 +1405,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 
 		String countString = " (" + (count + 1) + ')';
 
-		NameManager cnm = getRobotClassManager().getClassNameManager();  
+		NameManager cnm = getRobotClassManager().getClassNameManager();
 
 		name = cnm.getFullClassNameWithVersion() + countString;
 		shortName = cnm.getUniqueShortClassNameWithVersion() + countString;
@@ -1526,11 +1527,11 @@ public class RobotPeer implements Runnable, ContestantPeer {
 	public Color getBodyColor() {
 		return bodyColor;
 	}
-	
+
 	public void setBodyColor(Color color) {
 		bodyColor = color;
 	}
-	
+
 	public Color getRadarColor() {
 		return radarColor;
 	}
@@ -1571,7 +1572,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		if (sayTextPeer == null) {
 			sayTextPeer = new TextPeer();
 		}
-		
+
 		if (sayTextPeer.isReady()) {
 			if (text.length() > 100) {
 				return false;
@@ -1579,11 +1580,11 @@ public class RobotPeer implements Runnable, ContestantPeer {
 			sayTextPeer.setText(getVeryShortName() + ": " + text);
 			sayTextPeer.setX((int) x);
 			sayTextPeer.setY((int) y);
-			sayTextPeer.setDuration(20 + text.length());	
+			sayTextPeer.setDuration(20 + text.length());
 			return true;
 		} else {
 			return false;
-		}	
+		}
 	}
 
 	public void updateSayText() {
@@ -1607,7 +1608,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 	public boolean isSGPaintEnabled() {
 		return sgPaintEnabled;
 	}
-	
+
 	public int getRobotState() {
 		return isDead ? ROBOT_STATE_DEAD : (oldRobotState == robotState) ? ROBOT_STATE_ALIVE : oldRobotState;
 	}

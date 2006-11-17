@@ -227,7 +227,6 @@ public class GPBattleManager extends BattleManager {
 
             if (task != null && task.done) task = null;
             Utils.log("Looking for task");
-            GPBattleTask task = null;
             try {
                 task = (GPBattleTask) space.take(taskTemplate, null, 3000);
                 Utils.log((task == null) ? "null" : task.shortString());

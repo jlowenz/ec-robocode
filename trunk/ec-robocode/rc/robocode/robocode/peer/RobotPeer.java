@@ -372,7 +372,8 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		}
 		if (hitWall) {
 			robotState = ROBOT_STATE_HIT_WALL;
-		}
+            statistics.scoreWallHit();
+        }
 	}
 
 	public final void death() {
@@ -992,7 +993,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		x += dx;
 		y += dy;
 
-        statistics.addDistanceTravelled(Math.sqrt(dx*dx + dy*dy));
+        statistics.scoreDistanceTravelled(Math.sqrt(dx*dx + dy*dy));
 
         boolean updateBounds = false;
 

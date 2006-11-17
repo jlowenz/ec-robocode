@@ -1,10 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2001-2006 Mathew A. Nelson and Robocode contributors
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Common Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.robocode.net/license/CPLv1.0.html
- * 
+ *
  * Contributors:
  *     Mathew A. Nelson
  *     - Initial API and implementation
@@ -51,11 +51,11 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 	private double rammingDamageReceived;
 	private double totalRammingDamageReceived;
 
-    private double distanceTravelled; // TODO ron
-    private int numScanEvents; // TODO ron
-    private int numBulletsFired; // TODO: jason
-    private int numBulletHits; // TODO: jason
-    private int numWallsHit; // TODO
+    private double distanceTravelled;
+    private int numScanEvents;
+    private int numBulletsFired;
+    private int numBulletHits;
+    private int numWallsHit;
 
     private int totalFirsts;
 	private int totalSeconds;
@@ -114,7 +114,7 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 		return robotDamage;
 	}
 
-    public void addDistanceTravelled(double distance) {
+    public void scoreDistanceTravelled(double distance) {
         distanceTravelled += distance;
     }
 
@@ -122,7 +122,7 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
         return distanceTravelled;
     }
 
-    public void addScanEvent() {
+    public void scoreScanEvent() {
         ++numScanEvents;
     }
 
@@ -130,7 +130,7 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
         return numScanEvents;
     }
 
-    public void addWallHit() {
+    public void scoreWallHit() {
         ++numWallsHit;
     }
 

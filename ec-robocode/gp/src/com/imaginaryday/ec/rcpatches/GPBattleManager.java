@@ -71,7 +71,6 @@ public class GPBattleManager extends BattleManager {
     private RobocodeManager manager;
     private int stepTurn;
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    private String id;
 
     /**
      * Steps for a single turn, then goes back to paused
@@ -172,13 +171,22 @@ public class GPBattleManager extends BattleManager {
         boolean done = false;
         Entry taskTemplate = new GPBattleTask();
         Entry pillTemplate = new PoisonPill(id);
+        Utils.log((id != null)? id : "null, bitch");
         while (!done) {
             try {
                 PoisonPill pill = null;
                 pill = (PoisonPill)space.takeIfExists(pillTemplate, null, 0);
                 if (pill != null) {
-                    Utils.log("Pill received");
-                    return;
+                    Utils.log("Pill received " + pill.toString());
+                    if (pill.id.equals(id)) {
+                        Utils.log("Pill matches");
+                        return;
+                    } else {
+                        Utils.log("Pill doesn't match");
+                        space.write(pill, null, 120000);
+                    }
+                    done = true;
+                    continue;
                 }
             } catch (UnusableEntryException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

@@ -9,6 +9,10 @@ import net.jini.core.entry.Entry;
 public class PoisonPill implements Entry {
     public String id;
 
+    public PoisonPill() {
+        
+    }
+
     public PoisonPill(String id) {
         this.id = id;
     }

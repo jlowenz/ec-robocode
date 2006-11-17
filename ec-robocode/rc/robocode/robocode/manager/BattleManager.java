@@ -61,6 +61,7 @@ public class BattleManager {
     private String resultsFile;
     private RobocodeManager manager;
     private int stepTurn;
+    protected String id;
 
     /**
      * Steps for a single turn, then goes back to paused
@@ -98,6 +99,9 @@ public class BattleManager {
         }
     }
 
+    public void setID(String id) {
+        this.id = id;        
+    }
     public void restart() {
         stop(false);
         startNewBattle(battleProperties, false);

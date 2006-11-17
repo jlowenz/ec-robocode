@@ -117,11 +117,15 @@ public class GPRobocodeMain {
             boolean minimize = false;
             String battleFilename = null;
             String resultsFilename = null;
+            String id = null;
             int tps = 100000;
 
             for (int i = 0; i < args.length; i++) {
                 if (args[i].equals("-cwd") && (i < args.length + 1)) {
                     Constants.setWorkingDirectory(new File(args[i + 1]));
+                    i++;
+                } else if (args[i].equals("-id") && (i < args.length + 1)) {
+                    id = args[i + 1];
                     i++;
                 } else if (args[i].equals("-battle") && (i < args.length + 1)) {
                     battleFilename = args[i + 1];
@@ -148,6 +152,10 @@ public class GPRobocodeMain {
                     System.exit(8);
                 }
             }
+            if (id == null) {
+                id = new StringBuilder().append(System.currentTimeMillis()).toString();
+            }
+            System.out.println(new StringBuilder().append("ID = ").append(id).toString());
             File robots = new File(Constants.cwd(), "robots");
             /*
             if (!robots.exists() || !robots.isDirectory()) {
@@ -162,9 +170,10 @@ public class GPRobocodeMain {
                 }
                 manager.getBattleManager().setBattleFilename(battleFilename);
                 manager.getBattleManager().loadBattleProperties();
+                manager.getBattleManager().setID(id);
                 manager.getBattleManager().startNewBattle(manager.getBattleManager().getBattleProperties(), false);
                 manager.getBattleManager().getBattle().setDesiredTPS(tps);
-            }           
+            }
 
             if (!minimize && battleFilename == null) {
                 manager.getWindowManager().showSplashScreen();

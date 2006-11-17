@@ -25,6 +25,7 @@ package com.imaginaryday.ec.rcpatches;
 
 
 import com.imaginaryday.util.SpaceFinder;
+import com.imaginaryday.util.PoisonPill;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.transaction.TransactionException;
@@ -70,7 +71,7 @@ public class GPBattleManager extends BattleManager {
     private RobocodeManager manager;
     private int stepTurn;
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    private Map<String, RobotClassManager> standardBots;
+    private String id;
 
     /**
      * Steps for a single turn, then goes back to paused
@@ -170,8 +171,27 @@ public class GPBattleManager extends BattleManager {
 
         boolean done = false;
         Entry taskTemplate = new GPBattleTask();
+        Entry pillTemplate = new PoisonPill(id);
         while (!done) {
-            Utils.log("Looking for task");            
+            try {
+                PoisonPill pill = null;
+                pill = (PoisonPill)space.takeIfExists(pillTemplate, null, 0);
+                if (pill != null && id != null && id.equals(pill.id)) {
+                    Utils.log("Received shutdown request");
+                    done = true;
+                    continue;
+                }
+            } catch (UnusableEntryException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (TransactionException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (InterruptedException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (RemoteException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+            Utils.log("Looking for task");
             GPBattleTask task = null;
             try {
                 task = (GPBattleTask) space.take(taskTemplate, null, 3000);

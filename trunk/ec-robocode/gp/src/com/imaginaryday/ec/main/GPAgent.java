@@ -9,6 +9,7 @@ import info.javelot.functionalj.tuple.Pair;
 import org.jscience.mathematics.numbers.Float64;
 import org.jscience.mathematics.vectors.VectorFloat64;
 import robocode.*;
+import robocode.exception.DeathException;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
@@ -281,7 +282,9 @@ public class GPAgent extends AdvancedRobot {
                 setMaxVelocity(scale * 8.0);
                 setAhead(movementVector.normValue());
 
-                execute();
+                try {
+                    execute();
+                } catch (DeathException e) { alive = false; }
 
                 if (bulletHitAge > 100) resetBulletHit();
                 if (wallHitAge > 100) resetWallHit();
@@ -294,7 +297,9 @@ public class GPAgent extends AdvancedRobot {
                 e.printStackTrace();
                 log.severe("EXCEPTION in GPAgent: " + e.toString());
             } finally {
-                execute();
+                try {
+                    execute();
+                } catch (Exception e) { alive = false; }
             }
         }
     }

@@ -176,10 +176,9 @@ public class GPBattleManager extends BattleManager {
             try {
                 PoisonPill pill = null;
                 pill = (PoisonPill)space.takeIfExists(pillTemplate, null, 0);
-                if (pill != null && id != null && id.equals(pill.id)) {
-                    Utils.log("Received shutdown request");
-                    done = true;
-                    continue;
+                if (pill != null) {
+                    Utils.log("Pill received");
+                    return;
                 }
             } catch (UnusableEntryException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

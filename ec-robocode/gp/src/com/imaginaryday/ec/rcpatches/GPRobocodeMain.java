@@ -172,9 +172,9 @@ public class GPRobocodeMain {
                 manager.getBattleManager().loadBattleProperties();
                 manager.getBattleManager().setID(id);
                 manager.getBattleManager().startNewBattle(manager.getBattleManager().getBattleProperties(), false);
-                manager.getBattleManager().getBattle().setDesiredTPS(tps);
+                //manager.getBattleManager().getBattle().setDesiredTPS(tps);
             }
-
+            /*
             if (!minimize && battleFilename == null) {
                 manager.getWindowManager().showSplashScreen();
             }
@@ -191,7 +191,7 @@ public class GPRobocodeMain {
                 manager.saveProperties();
                 manager.runIntroBattle();
             }
-
+            */
             return true;
         } catch (Throwable e) {
             Utils.log(e);

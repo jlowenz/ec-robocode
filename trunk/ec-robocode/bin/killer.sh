@@ -24,4 +24,5 @@ while [ $i -lt $2 ]; do
 	    -server \
 	    -Dorg.jini.rio.groups="GPRobocode"  \
 	    -cp "${CLASSPATH}" com.imaginaryday.ec.main.Killer $1$i &
+	i=$(($i + 1))
 done

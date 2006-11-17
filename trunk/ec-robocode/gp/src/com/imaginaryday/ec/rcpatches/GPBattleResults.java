@@ -150,8 +150,8 @@ public class GPBattleResults implements Entry {
       StringBuilder sb = new StringBuilder();
         sb.append(generation).append(',').append(robot1).append(',').append(robot2);
         sb.append(',').append(fitness1).append(',').append(fitness2);
-        sb.append(',').append(rank1).append(',').append(rank2);
         sb.append(',').append(score1).append(',').append(score2);
+        sb.append(',').append(rank1).append(',').append(rank2);
         sb.append(',').append(survival1).append(',').append(survival2);
         sb.append(',').append(lastSurvivorBonus1).append(',').append(lastSurvivorBonus2);
         sb.append(',').append(bulletDamage1).append(',').append(bulletDamage2);

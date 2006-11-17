@@ -71,6 +71,7 @@ public class GPBattleManager extends BattleManager {
     private RobocodeManager manager;
     private int stepTurn;
     private Logger logger = Logger.getLogger(this.getClass().getName());
+    private GPBattleTask task;
 
     /**
      * Steps for a single turn, then goes back to paused
@@ -168,6 +169,32 @@ public class GPBattleManager extends BattleManager {
         ResultForwarder rl = new ResultForwarder(space);
         manager.setListener(rl);
 
+
+        final JavaSpace space1 = space;
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            private GPBattleManager bm = GPBattleManager.this;
+            private JavaSpace s = space1;
+            public void run() {
+                System.err.println("shutdown hook running!");
+                Utils.log("Writing unfinished task back to space!");
+                GPBattleTask t = bm.getTask();
+                if (t != null && !t.done) {
+                    try {
+                        space1.write(t, null, 1000);
+                        Utils.log("Done");
+                    } catch (TransactionException e) {
+                        Utils.log("%%%%%%%%%%%%%%%%%%%%%% failed to replace TASK");
+                        e.printStackTrace();
+                    } catch (RemoteException e) {
+                        Utils.log("%%%%%%%%%%%%%%%%%%%%%% failed to replace TASK");
+                        e.printStackTrace();
+                    }
+                } else {
+                    Utils.log("No unfinished task!");
+                }
+            }
+        });
+
         boolean done = false;
         Entry taskTemplate = new GPBattleTask();
         Entry pillTemplate = new PoisonPill(id);
@@ -198,19 +225,20 @@ public class GPBattleManager extends BattleManager {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
+            if (task != null && task.done) task = null;
             Utils.log("Looking for task");
             GPBattleTask task = null;
             try {
                 task = (GPBattleTask) space.take(taskTemplate, null, 3000);
                 Utils.log((task == null) ? "null" : task.shortString());
             } catch (UnusableEntryException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             } catch (TransactionException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             } catch (InterruptedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             } catch (RemoteException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
 
             if (task == null) continue;
@@ -246,12 +274,15 @@ public class GPBattleManager extends BattleManager {
                 battlingRobotsVector.add(ralph);
                 battlingRobotsVector.add(alice);
                 startNewBattle(battlingRobotsVector, false, null);
-
-
+                task.done = true;
             }
         }
 
 
+    }
+
+    private GPBattleTask getTask() {
+        return task;
     }
 
     class ResultForwarder implements RobocodeListener {

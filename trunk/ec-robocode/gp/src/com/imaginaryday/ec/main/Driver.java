@@ -83,16 +83,16 @@ public class Driver implements Runnable {
 
     private Date endDate;
 
-    private int numGenerations = 100;
+    private int numGenerations = 1000;
     private int generationCount = 0; // ??
     private int treeDepth = 8;
     private final int alpha = 0;
     private final int beta = 2;
     private double elitismPercentage = 0.1;
-    private double crossoverProbability = .6;
-    private double mutationProbability = .1;
+    private double crossoverProbability = 0.6;
+    private double mutationProbability = 0.1;
     private int testFreq = 5;
-    private int populationSize = 40; // KEEP THIS EVEN! yeah, it's a hack, deal with it :-/
+    private int populationSize = 50; // KEEP THIS EVEN! yeah, it's a hack, deal with it :-/
     private boolean readPopulation = false;
     private String popFile = "";
     private String progLogFile = "progressLog";

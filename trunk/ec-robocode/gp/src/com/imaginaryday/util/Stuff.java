@@ -1,5 +1,8 @@
 package com.imaginaryday.util;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /**
  * <b>
  * User: jlowens<br>
@@ -31,4 +34,13 @@ public class Stuff {
         double d = Math.abs(val);
         return d == 0.0 || (d > MIN_REASONABLE && d < MAX_REASONABLE);
     }
+
+    public static <T> List<T> slice(int i, T[] args) {
+        List<T> l = new ArrayList<T>();
+        for (int j = i; j < args.length; j++) {
+            l.add(args[j]);
+        }
+        return l;
+    }
+
 }

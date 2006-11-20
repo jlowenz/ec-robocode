@@ -17,12 +17,8 @@ done
 export CLASSPATH="${CLASSPATH}:${GP_HOME}/rc/classes/"
 echo $CLASSPATH
 
-i=0
-while [ $i -lt $2 ]; do
-    java -Djava.security.policy=/home/rbowers/.java.policy \
-	    -DGP_HOME="${GP_HOME}"  \
-	    -server \
-	    -Dorg.jini.rio.groups="GPRobocode"  \
-	    -cp "${CLASSPATH}" com.imaginaryday.ec.main.Killer $1$i &
-	i=$(($i + 1))
-done
+java -Djava.security.policy=/home/rbowers/.java.policy \
+     -DGP_HOME="${GP_HOME}"  \
+	 -server \
+	 -Dorg.jini.rio.groups="GPRobocode"  \
+	 -cp "${CLASSPATH}" com.imaginaryday.ec.main.Killer $* &

@@ -66,7 +66,7 @@ public class GPRobocodeMain {
             manager = new GPRobocodeManager(false, null);
 
             // Set native look and feel
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
             if (System.getProperty("WORKINGDIRECTORY") != null) {
                 Constants.setWorkingDirectory(new File(System.getProperty("WORKINGDIRECTORY")));

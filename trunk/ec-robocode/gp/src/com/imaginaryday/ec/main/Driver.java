@@ -13,7 +13,6 @@ import info.javelot.functionalj.Function1Impl;
 import info.javelot.functionalj.FunctionException;
 import info.javelot.functionalj.tuple.Pair;
 import net.jini.core.entry.Entry;
-import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 import org.jscience.mathematics.vectors.VectorFloat64;
@@ -527,7 +526,7 @@ public class Driver implements Runnable {
 
 // submit
                 try {
-                    logger.info("Submitting: " + task.toString());
+                    logger.info("Submitting: " + task.shortString());
                     space.write(task, null, Long.MAX_VALUE);
                     battle ++;
                 } catch (TransactionException e) {

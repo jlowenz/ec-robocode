@@ -24,8 +24,8 @@
 package com.imaginaryday.ec.rcpatches;
 
 
-import com.imaginaryday.util.SpaceFinder;
 import com.imaginaryday.util.PoisonPill;
+import com.imaginaryday.util.SpaceFinder;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.transaction.TransactionException;
@@ -61,6 +61,7 @@ import java.util.logging.Logger;
  * @author Flemming N. Larsen (current)
  */
 public class GPBattleManager extends BattleManager {
+
     private BattleProperties battleProperties = new BattleProperties();
     private String battleFilename;
     private String battlePath;
@@ -155,25 +156,15 @@ public class GPBattleManager extends BattleManager {
         Map<String, RobotClassManager> standardBots = loadStandardBots();
 
         JavaSpace space = null;
-        try {
-            space = new SpaceFinder().getSpace();
-        } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-        if (space == null) {
-            System.err.println("Frak");
-            return;
-        }
 
         ResultForwarder rl = new ResultForwarder(space);
         manager.setListener(rl);
-
 
         final JavaSpace space1 = space;
         Runtime.getRuntime().addShutdownHook(new Thread() {
             private GPBattleManager bm = GPBattleManager.this;
             private JavaSpace s = space1;
+
             public void run() {
                 System.err.println("shutdown hook running!");
                 Utils.log("Writing unfinished task back to space!");
@@ -198,19 +189,34 @@ public class GPBattleManager extends BattleManager {
         boolean done = false;
         Entry taskTemplate = new GPBattleTask();
         Entry pillTemplate = new PoisonPill(id);
-        Utils.log((id != null)? id : "null, bitch");
+        Utils.log((id != null) ? id : "null, bitch");
         while (!done) {
+
+            while (space == null) {
+                try {
+                    space = new SpaceFinder().getSpace();
+                } catch (Exception e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+
+                if (space == null) {
+                    System.err.println("No space, will look again");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
             try {
-                PoisonPill pill = null;
-                pill = (PoisonPill)space.takeIfExists(pillTemplate, null, 0);
+                PoisonPill pill;
+                pill = (PoisonPill) space.takeIfExists(pillTemplate, null, 0);
                 if (pill != null) {
                     Utils.log("Pill received " + pill.toString());
                     if (pill.id.equals(id)) {
                         Utils.log("Pill matches");
                         return;
-                    } else {
-                        Utils.log("Pill doesn't match");
-                        space.write(pill, null, 120000);
                     }
                     done = true;
                     continue;
@@ -222,10 +228,11 @@ public class GPBattleManager extends BattleManager {
             } catch (InterruptedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             } catch (RemoteException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                space = null;
+                System.err.println("Lost connection to space");
+                continue;
             }
 
-            if (task != null && task.done) task = null;
             Utils.log("Looking for task");
             try {
                 task = (GPBattleTask) space.take(taskTemplate, null, 3000);
@@ -237,7 +244,8 @@ public class GPBattleManager extends BattleManager {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (RemoteException e) {
-                e.printStackTrace();
+                space = null;
+                continue;
             }
 
             if (task == null) continue;
@@ -277,7 +285,6 @@ public class GPBattleManager extends BattleManager {
             }
         }
 
-
     }
 
     private GPBattleTask getTask() {
@@ -307,7 +314,7 @@ public class GPBattleManager extends BattleManager {
                 } catch (TransactionException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 } catch (RemoteException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();                    
                 }
             } else {
                 Utils.log("Bad results array");
@@ -340,7 +347,6 @@ public class GPBattleManager extends BattleManager {
         BattleField battleField = new DefaultBattleField(battleProperties.getBattlefieldWidth(),
                 battleProperties.getBattlefieldHeight());
 
-
         battle = new Battle(battleField, manager);
         battle.setExitOnComplete(exitOnComplete);
 
@@ -366,7 +372,6 @@ public class GPBattleManager extends BattleManager {
         for (int i = 0; i < battlingRobotsVector.size(); i++) {
             battle.addRobot((RobotClassManager) battlingRobotsVector.elementAt(i));
         }
-
 
         battleThread.setUncaughtExceptionHandler(new ExceptionHandler());
         battleThread.start();

@@ -26,7 +26,13 @@ public class GPFitnessCalc {
         double distRatio = (r1 > 0.0) ? (r1 / (r1+r2)) : 0;
 
         double accScaling = Math.pow(10.0, 0.002*numGenerations);
-        double accuracy = opponent.getNumBulletHits() / robot.getNumBulletsFired();
+
+        double accuracy;
+        if (robot.getNumBulletsFired() > 0) {
+            accuracy = opponent.getNumBulletHits() / robot.getNumBulletsFired();
+        } else {
+            accuracy = 0;
+        }
 
         return (numBulletsDodgedFactor * numBulletsDodged) +
                (numBulletsFiredFactor * robot.getNumBulletsFired()) +

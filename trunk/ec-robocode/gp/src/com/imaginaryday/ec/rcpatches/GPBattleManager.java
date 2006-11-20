@@ -74,6 +74,12 @@ public class GPBattleManager extends BattleManager {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private GPBattleTask task;
 
+    public JavaSpace getSpace() {
+        return space;
+    }
+
+    private JavaSpace space;
+
     /**
      * Steps for a single turn, then goes back to paused
      */
@@ -155,9 +161,9 @@ public class GPBattleManager extends BattleManager {
 
         Map<String, RobotClassManager> standardBots = loadStandardBots();
 
-        JavaSpace space = null;
+        space = null;
 
-        ResultForwarder rl = new ResultForwarder(space);
+        ResultForwarder rl = new ResultForwarder();
         manager.setListener(rl);
 
         final JavaSpace space1 = space;
@@ -171,8 +177,11 @@ public class GPBattleManager extends BattleManager {
                 GPBattleTask t = bm.getTask();
                 if (t != null && !t.done) {
                     try {
-                        space1.write(t, null, 1000);
-                        Utils.log("Done");
+                        JavaSpace space1 = getSpace();
+                        if (space1 != null) {
+                            space1.write(t, null, 1000);
+                            Utils.log("Done");
+                        }
                     } catch (TransactionException e) {
                         Utils.log("%%%%%%%%%%%%%%%%%%%%%% failed to replace TASK");
                         e.printStackTrace();
@@ -196,7 +205,7 @@ public class GPBattleManager extends BattleManager {
                 try {
                     space = new SpaceFinder().getSpace();
                 } catch (Exception e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
 
                 if (space == null) {
@@ -245,6 +254,7 @@ public class GPBattleManager extends BattleManager {
                 e.printStackTrace();
             } catch (RemoteException e) {
                 space = null;
+                System.err.println("Lost connection to space");
                 continue;
             }
 
@@ -294,13 +304,12 @@ public class GPBattleManager extends BattleManager {
     class ResultForwarder implements RobocodeListener {
 
         private GPBattleTask battleTask;
-        private JavaSpace space;
 
-        ResultForwarder(JavaSpace space) {
-            this.space = space;
+        ResultForwarder() {
         }
 
         public void battleComplete(BattleSpecification battle, RobotResults[] results) {
+
             if (results != null && results.length == 2) {
                 GPBattleResults res = new GPBattleResults(battleTask,
                         GPFitnessCalc.getFitness(battleTask.generation, results[0], results[1]),
@@ -309,11 +318,16 @@ public class GPBattleManager extends BattleManager {
 
                 Utils.log(res.toString());
                 try {
-                    space.write(res, null, Long.MAX_VALUE);
-                } catch (TransactionException e) {
+                    JavaSpace space = getSpace();
+                    if (space != null) {
+                        space.write(res, null, Long.MAX_VALUE);
+                    } else {
+                        System.err.println("Null space!");
+                    }
+                    } catch (TransactionException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 } catch (RemoteException e) {
-                    e.printStackTrace();                    
+                    e.printStackTrace();
                 }
             } else {
                 Utils.log("Bad results array");

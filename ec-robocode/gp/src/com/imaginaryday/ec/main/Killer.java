@@ -4,8 +4,11 @@ import net.jini.space.JavaSpace;
 import net.jini.core.entry.Entry;
 import com.imaginaryday.util.SpaceFinder;
 import com.imaginaryday.util.PoisonPill;
+import com.imaginaryday.util.Stuff;
 
 import java.rmi.RMISecurityManager;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Ronald A. Bowers
@@ -13,31 +16,30 @@ import java.rmi.RMISecurityManager;
  */
 public class Killer {
 
-
     public static void main(String[] args) {
         System.setSecurityManager(new RMISecurityManager());
-        String id = null;
-        if (args.length != 1) {
-            System.out.println("Usage: com.imaginaryday.ec.main.killer worker_id");
+        if (args.length < 1) {
+            System.out.println("Usage: com.imaginaryday.ec.main.killer <num_procs> machine0..n");
             System.exit(1);
-        } else {
-            id = args[0];
         }
-        Killer killer = new Killer(id);
-
+        Killer killer = new Killer(Integer.parseInt(args[0]), Stuff.slice(1,args));
     }
 
-    private Killer(String id) {
-        try {
-            JavaSpace space = new SpaceFinder().getSpace();
-            Entry pill = new PoisonPill(id);
-            space.write(pill, null, 120000);
-            System.out.println(new StringBuilder().append("Submitted task to kill ")
-                    .append(id).toString());
-        } catch (Exception e) {
-            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+    private Killer(int n, List<String> machines) {
+        for (String m : machines) {
+            try {
+                for (int i = 0; i < n; i++) {
+                    String id = m + System.getProperty("user.name") + i;
+                    JavaSpace space = new SpaceFinder().getSpace();
+                    Entry pill = new PoisonPill(id);
+                    space.write(pill, null, 120000);
+                    System.out.println(new StringBuilder().append("Submitted task to kill ")
+                            .append(id).toString());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
 }

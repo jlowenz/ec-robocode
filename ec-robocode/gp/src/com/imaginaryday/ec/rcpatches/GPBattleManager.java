@@ -301,11 +301,10 @@ public class GPBattleManager extends BattleManager {
         }
 
         public void battleComplete(BattleSpecification battle, RobotResults[] results) {
-
             if (results != null && results.length == 2) {
                 GPBattleResults res = new GPBattleResults(battleTask,
-                        GPFitnessCalc.getFitness(results[0], results[1]),
-                        GPFitnessCalc.getFitness(results[1], results[0]),
+                        GPFitnessCalc.getFitness(battleTask.generation, results[0], results[1]),
+                        GPFitnessCalc.getFitness(battleTask.generation, results[1], results[0]),
                         results[0], results[1]);
 
                 Utils.log(res.toString());

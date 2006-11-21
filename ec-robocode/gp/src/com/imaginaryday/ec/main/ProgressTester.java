@@ -74,16 +74,15 @@ public class ProgressTester {
         int battle = 0;
         try {
             Transaction t = TransactionFactory.create(transactionManager, 60000).transaction;
-
             for (Member m : population) {
                 for (String s : sampleBots) {
                     GPBattleTask task = new GPBattleTask(generation, battle, m, s);
                     taskArray[battle] = task;
                     submitTask(task, t);
-                    t.commit();
                     battle++;
                 }
             }
+            t.commit();
         } catch (LeaseDeniedException e) {
             e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
         } catch (RemoteException e) {
@@ -116,12 +115,15 @@ public class ProgressTester {
                         resubmitTasks();
                         takeCount = 0;
                     }
+                    Transaction t = TransactionFactory.create(transactionManager, 30000).transaction;
                     res = (GPBattleResults) space.takeIfExists(template, null, 0);
                     if (res == null) {
                         Thread.sleep(2000);
                         takeCount++;
+                        t.abort();
                     } else {
                         takeCount = 0;
+                        t.commit();
                         if (taskArray[res.battle] != null) {
                             // not a duplicate
                             taskArray[res.battle] = null;
@@ -140,6 +142,8 @@ public class ProgressTester {
                 e.printStackTrace();
             } catch (RemoteException e) {
                 e.printStackTrace();
+            } catch (LeaseDeniedException e) {
+                e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
             }
             if (res != null) {
                 for (Member member : results.keySet()) {

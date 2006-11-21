@@ -162,9 +162,9 @@ public class ProgressTester {
             logger.info(task.toString());
             space.write(task, t, Lease.FOREVER);
         } catch (TransactionException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         } catch (RemoteException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
     }
 

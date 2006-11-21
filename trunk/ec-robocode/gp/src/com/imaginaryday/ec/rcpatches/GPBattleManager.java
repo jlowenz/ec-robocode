@@ -29,7 +29,8 @@ import com.imaginaryday.util.ServiceFinder;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
-import net.jini.core.transaction.TransactionException;
+import net.jini.core.lease.LeaseDeniedException;
+import net.jini.core.transaction.*;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 import robocode.battle.Battle;
@@ -76,6 +77,7 @@ public class GPBattleManager extends BattleManager {
     private GPBattleTask task;
     private JavaSpace space;
     private TransactionManager transactionManager;
+    private Transaction battleTransaction = null;
 
     public TransactionManager getTransactionManager() {
         return transactionManager;
@@ -223,7 +225,6 @@ public class GPBattleManager extends BattleManager {
                 }
             }
 
-
             while (space == null) {
                 try {
                     space = new ServiceFinder().getSpace();
@@ -243,12 +244,17 @@ public class GPBattleManager extends BattleManager {
 
             try {
                 PoisonPill pill;
-                pill = (PoisonPill) space.takeIfExists(pillTemplate, null, 0);
+                Transaction t = TransactionFactory.create(transactionManager, 60000).transaction;
+
+                pill = (PoisonPill) space.takeIfExists(pillTemplate, t, 0);
                 if (pill != null) {
                     Utils.log("Pill received " + pill.toString());
                     if (pill.id.equals(id)) {
                         Utils.log("Pill matches");
+                        t.commit();
                         return;
+                    } else {
+                        t.abort();
                     }
                     done = true;
                     continue;
@@ -263,11 +269,23 @@ public class GPBattleManager extends BattleManager {
                 space = null;
                 System.err.println("Lost connection to space");
                 continue;
+            } catch (LeaseDeniedException e) {
+                e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+            }
+
+            try {
+                battleTransaction = TransactionFactory.create(getTransactionManager(), 60000).transaction;
+            } catch (LeaseDeniedException e) {
+                e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                continue;
+            } catch (RemoteException e) {
+                e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                continue;
             }
 
             Utils.log("Looking for task");
             try {
-                task = (GPBattleTask) space.takeIfExists(taskTemplate, null, 0);
+                task = (GPBattleTask) space.take(taskTemplate, battleTransaction, 3000);
                 Utils.log((task == null) ? "null" : task.shortString());
             } catch (UnusableEntryException e) {
                 e.printStackTrace();
@@ -350,17 +368,31 @@ public class GPBattleManager extends BattleManager {
                 try {
                     JavaSpace space = getSpace();
                     if (space != null) {
-                        space.write(res, null, Lease.FOREVER);
+                        Lease l = space.write(res, null, Lease.FOREVER);
+                        if (l.getExpiration() != Lease.FOREVER) {
+                            System.err.println("Lease returned was not FOREVER: " + l);
+                        }
                     } else {
                         System.err.println("Null space!");
+                        new RuntimeException("Null Space!!").printStackTrace();
+                        battleTransaction.abort();
                     }
-                } catch (TransactionException e) {
-                    e.printStackTrace();
+                    } catch (TransactionException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
             } else {
                 Utils.log("Bad results array");
+                try {
+                    battleTransaction.abort();
+                } catch (UnknownTransactionException e) {
+                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                } catch (CannotAbortException e) {
+                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                } catch (RemoteException e) {
+                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                }
             }
 
         }

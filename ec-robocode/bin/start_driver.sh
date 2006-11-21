@@ -1,5 +1,10 @@
 #!/bin/sh
 
+
+if [[ -e /tmp/ec_driver ]]; then
+    rm -rf /tmp/ec_driver
+fi
+
 if [[ -z ""{$GP_HOME} ]] 
 then
 	echo "Must set GP_HOME"
@@ -19,4 +24,4 @@ echo $CLASSPATH
 java -Djava.security.policy=/home/rbowers/.java.policy \
 	-DGP_HOME="${GP_HOME}"  \
 	-Dorg.jini.rio.groups="GPRobocode"  \
-	-cp "${CLASSPATH}"  com.imaginaryday.ec.main.Driver $*
+	-cp "${CLASSPATH}"  com.imaginaryday.ec.main.Driver $* 1>>/tmp/ec_driver 2>>/tmp/ec_driver

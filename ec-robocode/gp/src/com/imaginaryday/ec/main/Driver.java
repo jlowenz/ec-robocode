@@ -13,6 +13,7 @@ import info.javelot.functionalj.Function1Impl;
 import info.javelot.functionalj.FunctionException;
 import info.javelot.functionalj.tuple.Pair;
 import net.jini.core.entry.Entry;
+import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
@@ -106,14 +107,14 @@ public class Driver implements Runnable {
 
     // used to retry missing tasks on timeout
     private GPBattleTask[] taskArray;
-    private static final int MAX_TAKE_COUNT = 30;
+    private static final int MAX_TAKE_COUNT = 150;
 
     public Driver() {
         try {
             output = new FileOutputStream(generationLogFile, false);
             robots = new FileWriter(robotLogFile, false);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -186,13 +187,14 @@ public class Driver implements Runnable {
     public void run() {
         ProgressTester progressTester;
         try {
-            space = new SpaceFinder().getSpace();
+            // todo: encapsulate space to handle disconnections!
+            setSpace(new SpaceFinder().getSpace());
 
-            if (space == null) {
+            if (getSpace() == null) {
                 return;
             }
 
-            progressTester = new ProgressTester(space, progLogFile);
+            progressTester = new ProgressTester(getSpace(), progLogFile);
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe("Could not find space");
@@ -209,15 +211,15 @@ public class Driver implements Runnable {
             population = genInitialPopulation();
         }
 
-        taskArray = new GPBattleTask[populationSize];
+        int numTasks = (populationSize * (populationSize - 1))/2 + populationSize;
+        taskArray = new GPBattleTask[numTasks];
 
         /*
          * Main loop of the evolutionary algorithm.
          */
-        Date currentDate = new Date();
         long genStart;
         DecimalFormat df = new DecimalFormat("00");
-        while (/* endDate.compareTo(currentDate) > 0 && */ generationCount < numGenerations) {
+        while (generationCount < numGenerations) {
 
             resultMap = new HashMap<Member, List<GPBattleResults>>();
             for (Member m : population) {
@@ -229,6 +231,7 @@ public class Driver implements Runnable {
             */
             genStart = System.currentTimeMillis();
             int numBattles = submitBattles(population);
+            if (numBattles != numTasks) throw new RuntimeException("I'm stupid");
 
             /*
              * collect results.
@@ -297,6 +300,14 @@ public class Driver implements Runnable {
             e.printStackTrace();
         }
 
+    }
+
+    private JavaSpace getSpace() {
+        return space;
+    }
+
+    private void setSpace(JavaSpace space) {
+        this.space = space;
     }
 
     private static class Rank {
@@ -476,7 +487,7 @@ public class Driver implements Runnable {
                         resubmitTasks();
                         takeCount = 0;
                     }
-                    res = (GPBattleResults) space.takeIfExists(template, null, 0);
+                    res = (GPBattleResults) getSpace().takeIfExists(template, null, 0);
                     if (res == null) {
                         Thread.sleep(2000);
                         takeCount++;
@@ -521,7 +532,21 @@ public class Driver implements Runnable {
     private void resubmitTasks() {
         logger.warning("RESUBMITTING TASKS at " + new Date());
         for (GPBattleTask t : taskArray) {
-            if (t != null) submitBattle(t);
+            if (t != null) {
+                try {
+                    if (getSpace().readIfExists(t, null, 0) != null) {
+                        submitBattle(t);
+                    }
+                } catch (UnusableEntryException e) {
+                    e.printStackTrace();
+                } catch (TransactionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -539,7 +564,7 @@ public class Driver implements Runnable {
             output.write(sb.toString().getBytes());
             output.flush();
         } catch (IOException e) {
-            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
 
         List<Member> l = new ArrayList<Member>(resultMap.keySet());
@@ -562,9 +587,9 @@ public class Driver implements Runnable {
     private void submitBattle(GPBattleTask t) {
         try {
             logger.info("Submitting: " + t.shortString());
-            Lease l = space.write(t, null, Lease.FOREVER);
+            Lease l = getSpace().write(t, null, Lease.FOREVER);
             if (l.getExpiration() != Lease.FOREVER) {
-                logger.warning("Lease returned is not FOREVER: " + l);
+                logger.warning("Lease returned is not FOREVER: " + l.getExpiration());
             }
         } catch (TransactionException e) {
             e.printStackTrace();

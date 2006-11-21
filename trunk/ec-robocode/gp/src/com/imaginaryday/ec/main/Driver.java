@@ -15,8 +15,9 @@ import info.javelot.functionalj.tuple.Pair;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
-import net.jini.core.lease.LeaseDeniedException;
-import net.jini.core.transaction.*;
+import net.jini.core.transaction.Transaction;
+import net.jini.core.transaction.TransactionException;
+import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 import org.jscience.mathematics.vectors.VectorFloat64;
@@ -97,7 +98,7 @@ public class Driver implements Runnable {
     private double crossoverProbability = 0.6;
     private double mutationProbability = 0.1;
     private int testFreq = 5;
-    private int populationSize = 50; // KEEP THIS EVEN! yeah, it's a hack, deal with it :-/
+    private int populationSize = 20; // KEEP THIS EVEN! yeah, it's a hack, deal with it :-/
     private boolean readPopulation = false;
     private String popFile = "";
     private String progLogFile = "progressLog";
@@ -561,11 +562,10 @@ public class Driver implements Runnable {
         for (GPBattleTask t : taskArray) {
             if (t != null) {
                 try {
-                    Transaction tran = TransactionFactory.create(transactionManager, 60000).transaction;
                     if (getSpace().readIfExists(t, null, 0) != null) {
-                        submitBattle(t, tran);
+                        submitBattle(t);
                     }
-                    tran.commit();
+
                 } catch (UnusableEntryException e) {
                     e.printStackTrace();
                 } catch (TransactionException e) {
@@ -574,8 +574,6 @@ public class Driver implements Runnable {
                     e.printStackTrace();
                 } catch (RemoteException e) {
                     e.printStackTrace();
-                } catch (LeaseDeniedException e) {
-                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
                 }
             }
         }
@@ -616,10 +614,12 @@ public class Driver implements Runnable {
         }
     }
 
-    private void submitBattle(GPBattleTask t, Transaction tran) {
+    private void submitBattle(GPBattleTask t) {
         try {
             logger.info("Submitting: " + t.shortString());
+            Transaction tran = TransactionFactory.create(transactionManager, 60000).transaction;
             Lease l = getSpace().write(t, tran, Lease.FOREVER);
+            tran.commit();
             if (l.getExpiration() != Lease.FOREVER) {
                 logger.warning("Lease returned is not FOREVER: " + l.getExpiration());
             }
@@ -636,32 +636,17 @@ public class Driver implements Runnable {
 
         int battle = 0;
         Transaction t = null;
-        try {
-            t = TransactionFactory.create(transactionManager, 60000).transaction;
+        for (int i = 0; i < population.size(); ++i) {
 
-            for (int i = 0; i < population.size(); ++i) {
-
-                for (int j = i; j < population.size(); ++j) {
-                    GPBattleTask task = new GPBattleTask(generationCount, battle, population.get(i), population.get(j));
-                    taskArray[battle] = task; // record the task for replay later
-                    submitBattle(task, t);
-                    battle ++;
-                }
-
+            for (int j = i; j < population.size(); ++j) {
+                GPBattleTask task = new GPBattleTask(generationCount, battle, population.get(i), population.get(j));
+                taskArray[battle] = task; // record the task for replay later
+                submitBattle(task);
+                battle ++;
             }
-            t.commit();
-            return battle;
 
-        } catch (LeaseDeniedException e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (UnknownTransactionException e) {
-            e.printStackTrace();
-        } catch (CannotCommitException e) {
-            e.printStackTrace();
         }
-        return 0;
+        return battle;
     }
 
 

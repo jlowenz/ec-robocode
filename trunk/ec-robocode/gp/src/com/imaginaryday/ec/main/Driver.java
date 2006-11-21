@@ -7,7 +7,7 @@ import com.imaginaryday.ec.gp.TreeFactory;
 import com.imaginaryday.ec.main.nodes.*;
 import com.imaginaryday.ec.rcpatches.GPBattleResults;
 import com.imaginaryday.ec.rcpatches.GPBattleTask;
-import com.imaginaryday.util.SpaceFinder;
+import com.imaginaryday.util.ServiceFinder;
 import info.javelot.functionalj.Function1;
 import info.javelot.functionalj.Function1Impl;
 import info.javelot.functionalj.FunctionException;
@@ -15,7 +15,9 @@ import info.javelot.functionalj.tuple.Pair;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
-import net.jini.core.transaction.TransactionException;
+import net.jini.core.lease.LeaseDeniedException;
+import net.jini.core.transaction.*;
+import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 import org.jscience.mathematics.vectors.VectorFloat64;
 
@@ -104,6 +106,7 @@ public class Driver implements Runnable {
     private FileOutputStream output = null;
     private Writer robots = null;
     private Map<Member, List<GPBattleResults>> resultMap = null;
+    private TransactionManager transactionManager;
 
     // used to retry missing tasks on timeout
     private GPBattleTask[] taskArray;
@@ -118,6 +121,10 @@ public class Driver implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public TransactionManager getTransactionManager() {
+        return transactionManager;
     }
 
     public static void main(String[] args) {
@@ -186,15 +193,32 @@ public class Driver implements Runnable {
 
     public void run() {
         ProgressTester progressTester;
+
+        while (transactionManager == null) {
+            try {
+                transactionManager = new ServiceFinder().getTransactionManager();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (transactionManager == null) {
+                System.err.println("No TransactionManager, will look again");
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         try {
-            // todo: encapsulate space to handle disconnections!
-            setSpace(new SpaceFinder().getSpace());
+            space = new ServiceFinder().getSpace();
 
             if (getSpace() == null) {
                 return;
             }
 
-            progressTester = new ProgressTester(getSpace(), progLogFile);
+            progressTester = new ProgressTester(space, progLogFile, transactionManager);
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe("Could not find space");
@@ -249,11 +273,11 @@ public class Driver implements Runnable {
             /*
              * Perform selection and generate the next generation
              */
-             population = selectAndBreed(population);
+            population = selectAndBreed(population);
 
-            double delta = (double)System.currentTimeMillis() - genStart;
+            double delta = (double) System.currentTimeMillis() - genStart;
             double mins = delta * 0.001 / 60.0;
-            double secs = delta * 0.001 - (mins*60.0);
+            double secs = delta * 0.001 - (mins * 60.0);
             logger.info("Generation " + generationCount + " execution time: " + df.format(mins) + ":" + df.format(secs));
 
             ++generationCount;
@@ -335,17 +359,16 @@ public class Driver implements Runnable {
         List<Rank> rankedPopulation = rankMembers(oldPopulation);
 
         double P = populationSize; // 40
-        int count = (int)(P-Math.ceil(P*elitismPercentage)); // 40 - 4.0 = 36
+        int count = (int) (P - Math.ceil(P * elitismPercentage)); // 40 - 4.0 = 36
         // sample members
         List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, count); // 36
         for (Member m : newPopulation) {
-            m.setGeneration(m.getGeneration()+1);
+            m.setGeneration(m.getGeneration() + 1);
         }
         // crossover/recombine
         newPopulation = crossover(newPopulation);
         // mutation
         newPopulation = mutate(newPopulation);
-
 
         // elitism (top elitismPercentage)
         for (int i = count; i < populationSize; i++) {
@@ -487,13 +510,15 @@ public class Driver implements Runnable {
                         resubmitTasks();
                         takeCount = 0;
                     }
+                    Transaction tran = TransactionFactory.create(transactionManager, 60000).transaction;
                     res = (GPBattleResults) getSpace().takeIfExists(template, null, 0);
                     if (res == null) {
+                        tran.abort();
                         Thread.sleep(2000);
                         takeCount++;
-                    }
-                    else {
+                    } else {
                         takeCount = 0;
+                        tran.commit();
                         // got a result - check to make sure it's not a duplicate
                         if (taskArray[res.battle] != null) {
                             // NOT a duplicate
@@ -534,9 +559,11 @@ public class Driver implements Runnable {
         for (GPBattleTask t : taskArray) {
             if (t != null) {
                 try {
+                    Transaction tran = TransactionFactory.create(transactionManager, 60000).transaction;
                     if (getSpace().readIfExists(t, null, 0) != null) {
-                        submitBattle(t);
+                        submitBattle(t, tran);
                     }
+                    tran.commit();
                 } catch (UnusableEntryException e) {
                     e.printStackTrace();
                 } catch (TransactionException e) {
@@ -545,9 +572,12 @@ public class Driver implements Runnable {
                     e.printStackTrace();
                 } catch (RemoteException e) {
                     e.printStackTrace();
+                } catch (LeaseDeniedException e) {
+                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
                 }
             }
         }
+
     }
 
     private void printResults() {
@@ -584,7 +614,7 @@ public class Driver implements Runnable {
         }
     }
 
-    private void submitBattle(GPBattleTask t) {
+    private void submitBattle(GPBattleTask t, Transaction tran) {
         try {
             logger.info("Submitting: " + t.shortString());
             Lease l = getSpace().write(t, null, Lease.FOREVER);
@@ -603,17 +633,33 @@ public class Driver implements Runnable {
     public int submitBattles(List<Member> population) {
 
         int battle = 0;
-        for (int i = 0; i < population.size(); ++i) {
+        Transaction t = null;
+        try {
+            t = TransactionFactory.create(transactionManager, 60000).transaction;
 
-            for (int j = i; j < population.size(); ++j) {
-                GPBattleTask task = new GPBattleTask(generationCount, battle, population.get(i), population.get(j));
-                taskArray[battle] = task; // record the task for replay later
-                submitBattle(task);
-                battle ++;
+            for (int i = 0; i < population.size(); ++i) {
+
+                for (int j = i; j < population.size(); ++j) {
+                    GPBattleTask task = new GPBattleTask(generationCount, battle, population.get(i), population.get(j));
+                    taskArray[battle] = task; // record the task for replay later
+                    submitBattle(task, t);
+                    battle ++;
+                }
+
             }
+            t.commit();
+            return battle;
 
+        } catch (LeaseDeniedException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (UnknownTransactionException e) {
+            e.printStackTrace();
+        } catch (CannotCommitException e) {
+            e.printStackTrace();
         }
-        return battle;
+        return 0;
     }
 
 

@@ -268,7 +268,7 @@ public class Driver implements Runnable {
             /*
              * Periodically measure against the canned bots
              */
-            if (generationCount != 0 && (generationCount % testFreq == 0)) {
+            if ( /*generationCount != 0 && */ (generationCount % testFreq == 0)) {
                 progressTester.testProgress(population, generationCount);
             }
             persistPopulation(generationCount, population);
@@ -619,7 +619,7 @@ public class Driver implements Runnable {
     private void submitBattle(GPBattleTask t, Transaction tran) {
         try {
             logger.info("Submitting: " + t.shortString());
-            Lease l = getSpace().write(t, null, Lease.FOREVER);
+            Lease l = getSpace().write(t, tran, Lease.FOREVER);
             if (l.getExpiration() != Lease.FOREVER) {
                 logger.warning("Lease returned is not FOREVER: " + l.getExpiration());
             }

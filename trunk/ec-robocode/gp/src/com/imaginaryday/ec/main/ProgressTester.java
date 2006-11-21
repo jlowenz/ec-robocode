@@ -5,7 +5,9 @@ import com.imaginaryday.ec.rcpatches.GPBattleTask;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
-import net.jini.core.transaction.TransactionException;
+import net.jini.core.lease.LeaseDeniedException;
+import net.jini.core.transaction.*;
+import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 
 import java.io.FileNotFoundException;
@@ -28,15 +30,17 @@ import java.util.logging.Logger;
 public class ProgressTester {
 
     private JavaSpace space;
+    private final TransactionManager transactionManager;
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private FileOutputStream output;
     private static final int MAX_TAKE_COUNT = 60;
     private GPBattleTask[] taskArray;
 
 
-    public ProgressTester(JavaSpace space, String filename) {
+    public ProgressTester(JavaSpace space, String filename, TransactionManager transactionManager) {
 
         this.space = space;
+        this.transactionManager = transactionManager;
         try {
             output = new FileOutputStream(filename, false);
         } catch (FileNotFoundException e) {
@@ -67,16 +71,29 @@ public class ProgressTester {
 
         int numBattles = sampleBots.length * population.size();
         taskArray = new GPBattleTask[numBattles];
-
         int battle = 0;
-        for (Member m : population) {
-            for (String s : sampleBots) {
-                GPBattleTask task = new GPBattleTask(generation, battle, m, s);
-                taskArray[battle] = task;
-                submitTask(task);
-                battle++;
+        try {
+            Transaction t = TransactionFactory.create(transactionManager, 60000).transaction;
+
+            for (Member m : population) {
+                for (String s : sampleBots) {
+                    GPBattleTask task = new GPBattleTask(generation, battle, m, s);
+                    taskArray[battle] = task;
+                    submitTask(task, t);
+                    t.commit();
+                    battle++;
+                }
             }
+        } catch (LeaseDeniedException e) {
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+        } catch (RemoteException e) {
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+        } catch (UnknownTransactionException e) {
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+        } catch (CannotCommitException e) {
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
         }
+
         return battle;
     }
 
@@ -140,11 +157,10 @@ public class ProgressTester {
         return results;
     }
 
-    private void submitTask(GPBattleTask task)
-    {
+    private void submitTask(GPBattleTask task, Transaction t) {
         try {
             logger.info(task.toString());
-            space.write(task, null, Lease.FOREVER);
+            space.write(task, t, Lease.FOREVER);
         } catch (TransactionException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (RemoteException e) {
@@ -155,19 +171,30 @@ public class ProgressTester {
     private void resubmitTasks() {
         for (GPBattleTask t : taskArray) {
             if (t != null) {
+                Transaction tran = null;
                 try {
-                    if (space.readIfExists(t, null, 0) == null) {
-                        submitTask(t);
+                    tran = TransactionFactory.create(transactionManager, 60000).transaction;
+
+                    try {
+                        if (space.readIfExists(t, null, 0) == null) {
+                            submitTask(t, tran);
+                            tran.commit();
+                        }
+                    } catch (UnusableEntryException e) {
+                        e.printStackTrace();
+                    } catch (TransactionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
                     }
-                } catch (UnusableEntryException e) {
-                    e.printStackTrace();
-                } catch (TransactionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (LeaseDeniedException e) {
+                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
                 }
+
             }
         }
     }

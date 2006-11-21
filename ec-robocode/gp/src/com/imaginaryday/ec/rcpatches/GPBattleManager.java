@@ -372,12 +372,13 @@ public class GPBattleManager extends BattleManager {
                         if (l.getExpiration() != Lease.FOREVER) {
                             System.err.println("Lease returned was not FOREVER: " + l);
                         }
+                        battleTransaction.commit();
                     } else {
                         System.err.println("Null space!");
                         new RuntimeException("Null Space!!").printStackTrace();
                         battleTransaction.abort();
                     }
-                    } catch (TransactionException e) {
+                } catch (TransactionException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 } catch (RemoteException e) {
                     e.printStackTrace();

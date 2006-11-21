@@ -196,6 +196,7 @@ public class Driver implements Runnable {
 
         while (transactionManager == null) {
             try {
+                System.err.println("Looking for TM");
                 transactionManager = new ServiceFinder().getTransactionManager();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -212,12 +213,13 @@ public class Driver implements Runnable {
         }
 
         try {
+            System.err.println("Looking for space");
             space = new ServiceFinder().getSpace();
 
             if (getSpace() == null) {
                 return;
             }
-
+            System.err.println("Looking for space");
             progressTester = new ProgressTester(space, progLogFile, transactionManager);
         } catch (Exception e) {
             e.printStackTrace();

@@ -41,9 +41,11 @@ public class ServiceFinder extends JiniClient {
         ServiceTemplate template = new ServiceTemplate(null, new Class[]{TransactionManager.class}, null);
         while (System.currentTimeMillis() - startTime < 60000) {
             for (ServiceRegistrar r : this.getRegistrars()) {
+                System.err.println("Looking for TM");
                 TransactionManager tm = null;
                 try {
                     tm = (TransactionManager) r.lookup(template);
+                    System.err.println("Found TM");
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }

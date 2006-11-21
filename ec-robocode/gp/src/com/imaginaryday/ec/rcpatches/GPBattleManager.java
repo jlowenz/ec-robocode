@@ -28,6 +28,7 @@ import com.imaginaryday.util.PoisonPill;
 import com.imaginaryday.util.SpaceFinder;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
+import net.jini.core.lease.Lease;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 import robocode.battle.Battle;
@@ -320,7 +321,10 @@ public class GPBattleManager extends BattleManager {
                 try {
                     JavaSpace space = getSpace();
                     if (space != null) {
-                        space.write(res, null, Long.MAX_VALUE);
+                        Lease l = space.write(res, null, Lease.FOREVER);
+                        if (l.getExpiration() != Lease.FOREVER) {
+                            logger.warning("Lease returned was not FOREVER: " + l);
+                        }
                     } else {
                         System.err.println("Null space!");
                     }

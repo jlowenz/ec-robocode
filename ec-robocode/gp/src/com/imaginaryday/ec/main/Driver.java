@@ -13,6 +13,7 @@ import info.javelot.functionalj.Function1Impl;
 import info.javelot.functionalj.FunctionException;
 import info.javelot.functionalj.tuple.Pair;
 import net.jini.core.entry.Entry;
+import net.jini.core.lease.Lease;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 import org.jscience.mathematics.vectors.VectorFloat64;
@@ -21,6 +22,7 @@ import java.io.*;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -101,6 +103,10 @@ public class Driver implements Runnable {
     private FileOutputStream output = null;
     private Writer robots = null;
     private Map<Member, List<GPBattleResults>> resultMap = null;
+
+    // used to retry missing tasks on timeout
+    private GPBattleTask[] taskArray;
+    private static final int MAX_TAKE_COUNT = 30;
 
     public Driver() {
         try {
@@ -202,10 +208,15 @@ public class Driver implements Runnable {
         } else {
             population = genInitialPopulation();
         }
+
+        taskArray = new GPBattleTask[populationSize];
+
         /*
          * Main loop of the evolutionary algorithm.
          */
         Date currentDate = new Date();
+        long genStart;
+        DecimalFormat df = new DecimalFormat("00");
         while (/* endDate.compareTo(currentDate) > 0 && */ generationCount < numGenerations) {
 
             resultMap = new HashMap<Member, List<GPBattleResults>>();
@@ -216,6 +227,7 @@ public class Driver implements Runnable {
             /*
             * Build coevolutionary battle set and submit
             */
+            genStart = System.currentTimeMillis();
             int numBattles = submitBattles(population);
 
             /*
@@ -235,6 +247,12 @@ public class Driver implements Runnable {
              * Perform selection and generate the next generation
              */
              population = selectAndBreed(population);
+
+            double delta = (double)System.currentTimeMillis() - genStart;
+            double mins = delta * 0.001 / 60.0;
+            double secs = delta * 0.001 - (mins*60.0);
+            logger.info("Generation " + generationCount + " execution time: " + df.format(mins) + ":" + df.format(secs));
+
             ++generationCount;
         }
 
@@ -444,17 +462,36 @@ public class Driver implements Runnable {
 
 
     public void collectResults(List<Member> population, int numBattles) {
-
+        int takeCount = 0;
         int retrieved = 0;
         Entry template = new GPBattleResults();
 
         while (retrieved < numBattles) {
-
             GPBattleResults res = null;
             try {
                 while (res == null) {
+                    if (takeCount >= MAX_TAKE_COUNT) {
+                        // the problem with this is that the tasks could still be in the space
+                        // with NO workers to work on them!
+                        resubmitTasks();
+                        takeCount = 0;
+                    }
                     res = (GPBattleResults) space.takeIfExists(template, null, 0);
-                    if (res == null) Thread.sleep(2000);
+                    if (res == null) {
+                        Thread.sleep(2000);
+                        takeCount++;
+                    }
+                    else {
+                        takeCount = 0;
+                        // got a result - check to make sure it's not a duplicate
+                        if (taskArray[res.battle] != null) {
+                            // NOT a duplicate
+                            taskArray[res.battle] = null; // record that we've received the results for this task
+                        } else {
+                            // it WAS a duplicate - null it out and look for more tasks
+                            res = null;
+                        }
+                    }
                 }
                 logger.info(res.toString());
             } catch (RemoteException e) {
@@ -478,6 +515,13 @@ public class Driver implements Runnable {
                 ++retrieved;
                 logger.info("Collected " + retrieved + " of " + numBattles + " results");
             }
+        }
+    }
+
+    private void resubmitTasks() {
+        logger.warning("RESUBMITTING TASKS at " + new Date());
+        for (GPBattleTask t : taskArray) {
+            if (t != null) submitBattle(t);
         }
     }
 
@@ -515,25 +559,32 @@ public class Driver implements Runnable {
         }
     }
 
+    private void submitBattle(GPBattleTask t) {
+        try {
+            logger.info("Submitting: " + t.shortString());
+            Lease l = space.write(t, null, Lease.FOREVER);
+            if (l.getExpiration() != Lease.FOREVER) {
+                logger.warning("Lease returned is not FOREVER: " + l);
+            }
+        } catch (TransactionException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (Throwable th) {
+            th.printStackTrace();
+        }
+    }
+
     public int submitBattles(List<Member> population) {
 
         int battle = 0;
         for (int i = 0; i < population.size(); ++i) {
 
             for (int j = i; j < population.size(); ++j) {
-
                 GPBattleTask task = new GPBattleTask(generationCount, battle, population.get(i), population.get(j));
-
-// submit
-                try {
-                    logger.info("Submitting: " + task.shortString());
-                    space.write(task, null, Long.MAX_VALUE);
-                    battle ++;
-                } catch (TransactionException e) {
-                    e.printStackTrace();
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
+                taskArray[battle] = task; // record the task for replay later
+                submitBattle(task);
+                battle ++;
             }
 
         }

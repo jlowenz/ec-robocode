@@ -194,6 +194,7 @@ public class Battle implements Runnable {
 					Utils.log("Warning:  Null pointer exception while aborting battle.");
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				Utils.log("Exception running a battle: " + e);
 			}
 

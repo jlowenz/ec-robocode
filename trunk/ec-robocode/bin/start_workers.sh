@@ -6,6 +6,6 @@ if [[ $LINCOLN -ne 1 ]]; then
     exit
 fi
 
-distribute.sh "erg pi daytona wind xon xoff" 4
-distribute.sh "p1 p2 p3" 9
-distribute.sh "wopr" 14
+bin/distribute.sh "erg pi daytona wind xon xoff baal trinity orthus shiva" 4
+bin/distribute.sh "p1 p2 p3" 9
+bin/distribute.sh "wopr" 14

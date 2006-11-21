@@ -29,9 +29,7 @@ import com.imaginaryday.util.ServiceFinder;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
-import net.jini.core.lease.LeaseDeniedException;
 import net.jini.core.transaction.TransactionException;
-import net.jini.core.transaction.Transaction;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 import robocode.battle.Battle;
@@ -57,7 +55,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
 
 
 /**
@@ -75,7 +72,7 @@ public class GPBattleManager extends BattleManager {
     private String resultsFile;
     private RobocodeManager manager;
     private int stepTurn;
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+//    private Logger logger = Logger.getLogger(this.getClass().getName());
     private GPBattleTask task;
     private JavaSpace space;
     private TransactionManager transactionManager;
@@ -178,7 +175,6 @@ public class GPBattleManager extends BattleManager {
         final JavaSpace space1 = space;
         Runtime.getRuntime().addShutdownHook(new Thread() {
             private GPBattleManager bm = GPBattleManager.this;
-            private JavaSpace s = space1;
 
             public void run() {
                 System.err.println("shutdown hook running!");
@@ -188,7 +184,7 @@ public class GPBattleManager extends BattleManager {
                     try {
                         JavaSpace space1 = getSpace();
                         if (space1 != null) {
-                            space1.write(t, null, 1000);
+                            space1.write(t, null, Lease.FOREVER);
                             Utils.log("Done");
                         }
                     } catch (TransactionException e) {
@@ -267,13 +263,11 @@ public class GPBattleManager extends BattleManager {
                 space = null;
                 System.err.println("Lost connection to space");
                 continue;
-            } catch (LeaseDeniedException e) {
-                e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
             }
 
             Utils.log("Looking for task");
             try {
-                task = (GPBattleTask) space.take(taskTemplate, null, 3000);
+                task = (GPBattleTask) space.takeIfExists(taskTemplate, null, 0);
                 Utils.log((task == null) ? "null" : task.shortString());
             } catch (UnusableEntryException e) {
                 e.printStackTrace();
@@ -287,7 +281,14 @@ public class GPBattleManager extends BattleManager {
                 continue;
             }
 
-            if (task == null) continue;
+            if (task == null) {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                continue;
+            }
 
             if (task.done != null && task.done) done = true;
             else {
@@ -349,15 +350,12 @@ public class GPBattleManager extends BattleManager {
                 try {
                     JavaSpace space = getSpace();
                     if (space != null) {
-                        Lease l = space.write(res, null, Lease.FOREVER);
-                        if (l.getExpiration() != Lease.FOREVER) {
-                            logger.warning("Lease returned was not FOREVER: " + l);
-                        }
+                        space.write(res, null, Lease.FOREVER);
                     } else {
                         System.err.println("Null space!");
                     }
-                    } catch (TransactionException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (TransactionException e) {
+                    e.printStackTrace();
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }

@@ -4,6 +4,7 @@ import com.imaginaryday.ec.rcpatches.GPBattleResults;
 import com.imaginaryday.ec.rcpatches.GPBattleTask;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
+import net.jini.core.lease.Lease;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 
@@ -29,6 +30,8 @@ public class ProgressTester {
     private JavaSpace space;
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private FileOutputStream output;
+    private static final int MAX_TAKE_COUNT = 60;
+    private GPBattleTask[] taskArray;
 
 
     public ProgressTester(JavaSpace space, String filename) {
@@ -62,29 +65,23 @@ public class ProgressTester {
         String[] sampleBots = new String[]{"Corners", "Crazy", "Fire", "MyFirstRobot",
                 "RamFire", "SittingDuck", "SpinBot", "Target", "Tracker", "TrackFire", "Walls"};
 
+        int numBattles = sampleBots.length * population.size();
+        taskArray = new GPBattleTask[numBattles];
+
         int battle = 0;
         for (Member m : population) {
             for (String s : sampleBots) {
                 GPBattleTask task = new GPBattleTask(generation, battle, m, s);
-
-                try {
-                    logger.info(task.toString());
-                    space.write(task, null, Long.MAX_VALUE);
-
-                    battle ++;
-                } catch (TransactionException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (RemoteException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-
+                taskArray[battle] = task;
+                submitTask(task);
+                battle++;
             }
         }
         return battle;
     }
 
     private Map<Member, List<GPBattleResults>> collectResults(List<Member> population, int numBattles) {
-
+        int takeCount = 0;
         int retrieved = 0;
         Entry template = new GPBattleResults();
 
@@ -95,11 +92,28 @@ public class ProgressTester {
         }
 
         while (retrieved < numBattles) {
-
             GPBattleResults res = null;
             try {
-                while (res == null)
-                    res = (GPBattleResults) space.takeIfExists(template, null, 120000);
+                while (res == null) {
+                    if (takeCount >= MAX_TAKE_COUNT) {
+                        resubmitTasks();
+                        takeCount = 0;
+                    }
+                    res = (GPBattleResults) space.takeIfExists(template, null, 0);
+                    if (res == null) {
+                        Thread.sleep(2000);
+                        takeCount++;
+                    } else {
+                        takeCount = 0;
+                        if (taskArray[res.battle] != null) {
+                            // not a duplicate
+                            taskArray[res.battle] = null;
+                        } else {
+                            // was a duplicate
+                            res = null;
+                        }
+                    }
+                }
                 logger.info(res.toString());
             } catch (UnusableEntryException e) {
                 e.printStackTrace();
@@ -124,6 +138,38 @@ public class ProgressTester {
 
         }
         return results;
+    }
+
+    private void submitTask(GPBattleTask task)
+    {
+        try {
+            logger.info(task.toString());
+            space.write(task, null, Lease.FOREVER);
+        } catch (TransactionException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (RemoteException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    private void resubmitTasks() {
+        for (GPBattleTask t : taskArray) {
+            if (t != null) {
+                try {
+                    if (space.readIfExists(t, null, 0) == null) {
+                        submitTask(t);
+                    }
+                } catch (UnusableEntryException e) {
+                    e.printStackTrace();
+                } catch (TransactionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void printResults2(Map<Member, List<GPBattleResults>> results, int generation) {

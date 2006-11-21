@@ -25,11 +25,14 @@ package com.imaginaryday.ec.rcpatches;
 
 
 import com.imaginaryday.util.PoisonPill;
-import com.imaginaryday.util.SpaceFinder;
+import com.imaginaryday.util.ServiceFinder;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
+import net.jini.core.lease.LeaseDeniedException;
 import net.jini.core.transaction.TransactionException;
+import net.jini.core.transaction.Transaction;
+import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 import robocode.battle.Battle;
 import robocode.battle.BattleProperties;
@@ -74,12 +77,17 @@ public class GPBattleManager extends BattleManager {
     private int stepTurn;
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private GPBattleTask task;
+    private JavaSpace space;
+    private TransactionManager transactionManager;
+
+    public TransactionManager getTransactionManager() {
+        return transactionManager;
+    }
 
     public JavaSpace getSpace() {
         return space;
     }
 
-    private JavaSpace space;
 
     /**
      * Steps for a single turn, then goes back to paused
@@ -202,9 +210,27 @@ public class GPBattleManager extends BattleManager {
         Utils.log((id != null) ? id : "null, bitch");
         while (!done) {
 
+            while (transactionManager == null) {
+                try {
+                    transactionManager = new ServiceFinder().getTransactionManager();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (transactionManager == null) {
+                    System.err.println("No TransactionManager, will look again");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+
             while (space == null) {
                 try {
-                    space = new SpaceFinder().getSpace();
+                    space = new ServiceFinder().getSpace();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -241,6 +267,8 @@ public class GPBattleManager extends BattleManager {
                 space = null;
                 System.err.println("Lost connection to space");
                 continue;
+            } catch (LeaseDeniedException e) {
+                e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
             }
 
             Utils.log("Looking for task");

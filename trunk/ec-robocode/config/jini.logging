@@ -50,7 +50,7 @@ handlers = java.util.logging.ConsoleHandler
 # to the given level and above.
 
 java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
-java.util.logging.ConsoleHandler.level = SEVERE
+java.util.logging.ConsoleHandler.level = FINE
 
 # For messages printed to a file, do the following:
 # - use either a standard or XML formatter

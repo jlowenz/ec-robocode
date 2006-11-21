@@ -72,25 +72,13 @@ public class ProgressTester {
         int numBattles = sampleBots.length * population.size();
         taskArray = new GPBattleTask[numBattles];
         int battle = 0;
-        try {
-            Transaction t = TransactionFactory.create(transactionManager, 60000).transaction;
-            for (Member m : population) {
-                for (String s : sampleBots) {
-                    GPBattleTask task = new GPBattleTask(generation, battle, m, s);
-                    taskArray[battle] = task;
-                    submitTask(task, t);
-                    battle++;
-                }
+        for (Member m : population) {
+            for (String s : sampleBots) {
+                GPBattleTask task = new GPBattleTask(generation, battle, m, s);
+                taskArray[battle] = task;
+                submitTask(task);
+                battle++;
             }
-            t.commit();
-        } catch (LeaseDeniedException e) {
-            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
-        } catch (RemoteException e) {
-            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
-        } catch (UnknownTransactionException e) {
-            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
-        } catch (CannotCommitException e) {
-            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
         }
 
         return battle;
@@ -161,42 +149,36 @@ public class ProgressTester {
         return results;
     }
 
-    private void submitTask(GPBattleTask task, Transaction t) {
+    private void submitTask(GPBattleTask task) {
         try {
             logger.info(task.toString());
-            space.write(task, t, Lease.FOREVER);
+            Transaction tran = TransactionFactory.create(transactionManager, 60000).transaction;
+            space.write(task, tran, Lease.FOREVER);
+            tran.commit();
         } catch (TransactionException e) {
             e.printStackTrace();
         } catch (RemoteException e) {
             e.printStackTrace();
+        } catch (LeaseDeniedException e) {
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
         }
     }
 
     private void resubmitTasks() {
         for (GPBattleTask t : taskArray) {
             if (t != null) {
-                Transaction tran = null;
                 try {
-                    tran = TransactionFactory.create(transactionManager, 60000).transaction;
-
-                    try {
-                        if (space.readIfExists(t, null, 0) == null) {
-                            submitTask(t, tran);
-                            tran.commit();
-                        }
-                    } catch (UnusableEntryException e) {
-                        e.printStackTrace();
-                    } catch (TransactionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
+                    if (space.readIfExists(t, null, 0) == null) {
+                        submitTask(t);
                     }
-                } catch (LeaseDeniedException e) {
-                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                } catch (UnusableEntryException e) {
+                    e.printStackTrace();
+                } catch (TransactionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 } catch (RemoteException e) {
-                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
 
             }

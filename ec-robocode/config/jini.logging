@@ -50,7 +50,7 @@ handlers = java.util.logging.ConsoleHandler
 # to the given level and above.
 
 java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
-java.util.logging.ConsoleHandler.level = FINE
+java.util.logging.ConsoleHandler.level = FINEST
 
 # For messages printed to a file, do the following:
 # - use either a standard or XML formatter
@@ -241,13 +241,13 @@ For HTTPMD
 
 # For Outrigger
 #com.sun.jini.outrigger.entryMatching.level = INFO
-#com.sun.jini.outrigger.event.level = INFO
+com.sun.jini.outrigger.event.level = FINER
 #com.sun.jini.outrigger.iterator.level = INFO
 #com.sun.jini.outrigger.join.level = INFO
-com.sun.jini.outrigger.leases.level = FINE
+com.sun.jini.outrigger.leases.level = FINER
 #com.sun.jini.outrigger.lifecycle.level = INFO
-com.sun.jini.outrigger.operations.level = FINE
-#com.sun.jini.outrigger.store.level = INFO
+com.sun.jini.outrigger.operations.level = FINER
+com.sun.jini.outrigger.store.level = FINER
 #com.sun.jini.outrigger.transactions.level = INFO
 
 # For the Browser Client

@@ -10,6 +10,7 @@ import robocode.control.RobotResults;
  */
 public class GPBattleResults implements Entry {
 
+    public String id;
     public Integer generation;
     public Integer battle;
     public String robot1;
@@ -49,8 +50,9 @@ public class GPBattleResults implements Entry {
     public GPBattleResults() {
     }
 
-    public GPBattleResults(GPBattleTask task, double fitness1, double fitness2,
+    public GPBattleResults(String id, GPBattleTask task, double fitness1, double fitness2,
                            RobotResults results1, RobotResults results2) {
+        this.id = id;
         this.generation = task.generation;
         this.battle = task.battle;
         this.robot1 = task.robot1;

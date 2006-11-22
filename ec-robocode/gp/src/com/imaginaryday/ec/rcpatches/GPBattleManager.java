@@ -26,6 +26,7 @@ package com.imaginaryday.ec.rcpatches;
 
 import com.imaginaryday.util.PoisonPill;
 import com.imaginaryday.util.ServiceFinder;
+import com.imaginaryday.ec.main.Taken;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
@@ -306,6 +307,14 @@ public class GPBattleManager extends BattleManager {
                     e.printStackTrace();
                 }
                 continue;
+            } else {
+                try {
+                    space.write(new Taken(this.id, task.generation, task.battle), null, Lease.FOREVER);
+                } catch (TransactionException e) {
+                    e.printStackTrace();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
 
             if (task.done != null && task.done) done = true;
@@ -359,7 +368,7 @@ public class GPBattleManager extends BattleManager {
         public void battleComplete(BattleSpecification battle, RobotResults[] results) {
 
             if (results != null && results.length == 2) {
-                GPBattleResults res = new GPBattleResults(battleTask,
+                GPBattleResults res = new GPBattleResults(id, battleTask,
                         GPFitnessCalc.getFitness(battleTask.generation, results[0], results[1]),
                         GPFitnessCalc.getFitness(battleTask.generation, results[1], results[0]),
                         results[0], results[1]);

@@ -1,14 +1,16 @@
 package com.imaginaryday.ec.main;
 
-import net.jini.space.JavaSpace;
-import net.jini.core.entry.Entry;
-import com.imaginaryday.util.ServiceFinder;
 import com.imaginaryday.ec.rcpatches.GPBattleResults;
+import com.imaginaryday.ec.rcpatches.GPBattleTask;
+import com.imaginaryday.util.ServiceFinder;
+import net.jini.core.entry.Entry;
+import net.jini.core.event.RemoteEvent;
+import net.jini.core.event.RemoteEventListener;
+import net.jini.core.event.UnknownEventException;
+import net.jini.core.lease.Lease;
+import net.jini.space.JavaSpace;
 
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.rmi.RemoteException;
 
 /**
  * @author Ronald A. Bowers
@@ -21,7 +23,21 @@ public class Watcher implements Runnable {
     }
 
     public static void main(String[] args) {
-        new Thread(new Watcher());
+        new Thread(new Watcher()).start();
+    }
+
+    class TaskListener implements RemoteEventListener {
+
+        public void notify(RemoteEvent remoteEvent) throws UnknownEventException, RemoteException {
+            System.out.println("TaskListener: " + remoteEvent.toString());
+        }
+    }
+
+    class ResultListener implements RemoteEventListener {
+
+        public void notify(RemoteEvent remoteEvent) throws UnknownEventException, RemoteException {
+            System.out.println("ResultListener: " + remoteEvent.toString());
+        }
     }
 
     class TaskThing {
@@ -72,61 +88,24 @@ public class Watcher implements Runnable {
 
     public void run() {
         try {
-            JavaSpace space = new ServiceFinder().getSpace();
+            JavaSpace space = null;
+            ServiceFinder f = new ServiceFinder();
+            while (space == null) {
+                System.out.println("Looking for space");
+                space = f.getSpace();
+            }
             boolean done = false;
 
-            Map<String, List<TaskThing>> bob = new HashMap<String, List<TaskThing>>();
-
-            Entry takenTemplate = new Taken();
+            Entry taskTemplate = new GPBattleTask();
             Entry resultsTemplate = new GPBattleResults();
+
+            space.notify(taskTemplate,null, new TaskListener(), Lease.FOREVER, null);
+            space.notify(resultsTemplate, null, new ResultListener(), Lease.FOREVER, null);
+
+
             while(!done) {
-
-                Taken taken = (Taken)space.takeIfExists(takenTemplate, null, 0);
-
-                if (taken != null) {
-                    List<TaskThing> ltt = bob.get(taken.id);
-
-                    if (ltt == null) {
-                        ltt = new ArrayList<TaskThing>();
-                        bob.put(taken.id, ltt);
-                    } else {
-                        if (ltt.size() != 0) {
-                            System.out.println("WARNING - Worker took another task! " + taken.id );
-                            System.out.println("WARNING - Worker holds");
-                            for (TaskThing fred : ltt) {
-                                 System.out.print(fred);
-                            }
-                        }
-                    }
-                    ltt.add(new TaskThing(taken.generation, taken.battle));
-
-                    System.out.println(new StringBuilder().append("Worker ").append(taken.id)
-                            .append(" took ").append(taken.generation).append(":").append(taken.battle).toString());
-                }
-
-                GPBattleResults gpbr = (GPBattleResults)space.readIfExists(resultsTemplate, null, 0);
-
-                if (gpbr != null) {
-                    List<TaskThing> ltt = bob.get(gpbr.id);
-
-                    if (ltt == null) {
-                        System.out.println("WARNING - Tasked returned without a previous take");
-                        ltt = new ArrayList<TaskThing>();
-                        bob.put(gpbr.id, ltt);
-                    } else {
-                        for (int i = 0 ; i < ltt.size(); ++i ) {
-                            TaskThing t = ltt.get(i);
-                            if (t.getBattle().equals(gpbr.battle) && t.getGeneration().equals(gpbr.generation)) {
-                                System.out.println(new StringBuilder().append("Worker ").append(taken.id)
-                            .append(" finished ").append(taken.generation)
-                                        .append(":").append(taken.battle).toString());
-                                ltt.remove(i);
-                            }
-                        }
-                    }
-
-                }
-
+                System.out.println("Stayin Alive!");
+                Thread.sleep(10000);
             }
 
         } catch (Exception e) {

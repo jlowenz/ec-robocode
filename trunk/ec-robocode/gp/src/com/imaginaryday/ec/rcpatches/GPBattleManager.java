@@ -24,9 +24,7 @@
 package com.imaginaryday.ec.rcpatches;
 
 
-import com.imaginaryday.util.PoisonPill;
 import com.imaginaryday.util.ServiceFinder;
-import com.imaginaryday.ec.main.Taken;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
@@ -54,9 +52,13 @@ import javax.swing.*;
 import java.io.*;
 import java.rmi.RemoteException;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Logger;
 
 
 /**
@@ -74,11 +76,13 @@ public class GPBattleManager extends BattleManager {
     private String resultsFile;
     private RobocodeManager manager;
     private int stepTurn;
-//    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(this.getClass().getName());
     private GPBattleTask task;
     private JavaSpace space;
     private TransactionManager transactionManager;
-    private Transaction battleTransaction = null;
+    private LinkedList<GPBattleTask> workingTasks = new LinkedList<GPBattleTask>();
+    private Transaction battleTx = null;
+    private Lock btl = new ReentrantLock();
 
     public TransactionManager getTransactionManager() {
         return transactionManager;
@@ -175,37 +179,31 @@ public class GPBattleManager extends BattleManager {
         ResultForwarder rl = new ResultForwarder();
         manager.setListener(rl);
 
-        final JavaSpace space1 = space;
         Runtime.getRuntime().addShutdownHook(new Thread() {
-            private GPBattleManager bm = GPBattleManager.this;
-
             public void run() {
-                System.err.println("shutdown hook running!");
-                Utils.log("Writing unfinished task back to space!");
-                GPBattleTask t = bm.getTask();
-                if (t != null && !t.done) {
-                    try {
-                        JavaSpace space1 = getSpace();
-                        if (space1 != null) {
-                            space1.write(t, null, Lease.FOREVER);
-                            Utils.log("Done");
+                btl.lock();
+                try {
+                    if (battleTx != null) {
+                        try {
+                            battleTx.abort();
+                            battleTx = null;
+                        } catch (UnknownTransactionException e) {
+                            e.printStackTrace();
+                        } catch (CannotAbortException e) {
+                            e.printStackTrace();
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
                         }
-                    } catch (TransactionException e) {
-                        Utils.log("%%%%%%%%%%%%%%%%%%%%%% failed to replace TASK");
-                        e.printStackTrace();
-                    } catch (RemoteException e) {
-                        Utils.log("%%%%%%%%%%%%%%%%%%%%%% failed to replace TASK");
-                        e.printStackTrace();
                     }
-                } else {
-                    Utils.log("No unfinished task!");
+                } finally {
+                    btl.unlock();
                 }
+                System.err.println("shutdown hook running!");
             }
         });
 
         boolean done = false;
         Entry taskTemplate = new GPBattleTask();
-        Entry pillTemplate = new PoisonPill(id);
         Utils.log((id != null) ? id : "null, bitch");
         while (!done) {
 
@@ -244,38 +242,12 @@ public class GPBattleManager extends BattleManager {
             }
 
             try {
-                PoisonPill pill;
-                Transaction t = TransactionFactory.create(transactionManager, 60000).transaction;
-
-                pill = (PoisonPill) space.takeIfExists(pillTemplate, t, 0);
-                if (pill != null) {
-                    Utils.log("Pill received " + pill.toString());
-                    if (pill.id.equals(id)) {
-                        Utils.log("Pill matches");
-                        t.commit();
-                        return;
-                    } else {
-                        t.abort();
-                    }
-                    done = true;
-                    continue;
+                try {
+                    btl.lock();
+                    battleTx = TransactionFactory.create(getTransactionManager(), 150000).transaction;
+                } finally {
+                    btl.unlock();
                 }
-            } catch (UnusableEntryException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (TransactionException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (InterruptedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (RemoteException e) {
-                space = null;
-                System.err.println("Lost connection to space");
-                continue;
-            } catch (LeaseDeniedException e) {
-                e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
-            }
-
-            try {
-                battleTransaction = TransactionFactory.create(getTransactionManager(), 300000).transaction;
             } catch (LeaseDeniedException e) {
                 e.printStackTrace();
                 continue;
@@ -286,7 +258,8 @@ public class GPBattleManager extends BattleManager {
 
             Utils.log("Looking for task");
             try {
-                task = (GPBattleTask) space.take(taskTemplate, battleTransaction, 3000);
+                task = (GPBattleTask) space.takeIfExists(taskTemplate, battleTx, 3000);
+                if (task != null) workingTasks.addFirst(task);
                 Utils.log((task == null) ? "null" : task.shortString());
             } catch (UnusableEntryException e) {
                 e.printStackTrace();
@@ -307,14 +280,6 @@ public class GPBattleManager extends BattleManager {
                     e.printStackTrace();
                 }
                 continue;
-            } else {
-                try {
-                    space.write(new Taken(this.id, task.generation, task.battle), null, Lease.FOREVER);
-                } catch (TransactionException e) {
-                    e.printStackTrace();
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
             }
 
             if (task.done != null && task.done) done = true;
@@ -347,16 +312,27 @@ public class GPBattleManager extends BattleManager {
                 Vector<RobotClassManager> battlingRobotsVector = new Vector<RobotClassManager>();
                 battlingRobotsVector.add(ralph);
                 battlingRobotsVector.add(alice);
-                startNewBattle(battlingRobotsVector, false, null);
+                try {
+                    startNewBattle(battlingRobotsVector, false, null);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    logger.severe("Error during battle! on worker " + id);
+                    try {
+                        battleTx.abort();
+                    } catch (UnknownTransactionException e1) {
+                        e1.printStackTrace();
+                    } catch (CannotAbortException e1) {
+                        e1.printStackTrace();
+                    } catch (RemoteException e1) {
+                        e1.printStackTrace();
+                    }
+                }
                 task.done = true;
             }
         }
 
     }
 
-    private GPBattleTask getTask() {
-        return task;
-    }
 
     class ResultForwarder implements RobocodeListener {
 
@@ -377,15 +353,26 @@ public class GPBattleManager extends BattleManager {
                 try {
                     JavaSpace space = getSpace();
                     if (space != null) {
-                        Lease l = space.write(res, battleTransaction, Lease.FOREVER);
-                        if (l.getExpiration() != Lease.FOREVER) {
-                            System.err.println("Lease returned was not FOREVER: " + l);
+                        space.write(res, battleTx, Lease.FOREVER);
+                        battleTx.commit();
+
+                        if (workingTasks.size() > 1) {
+                            logger.severe("WORKER (" + id + ") !!!!!!! stomping on more than 1 working task!");
+                            for (GPBattleTask wt : workingTasks) {
+                                if (workingTasks.getLast().battle != res.battle) {
+                                    logger.severe("WORKER (" + id + "): result (" + res + ") doesn't match working task: " + wt);
+                                } else {
+                                    logger.severe("WORKER (" + id + "): found task: " + wt);
+                                }
+                            }
+                            workingTasks.clear();
+                        } else {
+                            workingTasks.removeLast();
                         }
-                        battleTransaction.commit();
                     } else {
                         System.err.println("Null space!");
                         new RuntimeException("Null Space!!").printStackTrace();
-                        battleTransaction.abort();
+                        battleTx.abort();
                     }
                 } catch (TransactionException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -395,7 +382,7 @@ public class GPBattleManager extends BattleManager {
             } else {
                 Utils.log("Bad results array");
                 try {
-                    battleTransaction.abort();
+                    battleTx.abort();
                 } catch (UnknownTransactionException e) {
                     e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
                 } catch (CannotAbortException e) {
@@ -404,7 +391,12 @@ public class GPBattleManager extends BattleManager {
                     e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
                 }
             }
-
+            try {
+                btl.lock();
+                battleTx = null;
+            } finally {
+                btl.unlock();
+            }
         }
 
         public void battleAborted(BattleSpecification battle) {
@@ -453,7 +445,6 @@ public class GPBattleManager extends BattleManager {
         }
         */
 
-
         for (int i = 0; i < battlingRobotsVector.size(); i++) {
             battle.addRobot((RobotClassManager) battlingRobotsVector.elementAt(i));
         }
@@ -466,6 +457,8 @@ public class GPBattleManager extends BattleManager {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
+
+    Transaction getBattleTx() { return battleTx; }
 
     public String getBattleFilename() {
         return battleFilename;
@@ -704,6 +697,11 @@ public class GPBattleManager extends BattleManager {
             System.err.println("Exception in thread " + thread.toString());
             System.err.println("Stack trace:");
             throwable.printStackTrace();
+            try {
+                getBattleTx().abort();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
         }
     }
 }

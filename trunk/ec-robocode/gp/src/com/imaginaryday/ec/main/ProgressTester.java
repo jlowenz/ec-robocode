@@ -6,7 +6,9 @@ import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
 import net.jini.core.lease.LeaseDeniedException;
-import net.jini.core.transaction.*;
+import net.jini.core.transaction.Transaction;
+import net.jini.core.transaction.TransactionException;
+import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 
@@ -104,11 +106,11 @@ public class ProgressTester {
                         takeCount = 0;
                     }
                     Transaction t = TransactionFactory.create(transactionManager, 30000).transaction;
-                    res = (GPBattleResults) space.takeIfExists(template, null, 0);
+                    res = (GPBattleResults) space.takeIfExists(template, t, 0);
                     if (res == null) {
                         Thread.sleep(2000);
                         takeCount++;
-                        t.abort();
+                        t.commit();
                     } else {
                         takeCount = 0;
                         t.commit();

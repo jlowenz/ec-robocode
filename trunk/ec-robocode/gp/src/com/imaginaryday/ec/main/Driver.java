@@ -15,9 +15,7 @@ import info.javelot.functionalj.tuple.Pair;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
-import net.jini.core.transaction.Transaction;
-import net.jini.core.transaction.TransactionException;
-import net.jini.core.transaction.TransactionFactory;
+import net.jini.core.transaction.*;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 import org.jscience.mathematics.vectors.VectorFloat64;
@@ -507,6 +505,7 @@ public class Driver implements Runnable {
 
         while (retrieved < numBattles) {
             GPBattleResults res = null;
+            Transaction tran = null;
             try {
                 while (res == null) {
                     if (takeCount >= MAX_TAKE_COUNT) {
@@ -515,10 +514,10 @@ public class Driver implements Runnable {
                         resubmitTasks();
                         takeCount = 0;
                     }
-                    Transaction tran = TransactionFactory.create(transactionManager, 60000).transaction;
-                    res = (GPBattleResults) getSpace().takeIfExists(template, null, 0);
+                    tran = TransactionFactory.create(transactionManager, 60000).transaction;
+                    res = (GPBattleResults) getSpace().takeIfExists(template, tran, 500);
                     if (res == null) {
-                        tran.abort();
+                        tran.commit();
                         Thread.sleep(2000);
                         takeCount++;
                     } else {
@@ -536,8 +535,26 @@ public class Driver implements Runnable {
                 }
                 logger.info(res.toString());
             } catch (RemoteException e) {
+                try {
+                    tran.abort();
+                } catch (UnknownTransactionException e1) {
+                    e1.printStackTrace();
+                } catch (CannotAbortException e1) {
+                    e1.printStackTrace();
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
                 e.printStackTrace();
             } catch (Exception e) {
+                try {
+                    tran.abort();
+                } catch (UnknownTransactionException e1) {
+                    e1.printStackTrace();
+                } catch (CannotAbortException e1) {
+                    e1.printStackTrace();
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
                 e.printStackTrace();
             }
 

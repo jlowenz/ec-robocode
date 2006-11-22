@@ -26,7 +26,7 @@ public class GPBattleTask implements Entry {
     public Node radarProgram2;
     public Node shootProgram2;
 
-    public Boolean done;
+    public Boolean done = Boolean.FALSE;
 
     public GPBattleTask(int generation, int battle, Member member1, Member member2) {
         this.generation = generation;

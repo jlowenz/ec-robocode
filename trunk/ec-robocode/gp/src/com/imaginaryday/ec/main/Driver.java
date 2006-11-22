@@ -279,8 +279,10 @@ public class Driver implements Runnable {
             population = selectAndBreed(population);
 
             double delta = (double) System.currentTimeMillis() - genStart;
-            double mins = delta * 0.001 / 60.0;
-            double secs = delta * 0.001 - (mins * 60.0);
+            logger.info("Delta milliseconds: " + delta);
+            double secs = delta * 0.001;
+            double mins = Math.floor(secs / 60.0);
+            secs = secs - (mins * 60.0);
             logger.info("Generation " + generationCount + " execution time: " + df.format(mins) + ":" + df.format(secs));
 
             ++generationCount;

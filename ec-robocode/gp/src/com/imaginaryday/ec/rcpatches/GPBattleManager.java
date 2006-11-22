@@ -274,12 +274,12 @@ public class GPBattleManager extends BattleManager {
             }
 
             try {
-                battleTransaction = TransactionFactory.create(getTransactionManager(), 60000).transaction;
+                battleTransaction = TransactionFactory.create(getTransactionManager(), 300000).transaction;
             } catch (LeaseDeniedException e) {
-                e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
                 continue;
             } catch (RemoteException e) {
-                e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
                 continue;
             }
 
@@ -368,7 +368,7 @@ public class GPBattleManager extends BattleManager {
                 try {
                     JavaSpace space = getSpace();
                     if (space != null) {
-                        Lease l = space.write(res, null, Lease.FOREVER);
+                        Lease l = space.write(res, battleTransaction, Lease.FOREVER);
                         if (l.getExpiration() != Lease.FOREVER) {
                             System.err.println("Lease returned was not FOREVER: " + l);
                         }

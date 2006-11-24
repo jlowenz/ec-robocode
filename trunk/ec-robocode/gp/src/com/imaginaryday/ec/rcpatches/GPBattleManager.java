@@ -297,10 +297,10 @@ public class GPBattleManager extends BattleManager {
                 if (standardBots.keySet().contains(task.robot1)) {
                     ralph = standardBots.get(task.robot1);
                 } else {
-                    gpcm1.setMoveProgram(task.moveProgram1);
-                    gpcm1.setTurretProgram(task.turretProgram1);
-                    gpcm1.setRadarProgram(task.radarProgram1);
-                    gpcm1.setShootProgram(task.shootProgram1);
+                    gpcm1.setMoveProgram(task.getMoveProgram1());
+                    gpcm1.setTurretProgram(task.getTurretProgram1());
+                    gpcm1.setRadarProgram(task.getRadarProgram1());
+                    gpcm1.setShootProgram(task.getShootProgram1());
                     ralph = gpcm1;
                 }
 
@@ -308,10 +308,10 @@ public class GPBattleManager extends BattleManager {
                 if (standardBots.keySet().contains(task.robot2)) {
                     alice = standardBots.get(task.robot2);
                 } else {
-                    gpcm2.setMoveProgram(task.moveProgram2);
-                    gpcm2.setTurretProgram(task.turretProgram2);
-                    gpcm2.setRadarProgram(task.radarProgram1);
-                    gpcm2.setShootProgram(task.shootProgram2);
+                    gpcm2.setMoveProgram(task.getMoveProgram2());
+                    gpcm2.setTurretProgram(task.getTurretProgram2());
+                    gpcm2.setRadarProgram(task.getRadarProgram1());
+                    gpcm2.setShootProgram(task.getShootProgram2());
                     alice = gpcm1;
                 }
                 rl.setBattleTask(task);

@@ -16,6 +16,11 @@ public class BooleanConstant extends AbstractNode {
     private static final Random rand = new Random();
     boolean val;
 
+    public BooleanConstant(Boolean b)
+    {
+        val = b;
+    }
+
     public BooleanConstant(boolean b)
     {
         val = b;

@@ -1,31 +1,38 @@
-package com.imaginaryday.ec.main;
+package ec;
 
-import com.imaginaryday.ec.gp.AbstractNode;
-import com.imaginaryday.ec.gp.Node;
-import static com.imaginaryday.util.Stuff.clampZero;
-import static com.imaginaryday.util.VectorUtils.toAngle;
-import static com.imaginaryday.util.VectorUtils.vecFromDir;
-import info.javelot.functionalj.tuple.Pair;
-import org.jscience.mathematics.numbers.Float64;
-import org.jscience.mathematics.vectors.VectorFloat64;
 import robocode.*;
 import robocode.exception.DeathException;
 
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.Handler;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+
+import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.gp.AbstractNode;
+import com.imaginaryday.ec.gp.NodeFactory;
+import com.imaginaryday.ec.gp.VetoTypeInduction;
+import com.imaginaryday.ec.gp.nodes.Constant;
+import com.imaginaryday.ec.main.nodes.MakePair;
+import com.imaginaryday.ec.main.nodes.VectorConstant;
+import com.imaginaryday.ec.main.nodes.VectorToEnemy;
+import com.imaginaryday.util.VectorUtils;
+import com.imaginaryday.util.Stuff;
+import org.jscience.mathematics.vectors.VectorFloat64;
+import org.jscience.mathematics.numbers.Float64;
+import info.javelot.functionalj.tuple.Pair;
 
 /**
  * User: jlowens Date: Oct 30, 2006 Time: 6:13:08 PM
  */
 public class GPAgent extends AdvancedRobot {
     private static Logger log = Logger.getLogger(GPAgent.class.getName());
+// comment out because robocode is a piece of shit
     static {
         Handler h = new ConsoleHandler();
         h.setLevel(Level.INFO);
-        log.addHandler(h);
-        log.setLevel(Level.INFO);
+        GPAgent.log.addHandler(h);
+        GPAgent.log.setLevel(Level.INFO);
     }
 
     private static final boolean DEBUG = false;
@@ -34,7 +41,6 @@ public class GPAgent extends AdvancedRobot {
     private Node turretTree;
     private Node firingTree;
     private Node directionTree;
-    private VectorFloat64 movementVector = VectorFloat64.valueOf(0, 1);
     private boolean alive = true;
     private VectorFloat64 vectorToEnemy = VectorFloat64.valueOf(0, 1);
     private int scannedEnemyAge = 0;
@@ -56,6 +62,27 @@ public class GPAgent extends AdvancedRobot {
     private double rammerBearing = 0.0;
     private boolean scannedEnemy = true;
 
+    public GPAgent() {
+        NodeFactory nf = NodeFactory.getInstance();
+        radarTree = new Constant(20*Math.PI/2.0);
+        turretTree = new Constant(3.0*Math.PI/2.0);
+        Node n = new MakePair();
+        try {
+            n.attach(0, nf.create("boolConst", true))
+             .attach(1, nf.create("const", 1.0));
+        } catch (VetoTypeInduction vetoTypeInduction) {
+            vetoTypeInduction.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        firingTree = n;
+        directionTree = new VectorToEnemy();
+
+	    radarTree.setOwner(this);
+	    turretTree.setOwner(this);
+	    firingTree.setOwner(this);
+	    directionTree.setOwner(this);
+    }
+
     public GPAgent(Node radarTree, Node turretTree, Node firingTree, Node directionTree) {
         this.radarTree = radarTree;
         this.turretTree = turretTree;
@@ -73,7 +100,7 @@ public class GPAgent extends AdvancedRobot {
     public Node getFiringTree() {return firingTree;}
     public Node getDirectionTree() {return directionTree;}
 
-    public VectorFloat64 getCurrentVector() {return movementVector;}
+//    public VectorFloat64 getCurrentVector() {return movementVector;}
 
     public VectorFloat64 getVectorToForwardWall() {return vectorToForwardWall;}
     public VectorFloat64 getVectorToNearWall() {return vectorToNearestWall;}
@@ -104,7 +131,7 @@ public class GPAgent extends AdvancedRobot {
         LEFT, BOTTOM, RIGHT, TOP
     }
 
-    private static enum Turn {
+    private enum Turn {
         LEFT, RIGHT
     }
 
@@ -143,11 +170,11 @@ public class GPAgent extends AdvancedRobot {
 
     @SuppressWarnings("unchecked")
     public void run() {
-        log.fine("run()");
+        GPAgent.log.fine("run()");
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
-        log.fine("starting pseudo-infinite loop");
+        GPAgent.log.fine("starting pseudo-infinite loop");
         while (alive) {
             try {
 // gather instantaneous sensor data
@@ -166,8 +193,8 @@ public class GPAgent extends AdvancedRobot {
                 double robotRadius = Math.sqrt(rheight2 * rheight2 + rwidth2 * rwidth2);
 
                 // find vector to nearest wall
-                switch (argmin(p.n(x, Wall.LEFT), p.n(y, Wall.BOTTOM), p.n(toRight,
-                        Wall.RIGHT), p.n(toTop, Wall.TOP))) {
+                switch (argmin(GPAgent.p.n(x, Wall.LEFT), GPAgent.p.n(y, Wall.BOTTOM), GPAgent.p.n(toRight,
+                        Wall.RIGHT), GPAgent.p.n(toTop, Wall.TOP))) {
                     case LEFT:
                         vectorToNearestWall = VectorFloat64.valueOf(-1, 0).times(Float64.valueOf(Math.abs(x - rwidth2)));
                         break;
@@ -183,7 +210,7 @@ public class GPAgent extends AdvancedRobot {
                 }
 
                 // find the vector to the forward wall
-                vectorToForwardWall = vecToWall(x, y, bfwidth, bfheight, getHeading(), robotRadius, vecFromDir(getHeadingRadians()));
+                vectorToForwardWall = vecToWall(x, y, bfwidth, bfheight, getHeading(), robotRadius, VectorUtils.vecFromDir(getHeadingRadians()));
 
                 // get absolute radar heading
                 double radarDirection = 0;
@@ -193,29 +220,32 @@ public class GPAgent extends AdvancedRobot {
                 try {
                     radarDirection = ((Number) radarTree.evaluate()).doubleValue();
                 } catch (Throwable e) {
-                    log.finest(((AbstractNode) radarTree).toStringEval());
+                    GPAgent.log.finest(((AbstractNode) radarTree).toStringEval());
                 }
 
                 // get absolute turret heading
                 try {
                     turretDirection = ((Number) turretTree.evaluate()).doubleValue();
                 } catch (Throwable e) {
-                    log.finest(((AbstractNode) turretTree).toStringEval());
+                    GPAgent.log.finest(((AbstractNode) turretTree).toStringEval());
                 }
 
                 // determine if we need to fire
                 try {
                     firing = (Pair<Boolean, Number>) firingTree.evaluate();
                 } catch (Throwable t ) {
-                    log.finest(((AbstractNode) firingTree).toStringEval());
+                    GPAgent.log.finest(((AbstractNode) firingTree).toStringEval());
                     firing = new Pair<Boolean, Number>(false, 0.0);
                 }
 
                 // get absolute robot heading and velocity
+	            VectorFloat64 movementVector = null;
                 try {
                     movementVector = (VectorFloat64) directionTree.evaluate();
                 } catch (Throwable t ) {
-                    log.finest(((AbstractNode) directionTree).toStringEval());
+	                System.err.println("frak");
+	                t.printStackTrace();
+                    GPAgent.log.finest(((AbstractNode) directionTree).toStringEval());
                 }
 
                 // process firing directive
@@ -246,7 +276,11 @@ public class GPAgent extends AdvancedRobot {
                 }
 
                 // process heading/speed directive
-                r = calculateTurn(getHeadingRadians(), toAngle(movementVector));
+	            // the movementVector is supposed to be an
+
+	            double heading = VectorUtils.toAngle(movementVector);
+	            System.err.println("desired heading = " + heading);
+                r = calculateTurn(getHeadingRadians(), heading);
                 switch (r.second) {
                     case LEFT:
                         setTurnLeftRadians(r.first);
@@ -295,7 +329,7 @@ public class GPAgent extends AdvancedRobot {
                 if (recentlyRammed) rammedAge++;
             } catch (Throwable e) {
                 e.printStackTrace();
-                log.severe("EXCEPTION in GPAgent: " + e.toString());
+                GPAgent.log.severe("EXCEPTION in GPAgent: " + e.toString());
             } finally {
                 try {
                     execute();
@@ -303,7 +337,7 @@ public class GPAgent extends AdvancedRobot {
             }
         }
     }
-    
+
     private void resetRammed() {
         rammedAge = 0;
         recentlyRammed = false;
@@ -322,8 +356,8 @@ public class GPAgent extends AdvancedRobot {
 
     private p<Double, Turn> calculateTurn(final double current, final double dest) {
         return (current > dest) ?
-                pairmin(p.n(clampZero(current - dest), Turn.LEFT), p.n(clampZero(2 * Math.PI - current + dest), Turn.RIGHT)) :
-                pairmin(p.n(clampZero(2 * Math.PI - dest + current), Turn.LEFT), p.n(clampZero(dest - current), Turn.RIGHT));
+                pairmin(GPAgent.p.n(Stuff.clampZero(current - dest), GPAgent.Turn.LEFT), GPAgent.p.n(Stuff.clampZero(2 * Math.PI - current + dest), GPAgent.Turn.RIGHT)) :
+                pairmin(GPAgent.p.n(Stuff.clampZero(2 * Math.PI - dest + current), GPAgent.Turn.LEFT), GPAgent.p.n(Stuff.clampZero(dest - current), GPAgent.Turn.RIGHT));
     }
 
 
@@ -375,22 +409,26 @@ public class GPAgent extends AdvancedRobot {
                 tx = -x / m;
             }
         }
-        return dir.times(Float64.valueOf(clampZero(Math.sqrt(tx * tx + ty * ty) - robotRadius)));
+        return dir.times(Float64.valueOf(Stuff.clampZero(Math.sqrt(tx * tx + ty * ty) - robotRadius)));
     }
 
 
     public void onScannedRobot(ScannedRobotEvent event) {
         super.onScannedRobot(event);
+	    System.err.println("scanned robot!");
+
         scannedEnemy = true;
         scannedEnemyAge = 0;
         double bearing = event.getBearingRadians();
+	    bearing = Stuff.modHeading(bearing - getHeadingRadians());
         double dist = event.getDistance();
         enemyHeading = event.getHeadingRadians();
         enemySpeed = event.getVelocity();
         enemyEnergy = event.getEnergy();
 
         // calculate a vector to the enemy
-        vectorToEnemy = vecFromDir(bearing).times(Float64.valueOf(dist - (getWidth())));
+        vectorToEnemy = VectorUtils.vecFromDir(bearing).times(Float64.valueOf(dist - (getWidth())));
+	    System.err.println("vec to enemy: " + vectorToEnemy);
     }
 
     public void onHitRobot(HitRobotEvent event) {

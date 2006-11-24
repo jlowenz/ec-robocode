@@ -2,7 +2,6 @@ package com.imaginaryday.ec.main.nodes;
 
 import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
-import com.imaginaryday.util.Stuff;
 import org.jscience.mathematics.vectors.VectorFloat64;
 
 /**
@@ -31,11 +30,12 @@ public class CurrentVector extends RoboNode {
     }
 
     public Object evaluate() {
-        VectorFloat64 vec = getOwner().getCurrentVector();
-        assert !(Double.isNaN(vec.getValue(0)) || Double.isInfinite(vec.getValue(0))) : "x was bad!";
-        assert !(Double.isNaN(vec.getValue(1)) || Double.isInfinite(vec.getValue(1))) : "y was bad!";
-        assert Stuff.isReasonable(vec.getValue(0)) : "unreasonable value: " + vec;
-        assert Stuff.isReasonable(vec.getValue(1)) : "unreasonable value: " + vec;
-        return vec;
+//        VectorFloat64 vec = getOwner().getCurrentVector();
+//        assert !(Double.isNaN(vec.getValue(0)) || Double.isInfinite(vec.getValue(0))) : "x was bad!";
+//        assert !(Double.isNaN(vec.getValue(1)) || Double.isInfinite(vec.getValue(1))) : "y was bad!";
+//        assert Stuff.isReasonable(vec.getValue(0)) : "unreasonable value: " + vec;
+//        assert Stuff.isReasonable(vec.getValue(1)) : "unreasonable value: " + vec;
+//        return vec;
+	    return VectorFloat64.valueOf(0,-1);
     }
 }

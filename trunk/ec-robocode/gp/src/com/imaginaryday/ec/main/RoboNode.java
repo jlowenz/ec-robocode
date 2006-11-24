@@ -1,6 +1,7 @@
 package com.imaginaryday.ec.main;
 
 import com.imaginaryday.ec.gp.AbstractNode;
+import ec.GPAgent;
 
 /**
  * User: jlowens

@@ -17,8 +17,13 @@ public class IfThenElse extends AbstractNode {
     Class outputType = null;
 
 
+    @Override
     public void induceOutputType(Class toType) throws VetoTypeInduction {
-        if (outputType != null && !outputType.equals(toType)) throw new VetoTypeInduction("Been there, done that. Already been induced, therefore my children are of the current toType, cannot be changed");
+        if (outputType != null && !outputType.equals(toType)) {
+            System.err.println("My current type: " + outputType);
+            System.err.println("Would be type  : " + toType);
+            throw new VetoTypeInduction("Been there, done that. Already been induced, therefore my children are of the current toType, cannot be changed");
+        }
         outputType = toType;
 	    type = null; // reset the type
     }

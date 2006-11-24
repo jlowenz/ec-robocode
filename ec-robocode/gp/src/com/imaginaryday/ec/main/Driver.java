@@ -73,6 +73,7 @@ public class Driver implements Runnable {
             nf.loadNode(VectorToForwardWall.class);
             nf.loadNode(VectorToNearestWall.class);
             nf.loadNode(MakePair.class);
+            nf.loadNode(FiringPairConstant.class);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -182,7 +183,7 @@ public class Driver implements Runnable {
             Member m = new Member(0, i);
             m.setMoveProgram(tf.generateRandomTree(treeDepth, VectorFloat64.class));
             m.setRadarProgram(tf.generateRandomTree(treeDepth, Number.class));
-            m.setShootProgram(tf.generateRandomTree(treeDepth, Pair.class));
+            m.setShootProgram(tf.generateRandomTree(treeDepth, FiringPair.class));
             m.setTurretProgram(tf.generateRandomTree(treeDepth, Number.class));
 //            m.setName(new StringBuilder().append("Bot.").append(generationCount).append(".").append(i).toString());
             members.add(m);

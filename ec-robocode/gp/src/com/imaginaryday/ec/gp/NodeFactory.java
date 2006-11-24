@@ -145,14 +145,24 @@ public class NodeFactory {
         }
     }
 
+    private Class randomFromMerged(List<Class> a, List<Class> b) {
+        int asize = ((a == null) ? 0 : a.size());
+        int bsize = ((b == null) ? 0 : b.size());
+        int index = rand.nextInt(asize + bsize);
+        if (index < asize) {
+            return a.get(index);
+        } else {
+            return b.get(index - asize);
+        }
+    }
+
     public Node randomNode(Class parentType) {
         if (parentType == null) {
             return create(nodes.get(rand.nextInt(nodes.size())));
         } else {
             List<Class> all = nodesByOutputType.get(parentType);
-	        // don't forget the polymorphic nodes
-	        all.addAll(nodesByOutputType.get(null));
-            Node newNode = create(all.get(rand.nextInt(all.size())));
+            List<Class> poly = nodesByOutputType.get(null);
+            Node newNode = create(randomFromMerged(all,poly));
 	        return induceIfNeeded(newNode, parentType);
         }
     }
@@ -165,8 +175,8 @@ public class NodeFactory {
 			return create(sel.get(rand.nextInt(sel.size())));
 		} else {
 			List<Class> all = nonterminalsByOutputType.get(parentType);
-			all.addAll(nonterminalsByOutputType.get(null));
-			Node newNode = create(all.get(rand.nextInt(all.size())));
+            List<Class> poly = nonterminalsByOutputType.get(null);
+			Node newNode = create(randomFromMerged(all, poly));
 			return induceIfNeeded(newNode, parentType);
 		}
 	}

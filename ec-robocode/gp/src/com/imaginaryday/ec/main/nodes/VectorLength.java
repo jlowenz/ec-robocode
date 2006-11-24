@@ -1,9 +1,10 @@
 package com.imaginaryday.ec.main.nodes;
 
-import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
-import com.imaginaryday.util.VectorUtils;
+import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.util.Stuff;
+import com.imaginaryday.util.VectorUtils;
+import org.jscience.mathematics.vectors.Vector;
 import org.jscience.mathematics.vectors.VectorFloat64;
 
 /**
@@ -23,7 +24,7 @@ public class VectorLength extends RoboNode {
         return "vectorLen";
     }
     public Class getInputType(int id) {
-        return VectorFloat64.class;
+        return Vector.class;
     }
     public Class getOutputType() {
         return Number.class;

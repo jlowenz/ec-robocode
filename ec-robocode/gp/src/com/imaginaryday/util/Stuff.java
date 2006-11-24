@@ -1,7 +1,7 @@
 package com.imaginaryday.util;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <b>
@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * </b>
  */
 public class Stuff {
-    public static double ZERO_TOLERANCE = 0.000001;
+    public static double ZERO_TOLERANCE = 0.0001;
     public static double MIN_REASONABLE = 0.000001;
     public static double MAX_REASONABLE = 1.0e6;
 

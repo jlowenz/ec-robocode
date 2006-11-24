@@ -1,15 +1,15 @@
 package ec;
 
-import static com.imaginaryday.util.Stuff.clampZero;
 import com.imaginaryday.ec.gp.AbstractNode;
 import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.ec.gp.NodeFactory;
 import com.imaginaryday.ec.gp.VetoTypeInduction;
 import com.imaginaryday.ec.gp.nodes.Constant;
-import com.imaginaryday.ec.gp.nodes.IfThenElse;
 import com.imaginaryday.ec.gp.nodes.GreaterThan;
+import com.imaginaryday.ec.gp.nodes.IfThenElse;
 import com.imaginaryday.ec.main.nodes.*;
 import com.imaginaryday.util.Stuff;
+import static com.imaginaryday.util.Stuff.clampZero;
 import com.imaginaryday.util.VectorUtils;
 import info.javelot.functionalj.tuple.Pair;
 import org.jscience.mathematics.numbers.Float64;
@@ -73,7 +73,7 @@ public class GPAgent extends AdvancedRobot {
             n.attach(0, nf.create("boolConst", true))
              .attach(1, nf.create("const", 1.0));
         } catch (VetoTypeInduction vetoTypeInduction) {
-            vetoTypeInduction.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            vetoTypeInduction.printStackTrace(); 
         }
 
         firingTree = n;

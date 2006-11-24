@@ -1,7 +1,8 @@
 package com.imaginaryday.ec.main.nodes;
 
-import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.main.RoboNode;
+import org.jscience.mathematics.vectors.Vector;
 import org.jscience.mathematics.vectors.VectorFloat64;
 
 /**
@@ -26,7 +27,7 @@ public class CurrentVector extends RoboNode {
     }
 
     public Class getOutputType() {
-        return VectorFloat64.class;
+        return Vector.class;
     }
 
     public Object evaluate() {

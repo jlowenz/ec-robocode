@@ -1,8 +1,7 @@
 package com.imaginaryday.ec.main.nodes;
 
-import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
-import info.javelot.functionalj.tuple.Pair;
+import com.imaginaryday.ec.main.RoboNode;
 
 /**
  * <b>
@@ -29,12 +28,12 @@ public class MakePair extends RoboNode {
         return null;
     }
     public Class getOutputType() {
-        return Pair.class;
+        return FiringPair.class;
     }
 
     public Object evaluate() {
         Boolean b = (Boolean)child[0].evaluate();
         Number n = (Number)child[1].evaluate();
-        return new Pair<Boolean,Number>(b,n);
+        return new FiringPair(b,n);
     }
 }

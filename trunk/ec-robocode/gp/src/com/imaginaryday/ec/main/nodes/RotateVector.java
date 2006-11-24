@@ -1,11 +1,12 @@
 package com.imaginaryday.ec.main.nodes;
 
-import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
-import com.imaginaryday.util.VectorUtils;
+import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.util.Stuff;
-import org.jscience.mathematics.vectors.VectorFloat64;
+import com.imaginaryday.util.VectorUtils;
 import org.jscience.mathematics.numbers.Float64;
+import org.jscience.mathematics.vectors.Vector;
+import org.jscience.mathematics.vectors.VectorFloat64;
 
 /**
  * <b>
@@ -25,13 +26,13 @@ public class RotateVector extends RoboNode {
     }
     public Class getInputType(int id) {
         switch (id) {
-            case 0: return VectorFloat64.class;
+            case 0: return Vector.class;
             case 1: return Number.class;
         }
         return null;
     }
     public Class getOutputType() {
-        return VectorFloat64.class;
+        return Vector.class;
     }
 
     public Object evaluate() {

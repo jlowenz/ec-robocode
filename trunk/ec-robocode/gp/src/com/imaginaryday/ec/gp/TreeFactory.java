@@ -56,8 +56,15 @@ public class TreeFactory {
 		        for (int i = 0; i < n.getInputCount(); i++) {
 		            Class type = n.getInputType(i);
 		            Node child = _grow(depth+1, maxDepth, type, full);
-		            n.attach(i, child);
-		        }
+                    try {
+                        n.attach(i, child);
+                    } catch (VetoTypeInduction vetoTypeInduction) {
+                        System.err.println(n);
+                        System.err.println(child);
+                        vetoTypeInduction.printStackTrace();
+                        throw vetoTypeInduction;
+                    }
+                }
 		        return n;
 		    }
 		}

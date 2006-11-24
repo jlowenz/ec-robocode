@@ -1,10 +1,11 @@
 package com.imaginaryday.ec.main.nodes;
 
-import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.util.Stuff;
-import org.jscience.mathematics.vectors.VectorFloat64;
 import org.jscience.mathematics.numbers.Float64;
+import org.jscience.mathematics.vectors.Vector;
+import org.jscience.mathematics.vectors.VectorFloat64;
 
 import java.util.Random;
 
@@ -48,7 +49,7 @@ public class VectorConstant extends RoboNode {
         return null;
     }
     public Class getOutputType() {
-        return VectorFloat64.class;
+        return Vector.class;
     }
     @Override
     public Object evaluate() {

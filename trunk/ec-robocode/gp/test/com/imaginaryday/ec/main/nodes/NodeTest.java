@@ -5,19 +5,17 @@ import com.imaginaryday.ec.gp.NodeFactory;
 import com.imaginaryday.ec.gp.TreeFactory;
 import com.imaginaryday.ec.gp.VetoTypeInduction;
 import com.imaginaryday.ec.gp.nodes.Constant;
-import info.javelot.functionalj.tuple.Pair;
+import ec.GPAgent;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.jscience.mathematics.vectors.Vector;
 import org.jscience.mathematics.vectors.VectorFloat64;
 import robocode.*;
 
 import java.awt.*;
 import java.io.File;
 import java.util.Random;
-import java.util.Vector;
-
-import ec.GPAgent;
 
 /**
  * <b>
@@ -63,6 +61,7 @@ public class NodeTest extends TestCase {
             nf.loadNode(VectorToForwardWall.class);
             nf.loadNode(VectorToNearestWall.class);
             nf.loadNode(MakePair.class);
+            nf.loadNode(FiringPairConstant.class);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -100,30 +99,36 @@ public class NodeTest extends TestCase {
 
         GPAgent robot = new robot();
 
-        for (int i = 0; i < 10000; i++) {
-            Node root = tf.generateRandomTree(6, Number.class);
-            root.setOwner(robot);
-            Object result = root.evaluate();
-            System.out.println(root);
-            System.out.println(result);
+        Node root = null;
+        try {
+            for (int i = 0; i < 1000; i++) {
+                root = tf.generateRandomTree(6, Number.class);
+                root.setOwner(robot);
+                Object result = root.evaluate();
+    //            System.out.println(root);
+                System.out.println(result);
 
-            root = tf.generateRandomTree(6, Boolean.class);
-            root.setOwner(robot);
-            result = root.evaluate();
-            System.out.println(root);
-            System.out.println(result);
+                root = tf.generateRandomTree(6, Boolean.class);
+                root.setOwner(robot);
+                result = root.evaluate();
+    //            System.out.println(root);
+                System.out.println(result);
 
-            root = tf.generateRandomTree(6, VectorFloat64.class);
-            root.setOwner(robot);
-            result = root.evaluate();
-            System.out.println(root);
-            System.out.println(result);
+                root = tf.generateRandomTree(6, Vector.class);
+                root.setOwner(robot);
+                result = root.evaluate();
+    //            System.out.println(root);
+                System.out.println(result);
 
-            root = tf.generateRandomTree(6, Pair.class);
-            root.setOwner(robot);
-            result = root.evaluate();
-            System.out.println(root);
-            System.out.println(result);
+                root = tf.generateRandomTree(6, FiringPair.class);
+                root.setOwner(robot);
+                result = root.evaluate();
+                System.out.println(root);
+                System.out.println(result);
+            }
+        } catch (Throwable e) {
+            System.err.println(root);
+            e.printStackTrace();
         }
     }
 
@@ -257,18 +262,6 @@ public class NodeTest extends TestCase {
             return rand.nextDouble();
         }
         @Override
-        public Vector<BulletHitBulletEvent> getBulletHitBulletEvents() {
-            return super.getBulletHitBulletEvents();
-        }
-        @Override
-        public Vector<BulletHitEvent> getBulletHitEvents() {
-            return super.getBulletHitEvents();
-        }
-        @Override
-        public Vector<BulletMissedEvent> getBulletMissedEvents() {
-            return super.getBulletMissedEvents();
-        }
-        @Override
         public File getDataDirectory() {
             return super.getDataDirectory();
         }
@@ -289,28 +282,8 @@ public class NodeTest extends TestCase {
             return rand.nextDouble();
         }
         @Override
-        public Vector<HitByBulletEvent> getHitByBulletEvents() {
-            return super.getHitByBulletEvents();
-        }
-        @Override
-        public Vector<HitRobotEvent> getHitRobotEvents() {
-            return super.getHitRobotEvents();
-        }
-        @Override
-        public Vector<HitWallEvent> getHitWallEvents() {
-            return super.getHitWallEvents();
-        }
-        @Override
         public double getRadarTurnRemaining() {
             return rand.nextDouble();
-        }
-        @Override
-        public Vector<RobotDeathEvent> getRobotDeathEvents() {
-            return super.getRobotDeathEvents();
-        }
-        @Override
-        public Vector<ScannedRobotEvent> getScannedRobotEvents() {
-            return super.getScannedRobotEvents();
         }
         @Override
         public double getTurnRemaining() {

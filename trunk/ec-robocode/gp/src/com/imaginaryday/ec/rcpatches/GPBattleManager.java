@@ -205,7 +205,13 @@ public class GPBattleManager extends BattleManager {
         boolean done = false;
         Entry taskTemplate = new GPBattleTask();
         Utils.log((id != null) ? id : "null, bitch");
+        long deltaT = 600000; // Start at 5 minutes
+        long startTime = 0;
+        long txTime = 0;
+
         while (!done) {
+            startTime = System.currentTimeMillis();
+            txTime =   deltaT * 3;
 
             while (transactionManager == null) {
                 try {
@@ -244,7 +250,7 @@ public class GPBattleManager extends BattleManager {
             try {
                 try {
                     btl.lock();
-                    battleTx = TransactionFactory.create(getTransactionManager(), 150000).transaction;
+                    battleTx = TransactionFactory.create(getTransactionManager(), txTime).transaction;
                 } finally {
                     btl.unlock();
                 }
@@ -329,6 +335,9 @@ public class GPBattleManager extends BattleManager {
                 }
                 task.done = true;
             }
+
+            deltaT = System.currentTimeMillis() - startTime;
+            Utils.log("Battle fought in " + deltaT / 1000 + " seconds");
         }
 
     }

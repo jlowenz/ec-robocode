@@ -1,7 +1,6 @@
 package com.imaginaryday.ec.rcpatches;
 
 import com.imaginaryday.ec.gp.Node;
-import com.imaginaryday.ec.main.GPAgent;
 import robocode.Robot;
 import robocode.peer.TeamPeer;
 import robocode.peer.robot.RobotClassManager;
@@ -9,6 +8,8 @@ import robocode.repository.RobotSpecification;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import ec.GPAgent;
 
 /**
  * @author rbowers

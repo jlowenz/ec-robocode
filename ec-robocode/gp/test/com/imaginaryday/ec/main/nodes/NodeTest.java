@@ -5,7 +5,6 @@ import com.imaginaryday.ec.gp.NodeFactory;
 import com.imaginaryday.ec.gp.TreeFactory;
 import com.imaginaryday.ec.gp.VetoTypeInduction;
 import com.imaginaryday.ec.gp.nodes.Constant;
-import com.imaginaryday.ec.main.GPAgent;
 import info.javelot.functionalj.tuple.Pair;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -17,6 +16,8 @@ import java.awt.*;
 import java.io.File;
 import java.util.Random;
 import java.util.Vector;
+
+import ec.GPAgent;
 
 /**
  * <b>

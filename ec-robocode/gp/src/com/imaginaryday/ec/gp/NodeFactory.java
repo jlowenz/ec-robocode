@@ -115,7 +115,7 @@ public class NodeFactory {
             Class cargs[] = new Class[args.length];
             for (int i = 0; i < args.length; i++) cargs[i] = args[i].getClass();
             Constructor ctor = c.getConstructor(cargs);
-            return (Node)ctor.newInstance(args);
+	        return (Node)ctor.newInstance(args);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
@@ -150,7 +150,10 @@ public class NodeFactory {
             return create(nodes.get(rand.nextInt(nodes.size())));
         } else {
             List<Class> all = nodesByOutputType.get(parentType);
-            return create(all.get(rand.nextInt(all.size())));  
+	        // don't forget the polymorphic nodes
+	        all.addAll(nodesByOutputType.get(null));
+            Node newNode = create(all.get(rand.nextInt(all.size())));
+	        return induceIfNeeded(newNode, parentType);
         }
     }
 
@@ -162,10 +165,28 @@ public class NodeFactory {
 			return create(sel.get(rand.nextInt(sel.size())));
 		} else {
 			List<Class> all = nonterminalsByOutputType.get(parentType);
-			return create(all.get(rand.nextInt(all.size())));
+			all.addAll(nonterminalsByOutputType.get(null));
+			Node newNode = create(all.get(rand.nextInt(all.size())));
+			return induceIfNeeded(newNode, parentType);
 		}
 	}
-    public Node randomReplacement(Node child) {
+
+	private Node induceIfNeeded(Node newNode, Class parentType) {
+		if (newNode.getOutputType() == null) {
+			try {
+				newNode.induceOutputType(parentType);
+				return newNode;
+			} catch (VetoTypeInduction vetoTypeInduction) {
+				vetoTypeInduction.printStackTrace();
+				System.out.println("newNode: " + newNode);
+				return null;
+			}
+		} else {
+			return newNode;
+		}
+	}
+
+	public Node randomReplacement(Node child) {
         List<Class> nodes = getList(nodesByType, child.getType());
         return create(nodes.get(rand.nextInt(nodes.size())));
     }

@@ -1,26 +1,23 @@
 package ec;
 
+import static com.imaginaryday.util.Stuff.clampZero;
+import com.imaginaryday.ec.gp.AbstractNode;
+import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.gp.NodeFactory;
+import com.imaginaryday.ec.gp.VetoTypeInduction;
+import com.imaginaryday.ec.gp.nodes.Constant;
+import com.imaginaryday.ec.gp.nodes.IfThenElse;
+import com.imaginaryday.ec.gp.nodes.GreaterThan;
+import com.imaginaryday.ec.main.nodes.*;
+import com.imaginaryday.util.Stuff;
+import com.imaginaryday.util.VectorUtils;
+import info.javelot.functionalj.tuple.Pair;
+import org.jscience.mathematics.numbers.Float64;
+import org.jscience.mathematics.vectors.VectorFloat64;
 import robocode.*;
 import robocode.exception.DeathException;
 
 import java.util.logging.Logger;
-import java.util.logging.Handler;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-
-import com.imaginaryday.ec.gp.Node;
-import com.imaginaryday.ec.gp.AbstractNode;
-import com.imaginaryday.ec.gp.NodeFactory;
-import com.imaginaryday.ec.gp.VetoTypeInduction;
-import com.imaginaryday.ec.gp.nodes.Constant;
-import com.imaginaryday.ec.main.nodes.MakePair;
-import com.imaginaryday.ec.main.nodes.VectorConstant;
-import com.imaginaryday.ec.main.nodes.VectorToEnemy;
-import com.imaginaryday.util.VectorUtils;
-import com.imaginaryday.util.Stuff;
-import org.jscience.mathematics.vectors.VectorFloat64;
-import org.jscience.mathematics.numbers.Float64;
-import info.javelot.functionalj.tuple.Pair;
 
 /**
  * User: jlowens Date: Oct 30, 2006 Time: 6:13:08 PM
@@ -28,12 +25,12 @@ import info.javelot.functionalj.tuple.Pair;
 public class GPAgent extends AdvancedRobot {
     private static Logger log = Logger.getLogger(GPAgent.class.getName());
 // comment out because robocode is a piece of shit
-    static {
-        Handler h = new ConsoleHandler();
-        h.setLevel(Level.INFO);
-        GPAgent.log.addHandler(h);
-        GPAgent.log.setLevel(Level.INFO);
-    }
+//    static {
+//        Handler h = new ConsoleHandler();
+//        h.setLevel(Level.INFO);
+//        GPAgent.log.addHandler(h);
+//        GPAgent.log.setLevel(Level.INFO);
+//    }
 
     private static final boolean DEBUG = false;
 
@@ -63,9 +60,14 @@ public class GPAgent extends AdvancedRobot {
     private boolean scannedEnemy = true;
 
     public GPAgent() {
+        System.err.println("frakking A");
         NodeFactory nf = NodeFactory.getInstance();
         radarTree = new Constant(20*Math.PI/2.0);
-        turretTree = new Constant(3.0*Math.PI/2.0);
+        try {
+            turretTree = new VectorHeading().attach(0, new VectorToEnemy());
+        } catch (VetoTypeInduction vetoTypeInduction) {
+            vetoTypeInduction.printStackTrace();
+        }
         Node n = new MakePair();
         try {
             n.attach(0, nf.create("boolConst", true))
@@ -75,9 +77,16 @@ public class GPAgent extends AdvancedRobot {
         }
 
         firingTree = n;
-        directionTree = new VectorToEnemy();
+        try {
+            directionTree = new IfThenElse().attach(0, new GreaterThan().attach(0, new EnemySpeed())
+                                                                        .attach(1, new Constant(0.0)))
+                                            .attach(1, new VectorToEnemy())
+                                            .attach(2, new VectorToNearestWall());
+        } catch (VetoTypeInduction vetoTypeInduction) {
+            vetoTypeInduction.printStackTrace();
+        }
 
-	    radarTree.setOwner(this);
+        radarTree.setOwner(this);
 	    turretTree.setOwner(this);
 	    firingTree.setOwner(this);
 	    directionTree.setOwner(this);
@@ -279,7 +288,6 @@ public class GPAgent extends AdvancedRobot {
 	            // the movementVector is supposed to be an
 
 	            double heading = VectorUtils.toAngle(movementVector);
-	            System.err.println("desired heading = " + heading);
                 r = calculateTurn(getHeadingRadians(), heading);
                 switch (r.second) {
                     case LEFT:
@@ -314,7 +322,11 @@ public class GPAgent extends AdvancedRobot {
                     scale = 0.1;
                 }
                 setMaxVelocity(scale * 8.0);
-                setAhead(movementVector.normValue());
+                double dist = clampZero(movementVector.normValue());
+                // TODO: able to move backwards?
+                if (dist > 1.0) {
+                    setAhead(dist);
+                }
 
                 try {
                     execute();
@@ -356,8 +368,8 @@ public class GPAgent extends AdvancedRobot {
 
     private p<Double, Turn> calculateTurn(final double current, final double dest) {
         return (current > dest) ?
-                pairmin(GPAgent.p.n(Stuff.clampZero(current - dest), GPAgent.Turn.LEFT), GPAgent.p.n(Stuff.clampZero(2 * Math.PI - current + dest), GPAgent.Turn.RIGHT)) :
-                pairmin(GPAgent.p.n(Stuff.clampZero(2 * Math.PI - dest + current), GPAgent.Turn.LEFT), GPAgent.p.n(Stuff.clampZero(dest - current), GPAgent.Turn.RIGHT));
+                pairmin(GPAgent.p.n(clampZero(current - dest), GPAgent.Turn.LEFT), GPAgent.p.n(clampZero(2 * Math.PI - current + dest), GPAgent.Turn.RIGHT)) :
+                pairmin(GPAgent.p.n(clampZero(2 * Math.PI - dest + current), GPAgent.Turn.LEFT), GPAgent.p.n(clampZero(dest - current), GPAgent.Turn.RIGHT));
     }
 
 
@@ -372,63 +384,74 @@ public class GPAgent extends AdvancedRobot {
         double tx;
         double ty;
 
+        double dist = 0.0;
+        double angle = VectorUtils.toAngle(dir);
+        headingDegrees = Math.toDegrees(angle);
+        double cornerAngle = 0;
         if (headingDegrees >= 0 && headingDegrees < 90) {
-            // intersect top or right wall
-            tx = x / (1.0 - m);
-            if (tx > w) { // intersects right wall
-                tx = (w - x) / m;
-                ty = y / (1.0 - m);
-            } else { // intersects top wall
-                ty = (h - y) / m;
+            cornerAngle = VectorUtils.toAngle(VectorFloat64.valueOf(w-x, h-y));
+            if (angle <= cornerAngle) {
+                // intersects top wall
+                dist = (h-y)/Math.cos(angle);
+            } else {
+                dist = (w-x)/Math.cos(Math.PI/2.0-angle);
             }
         } else if (headingDegrees >= 90 && headingDegrees < 180) {
-            // intersects right or bottom wall
-            ty = y / (1.0 - m);
-            if (ty < 0) { // intersects bottom
-                tx = x / (1.0 - m);
-                ty = -y / m;
-            } else { // intersects right
-                tx = (w - x) / m;
+            cornerAngle = VectorUtils.toAngle(VectorFloat64.valueOf(w-x,0-y));
+            if (angle <= cornerAngle) {
+                dist = (w-x)/Math.cos(Math.cos(angle-Math.PI/2.0));
+            } else {
+                dist = (y)/Math.cos(Math.PI-angle);
             }
         } else if (headingDegrees >= 180 && headingDegrees < 270) {
-            // intersects bottom or left wall
-            ty = -y / m;
-            if (ty < 0) { // intersects left wall
-                tx = -x / m;
-                ty = y / (1.0 - m);
+            cornerAngle = VectorUtils.toAngle(VectorFloat64.valueOf(-x,-y));
+            if (angle <= cornerAngle) {
+                dist = (y)/Math.cos(angle-Math.PI);
             } else {
-                tx = x / (1.0 - m);
+                dist = (x)/Math.cos(3.0*Math.PI/2.0-angle);
             }
         } else {
-            // intersects left or top
-            ty = y / (1.0 - m);
-            if (ty > h) { // intersects top wall
-                tx = x / (1.0 - m);
-                ty = (h - y) / m;
-            } else { // intersects left wall
-                tx = -x / m;
+            cornerAngle = VectorUtils.toAngle(VectorFloat64.valueOf(-x,h-y));
+            if (angle <= cornerAngle) {
+                dist = -x/Math.cos(angle - 3.0*Math.PI/2.0);
+            } else {
+                dist = (h-y)/Math.cos(2.0*Math.PI-angle);
             }
         }
-        return dir.times(Float64.valueOf(Stuff.clampZero(Math.sqrt(tx * tx + ty * ty) - robotRadius)));
+
+//        System.err.println("(" + x + "," + y + ")");
+//        System.err.println("head  : " + headingDegrees);
+//        System.err.println("angle : " + Math.toDegrees(angle));
+//        System.err.println("corner: " + Math.toDegrees(cornerAngle));
+//        System.err.println("dist  : " + dist);
+
+        if (clampZero(dist - robotRadius) < 0.0) {
+            return dir;
+        } else {
+            return dir.times(Float64.valueOf(clampZero(dist - robotRadius)));
+        }
     }
 
 
     public void onScannedRobot(ScannedRobotEvent event) {
         super.onScannedRobot(event);
-	    System.err.println("scanned robot!");
-
         scannedEnemy = true;
         scannedEnemyAge = 0;
         double bearing = event.getBearingRadians();
-	    bearing = Stuff.modHeading(bearing - getHeadingRadians());
-        double dist = event.getDistance();
+	    bearing = Stuff.modHeading(bearing + getHeadingRadians());
+        double dist = clampZero(event.getDistance()) - getWidth();
         enemyHeading = event.getHeadingRadians();
         enemySpeed = event.getVelocity();
         enemyEnergy = event.getEnergy();
 
         // calculate a vector to the enemy
-        vectorToEnemy = VectorUtils.vecFromDir(bearing).times(Float64.valueOf(dist - (getWidth())));
-	    System.err.println("vec to enemy: " + vectorToEnemy);
+        vectorToEnemy = VectorUtils.vecFromDir(bearing);
+        if (dist > 0.0) {
+            vectorToEnemy = vectorToEnemy.times(Float64.valueOf(dist));
+        }
+//        System.err.println("vec to enemy: " + vectorToEnemy);
+//        System.err.println("dist to enemy: " + dist);
+//        System.err.println("remaining move: " + getDistanceRemaining());
     }
 
     public void onHitRobot(HitRobotEvent event) {
@@ -436,6 +459,7 @@ public class GPAgent extends AdvancedRobot {
         rammedAge = 0;
         myFault = event.isMyFault();
         rammerBearing = event.getBearingRadians();
+        System.err.println("hit robot (" + ((myFault) ? "my fault" : "not at fault") + ")");
     }
 
     public void onHitByBullet(HitByBulletEvent event) {
@@ -449,8 +473,11 @@ public class GPAgent extends AdvancedRobot {
 
     public void onHitWall(HitWallEvent event) {
         super.onHitWall(event);
+        System.err.println("hit wall");
         wallHitAge = 0;
         recentlyHitWall = true;
+        System.err.println("dist to forward wall: " + VectorUtils.vecLength(getVectorToForwardWall()));
+        System.err.println("dist to nearest wall: " + VectorUtils.vecLength(getVectorToNearWall()));                
     }
 
     public void onRobotDeath(RobotDeathEvent event) {

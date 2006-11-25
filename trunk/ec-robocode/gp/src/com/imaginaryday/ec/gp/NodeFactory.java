@@ -12,7 +12,7 @@ import com.imaginaryday.ec.gp.nodes.Multiply;
 import com.imaginaryday.ec.gp.nodes.Not;
 import com.imaginaryday.ec.gp.nodes.Or;
 import com.imaginaryday.ec.gp.nodes.Subtract;
-import info.javelot.functionalj.tuple.Pair;
+import com.imaginaryday.util.Tuple;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -38,7 +38,7 @@ public class NodeFactory {
     private Map<List<Class>, List<Class>> terminalsByInputType;
 	private Map<Class, List<Class>> nodesByOutputType;
 	private Map<List<Class>, List<Class>> nodesByInputType;
-    private Map<Pair<Class,List<Class>>,List<Class>> nodesByType;
+    private Map<Tuple.Two<Class,List<Class>>,List<Class>> nodesByType;
     private List<Class> nodes;
     private Random rand = new Random();
     private static Logger log = Logger.getLogger(NodeFactory.class.getName());
@@ -52,7 +52,7 @@ public class NodeFactory {
         terminalsByOutputType = new HashMap<Class, List<Class>>();
 	    nodesByOutputType = new HashMap<Class, List<Class>>();
 	    nodesByInputType = new HashMap<List<Class>, List<Class>>();
-        nodesByType = new HashMap<Pair<Class, List<Class>>, List<Class>>();
+        nodesByType = new HashMap<Tuple.Two<Class, List<Class>>, List<Class>>();
         nodes = new ArrayList<Class>();
 
         try {
@@ -85,7 +85,7 @@ public class NodeFactory {
     }
 
     private void putByType(Node n, Class aClass) {
-        List<Class> list = getList(nodesByType, new Pair<Class,List<Class>>(n.getOutputType(),n.getInputTypes()));
+        List<Class> list = getList(nodesByType, Tuple.pair(n.getOutputType(),n.getInputTypes()));
         list.add(aClass);
     }
 

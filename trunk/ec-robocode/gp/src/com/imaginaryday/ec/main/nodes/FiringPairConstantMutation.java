@@ -3,8 +3,7 @@ package com.imaginaryday.ec.main.nodes;
 import com.imaginaryday.ec.gp.GeneticOperators;
 import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.ec.gp.VetoTypeInduction;
-import info.javelot.functionalj.Function2Impl;
-import info.javelot.functionalj.FunctionException;
+import com.imaginaryday.util.F;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +18,8 @@ import java.util.List;
 public class FiringPairConstantMutation implements GeneticOperators.MutationFunc {
     public void mutate(Node node) {
         List<GeneticOperators.Link> fp = new ArrayList<GeneticOperators.Link>();
-        GeneticOperators.filterLinks(fp, node, 0, new Function2Impl<Boolean, GeneticOperators.Link, Integer>() {
-            public Boolean call(GeneticOperators.Link link, Integer integer) throws FunctionException {
+        GeneticOperators.filterLinks(fp, node, 0, new F.lambda2<Boolean, GeneticOperators.Link, Integer>() {
+            public Boolean _call(GeneticOperators.Link link, Integer integer) {
                 return link.child instanceof FiringPairConstant;
             }
         });

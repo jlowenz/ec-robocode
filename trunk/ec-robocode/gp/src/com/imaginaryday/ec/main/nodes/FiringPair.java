@@ -1,6 +1,6 @@
 package com.imaginaryday.ec.main.nodes;
 
-import info.javelot.functionalj.tuple.Pair;
+import com.imaginaryday.util.Tuple;
 
 /**
  * <b>
@@ -9,7 +9,7 @@ import info.javelot.functionalj.tuple.Pair;
  * Time: 5:41:23 PM<br>
  * </b>
  */
-public class FiringPair extends Pair<Boolean,Number> {
+public class FiringPair extends Tuple.Two<Boolean,Number> {
     private static final long serialVersionUID = -4950907474152324079L;
 
     public FiringPair() {

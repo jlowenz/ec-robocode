@@ -3,8 +3,7 @@ package com.imaginaryday.ec.main.nodes;
 import com.imaginaryday.ec.gp.GeneticOperators;
 import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.ec.gp.VetoTypeInduction;
-import info.javelot.functionalj.Function2Impl;
-import info.javelot.functionalj.FunctionException;
+import com.imaginaryday.util.F;
 import org.jscience.mathematics.vectors.VectorFloat64;
 
 import java.util.ArrayList;
@@ -20,8 +19,8 @@ import java.util.List;
 public class VectorConstantMutation implements GeneticOperators.MutationFunc {
     public void mutate(Node node) {
         List<GeneticOperators.Link> vc = new ArrayList<GeneticOperators.Link>();
-        GeneticOperators.filterLinks(vc, node, 0, new Function2Impl<Boolean, GeneticOperators.Link, Integer>() {
-            public Boolean call(GeneticOperators.Link link, Integer integer) throws FunctionException {
+        GeneticOperators.filterLinks(vc, node, 0, new F.lambda2<Boolean, GeneticOperators.Link, Integer>() {
+            public Boolean _call(GeneticOperators.Link link, Integer integer) {
                 return link.child instanceof VectorConstant;
             }
         });

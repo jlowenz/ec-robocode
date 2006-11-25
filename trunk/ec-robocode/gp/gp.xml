@@ -43,10 +43,6 @@
         <pathelement location="${basedir}/lib/junit-4.1.jar"/>
     </path>
 
-    <path id="library.functionalj-0.8-jdk15.classpath">
-        <pathelement location="${basedir}/lib/functionalj-0.8-jdk15.jar"/>
-    </path>
-
     <path id="library.jscience.classpath">
         <pathelement location="${basedir}/lib/jscience.jar"/>
     </path>
@@ -146,7 +142,6 @@
 
     <path id="gp.module.classpath">
         <path refid="library.junit-4.1.classpath"/>
-        <path refid="library.functionalj-0.8-jdk15.classpath"/>
         <path refid="library.jscience.classpath"/>
         <pathelement location="${module.gp.basedir}/lib/jini/jsk-platform.jar"/>
         <pathelement location="${module.gp.basedir}/lib/jini/jsk-dl.jar"/>
@@ -216,7 +211,7 @@
         <jar destfile="${gp.build.dir}/gp.jar">
             <manifest>
                 <attribute name="Main-Class" value="com.imaginaryday.ec.rcpatches.GPRobocodeMain"/>
-                <attribute name="Class-Path" value="jsk-debug-policy.jar jsk-dl.jar jsk-lib.jar jsk-platform.jar jsk-policy.jar jsk-resources.jar rio.jar functionalj-0.8-jdk15.jar jscience.jar junit-4.1.jar"/>                
+                <attribute name="Class-Path" value="jsk-debug-policy.jar jsk-dl.jar jsk-lib.jar jsk-platform.jar jsk-policy.jar jsk-resources.jar rio.jar jscience.jar junit-4.1.jar"/>                
             </manifest>
             <fileset dir="${gp.output.dir}"/>
             <fileset dir="${rc.output.dir}"/>
@@ -230,7 +225,6 @@
                 <include name="jini/jsk-policy.jar"/>
                 <include name="jini/jsk-resources.jar"/>
                 <include name="rio/rio.jar"/>
-                <include name="functionalj-0.8-jdk15.jar"/>
                 <include name="jscience.jar"/>
                 <include name="junit-4.1.jar"/>
                 <include name="javassist.jar"/>
@@ -243,7 +237,6 @@
         <mkdir dir="${module.gp.basedir}/bots"/>
         <unjar dest="${module.gp.basedir}/bots">
             <fileset dir="${module.gp.basedir}/lib">
-                <include name="functionalj-0.8-jdk15.jar"/>
                 <include name="jscience.jar"/>
                 <include name="junit-4.1.jar"/>
             </fileset>

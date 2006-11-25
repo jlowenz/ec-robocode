@@ -1,6 +1,6 @@
 package com.imaginaryday.ec.gp;
 
-import info.javelot.functionalj.tuple.Pair;
+import com.imaginaryday.util.Tuple;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -40,7 +40,7 @@ public class GOTest extends TestCase {
             vetoTypeInduction.printStackTrace();
         }
 
-        Pair<Node,Node> p = go.crossover(rootA, rootB);
+        Tuple.Two<Node,Node> p = go.crossover(rootA, rootB);
         System.out.println(rootA);
         System.out.println(rootB);
         System.out.println(p.getFirst().toString());
@@ -58,7 +58,7 @@ public class GOTest extends TestCase {
 
             System.out.println(a);
             System.out.println(b);
-            Pair<Node,Node> res = go.crossover(a, b);
+            Tuple.Two<Node,Node> res = go.crossover(a, b);
             System.out.println(res.getFirst());
             System.out.println(res.getSecond());
         }

@@ -67,6 +67,7 @@ public class ExtractBots {
                 cc.addField(turret, CtField.Initializer.byExpr(((AbstractNode)m.getTurretProgram()).toCodeString(imports)));
                 cc.addField(firing, CtField.Initializer.byExpr(((AbstractNode)m.getShootProgram()).toCodeString(imports)));
                 cc.addField(direction, CtField.Initializer.byExpr(((AbstractNode)m.getMoveProgram()).toCodeString(imports)));
+                for (Class c : imports) pool.importPackage(c.getName());
                 cc.writeFile(dest.getPath());
             }
         } catch (IOException e) {

@@ -2,10 +2,11 @@ package ec;
 
 import com.imaginaryday.ec.gp.AbstractNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.main.nodes.FiringPair;
 import com.imaginaryday.util.Stuff;
 import static com.imaginaryday.util.Stuff.clampZero;
+import com.imaginaryday.util.Tuple;
 import com.imaginaryday.util.VectorUtils;
-import info.javelot.functionalj.tuple.Pair;
 import org.jscience.mathematics.numbers.Float64;
 import org.jscience.mathematics.vectors.VectorFloat64;
 import robocode.AdvancedRobot;
@@ -215,7 +216,7 @@ public class GPAgent extends AdvancedRobot {
                 // get absolute radar heading
                 double radarDirection = 0;
                 double turretDirection = 0;
-                Pair<Boolean, Number> firing = null;
+                Tuple.Two<Boolean, Number> firing = null;
 
                 try {
                     radarDirection = ((Number) radarTree.evaluate()).doubleValue();
@@ -234,11 +235,11 @@ public class GPAgent extends AdvancedRobot {
 
                 // determine if we need to fire
                 try {
-                    firing = (Pair<Boolean, Number>) firingTree.evaluate();
+                    firing = (FiringPair) firingTree.evaluate();
                 } catch (Throwable t ) {
                     t.printStackTrace();
                     log.finest(((AbstractNode) firingTree).toStringEval());
-                    firing = new Pair<Boolean, Number>(false, 0.0);
+                    firing = new FiringPair(false, 0.0);
                 }
 
                 // get absolute robot heading and velocity

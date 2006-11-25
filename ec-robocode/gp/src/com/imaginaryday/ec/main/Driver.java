@@ -7,11 +7,9 @@ import com.imaginaryday.ec.gp.TreeFactory;
 import com.imaginaryday.ec.main.nodes.*;
 import com.imaginaryday.ec.rcpatches.GPBattleResults;
 import com.imaginaryday.ec.rcpatches.GPBattleTask;
+import com.imaginaryday.util.F;
 import com.imaginaryday.util.ServiceFinder;
-import info.javelot.functionalj.Function1;
-import info.javelot.functionalj.Function1Impl;
-import info.javelot.functionalj.FunctionException;
-import info.javelot.functionalj.tuple.Pair;
+import com.imaginaryday.util.Tuple;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
@@ -121,7 +119,7 @@ public class Driver implements Runnable {
     private double crossoverProbability = 0.6;
     private double mutationProbability = 0.1;
     private int testFreq = 5;
-    private int populationSize = 30;
+    private int populationSize = 24;
     private boolean readPopulation = false;
     private String popFile = "";
     private String progLogFile = "progressLog";
@@ -331,7 +329,7 @@ public class Driver implements Runnable {
         } catch (IOException ie) {
             ie.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         return null;
     }
@@ -340,7 +338,7 @@ public class Driver implements Runnable {
         logger.info("Persisting population for generation " + generation);
         StringBuilder sb = new StringBuilder().append("population").append(generation).append(".objs");
 
-        OutputStream os = null;
+        OutputStream os;
         try {
             os = new FileOutputStream(sb.toString());
             ObjectOutputStream oos = new ObjectOutputStream(os);
@@ -358,10 +356,6 @@ public class Driver implements Runnable {
         return space;
     }
 
-    private void setSpace(JavaSpace space) {
-        this.space = space;
-    }
-
     private static class Rank {
 
         public Member member;
@@ -374,8 +368,8 @@ public class Driver implements Runnable {
     }
 
     public List<Member> selectAndBreed(List<Member> oldPopulation) {
-        Function1<Double, Rank> probDist = new Function1Impl<Double, Rank>() {
-            public Double call(Rank rank) throws FunctionException {
+        F.lambda1<Double, Rank> probDist = new F.lambda1<Double, Rank>() {
+            public Double _call(Rank rank) {
                 double a = alpha;
                 double b = beta;
                 double r = rank.rank;
@@ -455,10 +449,10 @@ public class Driver implements Runnable {
                 Node radarB = n.getRadarProgram();
                 Node firingB = n.getShootProgram();
 
-                Pair<Node, Node> move = ops.crossover(moveA, moveB);
-                Pair<Node, Node> turret = ops.crossover(turretA, turretB);
-                Pair<Node, Node> radar = ops.crossover(radarA, radarB);
-                Pair<Node, Node> firing = ops.crossover(firingA, firingB);
+                Tuple.Two<Node, Node> move = ops.crossover(moveA, moveB);
+                Tuple.Two<Node, Node> turret = ops.crossover(turretA, turretB);
+                Tuple.Two<Node, Node> radar = ops.crossover(radarA, radarB);
+                Tuple.Two<Node, Node> firing = ops.crossover(firingA, firingB);
 
                 m.setMoveProgram(move.getFirst());
                 n.setMoveProgram(move.getSecond());
@@ -494,7 +488,7 @@ public class Driver implements Runnable {
      * @param p     the current population
      * @return a list of sampled parents based on the probability function
      */
-    private List<Member> stochasticUniversalSampling(List<Rank> p, Function1<Double, Rank> pr, int count) {
+    private List<Member> stochasticUniversalSampling(List<Rank> p, F.lambda1<Double, Rank> pr, int count) {
         List<Member> samples = new ArrayList<Member>();
         double u = rand.nextDouble() * (1.0 / (double) count);
         double sum = 0.0;
@@ -679,9 +673,7 @@ public class Driver implements Runnable {
     public int submitBattles(List<Member> population) {
 
         int battle = 0;
-        Transaction t = null;
         for (int i = 0; i < population.size(); ++i) {
-
             for (int j = i; j < population.size(); ++j) {
                 GPBattleTask task = new GPBattleTask(generationCount, battle, population.get(i), population.get(j));
                 taskArray[battle] = task; // record the task for replay later

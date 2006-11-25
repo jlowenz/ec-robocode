@@ -2,10 +2,9 @@ package com.imaginaryday.ec.gp;
 
 import com.imaginaryday.ec.gp.nodes.BooleanConstant;
 import com.imaginaryday.ec.gp.nodes.Constant;
-import info.javelot.functionalj.Function2;
-import info.javelot.functionalj.Function2Impl;
-import info.javelot.functionalj.FunctionException;
-import info.javelot.functionalj.tuple.Pair;
+import com.imaginaryday.util.F;
+import com.imaginaryday.util.Tuple;
+import org.jscience.mathematics.functions.FunctionException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,10 +84,11 @@ public class GeneticOperators {
     }
 
     // argh - there must be a pattern to handle this situation - if only I had simple anonymous functions / closures!
-    public Pair<Node, Node> crossover(Node parA, Node parB) {
+    // TODO: should crossover actually handle single element trees? how?
+    public Tuple.Two<Node, Node> crossover(Node parA, Node parB) {
         if (parA == null || parB == null) {
             notifyCrossoverFailed(parA, parB);
-            return new Pair<Node,Node>(parA, parB);
+            return Tuple.pair(parA, parB);
         }
         Node childA = parA.copy();
         Node childB = parB.copy();
@@ -102,7 +102,7 @@ public class GeneticOperators {
         }
         if (la == Link.EMPTY || lb == Link.EMPTY) {
             notifyCrossoverFailed(childA, childB);
-            return new Pair<Node, Node>(childA, childB);
+            return Tuple.pair(childA, childB);
         }
 
         try {
@@ -112,7 +112,7 @@ public class GeneticOperators {
             // todo: ack what to do with this?
         }
 
-        return new Pair<Node, Node>(childA, childB);
+        return Tuple.pair(childA, childB);
     }
 
     private static void swap(Link la, Link lb) throws VetoTypeInduction {
@@ -123,6 +123,7 @@ public class GeneticOperators {
 
     public Node mutate(Node parent) {
         Node child = parent.copy();
+        // TODO: mutation **needs** to handle single node trees!!!! or we'll never get out of that hole
         randomMutation().mutate(child);
         return child;
     }
@@ -207,8 +208,8 @@ public class GeneticOperators {
     public static class ConstantMutation implements MutationFunc {
         public void mutate(Node node) {
             List<Link> constantNodes = new ArrayList<Link>();
-            filterLinks(constantNodes, node, 0, new Function2Impl<Boolean, Link, Integer>() {
-                public Boolean call(Link link, Integer integer) throws FunctionException {
+            filterLinks(constantNodes, node, 0, new F.lambda2<Boolean, Link, Integer>() {
+                public Boolean _call(Link link, Integer integer) throws FunctionException {
                     return (link.child instanceof Constant);
                 }
             });
@@ -227,8 +228,8 @@ public class GeneticOperators {
     public static class BooleanMutation implements MutationFunc {
         public void mutate(Node node) {
             List<Link> boolLinks = new ArrayList<Link>();
-            filterLinks(boolLinks, node, 0, new Function2Impl<Boolean, Link, Integer>() {
-                public Boolean call(Link link, Integer integer) throws FunctionException {
+            filterLinks(boolLinks, node, 0, new F.lambda2<Boolean, Link, Integer>() {
+                public Boolean _call(Link link, Integer integer) throws FunctionException {
                     return link.child instanceof BooleanConstant;
                 }
             });
@@ -250,8 +251,8 @@ public class GeneticOperators {
     }
 
     public static Link randomSubtree(Node root, final Class outputType) {
-        Function2<Boolean, Link, Integer> f = new Function2Impl<Boolean, Link, Integer>() {
-            public Boolean call(Link link, Integer integer) throws FunctionException {
+        F.lambda2<Boolean, Link, Integer> f = new F.lambda2<Boolean, Link, Integer>() {
+            public Boolean _call(Link link, Integer integer) throws FunctionException {
                 return link.child.getOutputType().equals(outputType);
             }
         };
@@ -280,8 +281,8 @@ public class GeneticOperators {
     }
 
     public static Link selectLink(Node parent, final int i) {
-        Function2<Boolean, Link, Integer> f = new Function2Impl<Boolean, Link, Integer>() {
-            public Boolean call(Link link, Integer integer) throws FunctionException {
+        F.lambda2<Boolean, Link, Integer> f = new F.lambda2<Boolean, Link, Integer>() {
+            public Boolean _call(Link link, Integer integer) throws FunctionException {
                 return i == integer;
             }
         };
@@ -290,7 +291,7 @@ public class GeneticOperators {
         return l.get(0);
     }
 
-    public static int filterLinks(List<Link> l, Node parent, int count, Function2<Boolean, Link, Integer> pred) {
+    public static int filterLinks(List<Link> l, Node parent, int count, F.lambda2<Boolean, Link, Integer> pred) {
         int id = count;
         int i = 0;
         for (Node n : parent.childList()) {

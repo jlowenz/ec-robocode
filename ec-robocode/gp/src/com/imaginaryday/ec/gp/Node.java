@@ -1,6 +1,6 @@
 package com.imaginaryday.ec.gp;
 
-import info.javelot.functionalj.tuple.Pair;
+import com.imaginaryday.util.Tuple;
 
 import java.io.Serializable;
 import java.util.List;
@@ -25,7 +25,7 @@ public interface Node extends Serializable {
 	Class getInputType(int id);
     List<Class> getInputTypes();
     Class getOutputType();
-    Pair<Class,List<Class>> getType();
+    Tuple.Two<Class,List<Class>> getType();
 
     Object evaluate();
 

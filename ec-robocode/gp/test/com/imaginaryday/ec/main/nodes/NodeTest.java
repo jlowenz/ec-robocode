@@ -335,10 +335,6 @@ public class NodeTest extends TestCase {
             super.setEventPriority(eventClass, priority);
         }
         @Override
-        public void setInterruptible(boolean interruptible) {
-            super.setInterruptible(interruptible);
-        }
-        @Override
         public void setMaxTurnRate(double newMaxTurnRate) {
             super.setMaxTurnRate(newMaxTurnRate);
         }

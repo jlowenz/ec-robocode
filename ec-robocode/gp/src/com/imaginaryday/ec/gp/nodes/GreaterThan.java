@@ -13,8 +13,9 @@ import com.imaginaryday.util.Stuff;
  */
 public class GreaterThan extends AbstractNode {
 	private Node[] children = new Node[2];
+    private static final long serialVersionUID = 2422507265699110514L;
 
-	protected Node[] children() {
+    protected Node[] children() {
 		return children;
 	}
 

@@ -15,6 +15,7 @@ import static com.imaginaryday.util.Stuff.isReasonable;
 public class Add extends AbstractNode {
     
     private Node[] operands = new Node[2];
+    private static final long serialVersionUID = -3658244387907158747L;
 
 
     public String getName() {

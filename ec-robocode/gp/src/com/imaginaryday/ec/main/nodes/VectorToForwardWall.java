@@ -14,6 +14,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  * </b>
  */
 public class VectorToForwardWall extends RoboNode {
+    private static final long serialVersionUID = 7804563496768737940L;
     protected Node[] children() {
         return NONE;
     }

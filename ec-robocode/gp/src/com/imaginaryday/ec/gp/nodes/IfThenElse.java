@@ -15,6 +15,7 @@ public class IfThenElse extends AbstractNode {
 
     private Node[] child = new Node[3];
     private Class outputType = null;
+    private static final long serialVersionUID = -6928353949607697370L;
 
 
     public IfThenElse() {

@@ -13,6 +13,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  * </b>
  */
 public class CurrentVector extends RoboNode {
+    private static final long serialVersionUID = 7910860245468576353L;
 
     protected Node[] children() {
         return NONE;

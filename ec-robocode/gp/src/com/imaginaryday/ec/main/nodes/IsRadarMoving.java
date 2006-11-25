@@ -4,6 +4,7 @@ import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.ec.main.RoboNode;
 
 public class IsRadarMoving extends RoboNode {
+    private static final long serialVersionUID = -6601813067011832245L;
 
     @Override
     protected Node[] children() {

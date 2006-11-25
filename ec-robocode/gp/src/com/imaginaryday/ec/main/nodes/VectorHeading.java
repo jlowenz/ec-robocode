@@ -16,6 +16,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  */
 public class VectorHeading extends RoboNode {
     private Node child[] = new Node[1];
+    private static final long serialVersionUID = 162010540493658280L;
 
     protected Node[] children() {
         return child;

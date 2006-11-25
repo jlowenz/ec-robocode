@@ -1,7 +1,7 @@
 package com.imaginaryday.ec.main.nodes;
 
-import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.main.RoboNode;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,6 +11,7 @@ import com.imaginaryday.ec.gp.Node;
  * To change this template use File | Settings | File Templates.
  */
 public class IsTurretMoving extends RoboNode {
+    private static final long serialVersionUID = -6100391100365489576L;
 
     protected Node[] children() {
         return NONE;

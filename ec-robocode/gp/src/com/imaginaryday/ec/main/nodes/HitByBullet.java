@@ -1,7 +1,7 @@
 package com.imaginaryday.ec.main.nodes;
 
-import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.main.RoboNode;
 
 /**
  * <b>
@@ -11,6 +11,7 @@ import com.imaginaryday.ec.gp.Node;
  * </b>
  */
 public class HitByBullet extends RoboNode {
+    private static final long serialVersionUID = 6869073954918650904L;
     public String getName() { return "hitByBullet"; }
     public Class getInputType(int id) {  return null; }
     public Class getOutputType() { return Boolean.class; }

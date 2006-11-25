@@ -10,6 +10,7 @@ import info.javelot.functionalj.tuple.Pair;
  * </b>
  */
 public class FiringPair extends Pair<Boolean,Number> {
+    private static final long serialVersionUID = -4950907474152324079L;
 
     public FiringPair() {
     }

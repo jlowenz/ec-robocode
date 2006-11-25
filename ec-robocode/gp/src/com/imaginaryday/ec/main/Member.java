@@ -14,8 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Member implements Comparable<Member>, Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     private static AtomicInteger ID = new AtomicInteger(0);
 
     private int generation;
@@ -29,6 +27,7 @@ public class Member implements Comparable<Member>, Serializable {
 
     double cumulativeFitness = 0.0;
     int numBattles = 0;
+    private static final long serialVersionUID = 1481195345545820852L;
 
     public Member(int generation, int id) {
         this.generation = generation;

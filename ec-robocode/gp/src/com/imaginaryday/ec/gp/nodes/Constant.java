@@ -18,6 +18,7 @@ public class Constant extends AbstractNode {
     private static double min = -10, max = 10;
     private static Random rand = new Random();
     private Object val;
+    private static final long serialVersionUID = -2363840530594256597L;
 
 
     @SuppressWarnings({"unchecked"})

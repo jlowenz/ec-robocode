@@ -2,257 +2,245 @@
 <project name="gp" default="all">
 
 
-	<property file="gp.properties"/>
-	<!-- Uncomment the following property if no tests compilation is needed -->
-	<!--
-	  <property name="skip.tests" value="true"/>
-	   -->
+    <property file="gp.properties"/>
+    <!-- Uncomment the following property if no tests compilation is needed -->
+    <!--
+   <property name="skip.tests" value="true"/>
+    -->
 
-	<!-- Compiler options -->
+    <!-- Compiler options -->
 
-	<property name="compiler.debug" value="on"/>
-	<property name="compiler.generate.no.warnings" value="off"/>
-	<property name="compiler.args" value=""/>
-	<property name="compiler.max.memory" value="128m"/>
-	<patternset id="ignored.files">
-		<exclude name="**/CVS/**"/>
-		<exclude name="**/SCCS/**"/>
-		<exclude name="**/RCS/**"/>
-		<exclude name="**/rcs/**"/>
-		<exclude name="**/.DS_Store/**"/>
-		<exclude name="**/.svn/**"/>
-	</patternset>
-	<patternset id="compiler.resources">
-		<include name="**/?*.properties"/>
-		<include name="**/?*.xml"/>
-		<include name="**/?*.gif"/>
-		<include name="**/?*.png"/>
-		<include name="**/?*.jpeg"/>
-		<include name="**/?*.jpg"/>
-		<include name="**/?*.html"/>
-		<include name="**/?*.dtd"/>
-		<include name="**/?*.tld"/>
-	</patternset>
-
-
-	<!-- Project Libraries -->
-
-	<path id="library.junit-4.1.classpath">
-		<pathelement location="${basedir}/lib/junit-4.1.jar"/>
-	</path>
-
-	<path id="library.functionalj-0.8-jdk15.classpath">
-		<pathelement location="${basedir}/lib/functionalj-0.8-jdk15.jar"/>
-	</path>
-
-	<path id="library.jscience.classpath">
-		<pathelement location="${basedir}/lib/jscience.jar"/>
-	</path>
+    <property name="compiler.debug" value="on"/>
+    <property name="compiler.generate.no.warnings" value="off"/>
+    <property name="compiler.args" value=""/>
+    <property name="compiler.max.memory" value="128m"/>
+    <patternset id="ignored.files">
+        <exclude name="**/CVS/**"/>
+        <exclude name="**/SCCS/**"/>
+        <exclude name="**/RCS/**"/>
+        <exclude name="**/rcs/**"/>
+        <exclude name="**/.DS_Store/**"/>
+        <exclude name="**/.svn/**"/>
+        <exclude name="**/vssver.scc/**"/>
+        <exclude name="**/vssver2.scc/**"/>
+    </patternset>
+    <patternset id="compiler.resources">
+        <include name="**/?*.properties"/>
+        <include name="**/?*.xml"/>
+        <include name="**/?*.gif"/>
+        <include name="**/?*.png"/>
+        <include name="**/?*.jpeg"/>
+        <include name="**/?*.jpg"/>
+        <include name="**/?*.html"/>
+        <include name="**/?*.dtd"/>
+        <include name="**/?*.tld"/>
+    </patternset>
 
 
-	<!-- Global Libraries -->
+    <!-- Project Libraries -->
 
-	<path id="library.junit-4.1.classpath">
-		<pathelement location="/Users/jlowens/dev/jars/junit-4.1.jar"/>
-	</path>
+    <path id="library.junit-4.1.classpath">
+        <pathelement location="${basedir}/lib/junit-4.1.jar"/>
+    </path>
 
-	<!-- Modules -->
+    <path id="library.functionalj-0.8-jdk15.classpath">
+        <pathelement location="${basedir}/lib/functionalj-0.8-jdk15.jar"/>
+    </path>
 
+    <path id="library.jscience.classpath">
+        <pathelement location="${basedir}/lib/jscience.jar"/>
+    </path>
 
-	<!-- Module rc -->
-
-	<dirname property="module.rc.basedir" file="${ant.file}"/>
-
-
-	<property name="compiler.args.rc" value="${compiler.args}"/>
-
-	<property name="rc.output.dir" value="${module.rc.basedir}/rc/classes"/>
-	<property name="rc.testoutput.dir" value="${module.rc.basedir}/rc/classes"/>
-
-	<path id="rc.module.bootclasspath">
-		<!-- Paths to be included in compilation bootclasspath -->
-	</path>
-
-	<path id="rc.module.classpath">
-		<pathelement location="${module.rc.basedir}/lib/jini/jsk-policy.jar"/>
-		<pathelement location="${module.rc.basedir}/lib/jini/jsk-dl.jar"/>
-		<pathelement
-				location="${module.rc.basedir}/lib/jini/jsk-resources.jar"/>
-		<pathelement location="${module.rc.basedir}/lib/jini/jsk-platform.jar"/>
-		<pathelement location="${module.rc.basedir}/lib/jini/jsk-lib.jar"/>
-		<pathelement location="${module.rc.basedir}/lib/rio/rio.jar"/>
-	</path>
+    <!-- Modules -->
 
 
-	<patternset id="excluded.from.module.rc">
-		<patternset refid="ignored.files"/>
-	</patternset>
+    <!-- Module rc -->
 
-	<patternset id="excluded.from.compilation.rc">
-		<patternset refid="excluded.from.module.rc"/>
-	</patternset>
-
-	<path id="rc.module.sourcepath">
-		<dirset dir="${module.rc.basedir}/../rc">
-			<include name="robocode"/>
-			<include name="robots"/>
-		</dirset>
-	</path>
+    <dirname property="module.rc.basedir" file="${ant.file}"/>
 
 
-	<target name="compile.module.rc"
-	        depends="compile.module.rc.production,compile.module.rc.tests"
-	        description="Compile module rc"/>
+    <property name="compiler.args.rc" value="${compiler.args}"/>
 
-	<target name="compile.module.rc.production"
-	        description="Compile module rc; production classes">
-		<mkdir dir="${rc.output.dir}"/>
-		<javac destdir="${rc.output.dir}" debug="${compiler.debug}"
-		       nowarn="${compiler.generate.no.warnings}"
-		       memoryMaximumSize="${compiler.max.memory}" fork="true">
-			<compilerarg line="${compiler.args.rc}"/>
-			<bootclasspath refid="rc.module.bootclasspath"/>
-			<classpath refid="rc.module.classpath"/>
-			<src refid="rc.module.sourcepath"/>
-		</javac>
+    <property name="rc.output.dir" value="${module.rc.basedir}/rc/classes"/>
+    <property name="rc.testoutput.dir" value="${module.rc.basedir}/rc/classes"/>
 
-		<copy todir="${rc.output.dir}">
-			<fileset dir="${module.rc.basedir}/../rc/robocode">
-				<patternset refid="compiler.resources"/>
-				<type type="file"/>
-			</fileset>
-			<fileset dir="${module.rc.basedir}/../rc/robots">
-				<patternset refid="compiler.resources"/>
-				<type type="file"/>
-			</fileset>
-		</copy>
-	</target>
+    <path id="rc.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
 
-	<target name="compile.module.rc.tests"
-	        depends="compile.module.rc.production"
-	        description="compile module rc; test classes" unless="skip.tests"/>
-
-	<target name="clean.module.rc" description="cleanup module">
-		<delete dir="${rc.output.dir}"/>
-		<delete dir="${rc.testoutput.dir}"/>
-	</target>
+    <path id="rc.module.classpath">
+        <pathelement location="${module.rc.basedir}/lib/jini/jsk-policy.jar"/>
+        <pathelement location="${module.rc.basedir}/lib/jini/jsk-dl.jar"/>
+        <pathelement location="${module.rc.basedir}/lib/jini/jsk-resources.jar"/>
+        <pathelement location="${module.rc.basedir}/lib/jini/jsk-platform.jar"/>
+        <pathelement location="${module.rc.basedir}/lib/jini/jsk-lib.jar"/>
+        <pathelement location="${module.rc.basedir}/lib/rio/rio.jar"/>
+    </path>
 
 
-	<!-- Module gp -->
+    <patternset id="excluded.from.module.rc">
+        <patternset refid="ignored.files"/>
+    </patternset>
 
-	<dirname property="module.gp.basedir" file="${ant.file}"/>
+    <patternset id="excluded.from.compilation.rc">
+        <patternset refid="excluded.from.module.rc"/>
+    </patternset>
 
-
-	<property name="compiler.args.gp" value="${compiler.args}"/>
-
-	<property name="gp.output.dir" value="${module.gp.basedir}/build/classes"/>
-	<property name="gp.testoutput.dir"
-	          value="${module.gp.basedir}/build/classes"/>
-
-	<path id="gp.module.bootclasspath">
-		<!-- Paths to be included in compilation bootclasspath -->
-	</path>
-
-	<path id="gp.module.classpath">
-		<path refid="library.junit-4.1.classpath"/>
-		<path refid="library.functionalj-0.8-jdk15.classpath"/>
-		<path refid="library.jscience.classpath"/>
-		<pathelement location="${module.gp.basedir}/lib/jini/jsk-platform.jar"/>
-		<pathelement location="${module.gp.basedir}/lib/jini/jsk-dl.jar"/>
-		<pathelement location="${module.gp.basedir}/lib/jini/jsk-lib.jar"/>
-		<pathelement
-				location="${module.gp.basedir}/lib/jini/jsk-debug-policy.jar"/>
-		<pathelement
-				location="${module.gp.basedir}/lib/jini/jsk-resources.jar"/>
-		<pathelement location="${module.gp.basedir}/lib/jini/jsk-policy.jar"/>
-		<pathelement location="${module.gp.basedir}/lib/rio/rio.jar"/>
-		<pathelement location="${rc.output.dir}"/>
-	</path>
+    <path id="rc.module.sourcepath">
+        <dirset dir="${module.rc.basedir}/../rc">
+            <include name="robocode"/>
+            <include name="robots"/>
+        </dirset>
+    </path>
 
 
-	<patternset id="excluded.from.module.gp">
-		<patternset refid="ignored.files"/>
-	</patternset>
+    <target name="compile.module.rc" depends="compile.module.rc.production,compile.module.rc.tests"
+            description="Compile module rc"/>
 
-	<patternset id="excluded.from.compilation.gp">
-		<patternset refid="excluded.from.module.gp"/>
-	</patternset>
+    <target name="compile.module.rc.production" description="Compile module rc; production classes">
+        <mkdir dir="${rc.output.dir}"/>
+        <javac destdir="${rc.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+               memorymaximumsize="${compiler.max.memory}" fork="true">
+            <compilerarg line="${compiler.args.rc}"/>
+            <bootclasspath refid="rc.module.bootclasspath"/>
+            <classpath refid="rc.module.classpath"/>
+            <src refid="rc.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.rc"/>
+        </javac>
 
-	<path id="gp.module.sourcepath">
-		<dirset dir="${module.gp.basedir}">
-			<include name="src"/>
-		</dirset>
-	</path>
+        <copy todir="${rc.output.dir}">
+            <fileset dir="${module.rc.basedir}/../rc/robocode">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+            <fileset dir="${module.rc.basedir}/../rc/robots">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
 
-	<path id="gp.module.test.sourcepath">
-		<dirset dir="${module.gp.basedir}">
-			<include name="test"/>
-		</dirset>
-	</path>
+    <target name="compile.module.rc.tests" depends="compile.module.rc.production"
+            description="compile module rc; test classes" unless="skip.tests"/>
+
+    <target name="clean.module.rc" description="cleanup module">
+        <delete dir="${rc.output.dir}"/>
+        <delete dir="${rc.testoutput.dir}"/>
+    </target>
 
 
-	<target name="compile.module.gp"
-	        depends="compile.module.gp.production,compile.module.gp.tests"
-	        description="Compile module gp"/>
+    <!-- Module gp -->
 
-	<target name="compile.module.gp.production" depends="compile.module.rc"
-	        description="Compile module gp; production classes">
-		<mkdir dir="${gp.output.dir}"/>
-		<javac destdir="${gp.output.dir}" debug="${compiler.debug}"
-		       nowarn="${compiler.generate.no.warnings}"
-		       memoryMaximumSize="${compiler.max.memory}" fork="true">
-			<compilerarg line="${compiler.args.gp}"/>
-			<bootclasspath refid="gp.module.bootclasspath"/>
-			<classpath refid="gp.module.classpath"/>
-			<src refid="gp.module.sourcepath"/>
-		</javac>
+    <dirname property="module.gp.basedir" file="${ant.file}"/>
 
-		<copy todir="${gp.output.dir}">
-			<fileset dir="${module.gp.basedir}/src">
-				<patternset refid="compiler.resources"/>
-				<type type="file"/>
-			</fileset>
-		</copy>
-	</target>
+    <property name="compiler.args.gp" value="${compiler.args}"/>
 
-	<target name="compile.module.gp.tests"
-	        depends="compile.module.gp.production"
-	        description="compile module gp; test classes" unless="skip.tests">
-		<mkdir dir="${gp.testoutput.dir}"/>
-		<javac destdir="${gp.testoutput.dir}" debug="${compiler.debug}"
-		       nowarn="${compiler.generate.no.warnings}"
-		       memoryMaximumSize="${compiler.max.memory}" fork="true">
-			<compilerarg line="${compiler.args.gp}"/>
-			<classpath refid="gp.module.classpath"/>
-			<classpath location="${gp.output.dir}"/>
-			<src refid="gp.module.test.sourcepath"/>
-		</javac>
+    <property name="gp.build.dir" value="${module.gp.basedir}/../build"/>
+    <property name="gp.output.dir" value="${module.gp.basedir}/../robo_build"/>
+    <property name="gp.testoutput.dir" value="${module.gp.basedir}/../robo_build"/>
 
-		<copy todir="${gp.testoutput.dir}">
-			<fileset dir="${module.gp.basedir}/test">
-				<patternset refid="compiler.resources"/>
-				<type type="file"/>
-			</fileset>
-		</copy>
-	</target>
+    <path id="gp.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
 
-	<target name="clean.module.gp" description="cleanup module">
-		<delete dir="${gp.output.dir}"/>
-		<delete dir="${gp.testoutput.dir}"/>
-	</target>
+    <path id="gp.module.classpath">
+        <path refid="library.junit-4.1.classpath"/>
+        <path refid="library.functionalj-0.8-jdk15.classpath"/>
+        <path refid="library.jscience.classpath"/>
+        <pathelement location="${module.gp.basedir}/lib/jini/jsk-platform.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jini/jsk-dl.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jini/jsk-lib.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jini/jsk-debug-policy.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jini/jsk-resources.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jini/jsk-policy.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/rio/rio.jar"/>
+        <pathelement location="${rc.output.dir}"/>
+        <pathelement location="${module.gp.basedir}/lib/asm-3.0.jar"/>
+    </path>
 
-	<target name="dist" description="create the dist">
-		
-	</target>
 
-	<target name="init" description="Build initialization">
-		<!-- Perform any build initialization in this target -->
-	</target>
+    <patternset id="excluded.from.module.gp">
+        <patternset refid="ignored.files"/>
+    </patternset>
 
-	<target name="clean" depends="clean.module.rc, clean.module.gp"
-	        description="cleanup all"/>
+    <patternset id="excluded.from.compilation.gp">
+        <patternset refid="excluded.from.module.gp"/>
+    </patternset>
 
-	<target name="all"
-	        depends="init, clean, compile.module.rc, compile.module.gp"
-	        description="build all"/>
+    <path id="gp.module.sourcepath">
+        <dirset dir="${module.gp.basedir}/../../ec-robocode">
+            <include name="gp/src"/>
+            <include name="gp/test"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.gp" depends="compile.module.gp.production,compile.module.gp.tests"
+            description="Compile module gp"/>
+
+    <target name="compile.module.gp.production" depends="compile.module.rc"
+            description="Compile module gp; production classes">
+        <mkdir dir="${gp.output.dir}"/>
+        <javac destdir="${gp.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+               memorymaximumsize="${compiler.max.memory}" fork="true">
+            <compilerarg line="${compiler.args.gp}"/>
+            <bootclasspath refid="gp.module.bootclasspath"/>
+            <classpath refid="gp.module.classpath"/>
+            <src refid="gp.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.gp"/>
+        </javac>
+
+        <copy todir="${gp.output.dir}">
+            <fileset dir="${module.gp.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+            <fileset dir="${module.gp.basedir}/test">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.gp.tests" depends="compile.module.gp.production"
+            description="compile module gp; test classes" unless="skip.tests"/>
+
+    <target name="clean.module.gp" description="cleanup module">
+        <delete dir="${gp.output.dir}"/>
+        <delete dir="${gp.testoutput.dir}"/>
+    </target>
+
+    <target name="dist" depends="compile.module.rc, compile.module.gp">
+        <mkdir dir="${gp.build.dir}"/>
+        <jar destfile="${gp.build.dir}/gp.jar">
+            <manifest>
+                <attribute name="Main-Class" value="com.imaginaryday.ec.rcpatches.GPRobocodeMain"/>
+                <attribute name="Class-Path" value="jsk-debug-policy.jar jsk-dl.jar jsk-lib.jar jsk-platform.jar jsk-policy.jar jsk-resources.jar rio.jar functionalj-0.8-jdk15.jar jscience.jar junit-4.1.jar"/>                
+            </manifest>
+            <fileset dir="${gp.output.dir}"/>
+            <fileset dir="${rc.output.dir}"/>
+        </jar>
+        <copy todir="${gp.build.dir}" flatten="true">
+            <fileset dir="${module.gp.basedir}/lib" >
+                <include name="jini/jsk-debug-policy.jar"/>
+                <include name="jini/jsk-dl.jar"/>
+                <include name="jini/jsk-lib.jar"/>
+                <include name="jini/jsk-platform.jar"/>
+                <include name="jini/jsk-policy.jar"/>
+                <include name="jini/jsk-resources.jar"/>
+                <include name="rio/rio.jar"/>
+                <include name="functionalj-0.8-jdk15.jar"/>
+                <include name="jscience.jar"/>
+                <include name="junit-4.1.jar"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="init" description="Build initialization">
+        <!-- Perform any build initialization in this target -->
+    </target>
+
+    <target name="clean" depends="clean.module.rc, clean.module.gp" description="cleanup all"/>
+
+    <target name="all" depends="init, clean, compile.module.rc, compile.module.gp" description="build all"/>
 </project>

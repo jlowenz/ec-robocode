@@ -1,10 +1,7 @@
 package com.imaginaryday.ec.rcpatches;
 
-import robocode.control.RobotResults;
-
-import java.util.logging.Logger;
-
 import com.imaginaryday.util.Stuff;
+import robocode.control.RobotResults;
 
 /**
  * @author rbowers
@@ -18,6 +15,7 @@ public class GPFitnessCalc {
     private static double distanceTraveledFactor = 100.0;
     private static double numScanEventsFactor = 2.0;
     private static double accuracyFactor = 100.0;
+    private static double winFactor = 100.0;
 
     public static double getFitness(int numGenerations, RobotResults robot, RobotResults opponent) {
         double numBulletsDodged = opponent.getNumBulletsFired() - robot.getNumBulletHits();
@@ -34,11 +32,12 @@ public class GPFitnessCalc {
             accuracy = 0;
         }
 
-        return (numBulletsDodgedFactor * numBulletsDodged) +
-               (numBulletsFiredFactor * robot.getNumBulletsFired()) +
-               (numWallsHitFactor * robot.getNumWallsHit()) +
-               (distanceTraveledFactor * distRatio) +
-               (numScanEventsFactor * robot.getNumScanEvents()) +
-               (accuracyFactor * accuracy * accScaling);
+        return (winFactor * robot.getFirsts()) +
+                (numBulletsDodgedFactor * numBulletsDodged) +
+                (numBulletsFiredFactor * robot.getNumBulletsFired()) +
+                (numWallsHitFactor * robot.getNumWallsHit()) +
+                (distanceTraveledFactor * distRatio) +
+                (numScanEventsFactor * robot.getNumScanEvents()) +
+                (accuracyFactor * accuracy * accScaling);
     }
 }

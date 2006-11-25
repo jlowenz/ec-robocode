@@ -55,4 +55,9 @@ public class VectorConstant extends RoboNode {
     public Object evaluate() {
         return val;
     }
+
+    @Override
+    public String toString() {
+        return val.toString();
+    }
 }

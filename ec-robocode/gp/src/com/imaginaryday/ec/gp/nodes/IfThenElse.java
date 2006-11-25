@@ -13,10 +13,26 @@ import com.imaginaryday.ec.gp.VetoTypeInduction;
  */
 public class IfThenElse extends AbstractNode {
 
-    Node[] child = new Node[3];
-    Class outputType = null;
+    private Node[] child = new Node[3];
+    private Class outputType = null;
 
 
+    public IfThenElse() {
+    }
+
+    private IfThenElse(Class outputType) {
+        this.outputType = outputType;
+    }
+
+    @Override
+    public <T extends Node> T copy() {
+        Node n = new IfThenElse(outputType);
+        n.attach(0, child[0].copy());
+        n.attach(1, child[1].copy());
+        n.attach(2, child[2].copy());
+        return (T) n;
+    }
+    
     @Override
     public void induceOutputType(Class toType) throws VetoTypeInduction {
         if (outputType != null && !outputType.equals(toType)) {

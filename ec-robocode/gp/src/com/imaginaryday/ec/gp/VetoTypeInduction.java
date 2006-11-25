@@ -7,7 +7,7 @@ package com.imaginaryday.ec.gp;
  * Time: 9:13:00 PM<br>
  * </b>
  */
-public class VetoTypeInduction extends Exception {
+public class VetoTypeInduction extends RuntimeException {
 
     public VetoTypeInduction() {
     }

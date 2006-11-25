@@ -47,10 +47,28 @@ public class GOTest extends TestCase {
         System.out.println(p.getSecond().toString());
     }
 
+    public void testRandomCrossover() {
+        GeneticOperators go = GeneticOperators.getInstance();
+        NodeFactory nf = NodeFactory.getInstance();
+        TreeFactory tf = new TreeFactory(nf);
+
+        for (int i = 0; i < 100; i++) {
+            Node a = tf.generateRandomTree(5, Number.class);
+            Node b = tf.generateRandomTree(5, Number.class);
+
+            System.out.println(a);
+            System.out.println(b);
+            Pair<Node,Node> res = go.crossover(a, b);
+            System.out.println(res.getFirst());
+            System.out.println(res.getSecond());
+        }
+    }
+
     public static Test suite()
     {
         TestSuite s = new TestSuite();
         s.addTest(new GOTest("testCrossover"));
+        s.addTest(new GOTest("testRandomCrossover"));        
         return s;
 	}
 

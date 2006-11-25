@@ -107,6 +107,6 @@ public class Constant extends AbstractNode {
 
     @Override
     protected String getConstructorParam() {
-        return val.toString();
+        return "new Double(" + val.toString() + ")";
     }
 }

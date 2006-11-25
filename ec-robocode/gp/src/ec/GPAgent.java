@@ -2,16 +2,6 @@ package ec;
 
 import com.imaginaryday.ec.gp.AbstractNode;
 import com.imaginaryday.ec.gp.Node;
-import com.imaginaryday.ec.gp.NodeFactory;
-import com.imaginaryday.ec.gp.VetoTypeInduction;
-import com.imaginaryday.ec.gp.nodes.Constant;
-import com.imaginaryday.ec.gp.nodes.GreaterThan;
-import com.imaginaryday.ec.gp.nodes.IfThenElse;
-import com.imaginaryday.ec.main.nodes.EnemySpeed;
-import com.imaginaryday.ec.main.nodes.MakePair;
-import com.imaginaryday.ec.main.nodes.VectorHeading;
-import com.imaginaryday.ec.main.nodes.VectorToEnemy;
-import com.imaginaryday.ec.main.nodes.VectorToNearestWall;
 import com.imaginaryday.util.Stuff;
 import static com.imaginaryday.util.Stuff.clampZero;
 import com.imaginaryday.util.VectorUtils;
@@ -70,43 +60,27 @@ public class GPAgent extends AdvancedRobot {
     private boolean scannedEnemy = true;
 
     public GPAgent() {
-        System.err.println("frakking A");
-        NodeFactory nf = NodeFactory.getInstance();
+        radarTree = initRadarTree();
+        turretTree = initTurretTree();
+        firingTree = initFiringTree();
+        directionTree = initDirectionTree();
 
-        if (radarTree == null) {
-            radarTree = new Constant(20*Math.PI/2.0);
-        }
-        if (turretTree == null) {
-            try {
-                turretTree = new VectorHeading().attach(0, new VectorToEnemy());
-            } catch (VetoTypeInduction vetoTypeInduction) {
-                vetoTypeInduction.printStackTrace();
-            }
-        }
-        if (firingTree == null) {
-            Node n = new MakePair();
-            try {
-                n.attach(0, nf.create("boolConst", true))
-                        .attach(1, nf.create("const", 1.0));
-            } catch (VetoTypeInduction vetoTypeInduction) {
-                vetoTypeInduction.printStackTrace();
-            }
-            firingTree = n;
-        }
-        if (directionTree == null) {
-            try {
-                directionTree = new IfThenElse().attach(0, new GreaterThan().attach(0, new EnemySpeed())
-                        .attach(1, new Constant(0.0)))
-                        .attach(1, new VectorToEnemy())
-                        .attach(2, new VectorToNearestWall());
-            } catch (VetoTypeInduction vetoTypeInduction) {
-                vetoTypeInduction.printStackTrace();
-            }
-        }
         if (radarTree != null) this.radarTree.setOwner(this);
         if (turretTree != null) this.turretTree.setOwner(this);
         if (firingTree != null) this.firingTree.setOwner(this);
         if (directionTree != null) this.directionTree.setOwner(this);
+    }
+    protected Node initDirectionTree() {
+        return null;
+    }
+    protected Node initFiringTree() {
+        return null;
+    }
+    protected Node initTurretTree() {
+        return null;
+    }
+    protected Node initRadarTree() {
+        return null;
     }
 
     public GPAgent(Node radarTree, Node turretTree, Node firingTree, Node directionTree) {
@@ -246,21 +220,24 @@ public class GPAgent extends AdvancedRobot {
                 try {
                     radarDirection = ((Number) radarTree.evaluate()).doubleValue();
                 } catch (Throwable e) {
-                    GPAgent.log.finest(((AbstractNode) radarTree).toStringEval());
+                    e.printStackTrace();
+                    log.finest(((AbstractNode) radarTree).toStringEval());
                 }
 
                 // get absolute turret heading
                 try {
                     turretDirection = ((Number) turretTree.evaluate()).doubleValue();
                 } catch (Throwable e) {
-                    GPAgent.log.finest(((AbstractNode) turretTree).toStringEval());
+                    e.printStackTrace();
+                    log.finest(((AbstractNode) turretTree).toStringEval());
                 }
 
                 // determine if we need to fire
                 try {
                     firing = (Pair<Boolean, Number>) firingTree.evaluate();
                 } catch (Throwable t ) {
-                    GPAgent.log.finest(((AbstractNode) firingTree).toStringEval());
+                    t.printStackTrace();
+                    log.finest(((AbstractNode) firingTree).toStringEval());
                     firing = new Pair<Boolean, Number>(false, 0.0);
                 }
 
@@ -270,7 +247,7 @@ public class GPAgent extends AdvancedRobot {
                     movementVector = (VectorFloat64) directionTree.evaluate();
                 } catch (Throwable t ) {
 	                t.printStackTrace();
-                    GPAgent.log.finest(((AbstractNode) directionTree).toStringEval());
+                    log.finest(((AbstractNode) directionTree).toStringEval());
                 }
 
                 // process firing directive

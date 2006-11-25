@@ -135,6 +135,7 @@
 
     <property name="compiler.args.gp" value="${compiler.args}"/>
 
+    <property name="gp.population" value="oogabooga"/>
     <property name="gp.build.dir" value="${module.gp.basedir}/../build"/>
     <property name="gp.output.dir" value="${module.gp.basedir}/../robo_build"/>
     <property name="gp.testoutput.dir" value="${module.gp.basedir}/../robo_build"/>
@@ -235,6 +236,35 @@
                 <include name="javassist.jar"/>
             </fileset>
         </copy>
+
+    </target>
+
+    <target name="extract" depends="dist">
+        <mkdir dir="${module.gp.basedir}/bots"/>
+        <unjar dest="${module.gp.basedir}/bots">
+            <fileset dir="${module.gp.basedir}/lib">
+                <include name="functionalj-0.8-jdk15.jar"/>
+                <include name="jscience.jar"/>
+                <include name="junit-4.1.jar"/>
+            </fileset>
+        </unjar>
+        <copy todir="${module.gp.basedir}/bots">
+            <fileset dir="${gp.output.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+            <fileset dir="${rc.output.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+
+        <java fork="true" dir="${module.gp.basedir}" classname="com.imaginaryday.ec.main.ExtractBots" >
+            <arg value="${gp.population}"/>
+            <arg value="${module.gp.basedir}/bots"/>
+            <classpath refid="gp.module.classpath"/>
+            <classpath>
+                <path location="${module.gp.basedir}/bots"/>
+            </classpath>
+        </java>
     </target>
 
     <target name="init" description="Build initialization">

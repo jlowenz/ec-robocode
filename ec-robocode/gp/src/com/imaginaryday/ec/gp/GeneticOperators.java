@@ -178,8 +178,8 @@ public class GeneticOperators {
                     int i = 0;
                     for (Node c : children)
                         replacement.attach(i++, c);
+                    link.parent.attach(link.childIndex, replacement);
                 }
-                link.parent.attach(link.childIndex, replacement);
             } catch (VetoTypeInduction vetoTypeInduction) {
                 vetoTypeInduction.printStackTrace();
             }

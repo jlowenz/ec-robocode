@@ -1,11 +1,27 @@
 package com.imaginaryday.ec.gp;
 
-import com.imaginaryday.ec.gp.nodes.*;
+import com.imaginaryday.ec.gp.nodes.Add;
+import com.imaginaryday.ec.gp.nodes.And;
+import com.imaginaryday.ec.gp.nodes.BooleanConstant;
+import com.imaginaryday.ec.gp.nodes.Constant;
+import com.imaginaryday.ec.gp.nodes.Divide;
+import com.imaginaryday.ec.gp.nodes.GreaterThan;
+import com.imaginaryday.ec.gp.nodes.IfThenElse;
+import com.imaginaryday.ec.gp.nodes.LessThan;
+import com.imaginaryday.ec.gp.nodes.Multiply;
+import com.imaginaryday.ec.gp.nodes.Not;
+import com.imaginaryday.ec.gp.nodes.Or;
+import com.imaginaryday.ec.gp.nodes.Subtract;
 import info.javelot.functionalj.tuple.Pair;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * User: jlowens
@@ -25,6 +41,7 @@ public class NodeFactory {
     private Map<Pair<Class,List<Class>>,List<Class>> nodesByType;
     private List<Class> nodes;
     private Random rand = new Random();
+    private static Logger log = Logger.getLogger(NodeFactory.class.getName());
 
     private NodeFactory()
     {
@@ -198,6 +215,12 @@ public class NodeFactory {
 
 	public Node randomReplacement(Node child) {
         List<Class> nodes = getList(nodesByType, child.getType());
+        if (nodes.size() == 0) {
+            log.warning("randomReplacement with " + child.getType() + " failed!");
+            // in the current situation, probably because its an if-then-else - and there's nothing to replace it with!
+            // todo: look into this further
+            return null;
+        }
         return create(nodes.get(rand.nextInt(nodes.size())));
     }
 }

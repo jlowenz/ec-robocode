@@ -1,10 +1,13 @@
 package com.imaginaryday.ec.main;
 
 import com.imaginaryday.ec.gp.AbstractNode;
+import ec.GPAgent;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.CtField;
+import javassist.CtMethod;
+import javassist.CtNewMethod;
+import javassist.Modifier;
 import javassist.NotFoundException;
 
 import java.io.File;
@@ -53,21 +56,60 @@ public class ExtractBots {
             List<Member> members = ss.getPopulation();
             ClassPool pool = ClassPool.getDefault();
             for (Member m : members) {
-                CtClass cc = pool.getAndRename("ec.GPAgent", "ec.GPAgent_" + m.getGeneration() + "_" + m.getId());
-                CtField radar = cc.getField("radarTree");
-                CtField turret = cc.getField("turretTree");
-                CtField firing = cc.getField("firingTree");
-                CtField direction = cc.getField("directionTree");
-                cc.removeField(radar);
-                cc.removeField(turret);
-                cc.removeField(firing);
-                cc.removeField(direction);
+                CtClass gpagent = pool.get("ec.GPAgent");
+                CtClass node = pool.get("com.imaginaryday.ec.gp.Node");
+                CtClass cc = pool.makeClass("ec.GPAgent_" + m.getGeneration() + "_" + m.getId(), gpagent);
+                cc.getClassPool().importPackage("ec");                        
+
+                System.out.println("Creating class: " + cc.getName());
+
                 Set<Class> imports = new HashSet<Class>();
-                cc.addField(radar, CtField.Initializer.byExpr(((AbstractNode)m.getRadarProgram()).toCodeString(imports)));
-                cc.addField(turret, CtField.Initializer.byExpr(((AbstractNode)m.getTurretProgram()).toCodeString(imports)));
-                cc.addField(firing, CtField.Initializer.byExpr(((AbstractNode)m.getShootProgram()).toCodeString(imports)));
-                cc.addField(direction, CtField.Initializer.byExpr(((AbstractNode)m.getMoveProgram()).toCodeString(imports)));
-                for (Class c : imports) pool.importPackage(c.getName());
+
+                String expr = ((AbstractNode)m.getRadarProgram()).toCodeString(imports);
+                for (Class c : imports) cc.getClassPool().importPackage(c.getPackage().getName());
+                CtMethod radar = CtNewMethod.make(Modifier.PROTECTED,
+                        node,
+                        "initRadarTree",
+                        new CtClass[0],
+                        new CtClass[0],
+                        "{ return " + expr + "; }", cc);
+                cc.addMethod(radar);
+
+                expr = ((AbstractNode)m.getTurretProgram()).toCodeString(imports);
+                for (Class c : imports) cc.getClassPool().importPackage(c.getPackage().getName());
+                CtMethod turret = CtNewMethod.make(Modifier.PROTECTED,
+                        node,
+                        "initTurretTree",
+                        new CtClass[0],
+                        new CtClass[0],
+                        "{ return " + expr + "; }", cc);
+                cc.addMethod(turret);
+
+                expr = ((AbstractNode)m.getShootProgram()).toCodeString(imports);
+                for (Class c : imports) cc.getClassPool().importPackage(c.getPackage().getName());
+                CtMethod firing = CtNewMethod.make(Modifier.PROTECTED,
+                        node,
+                        "initFiringTree",
+                        new CtClass[0],
+                        new CtClass[0],
+                        "{ return " + expr + "; }", cc);
+                cc.addMethod(firing);
+
+                expr = ((AbstractNode)m.getMoveProgram()).toCodeString(imports);
+                for (Class c : imports) cc.getClassPool().importPackage(c.getPackage().getName());
+                CtMethod direction = CtNewMethod.make(Modifier.PROTECTED,
+                        node,
+                        "initDirectionTree",
+                        new CtClass[0],
+                        new CtClass[0],
+                        "{ return " + expr + "; }", cc);
+                cc.addMethod(direction);
+
+                cc.stopPruning(true);
+                Class c = pool.toClass(cc);
+                GPAgent agent = (GPAgent) c.newInstance();
+                System.out.println(agent.getClass());
+                cc.stopPruning(false);
                 cc.writeFile(dest.getPath());
             }
         } catch (IOException e) {
@@ -78,6 +120,9 @@ public class ExtractBots {
             e.printStackTrace();
         } catch (CannotCompileException e) {
             e.printStackTrace();
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
+
     }
 }

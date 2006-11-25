@@ -1,6 +1,10 @@
 package com.imaginaryday.ec.gp;
 
-import info.javelot.functionalj.*;
+import com.imaginaryday.ec.gp.nodes.BooleanConstant;
+import com.imaginaryday.ec.gp.nodes.Constant;
+import info.javelot.functionalj.Function2;
+import info.javelot.functionalj.Function2Impl;
+import info.javelot.functionalj.FunctionException;
 import info.javelot.functionalj.tuple.Pair;
 
 import java.util.ArrayList;
@@ -17,15 +21,28 @@ import java.util.logging.Logger;
  */
 public class GeneticOperators {
     private static Logger log = Logger.getLogger(GeneticOperators.class.getName());
-    private static Random rand = new Random();
+    public static Random rand = new Random();
     private int mutationProbability = 10;
     private int crossoverProbability = 60;
     private int copyProbability = 10;
     private int numCrossoverFailures = 0;
 
+    private List<MutationFunc> mutations = new ArrayList<MutationFunc>();
+
     private static GeneticOperators _instance = new GeneticOperators();
 
     protected GeneticOperators() {
+        mutations.add(new Cycle());
+        mutations.add(new Grow());
+        mutations.add(new Shrink());
+        mutations.add(new Switch());
+        mutations.add(new ConstantMutation());
+        mutations.add(new BooleanMutation());
+    }
+
+    public void addMutation(MutationFunc mf)
+    {
+        mutations.add(mf);
     }
 
     public static GeneticOperators getInstance() {
@@ -104,32 +121,17 @@ public class GeneticOperators {
         lb.parent.attach(lb.childIndex, la.child);
     }
 
-    private enum Mutation {
-        GROW(new Grow()), SHRINK(new Shrink()), CYCLE(new Cycle()), SWITCH(new Switch());
-        private static Random rand = new Random();
-        private MutationFunc func;
-
-        private Mutation(MutationFunc f) {
-            func = f;
-        }
-
-        public MutationFunc get() {
-            return func;
-        }
-
-        public static Mutation randomMutation() {
-            return values()[rand.nextInt(values().length)];
-        }
-    }
-
     public Node mutate(Node parent) {
         Node child = parent.copy();
-        Mutation.randomMutation().get().mutate(child);
+        randomMutation().mutate(child);
         return child;
     }
 
-
-    public interface MutationFunc {
+    private MutationFunc randomMutation() {
+        return mutations.get(rand.nextInt(mutations.size()));
+    }
+    
+    public static interface MutationFunc {
         void mutate(Node node);
     }
 
@@ -153,8 +155,11 @@ public class GeneticOperators {
             Link link = randomSubtree(node);
             if (link == Link.EMPTY) return;
             try {
-                Node newSubtree = tf.grow(0, treeDepth(link.parent) - 1, link.child.getOutputType());
-                link.parent.attach(link.childIndex, newSubtree);
+                int depth = treeDepth(link.parent);
+                if (depth >= 2) {
+                    Node newSubtree = tf.grow(0, depth - 1, link.child.getOutputType());
+                    link.parent.attach(link.childIndex, newSubtree);
+                }
             } catch (VetoTypeInduction vetoTypeInduction) {
                 vetoTypeInduction.printStackTrace();
             }
@@ -199,13 +204,52 @@ public class GeneticOperators {
         }
     }
 
-    private static Link randomSubtree(Node root) {
+    public static class ConstantMutation implements MutationFunc {
+        public void mutate(Node node) {
+            List<Link> constantNodes = new ArrayList<Link>();
+            filterLinks(constantNodes, node, 0, new Function2Impl<Boolean, Link, Integer>() {
+                public Boolean call(Link link, Integer integer) throws FunctionException {
+                    return (link.child instanceof Constant);
+                }
+            });
+            if (constantNodes.size() > 0) {
+                Link l = constantNodes.get(rand.nextInt(constantNodes.size()));
+                try {
+                    double xp = ((Number)l.child.evaluate()).doubleValue() + (rand.nextDouble() * 2.0 - 1.0);
+                    l.parent.attach(l.childIndex, new Constant(xp));
+                } catch (VetoTypeInduction vetoTypeInduction) {
+                    vetoTypeInduction.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static class BooleanMutation implements MutationFunc {
+        public void mutate(Node node) {
+            List<Link> boolLinks = new ArrayList<Link>();
+            filterLinks(boolLinks, node, 0, new Function2Impl<Boolean, Link, Integer>() {
+                public Boolean call(Link link, Integer integer) throws FunctionException {
+                    return link.child instanceof BooleanConstant;
+                }
+            });
+            if (boolLinks.size() > 0) {
+                Link l = boolLinks.get(rand.nextInt(boolLinks.size()));
+                try {
+                    l.parent.attach(l.childIndex, new BooleanConstant(rand.nextBoolean()));
+                } catch (VetoTypeInduction vetoTypeInduction) {
+                    vetoTypeInduction.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static Link randomSubtree(Node root) {
         int links = countLinks(root);
         if (links == 0) return Link.EMPTY;
         return selectLink(root, rand.nextInt(countLinks(root)));
     }
 
-    private static Link randomSubtree(Node root, final Class outputType) {
+    public static Link randomSubtree(Node root, final Class outputType) {
         Function2<Boolean, Link, Integer> f = new Function2Impl<Boolean, Link, Integer>() {
             public Boolean call(Link link, Integer integer) throws FunctionException {
                 return link.child.getOutputType().equals(outputType);
@@ -218,7 +262,7 @@ public class GeneticOperators {
     }
 
 
-    private static class Link {
+    public static class Link {
         public static final Link EMPTY = new Link(null, 0, null);
         public Node parent;
         public int childIndex;
@@ -235,7 +279,7 @@ public class GeneticOperators {
         }
     }
 
-    private static Link selectLink(Node parent, final int i) {
+    public static Link selectLink(Node parent, final int i) {
         Function2<Boolean, Link, Integer> f = new Function2Impl<Boolean, Link, Integer>() {
             public Boolean call(Link link, Integer integer) throws FunctionException {
                 return i == integer;
@@ -246,7 +290,7 @@ public class GeneticOperators {
         return l.get(0);
     }
 
-    private static int filterLinks(List<Link> l, Node parent, int count, Function2<Boolean, Link, Integer> pred) {
+    public static int filterLinks(List<Link> l, Node parent, int count, Function2<Boolean, Link, Integer> pred) {
         int id = count;
         int i = 0;
         for (Node n : parent.childList()) {
@@ -258,7 +302,7 @@ public class GeneticOperators {
         return id;
     }
 
-    private static int countLinks(Node root) {
+    public static int countLinks(Node root) {
         int i = 0;
         if (root != null) {
             for (int j = 0; j < root.getInputCount(); j++) {
@@ -269,7 +313,7 @@ public class GeneticOperators {
         return i;
     }
 
-    private static int treeDepth(Node root) {
+    public static int treeDepth(Node root) {
         if (root == null) return 0;
         return _treeDepth(root, 1);
     }

@@ -15,19 +15,40 @@ import info.javelot.functionalj.tuple.Pair;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
-import net.jini.core.transaction.*;
+import net.jini.core.transaction.CannotAbortException;
+import net.jini.core.transaction.Transaction;
+import net.jini.core.transaction.TransactionException;
+import net.jini.core.transaction.TransactionFactory;
+import net.jini.core.transaction.UnknownTransactionException;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
-import org.jscience.mathematics.vectors.VectorFloat64;
+import org.jscience.mathematics.vectors.Vector;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
 
 /**
@@ -45,7 +66,6 @@ public class Driver implements Runnable {
             nf.loadNode(BulletSpeed.class);
             nf.loadNode(CurrentRadarHeading.class);
             nf.loadNode(CurrentTurretHeading.class);
-//            nf.loadNode(CurrentVector.class);
             nf.loadNode(VectorConstant.class);
             nf.loadNode(EnemyEnergy.class);
             nf.loadNode(EnemyHeading.class);
@@ -79,6 +99,10 @@ public class Driver implements Runnable {
         } catch (InstantiationException e) {
             e.printStackTrace();
         }
+
+        GeneticOperators go = GeneticOperators.getInstance();
+        go.addMutation(new VectorConstantMutation());
+        go.addMutation(new FiringPairConstantMutation());
     }
 
     private JavaSpace space = null;
@@ -97,7 +121,7 @@ public class Driver implements Runnable {
     private double crossoverProbability = 0.6;
     private double mutationProbability = 0.1;
     private int testFreq = 5;
-    private int populationSize = 20; // KEEP THIS EVEN! yeah, it's a hack, deal with it :-/
+    private int populationSize = 30;
     private boolean readPopulation = false;
     private String popFile = "";
     private String progLogFile = "progressLog";
@@ -181,7 +205,7 @@ public class Driver implements Runnable {
 
         for (int i = 0; i < populationSize; i++) {
             Member m = new Member(0, i);
-            m.setMoveProgram(tf.generateRandomTree(treeDepth, VectorFloat64.class));
+            m.setMoveProgram(tf.generateRandomTree(treeDepth, Vector.class));
             m.setRadarProgram(tf.generateRandomTree(treeDepth, Number.class));
             m.setShootProgram(tf.generateRandomTree(treeDepth, FiringPair.class));
             m.setTurretProgram(tf.generateRandomTree(treeDepth, Number.class));
@@ -278,7 +302,7 @@ public class Driver implements Runnable {
             population = selectAndBreed(population);
 
             double delta = (double) System.currentTimeMillis() - genStart;
-            logger.info("Delta milliseconds: " + delta);
+            logger.info("Dlta milliseconds: " + delta);
             double secs = delta * 0.001;
             double mins = Math.floor(secs / 60.0);
             secs = secs - (mins * 60.0);

@@ -5,6 +5,7 @@ import info.javelot.functionalj.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: jlowens
@@ -122,6 +123,17 @@ public abstract class AbstractNode implements Node {
         } catch (Throwable e) {
             return sb.toString() + " ******* ";
         }
-
     }
+
+    public String toCodeString(Set<Class> imports) {
+        StringBuilder sb = new StringBuilder();
+        imports.add(getClass());
+        sb.append("new ").append(getClass().getSimpleName()).append("(").append(getConstructorParam()).append(")");
+        for (int i = 0; i < getInputCount(); i++) {
+            sb.append(".attach(").append(i).append(",").append(((AbstractNode)getChild(i)).toCodeString(imports)).append(")");
+        }
+        return sb.toString();
+    }
+
+    protected String getConstructorParam() { return ""; }
 }

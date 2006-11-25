@@ -52,6 +52,12 @@ public class BooleanConstant extends AbstractNode {
 
     @Override
     public String toString() {
-        return val ? "true" : "false";
+        return Boolean.toString(val);
+    }
+
+
+    @Override
+    protected String getConstructorParam() {
+        return Boolean.toString(val);
     }
 }

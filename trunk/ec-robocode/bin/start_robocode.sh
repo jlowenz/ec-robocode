@@ -21,7 +21,8 @@ echo $CLASSPATH
 
 i=0
 while [ $i -lt $PARALLEL ]; do
-    java -Djava.security.policy=$GP_HOME/bin/.java.policy \
+    nice -n20 java -Djava.security.policy=$GP_HOME/bin/.java.policy \
+        -Djava.util.logging.config.file=$GP_HOME/config/jini.logging \
 	    -DGP_HOME="${GP_HOME}"  \
 	    -server \
 	    -Dorg.jini.rio.groups="GPRobocode"  \

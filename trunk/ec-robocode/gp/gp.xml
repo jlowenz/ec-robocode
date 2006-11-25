@@ -155,7 +155,7 @@
         <pathelement location="${module.gp.basedir}/lib/jini/jsk-policy.jar"/>
         <pathelement location="${module.gp.basedir}/lib/rio/rio.jar"/>
         <pathelement location="${rc.output.dir}"/>
-        <pathelement location="${module.gp.basedir}/lib/asm-3.0.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/javassist.jar"/>
     </path>
 
 
@@ -232,6 +232,7 @@
                 <include name="functionalj-0.8-jdk15.jar"/>
                 <include name="jscience.jar"/>
                 <include name="junit-4.1.jar"/>
+                <include name="javassist.jar"/>
             </fileset>
         </copy>
     </target>

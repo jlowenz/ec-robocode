@@ -35,7 +35,7 @@ public class FiringPairConstant extends RoboNode {
     }
     @Override
     public <T extends Node> T copy() {
-        return (T) new FiringPair(toFire, energy);
+        return (T) new FiringPairConstant(toFire, energy);
     }
     protected Node[] children() {
         return NONE;
@@ -59,5 +59,11 @@ public class FiringPairConstant extends RoboNode {
     @Override
     public String toString() {
         return "[" + toFire + " | " + energy + "]";        
+    }
+
+
+    @Override
+    protected String getConstructorParam() {
+        return Boolean.toString(toFire) + "," + Double.toString(energy);
     }
 }

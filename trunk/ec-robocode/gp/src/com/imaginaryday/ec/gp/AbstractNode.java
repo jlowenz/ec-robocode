@@ -62,7 +62,7 @@ public abstract class AbstractNode implements Node {
     public void induceOutputType(Class type) throws VetoTypeInduction {}
 
     public Node attach(int id, Node n) throws VetoTypeInduction {
-        //n.induceOutputType(getOutputType());
+        n.induceOutputType(getInputType(id));
         children()[id] = n;
         return this;
     }

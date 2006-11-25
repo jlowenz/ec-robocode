@@ -51,7 +51,8 @@ public class TreeFactory {
 		if (depth == maxDepth) return nf.randomTerminal(parentType);
 		else {
 		    Node n = (full) ? nf.randomNonterminal(parentType) : nf.randomNode(parentType);
-		    if (n.isTerminal()) return n;
+            assert n.getOutputType() != null : "output type is NULL!";
+            if (n.isTerminal()) return n;
 		    else {
 		        for (int i = 0; i < n.getInputCount(); i++) {
 		            Class type = n.getInputType(i);

@@ -54,4 +54,10 @@ public class FiringPairConstant extends RoboNode {
     public Object evaluate() {
         return new FiringPair(toFire, energy);
     }
+
+
+    @Override
+    public String toString() {
+        return "[" + toFire + " | " + energy + "]";        
+    }
 }

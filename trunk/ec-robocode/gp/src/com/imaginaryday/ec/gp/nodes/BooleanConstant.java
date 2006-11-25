@@ -49,4 +49,9 @@ public class BooleanConstant extends AbstractNode {
     public Object evaluate() {
         return val;
     }
+
+    @Override
+    public String toString() {
+        return val ? "true" : "false";
+    }
 }

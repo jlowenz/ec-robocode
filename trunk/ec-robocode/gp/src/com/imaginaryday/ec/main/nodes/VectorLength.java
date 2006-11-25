@@ -16,6 +16,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  */
 public class VectorLength extends RoboNode {
     private Node child[] = new Node[1];
+    private static final long serialVersionUID = 3000589260663687008L;
 
     protected Node[] children() {
         return child;

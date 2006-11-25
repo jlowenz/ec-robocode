@@ -1,7 +1,7 @@
 package com.imaginaryday.ec.main.nodes;
 
-import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.util.Stuff;
 
 /**
@@ -12,6 +12,7 @@ import com.imaginaryday.util.Stuff;
  * </b>
  */
 public class EnergyLevel extends RoboNode {
+    private static final long serialVersionUID = 2945701519370000295L;
 
     protected Node[] children() {
         return NONE;

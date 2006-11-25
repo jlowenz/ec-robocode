@@ -15,6 +15,7 @@ import java.util.Set;
 public abstract class AbstractNode implements Node {
     protected transient Object owner;
     static protected Node[] NONE = new Node[0];
+    private static final long serialVersionUID = 5193080878842310275L;
     protected abstract Node[] children();
     protected Pair<Class,List<Class>> type;
 

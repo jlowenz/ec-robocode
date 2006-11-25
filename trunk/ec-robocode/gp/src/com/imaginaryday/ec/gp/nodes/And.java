@@ -10,8 +10,9 @@ import com.imaginaryday.ec.gp.Node;
  */
 public class And extends AbstractNode {
 	private Node[] child = new Node[2];
+    private static final long serialVersionUID = 5083161405597706323L;
 
-	protected Node[] children() {
+    protected Node[] children() {
 		return child;
 	}
 

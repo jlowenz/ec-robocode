@@ -1,9 +1,9 @@
 package com.imaginaryday.ec.gp.nodes;
 
-import static com.imaginaryday.util.Stuff.clampZero;
 import com.imaginaryday.ec.gp.AbstractNode;
 import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.util.Stuff;
+import static com.imaginaryday.util.Stuff.clampZero;
 
 /**
  * <b>
@@ -15,6 +15,7 @@ import com.imaginaryday.util.Stuff;
 public class Multiply extends AbstractNode {
 
     private Node[] operands = new Node[2];
+    private static final long serialVersionUID = 2102657472456303791L;
 
     protected Node[] children() {
         return operands;

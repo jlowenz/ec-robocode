@@ -6,6 +6,7 @@ import static com.imaginaryday.util.Stuff.clampZero;
 import static com.imaginaryday.util.Stuff.isReasonable;
 
 public class CurrentRadarHeading extends RoboNode {
+    private static final long serialVersionUID = -6435774937156077383L;
 
     @Override
     protected Node[] children() {

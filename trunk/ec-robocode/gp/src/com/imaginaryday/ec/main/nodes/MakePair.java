@@ -13,6 +13,7 @@ import com.imaginaryday.ec.main.RoboNode;
 public class MakePair extends RoboNode {
 
     private Node[] child = new Node[2];
+    private static final long serialVersionUID = -67139516800145620L;
 
     protected Node[] children() {
         return child;

@@ -19,6 +19,7 @@ import java.util.Random;
 public class VectorConstant extends RoboNode {
     private static final Random rand = new Random();
     VectorFloat64 val;
+    private static final long serialVersionUID = 7848819907141991753L;
 
     public VectorConstant(double x, double y) {
         this.val = VectorFloat64.valueOf(x,y);

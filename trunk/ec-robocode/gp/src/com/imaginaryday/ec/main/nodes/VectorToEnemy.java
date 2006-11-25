@@ -1,7 +1,7 @@
 package com.imaginaryday.ec.main.nodes;
 
-import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.util.Stuff;
 import org.jscience.mathematics.vectors.Vector;
 import org.jscience.mathematics.vectors.VectorFloat64;
@@ -14,6 +14,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  * </b>
  */
 public class VectorToEnemy extends RoboNode {
+    private static final long serialVersionUID = 3105366489094205608L;
     protected Node[] children() {
         return NONE;
     }

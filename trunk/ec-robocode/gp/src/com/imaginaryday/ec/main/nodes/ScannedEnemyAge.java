@@ -1,7 +1,7 @@
 package com.imaginaryday.ec.main.nodes;
 
-import com.imaginaryday.ec.main.RoboNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.main.RoboNode;
 
 /**
  * <b>
@@ -11,6 +11,7 @@ import com.imaginaryday.ec.gp.Node;
  * </b>
  */
 public class ScannedEnemyAge extends RoboNode  {
+    private static final long serialVersionUID = 1953097741406354491L;
     protected Node[] children() {
         return NONE;
     }

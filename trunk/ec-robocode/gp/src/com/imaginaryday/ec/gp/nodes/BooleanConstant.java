@@ -15,6 +15,7 @@ import java.util.Random;
 public class BooleanConstant extends AbstractNode {
     private static final Random rand = new Random();
     boolean val;
+    private static final long serialVersionUID = 2453461045207100125L;
 
     public BooleanConstant(Boolean b)
     {

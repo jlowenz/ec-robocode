@@ -9,11 +9,11 @@ import java.util.List;
  *         Time: 10:57:20 PM
  */
 public class Snapshot implements Serializable {
-    private static final long serialVersionUID = 1L;
 
     private int generation;
     private int popSize;
     private List<Member> population;
+    private static final long serialVersionUID = -8165357450899418342L;
 
     public int getGeneration() {
         return generation;

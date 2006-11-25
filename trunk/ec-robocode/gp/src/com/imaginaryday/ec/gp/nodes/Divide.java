@@ -1,9 +1,9 @@
 package com.imaginaryday.ec.gp.nodes;
 
-import static com.imaginaryday.util.Stuff.clampZero;
 import com.imaginaryday.ec.gp.AbstractNode;
 import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.util.Stuff;
+import static com.imaginaryday.util.Stuff.clampZero;
 
 import java.util.Random;
 
@@ -17,6 +17,7 @@ import java.util.Random;
 public class Divide extends AbstractNode {
     private static Random rand = new Random();
     private Node[] operands = new Node[2];
+    private static final long serialVersionUID = 1360850725337985896L;
 
     protected Node[] children() {
         return operands;

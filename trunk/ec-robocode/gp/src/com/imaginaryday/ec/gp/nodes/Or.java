@@ -13,6 +13,7 @@ import com.imaginaryday.ec.gp.Node;
 public class Or extends AbstractNode {
 
     private Node[] child = new Node[2];
+    private static final long serialVersionUID = -8823521930489804091L;
 
     protected Node[] children() {
         return child;

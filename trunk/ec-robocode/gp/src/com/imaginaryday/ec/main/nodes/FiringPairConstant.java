@@ -17,6 +17,7 @@ public class FiringPairConstant extends RoboNode {
     private static Random rand = new Random();
     private boolean toFire;
     private double energy;
+    private static final long serialVersionUID = 4828972562005715117L;
 
 
     public FiringPairConstant() {

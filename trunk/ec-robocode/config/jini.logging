@@ -264,3 +264,4 @@ com.sun.jini.outrigger.store.level = FINER
 #example.devdeploy.client.level = INFO
 
 com.imaginaryday.ec.main.Driver.level = FINER
+com.imaginaryday.ec.main.ProgressTester.level = FINER

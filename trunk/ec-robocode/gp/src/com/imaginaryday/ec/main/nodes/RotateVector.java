@@ -17,6 +17,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  */
 public class RotateVector extends RoboNode {
     private Node child[] = new Node[2];
+    private static final long serialVersionUID = -2305998710530725440L;
 
     protected Node[] children() {
         return child;

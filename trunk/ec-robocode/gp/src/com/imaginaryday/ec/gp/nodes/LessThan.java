@@ -9,8 +9,8 @@ import com.imaginaryday.util.Stuff;
  * To change this template use File | Settings | File Templates.
  */
 public class LessThan extends AbstractNode {
-    private static final long serialVersionUID = 1L;
     private Node[] children = new Node[2];
+    private static final long serialVersionUID = 2455635173915982204L;
 
     protected Node[] children() {
         return children;

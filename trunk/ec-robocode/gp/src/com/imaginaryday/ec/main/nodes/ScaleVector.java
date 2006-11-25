@@ -16,6 +16,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  */
 public class ScaleVector extends RoboNode {
     private Node child[] = new Node[2];
+    private static final long serialVersionUID = -3402938357919233286L;
 
     protected Node[] children() {
         return child;

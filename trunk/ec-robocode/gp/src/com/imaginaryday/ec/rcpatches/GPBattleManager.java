@@ -29,7 +29,11 @@ import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
 import net.jini.core.lease.LeaseDeniedException;
-import net.jini.core.transaction.*;
+import net.jini.core.transaction.CannotAbortException;
+import net.jini.core.transaction.Transaction;
+import net.jini.core.transaction.TransactionException;
+import net.jini.core.transaction.TransactionFactory;
+import net.jini.core.transaction.UnknownTransactionException;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 import robocode.battle.Battle;
@@ -48,8 +52,13 @@ import robocode.peer.robot.RobotStatistics;
 import robocode.util.Constants;
 import robocode.util.Utils;
 
-import javax.swing.*;
-import java.io.*;
+import javax.swing.JFileChooser;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.rmi.RemoteException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -205,13 +214,13 @@ public class GPBattleManager extends BattleManager {
         boolean done = false;
         Entry taskTemplate = new GPBattleTask();
         Utils.log((id != null) ? id : "null, bitch");
-        long deltaT = 600000; // Start at 5 minutes
+        long deltaT = 0;
         long startTime = 0;
-        long txTime = 0;
+        long txTime = 120000; // Start at 2 minutes
 
         while (!done) {
             startTime = System.currentTimeMillis();
-            txTime =   deltaT * 3;
+            txTime = Math.max(txTime, deltaT * 3);
 
             while (transactionManager == null) {
                 try {

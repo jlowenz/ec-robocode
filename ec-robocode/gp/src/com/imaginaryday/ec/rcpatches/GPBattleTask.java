@@ -4,8 +4,8 @@ import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.ec.main.Member;
 import net.jini.core.entry.Entry;
 
-import java.rmi.MarshalledObject;
 import java.io.IOException;
+import java.rmi.MarshalledObject;
 
 /**
  * @author rbowers
@@ -110,7 +110,7 @@ public class GPBattleTask implements Entry {
 
     public Node getMoveProgram1() {
         try {
-            return (Node)moveProgram1.get();
+            return (moveProgram1 != null) ? (Node)moveProgram1.get() : null;
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (ClassNotFoundException e) {
@@ -121,7 +121,7 @@ public class GPBattleTask implements Entry {
 
     public Node getMoveProgram2() {
         try {
-            return (Node) moveProgram2.get();
+            return (moveProgram2 != null) ? (Node) moveProgram2.get() : null;
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (ClassNotFoundException e) {
@@ -132,7 +132,7 @@ public class GPBattleTask implements Entry {
 
     public Node getRadarProgram1() {
         try {
-            return (Node) radarProgram1.get();
+            return (radarProgram1 != null) ? (Node) radarProgram1.get() : null;
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (ClassNotFoundException e) {
@@ -143,7 +143,7 @@ public class GPBattleTask implements Entry {
 
     public Node getRadarProgram2() {
         try {
-            return (Node)radarProgram2.get();
+            return (radarProgram2 != null) ? (Node)radarProgram2.get() : null;
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (ClassNotFoundException e) {
@@ -162,7 +162,7 @@ public class GPBattleTask implements Entry {
 
     public Node getShootProgram1() {
         try {
-            return (Node)shootProgram1.get();
+            return (shootProgram1 != null) ? (Node)shootProgram1.get() : null;
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (ClassNotFoundException e) {
@@ -173,7 +173,7 @@ public class GPBattleTask implements Entry {
 
     public Node getShootProgram2() {
         try {
-            return (Node)shootProgram2.get();
+            return (shootProgram2 != null) ? (Node)shootProgram2.get() : null;
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (ClassNotFoundException e) {
@@ -184,7 +184,7 @@ public class GPBattleTask implements Entry {
 
     public Node getTurretProgram1() {
         try {
-            return (Node)turretProgram1.get();
+            return (turretProgram1 != null) ? (Node)turretProgram1.get() : null;
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (ClassNotFoundException e) {
@@ -195,7 +195,7 @@ public class GPBattleTask implements Entry {
 
     public Node getTurretProgram2() {
         try {
-            return (Node) turretProgram2.get();
+            return (turretProgram2 != null) ? (Node) turretProgram2.get() : null;
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (ClassNotFoundException e) {

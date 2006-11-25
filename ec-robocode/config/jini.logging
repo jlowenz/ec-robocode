@@ -262,3 +262,5 @@ com.sun.jini.outrigger.store.level = FINER
 # For example service(s) and associated client(s)
 #example.devdeploy.service.level = INFO
 #example.devdeploy.client.level = INFO
+
+com.imaginaryday.ec.main.Driver.level = FINER

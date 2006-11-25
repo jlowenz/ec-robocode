@@ -1,21 +1,31 @@
 package com.imaginaryday.ec.main.nodes;
 
+import com.imaginaryday.ec.gp.AbstractNode;
 import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.ec.gp.NodeFactory;
 import com.imaginaryday.ec.gp.TreeFactory;
 import com.imaginaryday.ec.gp.VetoTypeInduction;
+import com.imaginaryday.ec.gp.nodes.Add;
 import com.imaginaryday.ec.gp.nodes.Constant;
+import com.imaginaryday.ec.gp.nodes.Divide;
+import com.imaginaryday.ec.gp.nodes.Multiply;
 import ec.GPAgent;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.jscience.mathematics.vectors.Vector;
 import org.jscience.mathematics.vectors.VectorFloat64;
-import robocode.*;
+import robocode.Bullet;
+import robocode.Condition;
+import robocode.CustomEvent;
+import robocode.DeathEvent;
+import robocode.SkippedTurnEvent;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.File;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * <b>
@@ -129,6 +139,7 @@ public class NodeTest extends TestCase {
         } catch (Throwable e) {
             System.err.println(root);
             e.printStackTrace();
+            fail();
         }
     }
 
@@ -177,6 +188,19 @@ public class NodeTest extends TestCase {
         assertEquals(5.0, vec.getValue(1), 0.000001);
     }
 
+    public void testToCodeString() {
+        Node n = new Add().attach(0,new Multiply().attach(0,new Constant(5.0))
+                                                  .attach(1,new Constant(3.0)))
+                          .attach(1,new Divide().attach(0,new Constant(100.0))
+                                                .attach(1,new Constant(25.0)));
+        Set<Class> imports = new HashSet<Class>();
+        String output = ((AbstractNode)n).toCodeString(imports);
+        assertEquals("new Add().attach(0,new Multiply().attach(0,new Constant(5.0))" +
+                ".attach(1,new Constant(3.0)))" +
+                ".attach(1,new Divide().attach(0,new Constant(100.0))" +
+                ".attach(1,new Constant(25.0)))", output);
+    }
+
     public static Test suite()
 	{
 		TestSuite s = new TestSuite();
@@ -185,6 +209,7 @@ public class NodeTest extends TestCase {
         s.addTest(new NodeTest("testRotateVector"));
         s.addTest(new NodeTest("testVectorHeading"));
         s.addTest(new NodeTest("testScaleVector"));
+        s.addTest(new NodeTest("testToCodeString"));
         return s;
 	}
 

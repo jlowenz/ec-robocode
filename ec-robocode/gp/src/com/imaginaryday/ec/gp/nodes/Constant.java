@@ -102,4 +102,10 @@ public class Constant extends AbstractNode {
 	public String toString() {
 		return val.toString();
 	}
+
+
+    @Override
+    protected String getConstructorParam() {
+        return val.toString();
+    }
 }

@@ -20,6 +20,9 @@ public class VectorConstant extends RoboNode {
     private static final Random rand = new Random();
     VectorFloat64 val;
 
+    public VectorConstant(double x, double y) {
+        this.val = VectorFloat64.valueOf(x,y);
+    }
     public VectorConstant(VectorFloat64 val) {
         this.val = val;
     }
@@ -59,5 +62,10 @@ public class VectorConstant extends RoboNode {
     @Override
     public String toString() {
         return val.toString();
+    }
+
+    @Override
+    protected String getConstructorParam() {
+        return Double.toString(val.getValue(0)) + "," + Double.toString(val.getValue(1));
     }
 }

@@ -7,14 +7,24 @@ import com.imaginaryday.ec.gp.VetoTypeInduction;
 import com.imaginaryday.ec.gp.nodes.Constant;
 import com.imaginaryday.ec.gp.nodes.GreaterThan;
 import com.imaginaryday.ec.gp.nodes.IfThenElse;
-import com.imaginaryday.ec.main.nodes.*;
+import com.imaginaryday.ec.main.nodes.EnemySpeed;
+import com.imaginaryday.ec.main.nodes.MakePair;
+import com.imaginaryday.ec.main.nodes.VectorHeading;
+import com.imaginaryday.ec.main.nodes.VectorToEnemy;
+import com.imaginaryday.ec.main.nodes.VectorToNearestWall;
 import com.imaginaryday.util.Stuff;
 import static com.imaginaryday.util.Stuff.clampZero;
 import com.imaginaryday.util.VectorUtils;
 import info.javelot.functionalj.tuple.Pair;
 import org.jscience.mathematics.numbers.Float64;
 import org.jscience.mathematics.vectors.VectorFloat64;
-import robocode.*;
+import robocode.AdvancedRobot;
+import robocode.HitByBulletEvent;
+import robocode.HitRobotEvent;
+import robocode.HitWallEvent;
+import robocode.RobotDeathEvent;
+import robocode.ScannedRobotEvent;
+import robocode.WinEvent;
 import robocode.exception.DeathException;
 
 import java.util.logging.Logger;
@@ -62,34 +72,41 @@ public class GPAgent extends AdvancedRobot {
     public GPAgent() {
         System.err.println("frakking A");
         NodeFactory nf = NodeFactory.getInstance();
-        radarTree = new Constant(20*Math.PI/2.0);
-        try {
-            turretTree = new VectorHeading().attach(0, new VectorToEnemy());
-        } catch (VetoTypeInduction vetoTypeInduction) {
-            vetoTypeInduction.printStackTrace();
-        }
-        Node n = new MakePair();
-        try {
-            n.attach(0, nf.create("boolConst", true))
-             .attach(1, nf.create("const", 1.0));
-        } catch (VetoTypeInduction vetoTypeInduction) {
-            vetoTypeInduction.printStackTrace(); 
-        }
 
-        firingTree = n;
-        try {
-            directionTree = new IfThenElse().attach(0, new GreaterThan().attach(0, new EnemySpeed())
-                                                                        .attach(1, new Constant(0.0)))
-                                            .attach(1, new VectorToEnemy())
-                                            .attach(2, new VectorToNearestWall());
-        } catch (VetoTypeInduction vetoTypeInduction) {
-            vetoTypeInduction.printStackTrace();
+        if (radarTree == null) {
+            radarTree = new Constant(20*Math.PI/2.0);
         }
-
-        radarTree.setOwner(this);
-	    turretTree.setOwner(this);
-	    firingTree.setOwner(this);
-	    directionTree.setOwner(this);
+        if (turretTree == null) {
+            try {
+                turretTree = new VectorHeading().attach(0, new VectorToEnemy());
+            } catch (VetoTypeInduction vetoTypeInduction) {
+                vetoTypeInduction.printStackTrace();
+            }
+        }
+        if (firingTree == null) {
+            Node n = new MakePair();
+            try {
+                n.attach(0, nf.create("boolConst", true))
+                        .attach(1, nf.create("const", 1.0));
+            } catch (VetoTypeInduction vetoTypeInduction) {
+                vetoTypeInduction.printStackTrace();
+            }
+            firingTree = n;
+        }
+        if (directionTree == null) {
+            try {
+                directionTree = new IfThenElse().attach(0, new GreaterThan().attach(0, new EnemySpeed())
+                        .attach(1, new Constant(0.0)))
+                        .attach(1, new VectorToEnemy())
+                        .attach(2, new VectorToNearestWall());
+            } catch (VetoTypeInduction vetoTypeInduction) {
+                vetoTypeInduction.printStackTrace();
+            }
+        }
+        if (radarTree != null) this.radarTree.setOwner(this);
+        if (turretTree != null) this.turretTree.setOwner(this);
+        if (firingTree != null) this.firingTree.setOwner(this);
+        if (directionTree != null) this.directionTree.setOwner(this);
     }
 
     public GPAgent(Node radarTree, Node turretTree, Node firingTree, Node directionTree) {
@@ -252,7 +269,6 @@ public class GPAgent extends AdvancedRobot {
                 try {
                     movementVector = (VectorFloat64) directionTree.evaluate();
                 } catch (Throwable t ) {
-	                System.err.println("frak");
 	                t.printStackTrace();
                     GPAgent.log.finest(((AbstractNode) directionTree).toStringEval());
                 }
@@ -459,7 +475,6 @@ public class GPAgent extends AdvancedRobot {
         rammedAge = 0;
         myFault = event.isMyFault();
         rammerBearing = event.getBearingRadians();
-        System.err.println("hit robot (" + ((myFault) ? "my fault" : "not at fault") + ")");
     }
 
     public void onHitByBullet(HitByBulletEvent event) {
@@ -473,11 +488,8 @@ public class GPAgent extends AdvancedRobot {
 
     public void onHitWall(HitWallEvent event) {
         super.onHitWall(event);
-        System.err.println("hit wall");
         wallHitAge = 0;
         recentlyHitWall = true;
-        System.err.println("dist to forward wall: " + VectorUtils.vecLength(getVectorToForwardWall()));
-        System.err.println("dist to nearest wall: " + VectorUtils.vecLength(getVectorToNearWall()));                
     }
 
     public void onRobotDeath(RobotDeathEvent event) {

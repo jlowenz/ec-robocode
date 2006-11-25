@@ -23,5 +23,5 @@ echo $CLASSPATH
 
 java -Djava.security.policy=bin/.java.policy \
 	-DGP_HOME="${GP_HOME}"  \
-	-Dorg.jini.rio.groups="GPRobocode"  \
+	-ea -Dorg.jini.rio.groups="GPRobocode"  \
 	-cp "${CLASSPATH}"  com.imaginaryday.ec.main.Driver $* 1>>/tmp/ec_driver 2>>/tmp/ec_driver

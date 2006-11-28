@@ -50,6 +50,7 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 	private double bulletDamageReceived;
 	private double rammingDamageReceived;
 	private double totalRammingDamageReceived;
+    public double scanRadians;
 
     private double distanceTravelled;
     private int numScanEvents;
@@ -138,9 +139,17 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
         return numWallsHit;
     }
 
+    public double getScanRadians() {
+        return scanRadians;
+    }
+
+    public double scoreScanRadians(double radians) {
+        return scanRadians += radians;
+    }
+
     public double getTotalBulletDamageDealt() {
-		return totalBulletDamageDealt;
-	}
+        return totalBulletDamageDealt;
+    }
 
 	public double getTotalBulletDamageReceived() {
 		return totalBulletDamageReceived;
@@ -345,4 +354,7 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 		return bulletDamageScore + rammingDamageScore + survivalScore + killedEnemyRammingScore + killedEnemyBulletScore
 				+ winnerScore;
 	}
+
+
+
 }

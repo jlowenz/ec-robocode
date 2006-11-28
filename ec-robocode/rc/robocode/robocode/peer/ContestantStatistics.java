@@ -60,4 +60,7 @@ public interface ContestantStatistics {
     public void scoreWallHit();
 
     public int getNumWallsHit();
+
+    public double getScanRadians();
+    public double scoreScanRadians(double radians);
 }

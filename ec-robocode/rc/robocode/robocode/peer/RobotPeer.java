@@ -515,7 +515,9 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		double startAngle = lastRadarHeading;
 		double scanRadians = radarHeading - lastRadarHeading;
 
-		// Check if we passed through 360
+
+
+        // Check if we passed through 360
 		if (scanRadians < -PI) {
 			scanRadians = 2 * PI + scanRadians;
 		} else if (scanRadians > PI) {
@@ -1019,19 +1021,23 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		if (radarTurnRemaining > 0) {
 			if (radarTurnRemaining < Rules.RADAR_TURN_RATE_RADIANS) {
 				radarHeading += radarTurnRemaining;
-				radarTurnRemaining = 0;
+                statistics.scoreScanRadians(radarTurnRemaining);
+                radarTurnRemaining = 0;
 			} else {
 				radarHeading += Rules.RADAR_TURN_RATE_RADIANS;
-				radarTurnRemaining -= Rules.RADAR_TURN_RATE_RADIANS;
+                statistics.scoreScanRadians(Rules.RADAR_TURN_RATE_RADIANS);
+                radarTurnRemaining -= Rules.RADAR_TURN_RATE_RADIANS;
 			}
 		} else if (radarTurnRemaining < 0) {
 			if (radarTurnRemaining > -Rules.RADAR_TURN_RATE_RADIANS) {
-				radarHeading += radarTurnRemaining;
+                statistics.scoreScanRadians(-radarTurnRemaining);                                
+                radarHeading += radarTurnRemaining;
 				radarTurnRemaining = 0;
 			} else {
 				radarHeading -= Rules.RADAR_TURN_RATE_RADIANS;
 				radarTurnRemaining += Rules.RADAR_TURN_RATE_RADIANS;
-			}
+                statistics.scoreScanRadians(Rules.RADAR_TURN_RATE_RADIANS);
+            }
 		}
 
 		radarHeading = normalAbsoluteAngle(radarHeading);

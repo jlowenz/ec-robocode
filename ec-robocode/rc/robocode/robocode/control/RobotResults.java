@@ -1,10 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2001-2006 Mathew A. Nelson and Robocode contributors
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Common Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.robocode.net/license/CPLv1.0.html
- * 
+ *
  * Contributors:
  *     Mathew A. Nelson
  *     - Initial API and implementation
@@ -21,24 +21,30 @@ import robocode.peer.robot.RobotStatistics;
  * @author Mathew A. Nelson (original)
  */
 public class RobotResults {
-	private RobotSpecification robot;
+
+    private RobotSpecification robot;
     private String name;
     private int rank;
-	private int score;
-	private int survival;
-	private int lastSurvivorBonus;
-	private int bulletDamage;
-	private int bulletDamageBonus;
-	private int ramDamage;
-	private int ramDamageBonus;
-	private int firsts;
-	private int seconds;
-	private int thirds;
+    private int score;
+    private int survival;
+    private int lastSurvivorBonus;
+    private int bulletDamage;
+    private int bulletDamageBonus;
+    private int ramDamage;
+    private int ramDamageBonus;
+    private int firsts;
+    private int seconds;
+    private int thirds;
     private int numBulletsFired;
     private int numBulletHits;
     private double distanceTravelled;
     private int numScanEvents;
     private int numWallsHit;
+    private double scanRadians;
+
+    public double getScanRadians() {
+        return scanRadians;
+    }
 
     public int getNumWallsHit() {
         return numWallsHit;
@@ -61,7 +67,7 @@ public class RobotResults {
     }
 
     public RobotResults(
-			RobotSpecification robot,
+            RobotSpecification robot,
             String name,
             int rank,
             int score,
@@ -74,7 +80,7 @@ public class RobotResults {
             int firsts,
             int seconds,
             int thirds
-            ) {
+    ) {
         this.robot = robot;
         this.rank = rank;
         this.score = score;
@@ -93,8 +99,8 @@ public class RobotResults {
         this.robot = robot;
         this.name = name;
         this.rank = rank;
-        this.score = (int)stats.getTotalScore();
-        this.survival = (int)stats.getTotalSurvivalScore();
+        this.score = (int) stats.getTotalScore();
+        this.survival = (int) stats.getTotalSurvivalScore();
         this.lastSurvivorBonus = (int) stats.getTotalWinnerScore();
         this.bulletDamage = (int) stats.getTotalBulletDamageScore();
         this.bulletDamageBonus = (int) stats.getTotalKilledEnemyBulletScore();
@@ -108,6 +114,7 @@ public class RobotResults {
         this.distanceTravelled = stats.getDistanceTravelled();
         this.numScanEvents = stats.getScanEvents();
         this.numWallsHit = stats.getNumWallsHit();
+        this.scanRadians = stats.getScanRadians();
     }
 
     /**
@@ -120,8 +127,8 @@ public class RobotResults {
     }
 
     public String getName() {
-            return name;
-        }
+        return name;
+    }
 
     /**
      * Gets the rank of this robot in the results.

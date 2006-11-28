@@ -13,40 +13,19 @@ import com.imaginaryday.util.Tuple;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
-import net.jini.core.transaction.CannotAbortException;
-import net.jini.core.transaction.Transaction;
-import net.jini.core.transaction.TransactionException;
-import net.jini.core.transaction.TransactionFactory;
-import net.jini.core.transaction.UnknownTransactionException;
+import net.jini.core.transaction.*;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 import org.jscience.mathematics.vectors.Vector;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.Writer;
+import java.io.*;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -122,11 +101,13 @@ public class Driver implements Runnable {
     private int populationSize = 24;
     private boolean readPopulation = false;
     private String popFile = "";
-    private String progLogFile = "progressLog";
-    private String generationLogFile = "generationLog";
+    private String progLogFile = "progress.log";
+    private String generationLogFile = "battle.log";
     private String robotLogFile = "robots.log";
-    private FileOutputStream output = null;
+    private Writer battleWriter = null;
     private Writer robots = null;
+    private String fitnessLog = "fitness.log";
+    private Writer fitnessWriter = null;
     private Map<Member, List<GPBattleResults>> resultMap = null;
     private TransactionManager transactionManager;
 
@@ -136,8 +117,9 @@ public class Driver implements Runnable {
 
     public Driver() {
         try {
-            output = new FileOutputStream(generationLogFile, false);
+            battleWriter = new FileWriter(generationLogFile, false);
             robots = new FileWriter(robotLogFile, false);
+            fitnessWriter = new FileWriter(fitnessLog,false);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -259,7 +241,7 @@ public class Driver implements Runnable {
             population = genInitialPopulation();
         }
 
-        int numTasks = (populationSize * (populationSize - 1))/2 + populationSize;
+        int numTasks = (populationSize * (populationSize - 1)) / 2 + populationSize;
         taskArray = new GPBattleTask[numTasks];
 
         /*
@@ -290,7 +272,7 @@ public class Driver implements Runnable {
             /*
              * Periodically measure against the canned bots
              */
-            if ( /*generationCount != 0 && */ (generationCount % testFreq == 0)) {
+            if (/*generationCount != 0 &&*/ (generationCount % testFreq == 0)) {
                 progressTester.testProgress(population, generationCount);
             }
             persistPopulation(generationCount, population);
@@ -310,7 +292,7 @@ public class Driver implements Runnable {
         }
 
         try {
-            output.close();
+            battleWriter.close();
             robots.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -619,18 +601,16 @@ public class Driver implements Runnable {
     }
 
     private void printResults() {
-        StringBuffer sb = new StringBuffer();
-
-        for (java.util.Map.Entry<Member, List<GPBattleResults>> e : resultMap.entrySet()) {
-            sb.append(e.getKey().getFitness()).append(",");
-            for (GPBattleResults r : e.getValue()) {
-                sb.append(r.getSummary_CSV()).append('\n');
-            }
-        }
 
         try {
-            output.write(sb.toString().getBytes());
-            output.flush();
+            StringBuilder sb = new StringBuilder();
+            for (java.util.Map.Entry<Member, List<GPBattleResults>> e : resultMap.entrySet()) {
+                for (GPBattleResults r : e.getValue()) {
+                    sb.append(r.getSummary_CSV()).append('\n');
+                }
+            }
+            battleWriter.write(sb.toString());
+            battleWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -641,15 +621,46 @@ public class Driver implements Runnable {
                 return o.getName().compareTo(o1.getName());
             }
         });
+
         try {
-            for (Member m : l) {
-                robots.append(Double.toString(m.getFitness())).append(",");
+            StringBuilder sb2 = new StringBuilder();
+            for (Iterator iter = l.iterator(); iter.hasNext();) {
+                Member m = (Member) iter.next();
+                sb2.append(Double.toString(m.getFitness()));
+                if (iter.hasNext()) {
+                    sb2.append(',');
+                } else {
+                    sb2.append('\n');
+                }
             }
-            robots.write("\n");
+            robots.write(sb2.toString());
             robots.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            StringBuilder sb3 = new StringBuilder();
+            double minFitness = Double.MAX_VALUE;
+            double maxFitness = Double.MIN_VALUE;
+            double sumFitness = 0.0;
+            for (Member m : resultMap.keySet()) {
+                double f = m.getFitness();
+
+                if (f > maxFitness) maxFitness = f;
+                else if (f < minFitness) minFitness = f;
+
+                sumFitness += f;
+            }
+            double meanFitness = sumFitness / (double)populationSize;
+            sb3.append(minFitness).append(',').append(meanFitness).append(',').append(maxFitness).append('\n');
+            fitnessWriter.write(sb3.toString());
+            fitnessWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void submitBattle(GPBattleTask t) {

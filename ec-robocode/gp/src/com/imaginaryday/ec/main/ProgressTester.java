@@ -12,9 +12,7 @@ import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +32,8 @@ public class ProgressTester {
     private JavaSpace space;
     private final TransactionManager transactionManager;
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    private FileOutputStream output;
+    private Writer summaryWriter;
+    private Writer detailsWriter;
     private static final int MAX_TAKE_COUNT = 60;
     private GPBattleTask[] taskArray;
 
@@ -44,8 +43,11 @@ public class ProgressTester {
         this.space = space;
         this.transactionManager = transactionManager;
         try {
-            output = new FileOutputStream(filename, false);
+            summaryWriter = new FileWriter("progressSummary.log", false);
+            detailsWriter = new FileWriter("progressDetails.log", false);
         } catch (FileNotFoundException e) {
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+        } catch (IOException e) {
             e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
         }
     }
@@ -153,7 +155,7 @@ public class ProgressTester {
 
     private void submitTask(GPBattleTask task) {
         try {
-            logger.info(task.toString());
+            logger.info(task.shortString());
             Transaction tran = TransactionFactory.create(transactionManager, 60000).transaction;
             space.write(task, tran, Lease.FOREVER);
             tran.commit();
@@ -187,35 +189,13 @@ public class ProgressTester {
         }
     }
 
-    private void printResults2(Map<Member, List<GPBattleResults>> results, int generation) {
-        StringBuffer output = new StringBuffer();
-
-        // Header
-        output.append('\n').append("Results for generation ").append(generation).append('\n');
-
-        for (java.util.Map.Entry<Member, List<GPBattleResults>> e : results.entrySet()) {
-
-            output.append("Robot ").append(e.getKey().getName()).append('\n');
-            output.append("------------------------------MOVE PROGRAM--------------------------------\n");
-            output.append(e.getKey().getMoveProgram().toString());
-            output.append("------------------------------TURRET PROGRAM------------------------------\n");
-            output.append(e.getKey().getTurretProgram().toString());
-            output.append("------------------------------SHOOT PROGRAM-------------------------------\n");
-            output.append(e.getKey().getShootProgram().toString());
-            output.append("------------------------------RADAR PROGRAM-------------------------------\n");
-            output.append(e.getKey().getRadarProgram().toString());
-            output.append("--------------------------------------------------------------------------\n");
-
-            for (GPBattleResults r : e.getValue()) {
-                output.append(r.getSummary()).append('\n');
-            }
-        }
-
-        logger.info(output.toString());
-
-    }
 
     private void printResults(Map<Member, List<GPBattleResults>> results) {
+        printDetails(results);
+        printSummary(results);
+    }
+
+    private void printDetails(Map<Member, List<GPBattleResults>> results) {
         StringBuffer sb = new StringBuffer();
 
         for (java.util.Map.Entry<Member, List<GPBattleResults>> e : results.entrySet()) {
@@ -226,11 +206,41 @@ public class ProgressTester {
         }
         logger.info(sb.toString());
         try {
-            output.write(sb.toString().getBytes());
-            output.flush();
+            detailsWriter.write(sb.toString());
+            detailsWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
         }
 
     }
+
+    private void printSummary(Map<Member, List<GPBattleResults>> results) {
+        StringBuffer sb = new StringBuffer();
+
+                int maxBeaten = 0;
+                int totalBeaten = 0;
+                int battles = 0;
+
+                for (Member m : results.keySet()) {
+                    int beaten = 0;
+                    for (GPBattleResults r : results.get(m)) {
+                        if (r.score1 > r.score2) {
+                            ++beaten;
+                        }
+                        ++battles;
+                    }
+                    if (beaten > maxBeaten) maxBeaten = beaten;
+                    totalBeaten += beaten;
+                }
+                double wp = (double)totalBeaten / (double)battles;
+                sb.append(maxBeaten).append(',').append(wp).append('\n');
+                try {
+                    summaryWriter.write(sb.toString());
+                    summaryWriter.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                }
+
+    }
+
 }

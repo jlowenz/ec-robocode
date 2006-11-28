@@ -228,4 +228,12 @@ public class TeamStatistics implements ContestantStatistics {
     public int getNumWallsHit() {
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    public double getScanRadians() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public double scoreScanRadians(double radians) {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

@@ -31,6 +31,7 @@ public class GPBattleResults implements Entry {
     public Double distanceTravelled1;
     public Integer numScanEvents1;
     public Integer numWallsHit1;
+    public Double scanRadians1;
 
     public Integer rank2;
     public Integer score2;
@@ -45,6 +46,7 @@ public class GPBattleResults implements Entry {
     public Double distanceTravelled2;
     public Integer numScanEvents2;
     public Integer numWallsHit2;
+    public Double scanRadians2;
 
 
     public GPBattleResults() {
@@ -73,6 +75,7 @@ public class GPBattleResults implements Entry {
         this.distanceTravelled1 = results1.getDistanceTravelled();
         this.numScanEvents1 = results1.getNumScanEvents();
         this.numWallsHit1 = results1.getNumWallsHit();
+        this.scanRadians1 = results1.getScanRadians();
 
 
         this.rank2 = results2.getRank();
@@ -88,6 +91,7 @@ public class GPBattleResults implements Entry {
         this.distanceTravelled2 = results2.getDistanceTravelled();
         this.numScanEvents2 = results2.getNumScanEvents();
         this.numWallsHit2 = results2.getNumWallsHit();
+        this.scanRadians2 = results2.getScanRadians();
 
         System.err.println(this);
     }
@@ -144,6 +148,7 @@ public class GPBattleResults implements Entry {
         sb.append(" Bh: ").append(numBulletHits1).append("|").append(numBulletHits2);
         sb.append(" Dt: ").append(distanceTravelled1).append("|").append(distanceTravelled2);
         sb.append(" Se: ").append(numScanEvents1).append("|").append(numScanEvents2);
+        sb.append(" Sr: ").append(scanRadians1).append("|").append(scanRadians2);
         sb.append(" Wh: ").append(numWallsHit1).append("|").append(numWallsHit2);
         return sb.toString();
     }
@@ -164,6 +169,7 @@ public class GPBattleResults implements Entry {
         sb.append(',').append(numBulletHits1).append(',').append(numBulletHits2);
         sb.append(',').append(distanceTravelled1).append(',').append(distanceTravelled2);
         sb.append(',').append(numScanEvents1).append(',').append(numScanEvents2);
+        sb.append(',').append(scanRadians1).append(',').append(scanRadians2);
         sb.append(',').append(numWallsHit1).append(',').append(numWallsHit2);
         return sb.toString();
     }

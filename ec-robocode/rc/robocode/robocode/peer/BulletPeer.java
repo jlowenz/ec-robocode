@@ -21,13 +21,18 @@
 package robocode.peer;
 
 
-import java.awt.geom.*;
-import java.util.Vector;
-import static java.lang.Math.*;
+import robocode.Bullet;
+import robocode.BulletHitBulletEvent;
+import robocode.BulletHitEvent;
+import robocode.BulletMissedEvent;
+import robocode.HitByBulletEvent;
+import robocode.Rules;
+import robocode.battle.Battle;
+import robocode.battlefield.BattleField;
 
-import robocode.battle.*;
-import robocode.battlefield.*;
-import robocode.*;
+import java.awt.geom.Line2D;
+import static java.lang.Math.*;
+import java.util.Vector;
 
 
 /**
@@ -105,8 +110,12 @@ public class BulletPeer {
 	}
 
 	public void checkBulletCollision() {
-		for (BulletPeer b : battle.getBullets()) {
-			if (!(b == null || b == this) && b.isActive && intersect(b.boundingLine)) {
+        Vector<BulletPeer> v = battle.getBullets();
+//        for (BulletPeer b : battle.getBullets()) {
+        int size = v.size();
+        for (int i = 0; i < size; i++) {
+            BulletPeer b = v.get(i);
+            if (!(b == null || b == this) && b.isActive && intersect(b.boundingLine)) {
 				bulletState = BULLET_STATE_HIT_BULLET;
 				isActive = false;
 				b.isActive = false;

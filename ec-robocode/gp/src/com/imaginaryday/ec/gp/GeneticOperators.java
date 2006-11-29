@@ -39,6 +39,35 @@ public class GeneticOperators {
         mutations.add(new BooleanMutation());
     }
 
+    private static class PR extends AbstractNode {
+        private Node[] child = new Node[1];
+        public PR(Node root) {
+            child[0] = root;
+        }
+        protected Node[] children() {
+            return child;
+        }
+        @Override
+        public <T extends Node> T copy() {
+            return (T) new PR(child[0]);
+        }
+        public String getName() {
+            return "PseudoRoot";
+        }
+        public Class getInputType(int id) {
+            return child[0].getOutputType();
+        }
+        public Class getOutputType() {
+            return null;
+        }
+    }
+
+    public static Node pseudoRoot(final Node root)
+    {
+        return new PR(root);
+    }
+
+
     public void addMutation(MutationFunc mf)
     {
         mutations.add(mf);
@@ -46,30 +75,6 @@ public class GeneticOperators {
 
     public static GeneticOperators getInstance() {
         return _instance;
-    }
-
-    public int getCopyProbability() {
-        return copyProbability;
-    }
-
-    public void setCopyProbability(int copyProbability) {
-        this.copyProbability = copyProbability;
-    }
-
-    public int getMutationProbability() {
-        return mutationProbability;
-    }
-
-    public void setMutationProbability(int mutationProbability) {
-        this.mutationProbability = mutationProbability;
-    }
-
-    public int getCrossoverProbability() {
-        return crossoverProbability;
-    }
-
-    public void setCrossoverProbability(int crossoverProbability) {
-        this.crossoverProbability = crossoverProbability;
     }
 
     public int getNumCrossoverFailures() {
@@ -95,16 +100,14 @@ public class GeneticOperators {
 
         Link la = null, lb = null;
         for (int i = 0; i < 3; i++) {
-            la = randomSubtree(childA); // this may return EMPTY
-            if (la == Link.EMPTY) break;
+            la = randomSubtree(childA);
             lb = randomSubtree(childB, la.child.getOutputType()); // this may return EMPTY
             if (lb != Link.EMPTY) break;
         }
-        if (la == Link.EMPTY || lb == Link.EMPTY) {
+        if (lb == Link.EMPTY) {
             notifyCrossoverFailed(childA, childB);
             return Tuple.pair(childA, childB);
         }
-
         try {
             swap(la, lb);
         } catch (VetoTypeInduction vetoTypeInduction) {
@@ -117,7 +120,9 @@ public class GeneticOperators {
 
     private static void swap(Link la, Link lb) throws VetoTypeInduction {
         if (la == null || lb == null) throw new IllegalArgumentException("links cannot be null");
-        la.parent.attach(la.childIndex, lb.child);
+
+        if (la.parent != null) la.parent.attach(la.childIndex, lb.child);
+        else
         lb.parent.attach(lb.childIndex, la.child);
     }
 
@@ -246,7 +251,7 @@ public class GeneticOperators {
 
     public static Link randomSubtree(Node root) {
         int links = countLinks(root);
-        if (links == 0) return Link.EMPTY;
+        if (links == 0) { return Link.EMPTY; }
         return selectLink(root, rand.nextInt(countLinks(root)));
     }
 
@@ -291,7 +296,8 @@ public class GeneticOperators {
         return l.get(0);
     }
 
-    public static int filterLinks(List<Link> l, Node parent, int count, F.lambda2<Boolean, Link, Integer> pred) {
+    public static int filterLinks(List<Link> l, Node parent, int count, F.lambda2<Boolean, Link, Integer> pred)
+    {
         int id = count;
         int i = 0;
         for (Node n : parent.childList()) {

@@ -89,6 +89,10 @@ public class Member implements Comparable<Member>, Serializable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Node getMoveProgram() {
         return moveProgram;
     }

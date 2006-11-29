@@ -64,7 +64,10 @@ public class ProgressTester {
         List<Member> newPop = new ArrayList<Member>(population.size());
 
         for (Member m : population) {
-            newPop.add(new Member(m));
+            String name = m.getName();
+            Member nm = new Member(m);
+            nm.setName(name);
+            newPop.add(nm);
         }
         return newPop;
     }

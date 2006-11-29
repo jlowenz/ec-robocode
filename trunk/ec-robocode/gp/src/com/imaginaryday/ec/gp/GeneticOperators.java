@@ -122,8 +122,7 @@ public class GeneticOperators {
         if (la == null || lb == null) throw new IllegalArgumentException("links cannot be null");
 
         if (la.parent != null) la.parent.attach(la.childIndex, lb.child);
-        else
-        lb.parent.attach(lb.childIndex, la.child);
+        else lb.parent.attach(lb.childIndex, la.child);
     }
 
     public Node mutate(Node parent) {
@@ -199,6 +198,8 @@ public class GeneticOperators {
                 if (la == Link.EMPTY) return;
                 Link lb = randomSubtree(node, la.child.getOutputType());
                 if (lb == Link.EMPTY) continue;
+	            la.child = la.child.copy();
+	            lb.child = lb.child.copy();
                 if (!la.equals(lb)) {
                     try {
                         swap(la, lb);

@@ -70,8 +70,9 @@ public class ProgressTester {
     }
 
     private int submitBattles(List<Member> population, int generation) {
-        String[] sampleBots = new String[]{"Corners", "Crazy", "Fire", "MyFirstRobot",
-                "RamFire", "SittingDuck", "SpinBot", "Target", "Tracker", "TrackFire", "Walls"};
+        String[] sampleBots = new String[]{"Corners", "Crazy", "Fire",
+                    "RamFire", "SpinBot", "Tracker", "TrackFire", "Walls",
+                    "Nano", "Micro", "Mini", "Big"};
 
         int numBattles = sampleBots.length * population.size();
         taskArray = new GPBattleTask[numBattles];
@@ -224,7 +225,10 @@ public class ProgressTester {
                 for (Member m : results.keySet()) {
                     int beaten = 0;
                     for (GPBattleResults r : results.get(m)) {
-                        if (r.score1 > r.score2) {
+                        if (r.score1 > r.score2
+                                && r.firsts1 > r.firsts2
+                                && r.seconds1 < r.seconds2
+                                && r.fitness1 > 4.0) {
                             ++beaten;
                         }
                         ++battles;

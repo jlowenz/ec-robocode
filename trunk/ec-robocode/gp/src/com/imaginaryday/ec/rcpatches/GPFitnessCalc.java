@@ -22,7 +22,7 @@ public class GPFitnessCalc {
         double numBulletsDodged = opponent.getNumBulletsFired() - robot.getNumBulletHits();
         double r1 = Stuff.clampZero(robot.getDistanceTravelled());
         double r2 = Stuff.clampZero(opponent.getDistanceTravelled());
-        double distRatio = (r1 > 0.0) ? (r1 / (r1+r2)) : 0;
+        double distRatio = (r1 > 0.0) ? (r1 / (r1+r2)) : 0.0;
 
         double accScaling = Math.pow(10.0, 0.002*numGenerations);
 

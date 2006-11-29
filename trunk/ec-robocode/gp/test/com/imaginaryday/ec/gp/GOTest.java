@@ -1,5 +1,6 @@
 package com.imaginaryday.ec.gp;
 
+import static com.imaginaryday.ec.gp.GeneticOperators.pseudoRoot;
 import com.imaginaryday.util.Tuple;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -40,11 +41,11 @@ public class GOTest extends TestCase {
             vetoTypeInduction.printStackTrace();
         }
 
-        Tuple.Two<Node,Node> p = go.crossover(rootA, rootB);
+        Tuple.Two<Node,Node> p = go.crossover(pseudoRoot(rootA), pseudoRoot(rootB));
         System.out.println(rootA);
         System.out.println(rootB);
-        System.out.println(p.getFirst().toString());
-        System.out.println(p.getSecond().toString());
+        System.out.println(p.getFirst().getChild(0).toString());
+        System.out.println(p.getSecond().getChild(0).toString());
     }
 
     public void testRandomCrossover() {
@@ -58,9 +59,9 @@ public class GOTest extends TestCase {
 
             System.out.println(a);
             System.out.println(b);
-            Tuple.Two<Node,Node> res = go.crossover(a, b);
-            System.out.println(res.getFirst());
-            System.out.println(res.getSecond());
+            Tuple.Two<Node,Node> res = go.crossover(pseudoRoot(a), pseudoRoot(b));
+            System.out.println(res.getFirst().getChild(0));
+            System.out.println(res.getSecond().getChild(0));
         }
     }
 

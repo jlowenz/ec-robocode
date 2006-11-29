@@ -1,6 +1,7 @@
 package com.imaginaryday.ec.main;
 
 import com.imaginaryday.ec.gp.GeneticOperators;
+import static com.imaginaryday.ec.gp.GeneticOperators.pseudoRoot;
 import com.imaginaryday.ec.gp.Node;
 import com.imaginaryday.ec.gp.NodeFactory;
 import com.imaginaryday.ec.gp.TreeFactory;
@@ -13,19 +14,41 @@ import com.imaginaryday.util.Tuple;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
-import net.jini.core.transaction.*;
+import net.jini.core.transaction.CannotAbortException;
+import net.jini.core.transaction.Transaction;
+import net.jini.core.transaction.TransactionException;
+import net.jini.core.transaction.TransactionFactory;
+import net.jini.core.transaction.UnknownTransactionException;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 import org.jscience.mathematics.vectors.Vector;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
 
 /**
@@ -394,14 +417,17 @@ public class Driver implements Runnable {
             Node radar = m.getRadarProgram();
             Node firing = m.getShootProgram();
 
-            m.setMoveProgram((rand.nextDouble() < mutationProbability) ? ops.mutate(move) : move);
-            m.setTurretProgram((rand.nextDouble() < mutationProbability) ? ops.mutate(turret) : turret);
-            m.setRadarProgram((rand.nextDouble() < mutationProbability) ? ops.mutate(radar) : radar);
-            m.setShootProgram((rand.nextDouble() < mutationProbability) ? ops.mutate(firing) : firing);
+            if (rand.nextDouble() < mutationProbability) {
+                m.setMoveProgram(ops.mutate(pseudoRoot(move).getChild(0)));
+                m.setTurretProgram(ops.mutate(pseudoRoot(turret).getChild(0)));
+                m.setRadarProgram(ops.mutate(pseudoRoot(radar).getChild(0)));
+                m.setShootProgram(ops.mutate(pseudoRoot(firing).getChild(0)));
+            }
         }
 
         return selection;
     }
+
 
     private List<Member> crossover(List<Member> selection) {
         GeneticOperators ops = GeneticOperators.getInstance();
@@ -421,29 +447,29 @@ public class Driver implements Runnable {
             selection.remove(n);
 
             if (rand.nextDouble() < crossoverProbability) {
-                Node moveA = m.getMoveProgram();
-                Node turretA = m.getTurretProgram();
-                Node radarA = m.getRadarProgram();
-                Node firingA = m.getShootProgram();
+                Node moveA = pseudoRoot(m.getMoveProgram());
+                Node turretA = pseudoRoot(m.getTurretProgram());
+                Node radarA = pseudoRoot(m.getRadarProgram());
+                Node firingA = pseudoRoot(m.getShootProgram());
 
-                Node moveB = n.getMoveProgram();
-                Node turretB = n.getTurretProgram();
-                Node radarB = n.getRadarProgram();
-                Node firingB = n.getShootProgram();
+                Node moveB = pseudoRoot(n.getMoveProgram());
+                Node turretB = pseudoRoot(n.getTurretProgram());
+                Node radarB = pseudoRoot(n.getRadarProgram());
+                Node firingB = pseudoRoot(n.getShootProgram());                
 
                 Tuple.Two<Node, Node> move = ops.crossover(moveA, moveB);
                 Tuple.Two<Node, Node> turret = ops.crossover(turretA, turretB);
                 Tuple.Two<Node, Node> radar = ops.crossover(radarA, radarB);
                 Tuple.Two<Node, Node> firing = ops.crossover(firingA, firingB);
 
-                m.setMoveProgram(move.getFirst());
-                n.setMoveProgram(move.getSecond());
-                m.setTurretProgram(turret.getFirst());
-                n.setTurretProgram(turret.getSecond());
-                m.setRadarProgram(radar.getFirst());
-                n.setRadarProgram(radar.getSecond());
-                m.setShootProgram(firing.getFirst());
-                n.setShootProgram(firing.getSecond());
+                m.setMoveProgram(move.getFirst().getChild(0));
+                n.setMoveProgram(move.getSecond().getChild(0));
+                m.setTurretProgram(turret.getFirst().getChild(0));
+                n.setTurretProgram(turret.getSecond().getChild(0));
+                m.setRadarProgram(radar.getFirst().getChild(0));
+                n.setRadarProgram(radar.getSecond().getChild(0));
+                m.setShootProgram(firing.getFirst().getChild(0));
+                n.setShootProgram(firing.getSecond().getChild(0));
             }
             replacements.add(m);
             replacements.add(n);
@@ -485,19 +511,6 @@ public class Driver implements Runnable {
         }
         return samples;
     }
-
-    class FitnessComparator implements Comparator<Member> {
-
-        public int compare(Member one, Member two) {
-            if (one == null) throw new IllegalArgumentException("one is null");
-            if (two == null) throw new IllegalArgumentException("two is null");
-
-            if (one.getFitness() <= two.getFitness()) return -1;
-            else return 1;
-        }
-
-    }
-
 
     public void collectResults(List<Member> population, int numBattles) {
         int takeCount = 0;

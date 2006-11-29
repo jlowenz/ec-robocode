@@ -169,7 +169,14 @@ public class GPBattleManager extends BattleManager {
                 sample.TrackFire.class));
         map.put("Walls", new StandardRobotClassManager(new GPRobotSpecification("Walls", "11"),
                 sample.Walls.class));
-
+        map.put("Nano", new StandardRobotClassManager(new GPRobotSpecification("Nano", "12"),
+                 kc.nano.Splinter.class));
+        map.put("Micro", new StandardRobotClassManager(new GPRobotSpecification("Micro", "13"),
+                jam.micro.RaikoMicro.class));
+        map.put("Mini", new StandardRobotClassManager(new GPRobotSpecification("Mini", "14"),
+                voidious.mini.Komarious.class));
+        map.put("Big", new StandardRobotClassManager(new GPRobotSpecification("Big", "15"),
+                voidious.Dookious.class));
         return map;
     }
 

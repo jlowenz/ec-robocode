@@ -6,6 +6,7 @@ import com.imaginaryday.util.Tuple;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * User: jlowens
@@ -13,11 +14,14 @@ import java.util.Set;
  * Time: 4:22:09 PM
  */
 public abstract class AbstractNode implements Node {
+    private static final long serialVersionUID = 5193080878842310275L;
+    private static final AtomicLong ID = new AtomicLong(0);
+
     protected transient Object owner;
     static protected Node[] NONE = new Node[0];
-    private static final long serialVersionUID = 5193080878842310275L;
     protected abstract Node[] children();
     protected Tuple.Two<Class,List<Class>> type;
+    protected long id = ID.getAndIncrement();
 
     public <T extends Node> T copy() {
         // TODO: solve this with a new abstract method (e.g. create)
@@ -136,5 +140,25 @@ public abstract class AbstractNode implements Node {
         return sb.toString();
     }
 
+
+    public String debugString(Set<Node> set) {
+        StringBuilder sb = new StringBuilder();
+        if (set.contains(this)) {
+            sb.append("( ####### CYCLE: ").append(id).append(" ####### )");
+            return sb.toString();
+        } else {
+            set.add(this);
+            sb.append("(").append(getName()).append(" ").append(id).append(" ");
+            Node children[] = children();
+            for (int i = 0; i < children.length; i++) {
+                if (children[i] != null) {
+                    sb.append(children[i].debugString(set));
+                    if (i < children.length-1) sb.append(" ");
+                }
+            }
+            sb.append(")");
+            return sb.toString();
+        }
+    }
     protected String getConstructorParam() { return ""; }
 }

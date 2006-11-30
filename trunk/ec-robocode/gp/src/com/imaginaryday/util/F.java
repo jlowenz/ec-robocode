@@ -1,5 +1,7 @@
 package com.imaginaryday.util;
 
+import javolution.util.FastList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -94,20 +96,32 @@ public abstract class F {
 		for (t el : arr) c.add(el);
 	}
 
-	public static <r,c extends Collection<r>> c map(c c, lambda1<r,r> l) {
-		c newc = null;
-		try {
-			newc = (c)c.getClass().newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
+	public static <a,r,c extends Collection<r>> List<a> map(lambda1<a,r> l, c c) {
+		List<a> newc = new FastList<a>();
 		for (r el : c) { newc.add(l.call(el)); }
 		return newc;
 	}
 
-	public static <a, c extends Collection<a>> void foreach(c c, lambda1<?,a> lambda1) {
+    public static <a,b,c extends List<a>> b fold(lambda2<b,a,b> f, c L, b y) {
+        if (L.size() == 0) return y;
+//        else return f.call(L.get(0), fold(f,L.subList(1,L.size()),y));
+        else { // do it iteratively (i think its actually a foldr
+            b val = f.call(y,L.get(0));
+            for (a A : L.subList(1,L.size())) val = f.call(val,A);
+            return val;
+        }
+    }
+
+    public static <a extends Comparable<a>> a max(List<a> vals) {
+        a v = null;
+        for (a A : vals) {
+            if (v == null) v = A;
+            else if (A.compareTo(v) > 0) v = A;
+        }
+        return v;
+    }
+
+    public static <a, c extends Collection<a>> void foreach(c c, lambda1<?,a> lambda1) {
 		for (a el : c) { lambda1.call(el); }
 	}
 }

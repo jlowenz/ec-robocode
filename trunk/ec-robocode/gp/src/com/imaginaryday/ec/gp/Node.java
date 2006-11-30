@@ -4,6 +4,7 @@ import com.imaginaryday.util.Tuple;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: jlowens
@@ -32,4 +33,5 @@ public interface Node extends Serializable {
     boolean isTerminal();
 
     <T extends Node> T copy();
+    String debugString(Set<Node> set);
 }

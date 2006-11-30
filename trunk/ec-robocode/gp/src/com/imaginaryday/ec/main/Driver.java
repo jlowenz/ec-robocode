@@ -418,10 +418,10 @@ public class Driver implements Runnable {
             Node firing = m.getShootProgram();
 
             if (rand.nextDouble() < mutationProbability) {
-                m.setMoveProgram(ops.mutate(pseudoRoot(move).getChild(0)));
-                m.setTurretProgram(ops.mutate(pseudoRoot(turret).getChild(0)));
-                m.setRadarProgram(ops.mutate(pseudoRoot(radar).getChild(0)));
-                m.setShootProgram(ops.mutate(pseudoRoot(firing).getChild(0)));
+                m.setMoveProgram(ops.mutate(pseudoRoot(move)).getChild(0));
+                m.setTurretProgram(ops.mutate(pseudoRoot(turret)).getChild(0));
+                m.setRadarProgram(ops.mutate(pseudoRoot(radar)).getChild(0));
+                m.setShootProgram(ops.mutate(pseudoRoot(firing)).getChild(0));
             }
         }
 

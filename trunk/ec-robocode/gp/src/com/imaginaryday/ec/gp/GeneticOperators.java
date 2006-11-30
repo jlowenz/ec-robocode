@@ -3,12 +3,16 @@ package com.imaginaryday.ec.gp;
 import com.imaginaryday.ec.gp.nodes.BooleanConstant;
 import com.imaginaryday.ec.gp.nodes.Constant;
 import com.imaginaryday.util.F;
+import static com.imaginaryday.util.F.*;
 import com.imaginaryday.util.Tuple;
+import javolution.util.FastList;
 import org.jscience.mathematics.functions.FunctionException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -21,12 +25,9 @@ import java.util.logging.Logger;
 public class GeneticOperators {
     private static Logger log = Logger.getLogger(GeneticOperators.class.getName());
     public static Random rand = new Random();
-    private int mutationProbability = 10;
-    private int crossoverProbability = 60;
-    private int copyProbability = 10;
     private int numCrossoverFailures = 0;
 
-    private List<MutationFunc> mutations = new ArrayList<MutationFunc>();
+    List<MutationFunc> mutations = new ArrayList<MutationFunc>();
 
     private static GeneticOperators _instance = new GeneticOperators();
 
@@ -121,13 +122,12 @@ public class GeneticOperators {
     private static void swap(Link la, Link lb) throws VetoTypeInduction {
         if (la == null || lb == null) throw new IllegalArgumentException("links cannot be null");
 
-        if (la.parent != null) la.parent.attach(la.childIndex, lb.child);
-        else lb.parent.attach(lb.childIndex, la.child);
+        la.parent.attach(la.childIndex, lb.child);
+        lb.parent.attach(lb.childIndex, la.child);
     }
 
     public Node mutate(Node parent) {
         Node child = parent.copy();
-        // TODO: mutation **needs** to handle single node trees!!!! or we'll never get out of that hole
         randomMutation().mutate(child);
         return child;
     }
@@ -147,7 +147,8 @@ public class GeneticOperators {
             Link link = randomSubtree(node);
             if (link == Link.EMPTY) return;
             try {
-                Node newSubtree = tf.grow(0, treeDepth(link.parent) + 1, link.child.getOutputType());
+                int d = depth(link.child) + 1;
+                Node newSubtree = tf.grow(0, d, link.child.getOutputType());
                 link.parent.attach(link.childIndex, newSubtree);
             } catch (VetoTypeInduction vetoTypeInduction) {
                 vetoTypeInduction.printStackTrace();
@@ -160,7 +161,7 @@ public class GeneticOperators {
             Link link = randomSubtree(node);
             if (link == Link.EMPTY) return;
             try {
-                int depth = treeDepth(link.parent);
+                int depth = depth(link.child);
                 if (depth >= 2) {
                     Node newSubtree = tf.grow(0, depth - 1, link.child.getOutputType());
                     link.parent.attach(link.childIndex, newSubtree);
@@ -193,21 +194,38 @@ public class GeneticOperators {
 
     public static class Switch implements MutationFunc {
         public void mutate(Node node) {
-            for (int i = 0; i < 3; i++) {
-                Link la = randomSubtree(node);
-                if (la == Link.EMPTY) return;
-                Link lb = randomSubtree(node, la.child.getOutputType());
-                if (lb == Link.EMPTY) continue;
-	            la.child = la.child.copy();
-	            lb.child = lb.child.copy();
-                if (!la.equals(lb)) {
-                    try {
-                        swap(la, lb);
-                    } catch (VetoTypeInduction vetoTypeInduction) {
-                        vetoTypeInduction.printStackTrace();
+            Node realRoot = node.getChild(0);
+            if (!realRoot.isTerminal()) {
+                // pick two separate child
+                Tuple.Two<Node,Node> p;
+                if (realRoot.getInputCount() > 2) {
+                    p = randomChildren(realRoot);
+                } else {
+                    p = Tuple.pair(realRoot.getChild(0),realRoot.getChild(1));
+                }
+
+                for (int i = 0; i < 3; i++) {
+                    Link la = randomSubtree(p.first());
+                    if (la == Link.EMPTY) return;
+                    Link lb = randomSubtree(p.second(), la.child.getOutputType());
+                    if (lb == Link.EMPTY) continue;
+                    if (!la.equals(lb)) {
+                        try {
+                            swap(la, lb);
+                        } catch (VetoTypeInduction vetoTypeInduction) {
+                            vetoTypeInduction.printStackTrace();
+                        }
                     }
                 }
             }
+        }
+        private Tuple.Two<Node, Node> randomChildren(Node realRoot) {
+            Node a, b;
+            int indexa = rand.nextInt(realRoot.getInputCount());
+            a = realRoot.getChild(indexa);
+            int indexb = rand.nextInt(realRoot.getInputCount()-1);
+            b = realRoot.getChild((indexb < indexa) ? indexb : indexb+1);
+            return Tuple.pair(a,b);
         }
     }
 
@@ -310,27 +328,82 @@ public class GeneticOperators {
         return id;
     }
 
+
+    private static F.lambda2<Integer,Integer,Integer> addf = new F.lambda2<Integer,Integer,Integer>() {
+        protected Integer _call(Integer A, Integer B) {
+            return A + B;
+        }
+    };
+    private static F.lambda1<Integer,Node> numlinksf = new F.lambda1<Integer, Node>() {
+        protected Integer _call(Node A) {
+            return numLinks(A);
+        }
+    };
+    public static int numLinks(Node root) {
+        if (root.isTerminal()) return 0;
+        else return root.getInputCount() + fold(addf,map(numlinksf,childrenAsList(root)),0);
+    }
+
     public static int countLinks(Node root) {
+        Set<Node> set = new HashSet<Node>();
+        List<Node> st = new FastList<Node>();
+        int i = 0;
+        st.add(root);
+        while (!st.isEmpty()) {
+            Node start = st.remove(0);
+            if (set.contains(start)) { debugTree(root); throw new RuntimeException("CYCLE DETECTED IN TREE"); }
+            set.add(start);
+            for (int j = 0; j < start.getInputCount(); j++) {
+                st.add(start.getChild(j));
+                i++;
+            }
+        }
+        return i;
+    }
+    private static void debugTree(Node root) {
+        Set<Node> set = new HashSet<Node>();
+        log.warning(root.debugString(set));
+    }
+
+    public static int _countLinks(Node root) {
         int i = 0;
         if (root != null) {
             for (int j = 0; j < root.getInputCount(); j++) {
                 i++;
-                i += countLinks(root.getChild(j));
+                i += _countLinks(root.getChild(j));
             }
         }
         return i;
     }
 
-    public static int treeDepth(Node root) {
-        if (root == null) return 0;
-        return _treeDepth(root, 1);
+    private static F.lambda1<Integer,Node> depthf = new F.lambda1<Integer, Node>() {
+        protected Integer _call(Node A) {
+            return depth(A);
+        }
+    };
+
+    private static List<Node> childrenAsList(Node r) { // todo this can go away if we fixed node
+        List<Node> n = new FastList<Node>();
+        for (int i = 0; i < r.getInputCount(); i++) n.add(r.getChild(i));
+        return n;
     }
 
-    private static int _treeDepth(Node root, int current) {
-        int d = 0;
-        for (Node n : root.childList()) {
-            d = Math.max(d, _treeDepth(n, current + 1));
-        }
-        return d;
+    public static int depth(Node root) {
+        if (root.isTerminal()) return 1;
+        else return 1 + max(map(depthf, childrenAsList(root)));
     }
+
+    // BROKEN!!!
+//    public static int treeDepth(Node root) {
+//        if (root == null) return 0;
+//        return _treeDepth(root, 1);
+//    }
+//
+//    private static int _treeDepth(Node root, int current) {
+//        int d = 0;
+//        for (Node n : root.childList()) {
+//            d = Math.max(d, _treeDepth(n, current + 1));
+//        }
+//        return d;
+//    }
 }

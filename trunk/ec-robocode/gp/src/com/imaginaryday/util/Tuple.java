@@ -39,7 +39,21 @@ public abstract class Tuple implements Serializable {
 		}
 
 		private String nameFromInt(int i) { return Character.valueOf((char)('A' + (char)i)).toString(); }
-	}
+
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            One one = (One) o;
+
+            if (A != null ? !A.equals(one.A) : one.A != null) return false;
+
+            return true;
+        }
+        public int hashCode() {
+            return (A != null ? A.hashCode() : 0);
+        }
+    }
 
 	public static class Two<a,b> extends One<a>
 	{
@@ -48,7 +62,25 @@ public abstract class Tuple implements Serializable {
         public Two(a a, b b) { super(a); B = b; }
 		public b second() { return B; }
         public b getSecond() { return B; } // FunctionalJ compatibility
-	}
+        public String toString() { return "^" + first() + "," + B + "^"; }
+
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            if (!super.equals(o)) return false;
+
+            Two two = (Two) o;
+
+            if (B != null ? !B.equals(two.B) : two.B != null) return false;
+
+            return true;
+        }
+        public int hashCode() {
+            int result = super.hashCode();
+            result = 31 * result + (B != null ? B.hashCode() : 0);
+            return result;
+        }
+    }
 
 	public static class Three<a,b,c> extends Two<a,b>
 	{
@@ -56,6 +88,24 @@ public abstract class Tuple implements Serializable {
 		public Three(a a, b b, c c) { super(a,b); C = c; }
 		public c third() { return C; }
         public c getThird() { return C; }  // FunctionalJ compatibility
+
+
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            if (!super.equals(o)) return false;
+
+            Three three = (Three) o;
+
+            if (C != null ? !C.equals(three.C) : three.C != null) return false;
+
+            return true;
+        }
+        public int hashCode() {
+            int result = super.hashCode();
+            result = 31 * result + (C != null ? C.hashCode() : 0);
+            return result;
+        }
     }
 
 	public static class Four<a,b,c,d> extends Three<a,b,c>
@@ -64,14 +114,50 @@ public abstract class Tuple implements Serializable {
 		public Four(a a, b b, c c, d d) { super(a,b,c); D = d; }
 		public d fourth() { return D; }
         public d getFourth() { return D; }  // FunctionalJ compatibility
-	}
+
+
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            if (!super.equals(o)) return false;
+
+            Four four = (Four) o;
+
+            if (D != null ? !D.equals(four.D) : four.D != null) return false;
+
+            return true;
+        }
+        public int hashCode() {
+            int result = super.hashCode();
+            result = 31 * result + (D != null ? D.hashCode() : 0);
+            return result;
+        }
+    }
 
 	public static class Five<a,b,c,d,e> extends Four<a,b,c,d>
 	{
 		private e E;
 		public Five(a a, b b, c c, d d, e e) { super(a,b,c,d); E = e; }
 		public e fifth() { return E; }
-	}
+
+
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            if (!super.equals(o)) return false;
+
+            Five five = (Five) o;
+
+            if (E != null ? !E.equals(five.E) : five.E != null) return false;
+
+            return true;
+        }
+        public int hashCode() {
+            int result = super.hashCode();
+            result = 31 * result + (E != null ? E.hashCode() : 0);
+            return result;
+        }
+    }
 
 	public static <a> One<a> one(a A) { return new One<a>(A); }
 	public static <a> One<a> tuple(a A) { return new One<a>(A); }

@@ -31,6 +31,11 @@ public class ServiceFinder extends JiniClient {
                     e.printStackTrace();
                 }
                 if (js != null) return js;
+	            try {
+		            Thread.sleep(1000);
+	            } catch (InterruptedException e) {
+		            e.printStackTrace();
+	            }
             }
         }
         return null;
@@ -50,6 +55,11 @@ public class ServiceFinder extends JiniClient {
                     e.printStackTrace();
                 }
                 if (tm != null) return tm;
+	            try {
+		            Thread.sleep(1000);
+	            } catch (InterruptedException e) {
+		            e.printStackTrace();
+	            }
             }
         }
         return null;

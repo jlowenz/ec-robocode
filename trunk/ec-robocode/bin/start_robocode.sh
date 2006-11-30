@@ -10,9 +10,7 @@ fi
 
 export CLASSPATH="${GP_HOME}"
 
-for JAR in 	gp.jar rc.jar jsk-dl.jar rio.jar jscience.jar \
-			functionalj-0.8-jdk15.jar jsk-policy.jar jsk-lib.jar \
-			jsk-platform.jar jsk-resources.jar junit-4.1.jar
+for jar in `find $GP_HOME/build -name \*.jar | xargs`
 do
 	export CLASSPATH="${CLASSPATH}:${GP_HOME}/build/${JAR}"
 done

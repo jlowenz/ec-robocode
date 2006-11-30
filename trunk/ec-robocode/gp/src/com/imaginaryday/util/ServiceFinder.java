@@ -25,8 +25,10 @@ public class ServiceFinder extends JiniClient {
         while (System.currentTimeMillis() - startTime < 60000) {
             for (ServiceRegistrar r : this.getRegistrars()) {
                 JavaSpace js = null;
+                System.err.println("Looking for space");
                 try {
                     js = (JavaSpace) r.lookup(template);
+                    System.err.println("Found space");
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }

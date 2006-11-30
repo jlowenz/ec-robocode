@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="gp" default="all">
 
-
-    <property file="gp.properties"/>
     <!-- Uncomment the following property if no tests compilation is needed -->
     <!--
    <property name="skip.tests" value="true"/>
     -->
+
+    <echo message="BASEDIR: ${basedir}"/>
 
     <!-- Compiler options -->
 
@@ -36,15 +36,16 @@
         <include name="**/?*.tld"/>
     </patternset>
 
+    <property name="module.gp.basedir" value="${basedir}/gp"/>    
 
     <!-- Project Libraries -->
 
     <path id="library.junit-4.1.classpath">
-        <pathelement location="${basedir}/lib/junit-4.1.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/junit-4.1.jar"/>
     </path>
 
     <path id="library.jscience.classpath">
-        <pathelement location="${basedir}/lib/jscience.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jscience.jar"/>
     </path>
 
     <!-- Modules -->
@@ -52,25 +53,25 @@
 
     <!-- Module rc -->
 
-    <dirname property="module.rc.basedir" file="${ant.file}"/>
+    <property name="module.rc.basedir" value="${basedir}/rc"/>
 
 
     <property name="compiler.args.rc" value="${compiler.args}"/>
 
-    <property name="rc.output.dir" value="${module.rc.basedir}/rc/classes"/>
-    <property name="rc.testoutput.dir" value="${module.rc.basedir}/rc/classes"/>
+    <property name="rc.output.dir" value="${module.rc.basedir}/classes"/>
+    <property name="rc.testoutput.dir" value="${module.rc.basedir}/classes"/>
 
     <path id="rc.module.bootclasspath">
         <!-- Paths to be included in compilation bootclasspath -->
     </path>
 
     <path id="rc.module.classpath">
-        <pathelement location="${module.rc.basedir}/lib/jini/jsk-policy.jar"/>
-        <pathelement location="${module.rc.basedir}/lib/jini/jsk-dl.jar"/>
-        <pathelement location="${module.rc.basedir}/lib/jini/jsk-resources.jar"/>
-        <pathelement location="${module.rc.basedir}/lib/jini/jsk-platform.jar"/>
-        <pathelement location="${module.rc.basedir}/lib/jini/jsk-lib.jar"/>
-        <pathelement location="${module.rc.basedir}/lib/rio/rio.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jini/jsk-policy.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jini/jsk-dl.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jini/jsk-resources.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jini/jsk-platform.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jini/jsk-lib.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/rio/rio.jar"/>
     </path>
 
 
@@ -83,7 +84,7 @@
     </patternset>
 
     <path id="rc.module.sourcepath">
-        <dirset dir="${module.rc.basedir}/../rc">
+        <dirset dir="${module.rc.basedir}">
             <include name="robocode"/>
             <include name="robots"/>
         </dirset>
@@ -127,14 +128,13 @@
 
     <!-- Module gp -->
 
-    <dirname property="module.gp.basedir" file="${ant.file}"/>
 
     <property name="compiler.args.gp" value="${compiler.args}"/>
 
     <property name="gp.population" value="oogabooga"/>
     <property name="gp.build.dir" value="${module.gp.basedir}/../build"/>
-    <property name="gp.output.dir" value="${module.gp.basedir}/../robo_build"/>
-    <property name="gp.testoutput.dir" value="${module.gp.basedir}/../robo_build"/>
+    <property name="gp.output.dir" value="${module.gp.basedir}/robo_build"/>
+    <property name="gp.testoutput.dir" value="${module.gp.basedir}/robo_build"/>
 
     <path id="gp.module.bootclasspath">
         <!-- Paths to be included in compilation bootclasspath -->
@@ -168,9 +168,9 @@
     </patternset>
 
     <path id="gp.module.sourcepath">
-        <dirset dir="${module.gp.basedir}/../../ec-robocode">
-            <include name="gp/src"/>
-            <include name="gp/test"/>
+        <dirset dir="${module.gp.basedir}">
+            <include name="src"/>
+            <include name="test"/>
         </dirset>
     </path>
 

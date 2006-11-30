@@ -234,7 +234,7 @@ public class GeneticOperators {
         public void mutate(Node node) {
 	        if (CHECK_CYCLE) countLinks(node);
             Node realRoot = node.getChild(0);
-            if (!realRoot.isTerminal() && realRoot.getInputCount() < 2) {
+            if (!realRoot.isTerminal() && realRoot.getInputCount() >= 2) {
                 // pick two separate child
                 Tuple.Two<Node,Node> p;
                 if (realRoot.getInputCount() > 2) {

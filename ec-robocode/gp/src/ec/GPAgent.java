@@ -16,6 +16,7 @@ import robocode.HitWallEvent;
 import robocode.RobotDeathEvent;
 import robocode.ScannedRobotEvent;
 import robocode.WinEvent;
+import robocode.SkippedTurnEvent;
 import robocode.exception.DeathException;
 
 import java.util.logging.Logger;
@@ -322,9 +323,9 @@ public class GPAgent extends AdvancedRobot {
                     setAhead(dist);
                 }
 
-                try {
-                    execute();
-                } catch (DeathException e) { alive = false; }
+//                try {
+//                    execute();
+//                } catch (DeathException e) { alive = false; }
 
                 if (bulletHitAge > 100) resetBulletHit();
                 if (wallHitAge > 100) resetWallHit();
@@ -427,7 +428,12 @@ public class GPAgent extends AdvancedRobot {
     }
 
 
-    public void onScannedRobot(ScannedRobotEvent event) {
+	public void onSkippedTurn(SkippedTurnEvent event) {
+		super.onSkippedTurn(event);    //To change body of overridden methods use File | Settings | File Templates.
+		System.err.println("SKIPPED TURN!!!!");
+	}
+
+	public void onScannedRobot(ScannedRobotEvent event) {
         super.onScannedRobot(event);
         scannedEnemy = true;
         scannedEnemyAge = 0;

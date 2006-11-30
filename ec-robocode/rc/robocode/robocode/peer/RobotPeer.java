@@ -682,8 +682,8 @@ public class RobotPeer implements Runnable, ContestantPeer {
 			// Notify the battle that we are now asleep.
 			// This ends any pending wait() call in battle.runRound().
 			// Should not actually take place until we release the lock in wait(), below.
-			this.notify();
 			isSleeping = true;
+			this.notify();
 			// Notifying battle that we're asleep
 			// Sleeping and waiting for battle to wake us up.
 			try {

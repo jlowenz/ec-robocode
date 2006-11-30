@@ -41,6 +41,8 @@ public class GOTest extends TestCase {
             vetoTypeInduction.printStackTrace();
         }
 
+	    System.out.println(rootA);
+	    System.out.println(rootB);
         Tuple.Two<Node,Node> p = go.crossover(pseudoRoot(rootA), pseudoRoot(rootB));
         System.out.println(rootA);
         System.out.println(rootB);
@@ -53,17 +55,36 @@ public class GOTest extends TestCase {
         NodeFactory nf = NodeFactory.getInstance();
         TreeFactory tf = new TreeFactory(nf);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 5000; i++) {
             Node a = tf.generateRandomTree(5, Number.class);
             Node b = tf.generateRandomTree(5, Number.class);
 
-            System.out.println(a);
-            System.out.println(b);
+//            System.out.println(a);
+//            System.out.println(b);
             Tuple.Two<Node,Node> res = go.crossover(pseudoRoot(a), pseudoRoot(b));
-            System.out.println(res.getFirst().getChild(0));
-            System.out.println(res.getSecond().getChild(0));
+            System.out.println(res.getFirst().getChild(0).getName());
+            System.out.println(res.getSecond().getChild(0).getName());
         }
     }
+
+	public void testRandomCrossover2() {
+	    GeneticOperators go = GeneticOperators.getInstance();
+	    NodeFactory nf = NodeFactory.getInstance();
+	    TreeFactory tf = new TreeFactory(nf);
+
+		Node a = pseudoRoot(tf.generateRandomTree(10, Number.class));
+		Node b = pseudoRoot(tf.generateRandomTree(10, Boolean.class));
+	    for (int i = 0; i < 5000; i++) {
+//            System.out.println(a);
+//            System.out.println(b);
+	        Tuple.Two<Node,Node> res = go.crossover(a, b);
+            System.out.println(res.getFirst().getChild(0).getName());
+            System.out.println(res.getSecond().getChild(0).getName());
+		    a = res.first();
+		    b = res.second();
+	    }
+	}
+
 
     public void testCycle()
     {
@@ -168,7 +189,8 @@ public class GOTest extends TestCase {
         TestSuite s = new TestSuite();
         s.addTest(new GOTest("testDepth"));
         s.addTest(new GOTest("testNumLinks"));
-        s.addTest(new GOTest("testRandomCrossover"));
+	    s.addTest(new GOTest("testRandomCrossover"));
+	    s.addTest(new GOTest("testRandomCrossover2"));
         s.addTest(new GOTest("testCycle"));
         s.addTest(new GOTest("testGrow"));
         s.addTest(new GOTest("testShrink"));

@@ -211,7 +211,8 @@
     </target>
 
     <target name="dist" depends="compile.module.rc, compile.module.gp">
-        <mkdir dir="${gp.build.dir}"/>
+        <delete dir="${gp.build.dir}"/>
+	    <mkdir dir="${gp.build.dir}"/>
         <jar destfile="${gp.build.dir}/gp.jar">
             <manifest>
                 <attribute name="Main-Class" value="com.imaginaryday.ec.rcpatches.GPRobocodeMain"/>

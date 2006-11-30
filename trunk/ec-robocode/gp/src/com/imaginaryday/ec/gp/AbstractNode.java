@@ -162,4 +162,19 @@ public abstract class AbstractNode implements Node {
     }
     protected String getConstructorParam() { return ""; }
 
+
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		AbstractNode that = (AbstractNode) o;
+
+		if (id != that.id) return false;
+
+		return true;
+	}
+
+	public int hashCode() {
+		return (int) (id ^ (id >>> 32));
+	}
 }

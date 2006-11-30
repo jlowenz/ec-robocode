@@ -12,7 +12,7 @@ export CLASSPATH="${GP_HOME}"
 
 for jar in `find $GP_HOME/build -name \*.jar | xargs`
 do
-	export CLASSPATH="${CLASSPATH}:${JAR}"
+	export CLASSPATH="${CLASSPATH}:${jar}"
 done
 export CLASSPATH="${CLASSPATH}"
 echo $CLASSPATH

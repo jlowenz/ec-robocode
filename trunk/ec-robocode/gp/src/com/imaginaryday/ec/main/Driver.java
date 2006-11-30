@@ -446,7 +446,7 @@ public class Driver implements Runnable {
             Member n = selection.get(rand.nextInt(selection.size()));
             selection.remove(n);
 
-            if (rand.nextDouble() < crossoverProbability) {
+            if (rand.nextDouble() < crossoverProbability) { 
                 Node moveA = pseudoRoot(m.getMoveProgram());
                 Node turretA = pseudoRoot(m.getTurretProgram());
                 Node radarA = pseudoRoot(m.getRadarProgram());

@@ -23,6 +23,7 @@ import java.util.logging.Logger;
  * </b>
  */
 public class GeneticOperators {
+	private static final boolean CHECK_CYCLE = false;
     private static Logger log = Logger.getLogger(GeneticOperators.class.getName());
     public static Random rand = new Random();
     private int numCrossoverFailures = 0;
@@ -50,7 +51,7 @@ public class GeneticOperators {
         }
         @Override
         public <T extends Node> T copy() {
-            return (T) new PR(child[0]);
+            return (T) new PR(child[0].copy());
         }
         public String getName() {
             return "PseudoRoot";
@@ -61,6 +62,10 @@ public class GeneticOperators {
         public Class getOutputType() {
             return null;
         }
+
+	    void setChild(Node n) {
+		    child[0] = n;
+	    }
     }
 
     public static Node pseudoRoot(final Node root)
@@ -92,6 +97,14 @@ public class GeneticOperators {
     // argh - there must be a pattern to handle this situation - if only I had simple anonymous functions / closures!
     // TODO: should crossover actually handle single element trees? how?
     public Tuple.Two<Node, Node> crossover(Node parA, Node parB) {
+	    if (CHECK_CYCLE) {
+		    try {
+			    countLinks(parA);
+			    countLinks(parB);
+		    } catch (RuntimeException e) {
+			    System.err.println("Cycle BEFORE crossover called");
+		    }
+	    }
         if (parA == null || parB == null) {
             notifyCrossoverFailed(parA, parB);
             return Tuple.pair(parA, parB);
@@ -124,6 +137,9 @@ public class GeneticOperators {
 
         la.parent.attach(la.childIndex, lb.child);
         lb.parent.attach(lb.childIndex, la.child);
+
+	    assert(la.parent.getChild(la.childIndex).equals(lb.child));
+	    assert(lb.parent.getChild(lb.childIndex).equals(la.child));
     }
 
     public Node mutate(Node parent) {
@@ -143,7 +159,9 @@ public class GeneticOperators {
     private static TreeFactory tf = new TreeFactory(NodeFactory.getInstance());
 
     public static class Grow implements MutationFunc {
-        public void mutate(Node node) {
+
+	    public void mutate(Node node) {
+	        if (CHECK_CYCLE) countLinks(node);
             Link link = randomSubtree(node);
             if (link == Link.EMPTY) return;
             try {
@@ -153,11 +171,18 @@ public class GeneticOperators {
             } catch (VetoTypeInduction vetoTypeInduction) {
                 vetoTypeInduction.printStackTrace();
             }
-        }
+	        if (CHECK_CYCLE)
+		        try {
+			        countLinks(node);
+		        } catch (RuntimeException e) {
+			        System.err.println("CYCLE created in GROW!");
+		        }
+	    }
     }
 
     public static class Shrink implements MutationFunc {
         public void mutate(Node node) {
+	        if (CHECK_CYCLE) countLinks(node);
             Link link = randomSubtree(node);
             if (link == Link.EMPTY) return;
             try {
@@ -169,11 +194,18 @@ public class GeneticOperators {
             } catch (VetoTypeInduction vetoTypeInduction) {
                 vetoTypeInduction.printStackTrace();
             }
+	        if (CHECK_CYCLE)
+		        try {
+			        countLinks(node);
+		        } catch (RuntimeException e) {
+			        System.err.println("CYCLE created in GROW!");
+		        }
         }
     }
 
     public static class Cycle implements MutationFunc {
         public void mutate(Node node) {
+	        if (CHECK_CYCLE) countLinks(node);
             Link link = randomSubtree(node);
             if (link == Link.EMPTY) return;
             try {
@@ -189,13 +221,20 @@ public class GeneticOperators {
             } catch (VetoTypeInduction vetoTypeInduction) {
                 vetoTypeInduction.printStackTrace();
             }
+	        if (CHECK_CYCLE)
+		        try {
+			        countLinks(node);
+		        } catch (RuntimeException e) {
+			        System.err.println("CYCLE created in CYCLE!");
+		        }
         }
     }
 
     public static class Switch implements MutationFunc {
         public void mutate(Node node) {
+	        if (CHECK_CYCLE) countLinks(node);
             Node realRoot = node.getChild(0);
-            if (!realRoot.isTerminal()) {
+            if (!realRoot.isTerminal() && realRoot.getInputCount() < 2) {
                 // pick two separate child
                 Tuple.Two<Node,Node> p;
                 if (realRoot.getInputCount() > 2) {
@@ -217,6 +256,12 @@ public class GeneticOperators {
                         }
                     }
                 }
+	            if (CHECK_CYCLE)
+		            try {
+			            countLinks(node);
+		            } catch (RuntimeException e) {
+			            System.err.println("CYCLE created in SWITCH!");
+		            }
             }
         }
         private Tuple.Two<Node, Node> randomChildren(Node realRoot) {

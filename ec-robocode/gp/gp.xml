@@ -152,6 +152,10 @@
         <pathelement location="${module.gp.basedir}/lib/rio/rio.jar"/>
         <pathelement location="${rc.output.dir}"/>
         <pathelement location="${module.gp.basedir}/lib/javassist.jar"/>
+	    <pathelement location="${module.gp.basedir}/lib/jam.micro.RaikoMicro_1.44.jar"/>
+	    <pathelement location="${module.gp.basedir}/lib/kc.nano.Splinter_1.1.jar"/>
+	    <pathelement location="${module.gp.basedir}/lib/voidious.Dookious_1.25.jar"/>
+	    <pathelement location="${module.gp.basedir}/lib/voidious.mini.Komarious_1.56.jar"/>
     </path>
 
 
@@ -211,7 +215,7 @@
         <jar destfile="${gp.build.dir}/gp.jar">
             <manifest>
                 <attribute name="Main-Class" value="com.imaginaryday.ec.rcpatches.GPRobocodeMain"/>
-                <attribute name="Class-Path" value="jsk-debug-policy.jar jsk-dl.jar jsk-lib.jar jsk-platform.jar jsk-policy.jar jsk-resources.jar rio.jar jscience.jar junit-4.1.jar"/>                
+                <attribute name="Class-Path" value="jsk-debug-policy.jar jsk-dl.jar jsk-lib.jar jsk-platform.jar jsk-policy.jar jsk-resources.jar rio.jar jscience.jar junit-4.1.jar jam.micro.RaikoMicro_1.44.jar kc.nano.Splinter_1.1.jar voidious.Dookious_1.25.jar voidious.mini.Komarious_1.56.jar"/>                
             </manifest>
             <fileset dir="${gp.output.dir}"/>
             <fileset dir="${rc.output.dir}"/>
@@ -228,6 +232,10 @@
                 <include name="jscience.jar"/>
                 <include name="junit-4.1.jar"/>
                 <include name="javassist.jar"/>
+	            <include name="jam.micro.RaikoMicro_1.44.jar"/>
+	            <include name="kc.nano.Splinter_1.1.jar"/>
+	            <include name="voidious.Dookious_1.25.jar"/>
+	            <include name="voidious.mini.Komarious_1.56.jar"/>
             </fileset>
         </copy>
 

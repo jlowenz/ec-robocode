@@ -43,8 +43,8 @@ public class ProgressTester {
         this.space = space;
         this.transactionManager = transactionManager;
         try {
-            summaryWriter = new FileWriter("progressSummary.log", false);
-            detailsWriter = new FileWriter("progressDetails.log", false);
+            summaryWriter = new FileWriter("progressSummary.log", true);
+            detailsWriter = new FileWriter("progressDetails.log", true);
         } catch (FileNotFoundException e) {
             e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
         } catch (IOException e) {

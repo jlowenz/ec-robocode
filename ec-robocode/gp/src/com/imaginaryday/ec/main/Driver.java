@@ -140,9 +140,9 @@ public class Driver implements Runnable {
 
     public Driver() {
         try {
-            battleWriter = new FileWriter(generationLogFile, false);
-            robots = new FileWriter(robotLogFile, false);
-            fitnessWriter = new FileWriter(fitnessLog,false);
+            battleWriter = new FileWriter(generationLogFile, true);
+            robots = new FileWriter(robotLogFile, true);
+            fitnessWriter = new FileWriter(fitnessLog, true);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

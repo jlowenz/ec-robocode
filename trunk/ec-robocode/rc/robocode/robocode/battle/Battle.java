@@ -730,6 +730,7 @@ public class Battle implements Runnable {
 				if (r.isSleeping() || !r.isRunning()) {
 					r.setSkippedTurns(0);
 				} else {
+					Utils.log("robot skipped turn?");
 					r.setSkippedTurns(r.getSkippedTurns() + 1);
 
 					r.getEventManager().add(new SkippedTurnEvent());

@@ -1,6 +1,7 @@
 package com.imaginaryday.ec.rcpatches;
 
 import robocode.control.RobotResults;
+import com.imaginaryday.util.Stuff;
 
 /**
  * @author rbowers
@@ -52,7 +53,7 @@ public class GPFitnessCalc {
         } else {
             accuracy = 0;
         }
-        double accuracyBonus = 3 * accuracy * robot.getBulletDamage();
+        double accuracyBonus = 5 * accuracy * robot.getBulletDamage();
 
         /*
          * Add a bonus for scan efficiency.
@@ -60,8 +61,10 @@ public class GPFitnessCalc {
          */
         double scanEfficiency;
         if (robot.getNumScanEvents() > 0 && robot.getScanRadians() > 0.0) {
-            scanEfficiency = (((double) robot.getNumScanEvents() / (robot.getScanRadians() / (2.0 * Math.PI))) - 1.0);
-            scanEfficiency /= 8.0; // scale by 1/8 so that we need to get 8 events per rotation to get a _good_ bonus
+	        double revs = robot.getScanRadians() / (2.0 * Math.PI);
+	        revs = (Stuff.nearZero(revs)) ? 1.0 : revs;
+            scanEfficiency = ((double) robot.getNumScanEvents() - revs) / revs;
+            scanEfficiency /= 4.0; // scale by 1/8 so that we need to get 8 events per rotation to get a _good_ bonus
         } else {
             scanEfficiency = 0.0;
         }

@@ -112,14 +112,14 @@ public class Driver implements Runnable {
 
     private Date endDate;
 
-    private int numGenerations = 1000;
+    private int numGenerations = 2000;
     private int generationCount = 0; // ??
     private int treeDepth = 8;
     private final int alpha = 0;
     private final int beta = 2;
-    private double elitismPercentage = 0.1;
-    private double crossoverProbability = 0.6;
-    private double mutationProbability = 0.1;
+	private int eliteCount = 1;
+    private double crossoverProbability = 0.8;
+    private double mutationProbability = 0.2;
     private int testFreq = 5;
     private int populationSize = 24;
     private boolean readPopulation = false;
@@ -386,7 +386,7 @@ public class Driver implements Runnable {
         List<Rank> rankedPopulation = rankMembers(oldPopulation);
 
         double P = populationSize; // 40
-        int count = (int) (P - Math.ceil(P * elitismPercentage)); // 40 - 4.0 = 36
+        int count = (int) (P - eliteCount); // 40 - 4.0 = 36
         // sample members
         List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, count); // 36
         for (Member m : newPopulation) {

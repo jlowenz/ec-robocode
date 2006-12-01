@@ -330,7 +330,7 @@ public class GPBattleManager extends BattleManager {
                     gpcm2.setName(task.robot2);
                     gpcm2.setMoveProgram(task.getMoveProgram2());
                     gpcm2.setTurretProgram(task.getTurretProgram2());
-                    gpcm2.setRadarProgram(task.getRadarProgram1());
+                    gpcm2.setRadarProgram(task.getRadarProgram2());
                     gpcm2.setShootProgram(task.getShootProgram2());
                     alice = gpcm2; // WE WERE RUNNING THE SAME DAMN BOTS AGAINST EACH OTHER!
                 }

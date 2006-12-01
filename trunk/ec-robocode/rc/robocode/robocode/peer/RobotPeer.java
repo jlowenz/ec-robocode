@@ -29,8 +29,14 @@
 package robocode.peer;
 
 
-import robocode.*;
+import robocode.Condition;
+import robocode.DeathEvent;
+import robocode.HitRobotEvent;
+import robocode.HitWallEvent;
 import robocode.Robot;
+import robocode.Rules;
+import robocode.ScannedRobotEvent;
+import robocode.WinEvent;
 import robocode.battle.Battle;
 import robocode.battlefield.BattleField;
 import robocode.exception.DeathException;
@@ -39,12 +45,19 @@ import robocode.exception.RobotException;
 import robocode.exception.WinException;
 import robocode.manager.NameManager;
 import robocode.manager.RobotRepositoryManager;
-import robocode.peer.robot.*;
+import robocode.peer.robot.EventManager;
+import robocode.peer.robot.RobotClassManager;
+import robocode.peer.robot.RobotFileSystemManager;
+import robocode.peer.robot.RobotMessageManager;
+import robocode.peer.robot.RobotOutputStream;
+import robocode.peer.robot.RobotStatistics;
+import robocode.peer.robot.RobotThreadManager;
 import robocode.util.BoundingRectangle;
+import robocode.util.Utils;
 import static robocode.util.Utils.log;
 import static robocode.util.Utils.*;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Rectangle2D;
 import static java.lang.Math.*;
@@ -502,9 +515,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 
 	public boolean intersects(Arc2D arc, Rectangle2D rect) {
 		return (rect.intersectsLine(arc.getCenterX(), arc.getCenterY(), arc.getStartPoint().getX(),
-				arc.getStartPoint().getY()))
-				? true
-				: arc.intersects(rect);
+                arc.getStartPoint().getY())) || arc.intersects(rect);
 	}
 
 	public void scan() {
@@ -1244,7 +1255,8 @@ public class RobotPeer implements Runnable, ContestantPeer {
 	 */
 	public RobotPeer(RobotClassManager robotClassManager, RobotRepositoryManager robotManager, long fileSystemQuota) {
 		super();
-		this.robotClassManager = robotClassManager;
+        Utils.log("new RobotPeer with name: " + robotClassManager.getName());
+        this.robotClassManager = robotClassManager;
 		robotThreadManager = new RobotThreadManager(this);
 		robotFileSystemManager = new RobotFileSystemManager(this, fileSystemQuota);
 		eventManager = new EventManager(this);

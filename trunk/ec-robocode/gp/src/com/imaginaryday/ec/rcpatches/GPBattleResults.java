@@ -62,8 +62,10 @@ public class GPBattleResults implements Entry {
         this.id = id;
         this.generation = task.generation;
         this.battle = task.battle;
-        this.robot1 = task.robot1;
-        this.robot2 = task.robot2;
+
+        this.robot1 = results1.getName();
+        this.robot2 = results2.getName();
+
         this.fitness1 = fitness1;
         this.fitness2 = fitness2;
 

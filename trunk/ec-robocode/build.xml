@@ -242,6 +242,25 @@
 
     </target>
 
+    <property name="rc.test.dir" value="${module.gp.basedir}/rc_test"/>
+    <target name="testagent" depends="dist">
+        <mkdir dir="${rc.test.dir}"/>
+        <unjar dest="${rc.test.dir}">
+            <fileset dir="${module.gp.basedir}/lib">
+                <include name="jscience.jar"/>
+                <include name="junit-4.1.jar"/>
+            </fileset>
+        </unjar>
+        <copy todir="${rc.test.dir}">
+            <fileset dir="${gp.output.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+            <fileset dir="${rc.output.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+    </target>
+
     <target name="extract" depends="dist">
         <mkdir dir="${module.gp.basedir}/bots"/>
         <unjar dest="${module.gp.basedir}/bots">
@@ -273,7 +292,10 @@
         <!-- Perform any build initialization in this target -->
     </target>
 
-    <target name="clean" depends="clean.module.rc, clean.module.gp" description="cleanup all"/>
+    <target name="clean" depends="clean.module.rc, clean.module.gp" description="cleanup all">
+        <delete dir="${module.gp.basedir}/bots"/>
+        <delete dir="${rc.test.dir}"/>
+    </target>
 
     <target name="all" depends="init, clean, compile.module.rc, compile.module.gp" description="build all"/>
 </project>

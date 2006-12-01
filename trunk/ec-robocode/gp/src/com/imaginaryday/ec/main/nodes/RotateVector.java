@@ -57,7 +57,7 @@ public class RotateVector extends RoboNode {
         assert !(Double.isNaN(curAngle) || Double.isInfinite(curAngle)) : "curAngle was bad!";
         assert Stuff.isReasonable(curAngle) : "unreasonable value: " + curAngle;
 
-        double newAngle = (curAngle + angle) % (2.0*Math.PI);
+        double newAngle = Stuff.modHeading(curAngle + angle);
         assert !(Double.isNaN(newAngle) || Double.isInfinite(newAngle)) : "newAngle was bad!";
         assert Stuff.isReasonable(newAngle) : "unreasonable value: " + newAngle;
 

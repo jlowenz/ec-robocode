@@ -21,7 +21,6 @@ import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.UnknownTransactionException;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
-import org.jscience.mathematics.vectors.Vector;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -92,8 +91,13 @@ public class Driver implements Runnable {
             nf.loadNode(VectorToEnemy.class);
             nf.loadNode(VectorToForwardWall.class);
             nf.loadNode(VectorToNearestWall.class);
-            nf.loadNode(MakePair.class);
+            nf.loadNode(MakeFiringPair.class);
             nf.loadNode(FiringPairConstant.class);
+            nf.loadNode(MakeDirectionPair.class);
+            nf.loadNode(DirectionPairConstant.class);
+            nf.loadNode(DotProduct.class);
+            nf.loadNode(NegateVector.class);
+            nf.loadNode(VectorFromHeading.class);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -208,7 +212,7 @@ public class Driver implements Runnable {
 
         for (int i = 0; i < populationSize; i++) {
             Member m = new Member(0, i);
-            m.setMoveProgram(tf.generateRandomTree(treeDepth, Vector.class));
+            m.setMoveProgram(tf.generateRandomTree(treeDepth, DirectionPair.class));
             m.setRadarProgram(tf.generateRandomTree(treeDepth, Number.class));
             m.setShootProgram(tf.generateRandomTree(treeDepth, FiringPair.class));
             m.setTurretProgram(tf.generateRandomTree(treeDepth, Number.class));

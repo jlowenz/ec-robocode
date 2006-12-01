@@ -92,6 +92,10 @@ public class GPBattleManager extends BattleManager {
     private LinkedList<GPBattleTask> workingTasks = new LinkedList<GPBattleTask>();
     private Transaction battleTx = null;
     private Lock btl = new ReentrantLock();
+    private String robotName1;
+    private String robotName2;
+    private RobotClassManager ralph;
+    private RobotClassManager alice;
 
     public TransactionManager getTransactionManager() {
         return transactionManager;
@@ -306,8 +310,7 @@ public class GPBattleManager extends BattleManager {
 
             if (task.done != null && task.done) done = true;
             else {
-                RobotClassManager ralph;
-                RobotClassManager alice;
+
 
                 Utils.log("robot1 = " + task.robot1);
                 if (standardBots.keySet().contains(task.robot1)) {
@@ -330,6 +333,9 @@ public class GPBattleManager extends BattleManager {
                     gpcm2.setShootProgram(task.getShootProgram2());
                     alice = gpcm1;
                 }
+                robotName1 = ralph.getRobotSpecification().getName();
+                robotName2 = alice.getRobotSpecification().getName();
+
                 rl.setBattleTask(task);
                 Vector<RobotClassManager> battlingRobotsVector = new Vector<RobotClassManager>();
                 battlingRobotsVector.add(ralph);
@@ -369,6 +375,7 @@ public class GPBattleManager extends BattleManager {
         public void battleComplete(BattleSpecification battle, RobotResults[] results) {
 
             if (results != null && results.length == 2) {
+
                 GPBattleResults res = new GPBattleResults(id, battleTask,
                         GPFitnessCalc.getFitness(battleTask.generation, results[0], results[1]),
                         GPFitnessCalc.getFitness(battleTask.generation, results[1], results[0]),
@@ -665,9 +672,15 @@ public class GPBattleManager extends BattleManager {
             Utils.log("robot " + r.getName());
         }
 
-        Vector<RobotPeer> orderedRobots = new Vector<RobotPeer>(battle.getRobots());
-
-        Collections.sort(orderedRobots);
+        Vector<RobotPeer> vr = battle.getRobots();
+        Vector<RobotPeer> orderedRobots = new Vector<RobotPeer>();
+        if (vr.elementAt(0).getRobotClassManager() == ralph && vr.elementAt(1).getRobotClassManager() == alice) {
+            orderedRobots.add(0, vr.elementAt(0));
+            orderedRobots.add(1, vr.elementAt(1));
+        } else {
+            orderedRobots.add(0, vr.elementAt(1));
+            orderedRobots.add(1, vr.elementAt(0));
+        }
 
         robocode.control.RobotResults results[] = new robocode.control.RobotResults[orderedRobots.size()];
 
@@ -729,4 +742,5 @@ public class GPBattleManager extends BattleManager {
             }
         }
     }
+
 }

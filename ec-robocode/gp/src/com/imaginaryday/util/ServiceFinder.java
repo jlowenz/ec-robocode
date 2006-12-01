@@ -39,6 +39,13 @@ public class ServiceFinder extends JiniClient {
 		            e.printStackTrace();
 	            }
             }
+	        if (getRegistrars().length == 0) {
+		        try {
+			        Thread.sleep(1000);
+		        } catch (InterruptedException e) {
+			        e.printStackTrace();
+		        }
+	        }
         }
         return null;
     }
@@ -63,6 +70,13 @@ public class ServiceFinder extends JiniClient {
 		            e.printStackTrace();
 	            }
             }
+	        if (getRegistrars().length == 0) {
+		        try {
+			        Thread.sleep(1000);
+		        } catch (InterruptedException e) {
+			        e.printStackTrace();
+		        }
+	        }
         }
         return null;
     }

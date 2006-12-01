@@ -496,7 +496,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		setRunning(false);
 		// If battle is waiting for us, well, all done!
 		synchronized (this) {
-			this.notify();
+			this.notifyAll();
 		}
 	}
 
@@ -683,7 +683,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 			// This ends any pending wait() call in battle.runRound().
 			// Should not actually take place until we release the lock in wait(), below.
 			isSleeping = true;
-			this.notify();
+			this.notifyAll();
 			// Notifying battle that we're asleep
 			// Sleeping and waiting for battle to wake us up.
 			try {
@@ -696,7 +696,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 			// our wakeup() call, to return.
 			// It's quite possible, by the way, that we'll be back in sleep (above)
 			// before the battle thread actually wakes up
-			this.notify();
+			this.notifyAll();
 		}
 
 		eventManager.setFireAssistValid(false);
@@ -1030,7 +1030,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 			}
 		} else if (radarTurnRemaining < 0) {
 			if (radarTurnRemaining > -Rules.RADAR_TURN_RATE_RADIANS) {
-                statistics.scoreScanRadians(-radarTurnRemaining);                                
+                statistics.scoreScanRadians(-radarTurnRemaining);
                 radarHeading += radarTurnRemaining;
 				radarTurnRemaining = 0;
 			} else {
@@ -1046,7 +1046,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 	public synchronized void wakeup(Battle b) {
 		if (isSleeping) {
 			// Wake up the thread
-			this.notify();
+			this.notifyAll();
 			try {
 				this.wait(10000);
 			} catch (InterruptedException e) {}

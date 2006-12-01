@@ -36,6 +36,21 @@ public class ProgressTester {
     private Writer detailsWriter;
     private static final int MAX_TAKE_COUNT = 60;
     private GPBattleTask[] taskArray;
+	final List<String> sampleBots = new ArrayList<String>();
+	{
+		sampleBots.add("Corners");
+		sampleBots.add("Crazy");
+		sampleBots.add("Fire");
+		sampleBots.add("RamFire");
+		sampleBots.add("SpinBot");
+		sampleBots.add("Tracker");
+		sampleBots.add("TrackFire");
+		sampleBots.add("Walls");
+		sampleBots.add("Nano");
+		sampleBots.add("Micro");
+		sampleBots.add("Mini");
+		sampleBots.add("Big");
+	}
 
 
     public ProgressTester(JavaSpace space, String filename, TransactionManager transactionManager) {
@@ -73,11 +88,8 @@ public class ProgressTester {
     }
 
     private int submitBattles(List<Member> population, int generation) {
-        String[] sampleBots = new String[]{"Corners", "Crazy", "Fire",
-                    "RamFire", "SpinBot", "Tracker", "TrackFire", "Walls",
-                    "Nano", "Micro", "Mini", "Big"};
 
-        int numBattles = sampleBots.length * population.size();
+        int numBattles = sampleBots.size() * population.size();
         taskArray = new GPBattleTask[numBattles];
         int battle = 0;
         for (Member m : population) {
@@ -228,12 +240,18 @@ public class ProgressTester {
                 for (Member m : results.keySet()) {
                     int beaten = 0;
                     for (GPBattleResults r : results.get(m)) {
-                        if (r.score1 > r.score2
-                                && r.firsts1 > r.firsts2
-                                && r.seconds1 < r.seconds2
-                                && r.fitness1 > 4.0) {
-                            ++beaten;
-                        }
+	                    if (sampleBots.contains(r.robot2))
+		                    if (r.score1 > r.score2
+				                    && r.firsts1 > r.firsts2
+				                    && r.seconds1 < r.seconds2
+				                    && r.fitness1 > 4.0)
+			                    ++beaten;
+                        else
+		                    if (r.score2 > r.score1
+				                    && r.firsts2 > r.firsts1
+				                    && r.seconds2 < r.seconds1
+				                    && r.fitness2 > 4.0)
+			                    ++beaten;
                         ++battles;
                     }
                     if (beaten > maxBeaten) maxBeaten = beaten;

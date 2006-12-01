@@ -63,6 +63,7 @@ import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Vector;
+import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -670,15 +671,17 @@ public class GPBattleManager extends BattleManager {
             Utils.log("robot " + r.getName());
         }
 
-        Vector<RobotPeer> vr = battle.getRobots();
-        Vector<RobotPeer> orderedRobots = new Vector<RobotPeer>();
-        if (vr.elementAt(0).getRobotClassManager() == ralph && vr.elementAt(1).getRobotClassManager() == alice) {
-            orderedRobots.add(0, vr.elementAt(0));
-            orderedRobots.add(1, vr.elementAt(1));
-        } else {
-            orderedRobots.add(0, vr.elementAt(1));
-            orderedRobots.add(1, vr.elementAt(0));
-        }
+        Vector<RobotPeer> orderedRobots = new Vector<RobotPeer>(battle.getRobots());
+	    Collections.sort(orderedRobots);
+//        Vector<RobotPeer> vr = battle.getRobots();
+//        Vector<RobotPeer> orderedRobots = new Vector<RobotPeer>();
+//        if (vr.elementAt(0).getRobotClassManager() == ralph && vr.elementAt(1).getRobotClassManager() == alice) {
+//            orderedRobots.add(0, vr.elementAt(0));
+//            orderedRobots.add(1, vr.elementAt(1));
+//        } else {
+//            orderedRobots.add(0, vr.elementAt(1));
+//            orderedRobots.add(1, vr.elementAt(0));
+//        }
 
         robocode.control.RobotResults results[] = new robocode.control.RobotResults[orderedRobots.size()];
 

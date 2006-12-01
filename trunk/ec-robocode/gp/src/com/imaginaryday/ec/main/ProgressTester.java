@@ -154,11 +154,16 @@ public class ProgressTester {
                 e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
             }
             if (res != null) {
-                for (Member member : results.keySet()) {
-                    if (member.getName().equals(res.robot1)) {
-                        List<GPBattleResults> r2 = results.get(member);
-                        r2.add(res);
-                        break;
+                String nameToUse;
+                if (sampleBots.contains(res.robot1)) {
+                    nameToUse = res.robot2;
+                } else {
+                    nameToUse = res.robot1;
+                }
+                for (Member m : results.keySet()) {
+                    if (m.getName().equals(nameToUse)) {
+                        List<GPBattleResults> l = results.get(m);
+                        l.add(res);
                     }
                 }
                 logger.info("Collected " + retrieved + " of " + numBattles + " results");

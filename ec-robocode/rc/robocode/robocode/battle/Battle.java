@@ -983,7 +983,7 @@ public class Battle implements Runnable {
 
 		// Notifying loader
 		synchronized (unsafeLoaderMonitor) {
-			unsafeLoaderMonitor.notify();
+			unsafeLoaderMonitor.notifyAll();
 		}
 		while (!isRobotsLoaded()) {
 			if (battleView != null) {
@@ -1148,7 +1148,7 @@ public class Battle implements Runnable {
 	 *
 	 * @return Returns a int
 	 */
-	public int getActiveRobots() {
+	public synchronized int getActiveRobots() {
 		return activeRobots;
 	}
 

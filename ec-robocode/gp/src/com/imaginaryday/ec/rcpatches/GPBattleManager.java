@@ -29,7 +29,11 @@ import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
 import net.jini.core.lease.LeaseDeniedException;
-import net.jini.core.transaction.*;
+import net.jini.core.transaction.CannotAbortException;
+import net.jini.core.transaction.Transaction;
+import net.jini.core.transaction.TransactionException;
+import net.jini.core.transaction.TransactionFactory;
+import net.jini.core.transaction.UnknownTransactionException;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 import robocode.battle.Battle;
@@ -48,8 +52,13 @@ import robocode.peer.robot.RobotStatistics;
 import robocode.util.Constants;
 import robocode.util.Utils;
 
-import javax.swing.*;
-import java.io.*;
+import javax.swing.JFileChooser;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.Map;
@@ -303,7 +312,9 @@ public class GPBattleManager extends BattleManager {
                 Utils.log("robot1 = " + task.robot1);
                 if (standardBots.keySet().contains(task.robot1)) {
                     ralph = standardBots.get(task.robot1);
+                    ralph.setName(task.robot1); // Ron - it works!
                 } else {
+                    gpcm1.setName(task.robot1);
                     gpcm1.setMoveProgram(task.getMoveProgram1());
                     gpcm1.setTurretProgram(task.getTurretProgram1());
                     gpcm1.setRadarProgram(task.getRadarProgram1());
@@ -314,12 +325,14 @@ public class GPBattleManager extends BattleManager {
                 Utils.log("robot2 = " + task.robot2);
                 if (standardBots.keySet().contains(task.robot2)) {
                     alice = standardBots.get(task.robot2);
+                    alice.setName(task.robot2);
                 } else {
+                    gpcm2.setName(task.robot2);
                     gpcm2.setMoveProgram(task.getMoveProgram2());
                     gpcm2.setTurretProgram(task.getTurretProgram2());
                     gpcm2.setRadarProgram(task.getRadarProgram1());
                     gpcm2.setShootProgram(task.getShootProgram2());
-                    alice = gpcm1;
+                    alice = gpcm2; // WE WERE RUNNING THE SAME DAMN BOTS AGAINST EACH OTHER!
                 }
 
                 rl.setBattleTask(task);
@@ -672,9 +685,10 @@ public class GPBattleManager extends BattleManager {
         for (int i = 0; i < results.length; i++) {
             RobotStatistics stats = orderedRobots.elementAt(i).getRobotStatistics();
 
+            String name = orderedRobots.get(i).getRobotClassManager().getName(); // this is the name we passed in
             results[i] = new robocode.control.RobotResults(
                     orderedRobots.elementAt(i).getRobotClassManager().getControlRobotSpecification(),
-                    orderedRobots.elementAt(i).getName(), (i + 1), stats);
+                    name, (i + 1), stats);
         }
         listener.battleComplete(battle.getBattleSpecification(), results);
     }

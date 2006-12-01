@@ -10,7 +10,7 @@ import com.imaginaryday.ec.main.RoboNode;
  * Time: 10:29:26 PM<br>
  * </b>
  */
-public class MakePair extends RoboNode {
+public class MakeFiringPair extends RoboNode {
 
     private Node[] child = new Node[2];
     private static final long serialVersionUID = -67139516800145620L;
@@ -19,7 +19,7 @@ public class MakePair extends RoboNode {
         return child;
     }
     public String getName() {
-        return "makePair";
+        return "makeFiringPair";
     }
     public Class getInputType(int id) {
         switch (id) {

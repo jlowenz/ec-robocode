@@ -17,14 +17,16 @@
 package robocode.peer.robot;
 
 
-import java.util.*;
-
-import robocode.security.RobocodeClassLoader;
-import robocode.repository.*;
-import robocode.manager.*;
-import robocode.peer.*;
-import robocode.util.Utils;
 import robocode.Robot;
+import robocode.manager.NameManager;
+import robocode.peer.TeamPeer;
+import robocode.repository.RobotSpecification;
+import robocode.security.RobocodeClassLoader;
+import robocode.util.Utils;
+
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 
 /**
@@ -43,6 +45,7 @@ public class RobotClassManager {
     private TeamPeer teamManager;
 
     private String uid = "";
+    private String name;
 
     /**
      * RobotClassHandler constructor
@@ -56,6 +59,15 @@ public class RobotClassManager {
         this.fullClassName = robotSpecification.getName();
         this.teamManager = teamManager;
     }
+
+    public void setName(String robot2) {
+        this.name = robot2;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 
     public String getRootPackage() {
         return getClassNameManager().getRootPackage();
@@ -159,7 +171,7 @@ public class RobotClassManager {
     /**
      * Sets the robotSpecification.
      *
-     * @param robotSpecification The robotSpecification to set
+     * @param controlRobotSpecification The robotSpecification to set
      */
     public void setControlRobotSpecification(robocode.control.RobotSpecification controlRobotSpecification) {
         this.controlRobotSpecification = controlRobotSpecification;

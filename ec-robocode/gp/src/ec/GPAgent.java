@@ -2,11 +2,33 @@ package ec;
 
 import com.imaginaryday.ec.gp.AbstractNode;
 import com.imaginaryday.ec.gp.Node;
+import com.imaginaryday.ec.gp.nodes.Add;
+import com.imaginaryday.ec.gp.nodes.And;
+import com.imaginaryday.ec.gp.nodes.BooleanConstant;
+import com.imaginaryday.ec.gp.nodes.Constant;
+import com.imaginaryday.ec.gp.nodes.GreaterThan;
+import com.imaginaryday.ec.gp.nodes.IfThenElse;
+import com.imaginaryday.ec.gp.nodes.LessThan;
+import com.imaginaryday.ec.gp.nodes.Not;
+import com.imaginaryday.ec.main.nodes.DirectionPair;
+import com.imaginaryday.ec.main.nodes.DotProduct;
+import com.imaginaryday.ec.main.nodes.EnemyHeading;
 import com.imaginaryday.ec.main.nodes.FiringPair;
+import com.imaginaryday.ec.main.nodes.MakeDirectionPair;
+import com.imaginaryday.ec.main.nodes.MakeFiringPair;
+import com.imaginaryday.ec.main.nodes.Rammed;
+import com.imaginaryday.ec.main.nodes.RammedAge;
+import com.imaginaryday.ec.main.nodes.ScannedEnemy;
+import com.imaginaryday.ec.main.nodes.ScannedEnemyAge;
+import com.imaginaryday.ec.main.nodes.VectorFromHeading;
+import com.imaginaryday.ec.main.nodes.VectorHeading;
+import com.imaginaryday.ec.main.nodes.VectorLength;
+import com.imaginaryday.ec.main.nodes.VectorToEnemy;
 import com.imaginaryday.util.Stuff;
 import static com.imaginaryday.util.Stuff.clampZero;
 import com.imaginaryday.util.Tuple;
 import com.imaginaryday.util.VectorUtils;
+import javolution.context.PoolContext;
 import org.jscience.mathematics.numbers.Float64;
 import org.jscience.mathematics.vectors.VectorFloat64;
 import robocode.AdvancedRobot;
@@ -15,9 +37,8 @@ import robocode.HitRobotEvent;
 import robocode.HitWallEvent;
 import robocode.RobotDeathEvent;
 import robocode.ScannedRobotEvent;
-import robocode.WinEvent;
 import robocode.SkippedTurnEvent;
-import robocode.exception.DeathException;
+import robocode.WinEvent;
 
 import java.util.logging.Logger;
 
@@ -29,12 +50,10 @@ public class GPAgent extends AdvancedRobot {
 // comment out because robocode is a piece of shit
 //    static {
 //        Handler h = new ConsoleHandler();
-//        h.setLevel(Level.INFO);
+//        h.setLevel(Level.FINEST);
 //        GPAgent.log.addHandler(h);
-//        GPAgent.log.setLevel(Level.INFO);
+//        GPAgent.log.setLevel(Level.FINEST);
 //    }
-
-    private static final boolean DEBUG = false;
 
     private Node radarTree;
     private Node turretTree;
@@ -59,7 +78,11 @@ public class GPAgent extends AdvancedRobot {
     private int rammedAge = 0;
     private boolean myFault = false;
     private double rammerBearing = 0.0;
-    private boolean scannedEnemy = true;
+    private boolean scannedEnemy = false;
+    private static final int BULLET_HIT_AGE_LIMIT = 50;
+    private static final int WALL_HIT_AGE_LIMIT = 50;
+    private static final int RAMMED_AGE_LIMIT = 50;
+    private static final int SCANNED_AGE_LIMIT = 50;
 
     public GPAgent() {
         radarTree = initRadarTree();
@@ -72,17 +95,54 @@ public class GPAgent extends AdvancedRobot {
         if (firingTree != null) this.firingTree.setOwner(this);
         if (directionTree != null) this.directionTree.setOwner(this);
     }
+
     protected Node initDirectionTree() {
-        return null;
+        return new MakeDirectionPair()
+                .attach(0,new VectorToEnemy())
+                .attach(1,new IfThenElse()
+                        .attach(0,new Not().attach(0,new Rammed()))
+                        .attach(1,new BooleanConstant(true))
+                        .attach(2,new IfThenElse()
+                                .attach(0,new LessThan()
+                                            .attach(0,new RammedAge())
+                                            .attach(1,new Constant(10)))
+                                .attach(1,new BooleanConstant(false))
+                                .attach(2,new BooleanConstant(true))));
     }
+
     protected Node initFiringTree() {
-        return null;
+        return new MakeFiringPair()
+                .attach(0, new And()
+                            .attach(0, new ScannedEnemy())
+                            .attach(1, new LessThan()
+                                        .attach(0,new VectorLength().attach(0, new VectorToEnemy()))
+                                        .attach(1,new Constant(100))))
+                .attach(1, new Constant(3));
     }
+
     protected Node initTurretTree() {
-        return null;
+        return new VectorHeading().attach(0,new VectorToEnemy());
     }
     protected Node initRadarTree() {
-        return null;
+        return new IfThenElse()
+                .attach(0, new Not().attach(0,new ScannedEnemy()))
+                .attach(1, new Constant(6*Math.PI))
+                .attach(2, new IfThenElse()
+                    .attach(0, new GreaterThan()
+                                .attach(0,new ScannedEnemyAge())
+                                .attach(1,new Constant(2)))
+                    .attach(1, new Add()
+                                .attach(0,new VectorHeading().attach(0,new VectorToEnemy()))
+                                .attach(1,new IfThenElse()
+                                            .attach(0,new GreaterThan()
+                                                        .attach(0,new DotProduct()
+                                                                    .attach(0, new VectorFromHeading()
+                                                                                .attach(0,new EnemyHeading()))
+                                                                    .attach(1, new VectorToEnemy()))
+                                                        .attach(1,new Constant(0)))
+                                            .attach(1,new Constant(0.1))
+                                            .attach(2,new Constant(-0.1))))
+                    .attach(2, new VectorHeading().attach(0,new VectorToEnemy())));
     }
 
     public GPAgent(Node radarTree, Node turretTree, Node firingTree, Node directionTree) {
@@ -172,14 +232,15 @@ public class GPAgent extends AdvancedRobot {
 
     @SuppressWarnings("unchecked")
     public void run() {
-        GPAgent.log.fine("run()");
+        log.fine("run()");
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
         setAdjustRadarForRobotTurn(true);
         GPAgent.log.fine("starting pseudo-infinite loop");
         while (alive) {
             try {
-// gather instantaneous sensor data
+                PoolContext.enter();
+                // gather instantaneous sensor data
                 double bfheight = getBattleFieldHeight();
                 double bfwidth = getBattleFieldWidth();
 
@@ -195,8 +256,7 @@ public class GPAgent extends AdvancedRobot {
                 double robotRadius = Math.sqrt(rheight2 * rheight2 + rwidth2 * rwidth2);
 
                 // find vector to nearest wall
-                switch (argmin(GPAgent.p.n(x, Wall.LEFT), GPAgent.p.n(y, Wall.BOTTOM), GPAgent.p.n(toRight,
-                        Wall.RIGHT), GPAgent.p.n(toTop, Wall.TOP))) {
+                switch (argmin(p.n(x, Wall.LEFT), p.n(y, Wall.BOTTOM), p.n(toRight,Wall.RIGHT), p.n(toTop, Wall.TOP))) {
                     case LEFT:
                         vectorToNearestWall = VectorFloat64.valueOf(-1, 0).times(Float64.valueOf(Math.abs(x - rwidth2)));
                         break;
@@ -217,7 +277,7 @@ public class GPAgent extends AdvancedRobot {
                 // get absolute radar heading
                 double radarDirection = 0;
                 double turretDirection = 0;
-                Tuple.Two<Boolean, Number> firing = null;
+                Tuple.Two<Boolean, Number> firing;
 
                 try {
                     radarDirection = ((Number) radarTree.evaluate()).doubleValue();
@@ -244,9 +304,9 @@ public class GPAgent extends AdvancedRobot {
                 }
 
                 // get absolute robot heading and velocity
-	            VectorFloat64 movementVector = null;
+                DirectionPair movementPair = null;
                 try {
-                    movementVector = (VectorFloat64) directionTree.evaluate();
+                    movementPair = (DirectionPair) directionTree.evaluate();
                 } catch (Throwable t ) {
 	                t.printStackTrace();
                     log.finest(((AbstractNode) directionTree).toStringEval());
@@ -282,7 +342,7 @@ public class GPAgent extends AdvancedRobot {
                 // process heading/speed directive
 	            // the movementVector is supposed to be an
 
-	            double heading = VectorUtils.toAngle(movementVector);
+	            double heading = VectorUtils.toAngle(movementPair.first());
                 r = calculateTurn(getHeadingRadians(), heading);
                 switch (r.second) {
                     case LEFT:
@@ -317,23 +377,24 @@ public class GPAgent extends AdvancedRobot {
                     scale = 0.1;
                 }
                 setMaxVelocity(scale * 8.0);
-                double dist = clampZero(movementVector.normValue());
-                // TODO: able to move backwards?
+                double dist = clampZero(movementPair.first().normValue());
                 if (dist > 1.0) {
-                    setAhead(dist);
+                    if (movementPair.second())
+                        setAhead(dist);
+                    else
+                        setBack(dist);
                 }
 
-//                try {
-//                    execute();
-//                } catch (DeathException e) { alive = false; }
-
-                if (bulletHitAge > 100) resetBulletHit();
-                if (wallHitAge > 100) resetWallHit();
-                if (rammedAge > 100) resetRammed();
+                if (bulletHitAge > BULLET_HIT_AGE_LIMIT) resetBulletHit();
+                if (wallHitAge > WALL_HIT_AGE_LIMIT) resetWallHit();
+                if (rammedAge > RAMMED_AGE_LIMIT) resetRammed();
+                if (scannedEnemyAge > SCANNED_AGE_LIMIT) resetScanned();
 
                 if (recentlyHitByBullet) bulletHitAge++;
                 if (recentlyHitWall) wallHitAge++;
                 if (recentlyRammed) rammedAge++;
+                if (scannedEnemy) scannedEnemyAge++;
+
             } catch (Throwable e) {
                 e.printStackTrace();
                 GPAgent.log.severe("EXCEPTION in GPAgent: " + e.toString());
@@ -341,8 +402,13 @@ public class GPAgent extends AdvancedRobot {
                 try {
                     execute();
                 } catch (Exception e) { alive = false; }
+                PoolContext.exit();
             }
         }
+    }
+    private void resetScanned() {
+        scannedEnemyAge = 0;
+        scannedEnemy = false;
     }
 
     private void resetRammed() {
@@ -375,14 +441,11 @@ public class GPAgent extends AdvancedRobot {
                                     double headingDegrees,
                                     double robotRadius,
                                     VectorFloat64 dir) {
-        double m = dir.getValue(1) / dir.getValue(0);
-        double tx;
-        double ty;
 
-        double dist = 0.0;
+        double dist;
         double angle = VectorUtils.toAngle(dir);
         headingDegrees = Math.toDegrees(angle);
-        double cornerAngle = 0;
+        double cornerAngle;
         if (headingDegrees >= 0 && headingDegrees < 90) {
             cornerAngle = VectorUtils.toAngle(VectorFloat64.valueOf(w-x, h-y));
             if (angle <= cornerAngle) {
@@ -439,7 +502,7 @@ public class GPAgent extends AdvancedRobot {
         scannedEnemyAge = 0;
         double bearing = event.getBearingRadians();
 	    bearing = Stuff.modHeading(bearing + getHeadingRadians());
-        double dist = clampZero(event.getDistance()) - getWidth();
+        double dist = clampZero(event.getDistance()) - (getWidth()*.5);
         enemyHeading = event.getHeadingRadians();
         enemySpeed = event.getVelocity();
         enemyEnergy = event.getEnergy();
@@ -456,6 +519,7 @@ public class GPAgent extends AdvancedRobot {
 
     public void onHitRobot(HitRobotEvent event) {
         super.onHitRobot(event);
+        recentlyRammed = true;
         rammedAge = 0;
         myFault = event.isMyFault();
         rammerBearing = event.getBearingRadians();

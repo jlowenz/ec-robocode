@@ -11,13 +11,13 @@ import robocode.repository.RobotSpecification;
  */
 public class StandardRobotClassManager extends RobotClassManager {
 
-    private Class<? extends Robot> robotClass;
+//    private Class<? extends Robot> robotClass;
     private RobotSpecification robotSpecification;
 
     public StandardRobotClassManager(RobotSpecification robotSpecification,
                                      Class<? extends Robot> clazz) {
         super(robotSpecification);
-        this.robotClass = clazz;
+        setRobotClass(clazz);
         this.robotSpecification = robotSpecification;
     }
 

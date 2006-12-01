@@ -70,7 +70,7 @@ public class NodeTest extends TestCase {
             nf.loadNode(VectorToEnemy.class);
             nf.loadNode(VectorToForwardWall.class);
             nf.loadNode(VectorToNearestWall.class);
-            nf.loadNode(MakePair.class);
+            nf.loadNode(MakeFiringPair.class);
             nf.loadNode(FiringPairConstant.class);
         } catch (IllegalAccessException e) {
             e.printStackTrace();

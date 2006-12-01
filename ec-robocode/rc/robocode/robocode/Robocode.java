@@ -27,7 +27,8 @@ import robocode.security.SecurePrintStream;
 import robocode.util.Constants;
 import robocode.util.Utils;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.UIManager;
 import java.io.File;
 import java.security.Policy;
 
@@ -111,7 +112,7 @@ public class Robocode {
 			boolean minimize = false;
 			String battleFilename = null;
 			String resultsFilename = null;
-			int tps = 10000;
+			int tps = 1000000;
 
 			for (int i = 0; i < args.length; i++) {
 				if (args[i].equals("-cwd") && (i < args.length + 1)) {
@@ -157,7 +158,7 @@ public class Robocode {
 				manager.getBattleManager().setBattleFilename(battleFilename);
 				manager.getBattleManager().loadBattleProperties();
 				manager.getBattleManager().startNewBattle(manager.getBattleManager().getBattleProperties(), true);
-				manager.getBattleManager().getBattle().setDesiredTPS(tps);
+				//manager.getBattleManager().getBattle().setDesiredTPS(tps);
 			}
 			
 

@@ -81,6 +81,7 @@ public class RobotResults {
             int seconds,
             int thirds
     ) {
+        this.name = name;
         this.robot = robot;
         this.rank = rank;
         this.score = score;

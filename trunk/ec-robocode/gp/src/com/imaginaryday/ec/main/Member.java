@@ -3,6 +3,8 @@ package com.imaginaryday.ec.main;
 import com.imaginaryday.ec.gp.Node;
 
 import java.io.Serializable;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -28,6 +30,11 @@ public class Member implements Comparable<Member>, Serializable {
     double cumulativeFitness = 0.0;
     int numBattles = 0;
     private static final long serialVersionUID = 1481195345545820852L;
+
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		if (ID.get() < id) ID.set(id+1);
+	}
 
     public Member(int generation, int id) {
         this.generation = generation;

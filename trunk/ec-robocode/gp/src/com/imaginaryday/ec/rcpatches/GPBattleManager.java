@@ -29,11 +29,7 @@ import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
 import net.jini.core.lease.LeaseDeniedException;
-import net.jini.core.transaction.CannotAbortException;
-import net.jini.core.transaction.Transaction;
-import net.jini.core.transaction.TransactionException;
-import net.jini.core.transaction.TransactionFactory;
-import net.jini.core.transaction.UnknownTransactionException;
+import net.jini.core.transaction.*;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 import robocode.battle.Battle;
@@ -52,15 +48,9 @@ import robocode.peer.robot.RobotStatistics;
 import robocode.util.Constants;
 import robocode.util.Utils;
 
-import javax.swing.JFileChooser;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import javax.swing.*;
+import java.io.*;
 import java.rmi.RemoteException;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Vector;
@@ -92,8 +82,6 @@ public class GPBattleManager extends BattleManager {
     private LinkedList<GPBattleTask> workingTasks = new LinkedList<GPBattleTask>();
     private Transaction battleTx = null;
     private Lock btl = new ReentrantLock();
-    private String robotName1;
-    private String robotName2;
     private RobotClassManager ralph;
     private RobotClassManager alice;
 
@@ -174,7 +162,7 @@ public class GPBattleManager extends BattleManager {
         map.put("Walls", new StandardRobotClassManager(new GPRobotSpecification("Walls", "11"),
                 sample.Walls.class));
         map.put("Nano", new StandardRobotClassManager(new GPRobotSpecification("Nano", "12"),
-                 kc.nano.Splinter.class));
+                kc.nano.Splinter.class));
         map.put("Micro", new StandardRobotClassManager(new GPRobotSpecification("Micro", "13"),
                 jam.micro.RaikoMicro.class));
         map.put("Mini", new StandardRobotClassManager(new GPRobotSpecification("Mini", "14"),
@@ -226,7 +214,7 @@ public class GPBattleManager extends BattleManager {
         Entry taskTemplate = new GPBattleTask();
         Utils.log((id != null) ? id : "null, bitch");
         long deltaT = 0;
-        long startTime = 0;
+        long startTime;
         long txTime = 120000; // Start at 2 minutes
 
         while (!done) {
@@ -333,8 +321,6 @@ public class GPBattleManager extends BattleManager {
                     gpcm2.setShootProgram(task.getShootProgram2());
                     alice = gpcm1;
                 }
-                robotName1 = ralph.getRobotSpecification().getName();
-                robotName2 = alice.getRobotSpecification().getName();
 
                 rl.setBattleTask(task);
                 Vector<RobotClassManager> battlingRobotsVector = new Vector<RobotClassManager>();
@@ -416,11 +402,11 @@ public class GPBattleManager extends BattleManager {
                 try {
                     battleTx.abort();
                 } catch (UnknownTransactionException e) {
-                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 } catch (CannotAbortException e) {
-                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 } catch (RemoteException e) {
-                    e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
             }
             try {
@@ -478,7 +464,7 @@ public class GPBattleManager extends BattleManager {
         */
 
         for (int i = 0; i < battlingRobotsVector.size(); i++) {
-            battle.addRobot((RobotClassManager) battlingRobotsVector.elementAt(i));
+            battle.addRobot(battlingRobotsVector.elementAt(i));
         }
 
         battleThread.setUncaughtExceptionHandler(new ExceptionHandler());
@@ -490,7 +476,9 @@ public class GPBattleManager extends BattleManager {
         }
     }
 
-    Transaction getBattleTx() { return battleTx; }
+    Transaction getBattleTx() {
+        return battleTx;
+    }
 
     public String getBattleFilename() {
         return battleFilename;
@@ -545,10 +533,7 @@ public class GPBattleManager extends BattleManager {
                 if (idx >= 0) {
                     extension = fn.substring(idx);
                 }
-                if (extension.equalsIgnoreCase(".battle")) {
-                    return true;
-                }
-                return false;
+                return extension.equalsIgnoreCase(".battle");
             }
 
             public String getDescription() {

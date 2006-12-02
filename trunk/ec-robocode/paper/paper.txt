@@ -1,0 +1,90 @@
+Title: Coevolution of 
+
+
+Background
+ 
+
+
+
+
+Abstract
+
+
+Introduction
+
+	Coevolution appears to be a useful way of evolving game-playing agents
+
+
+	Historically, not often successful in games where there is a cost to taking action, or risk 
+
+	One issue that has consistantly hindered the use of coevolution in the development of combat game playing agents is that of the "mediocre steady-state" [Ben-Gurion Guys], [Pollack], [Sheppard]. The "mediocre steady state" is a state where the population consists of members who do absolutely nothing. This phenemonen occurs because the 
+
+As was pointed out in [W/S], this phenomenon has been documented to occur in real life - wwi story.
+
+Interestingly, no such corollary could be found in WWII. A reasonable theory as to why this might be the case is that the nature of the conflicts, and thus the motivations of the soldiers who faught in them were different. In WWI, the war was an outgrowth of issues within the European aristocracy. The common soldier saw no great need to win the war, nor did they have any great fear of losing. Survival was their primary concern. On the other hand, WWII presented the Allied soldier with a 
+
+
+	Hypothesis:
+		We hypothesize that using GP and coevolution, 
+		and by applying an exogenous fitness function based on victories, 
+		we can evolve Robocode players that can compete successfully against the best human-designed robots.
+
+So, the exogenic[?]
+
+
+
+Related work.
+
+	GP of game-players
+
+	Coevolution of game-players
+
+	Mediocre steady-state.
+
+	Exogenous fitness as a motivator - overcoming the mediocre steady state.
+
+	"Arms Race"
+
+	Previous robocode research
+	
+Approach:
+
+
+	"Forest of GP trees"
+	Each tree corresponding to one of the events that a robot listens for. Examples
+	An additional tree will be generated for the main loop and the initialization step.
+
+	Each event handler has different information available to it. Therefore, the programs that are built 
+	for each handler have different grammars.
+
+	The operators will be the set of methods that a Robocode robot has. 
+	We might introduce some macro-operations
+
+	Require a Strongly-typed tree.
+	
+	Generating and executing the trees.
+
+	Perfectly valid that a robot fight itself. 
+		
+	Selection
+
+	Cross-over 
+
+	Mutation. Probably is a valid operator since it is unlikely that all valid operations will exist in the initial population. 
+	Will likely consist of random selection of an operator in the tree and swapping it with a randomly selected type-compatible operator 
+
+	Execution environment
+		  The battles can be fought in parallel and the results accumulated to enable the next round of selection and reproduction.
+		  
+		  Robocode will be slightly modified to enable it to consume battle specifications from a JavaSpace.
+		  The results of the battle will then be posted back to the space. This will enable us to use multiple computers fight
+		  the battles and evalute the fitness.
+
+
+	If time permits, a control test will be run without
+
+Results
+
+We plan to collect the following results.
+
+   

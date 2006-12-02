@@ -1,0 +1,27 @@
+Things to talk about
+
+* change abstract
+* rework tense
+* 
+
+discuss the representation, nodes, and operators.
+
+discuss the fitness function.
+	history of the fitness function - i.e. versions and their apparent effect.
+	1. The effectively distance-driven version
+
+	Multigoal optimization w.r.t. relative weighting of the parameters in the fitness 
+
+	2. The final version and the thought behind it.
+
+
+test architecture
+	be brief
+	not terribly important
+
+
+
+results and analysis.
+
+	- speculation on the big drop-off
+	

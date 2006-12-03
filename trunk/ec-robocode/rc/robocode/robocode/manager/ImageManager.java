@@ -15,14 +15,13 @@
 package robocode.manager;
 
 
-import java.awt.Image;
-import java.awt.Color;
-import java.net.URL;
-import java.util.*;
-import javax.imageio.ImageIO;
+import robocode.render.RenderImage;
 
-import robocode.render.*;
-import robocode.util.*;
+import java.awt.Color;
+import java.awt.Image;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -54,79 +53,85 @@ public class ImageManager {
 	}	
 
 	public void initialize() {
-		getBodyImage();
-		getGunImage();
-		getRadarImage();
-		getExplosionRenderImage(0, 0);
+//		getBodyImage();
+//		getGunImage();
+//		getRadarImage();
+//		getExplosionRenderImage(0, 0);
 	}
 
 	public Image getGroundTileImage(int index) {
-		if (groundImages[index] == null) {
-			groundImages[index] = ImageUtil.getImage(this,
-					"/resources/images/ground/blue_metal/blue_metal_" + index + ".png");
-		}		
+//		if (groundImages[index] == null) {
+//			groundImages[index] = ImageUtil.getImage(this,
+//					"/resources/images/ground/blue_metal/blue_metal_" + index + ".png");
+//		}
 		return groundImages[index];
 	}
 	
 	public int getNumExplosions() {
-		return explosionRenderImages.length;
-	}
+//		return explosionRenderImages.length;
+        return 2;
+    }
 
 	public int getExplosionFrames(int which) {
-		return explosionRenderImages[which].length;
-	}
+//		return explosionRenderImages[which].length;
+        switch (which) {
+            case 0: return 17;
+            case 1: return 71;
+            default: return 1;
+        }
+    }
 
 	public RenderImage getExplosionRenderImage(int which, int frame) {
 		if (explosionRenderImages == null) {
 
-			boolean done = false;
-
-			int numExplosion, numFrame;
+//			boolean done = false;
+//
+//			int numExplosion, numFrame;
 
 			List<List<RenderImage>> explosions = new ArrayList<List<RenderImage>>();
-
-			for (numExplosion = 1; !done; numExplosion++) {
-				List<RenderImage> frames = new ArrayList<RenderImage>();
-
-				for (numFrame = 1;; numFrame++) {
-					StringBuffer filename = new StringBuffer("/resources/images/explosion/explosion");
-
-					filename.append(numExplosion).append('-').append(numFrame).append(".png");
-
-					URL url = getClass().getResource(filename.toString());
-
-					if (url == null) {
-						if (numFrame == 1) {
-							done = true;
-						} else {
-							explosions.add(frames);
-						}
-						break;
-					}
-
-					try {
-						frames.add(new RenderImage(ImageIO.read(url)));
-					} catch (Exception e) {
-						Utils.log("Could not load image: " + filename);
-						break;
-					}		
-				}
-			}
-			
-			numExplosion = explosions.size();
-			explosionRenderImages = new RenderImage[numExplosion][];
-
-			for (int i = numExplosion - 1; i >= 0; i--) {
-				explosionRenderImages[i] = explosions.get(i).toArray(new RenderImage[0]);
-			}
+//
+//			for (numExplosion = 1; !done; numExplosion++) {
+//				List<RenderImage> frames = new ArrayList<RenderImage>();
+//
+//				for (numFrame = 1;; numFrame++) {
+//					StringBuffer filename = new StringBuffer("/resources/images/explosion/explosion");
+//
+//					filename.append(numExplosion).append('-').append(numFrame).append(".png");
+//
+//					URL url = getClass().getResource(filename.toString());
+//
+//					if (url == null) {
+//						if (numFrame == 1) {
+//							done = true;
+//						} else {
+//							explosions.add(frames);
+//						}
+//						break;
+//					}
+//
+//					try {
+//						frames.add(new RenderImage(ImageIO.read(url)));
+//					} catch (Exception e) {
+//						Utils.log("Could not load image: " + filename);
+//						break;
+//					}
+//				}
+//			}
+//
+//			numExplosion = explosions.size();
+//			explosionRenderImages = new RenderImage[numExplosion][];
+//
+//			for (int i = numExplosion - 1; i >= 0; i--) {
+//				explosionRenderImages[i] = explosions.get(i).toArray(new RenderImage[0]);
+//			}
 		}
 		return explosionRenderImages[which][frame];
 	}
 
 	public RenderImage getExplosionDebriseRenderImage() {
-		if (debriseRenderImage == null) {
-			debriseRenderImage = new RenderImage(ImageUtil.getImage(this, "/resources/images/ground/explode_debris.png"));
-		}
+//		if (debriseRenderImage == null) {
+//			debriseRenderImage = new RenderImage(ImageUtil.getImage(this, "/resources/images/ground/explode_debris.png"));
+//		}
 		return debriseRenderImage;
 	}
 	
@@ -136,9 +141,9 @@ public class ImageManager {
 	 * @return the body image
 	 */
 	private Image getBodyImage() {
-		if (bodyImage == null) {
-			bodyImage = ImageUtil.getImage(this, "/resources/images/body.png");	
-		}
+//		if (bodyImage == null) {
+//			bodyImage = ImageUtil.getImage(this, "/resources/images/body.png");
+//		}
 		return bodyImage;
 	}
 	
@@ -148,9 +153,9 @@ public class ImageManager {
 	 * @return the gun image
 	 */
 	private Image getGunImage() {
-		if (gunImage == null) {
-			gunImage = ImageUtil.getImage(this, "/resources/images/turret.png");
-		}
+//		if (gunImage == null) {
+//			gunImage = ImageUtil.getImage(this, "/resources/images/turret.png");
+//		}
 		return gunImage;
 	}
 	
@@ -160,52 +165,52 @@ public class ImageManager {
 	 * @return the radar image
 	 */
 	private Image getRadarImage() {
-		if (radarImage == null) {
-			radarImage = ImageUtil.getImage(this, "/resources/images/radar.png");
-		}
+//		if (radarImage == null) {
+//			radarImage = ImageUtil.getImage(this, "/resources/images/radar.png");
+//		}
 		return radarImage;
 	}	
 	
 	public RenderImage getColoredBodyRenderImage(Color color) {
-		RenderImage img = coloredBodyRenderImageMap.get(color);
-
-		if (img == null) {
-			if (coloredBodyRenderImageMap.size() < MAX_NUM_COLORS) {
-				img = new RenderImage(ImageUtil.createColouredRobotImage(getBodyImage(), color));
-				coloredBodyRenderImageMap.put(color, img);
-			} else {
-				img = getBodyRenderImage();
-			}
-		}
-		return img;
+//		RenderImage img = coloredBodyRenderImageMap.get(color);
+//
+//		if (img == null) {
+//			if (coloredBodyRenderImageMap.size() < MAX_NUM_COLORS) {
+//				img = new RenderImage(ImageUtil.createColouredRobotImage(getBodyImage(), color));
+//				coloredBodyRenderImageMap.put(color, img);
+//			} else {
+//				img = getBodyRenderImage();
+//			}
+//		}
+		return null;
 	}
 
 	public RenderImage getColoredGunRenderImage(Color color) {
-		RenderImage img = coloredGunRenderImageMap.get(color);
-
-		if (img == null) {
-			if (coloredGunRenderImageMap.size() < MAX_NUM_COLORS) {
-				img = new RenderImage(ImageUtil.createColouredRobotImage(getGunImage(), color));
-				coloredGunRenderImageMap.put(color, img);
-			} else {
-				img = getGunRenderImage();
-			}
-		}
-		return img;
+//		RenderImage img = coloredGunRenderImageMap.get(color);
+//
+//		if (img == null) {
+//			if (coloredGunRenderImageMap.size() < MAX_NUM_COLORS) {
+//				img = new RenderImage(ImageUtil.createColouredRobotImage(getGunImage(), color));
+//				coloredGunRenderImageMap.put(color, img);
+//			} else {
+//				img = getGunRenderImage();
+//			}
+//		}
+		return null;
 	}
 
 	public RenderImage getColoredRadarRenderImage(Color color) {
-		RenderImage img = coloredRadarRenderImageMap.get(color);
-
-		if (img == null) {
-			if (coloredRadarRenderImageMap.size() < MAX_NUM_COLORS) {
-				img = new RenderImage(ImageUtil.createColouredRobotImage(getRadarImage(), color));
-				coloredRadarRenderImageMap.put(color, img);
-			} else {
-				img = getRadarRenderImage();
-			}
-		}
-		return img;
+//		RenderImage img = coloredRadarRenderImageMap.get(color);
+//
+//		if (img == null) {
+//			if (coloredRadarRenderImageMap.size() < MAX_NUM_COLORS) {
+//				img = new RenderImage(ImageUtil.createColouredRobotImage(getRadarImage(), color));
+//				coloredRadarRenderImageMap.put(color, img);
+//			} else {
+//				img = getRadarRenderImage();
+//			}
+//		}
+		return null;
 	}
 
 	private RenderImage getBodyRenderImage() {

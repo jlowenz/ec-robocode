@@ -18,7 +18,12 @@ then
 	if [ -z ""$JAVA_HOME ] 
 	then
 		echo "Nope, didn't work, trying path on system: $HOSTNAME"
-		JAVA=`which java`
+		if [ `uname` = "Darwin ]; then
+		    JAVA=`which java`
+		else
+		    echo "giving up!"
+		    exit
+		fi
 	fi
 fi
 
@@ -37,6 +42,7 @@ fi
 
 i=0
 while [ $i -lt $PARALLEL ]; do
+    echo "Starting worker on $HOSTNAME with $JAVA"
     nice -n20 $JAVA -Djava.security.policy=$GP_HOME/bin/.java.policy \
         -Djava.util.logging.config.file=$GP_HOME/config/jini.logging \
 	    -DGP_HOME="${GP_HOME}"  \

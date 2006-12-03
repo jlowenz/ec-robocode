@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 PARALLEL=$1
 
@@ -38,7 +38,7 @@ export CLASSPATH="${CLASSPATH}"
 
 i=0
 while [ $i -lt $PARALLEL ]; do
-    echo "Starting worker on $HOSTNAME with $JAVA"
+    echo "Starting worker on $HOSTNAME using $JAVA_HOME"
     nice -n20 $JAVA_HOME/bin/java -Djava.security.policy=$GP_HOME/bin/.java.policy \
         -Djava.util.logging.config.file=$GP_HOME/config/jini.logging \
 	    -DGP_HOME="${GP_HOME}"  \

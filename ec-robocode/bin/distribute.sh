@@ -23,6 +23,9 @@ fi
 cp -r bin build config ecdist
 tar czf ecdist.tgz ecdist
 
+echo "GP_RSH=$GP_RSH"
+echo "GP_RCP=$GP_RCP"
+
 for m in $MACHINES; do
     echo $m
     $GP_RCP ecdist.tgz $m:/tmp

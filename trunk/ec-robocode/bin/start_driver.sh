@@ -21,7 +21,7 @@ do
 done
 echo $CLASSPATH
 
-java -Djava.security.policy=$GP_HOME/bin/.java.policy \
+java -Xmx800M -Djava.security.policy=$GP_HOME/bin/.java.policy \
     -Djava.util.logging.config.file=$GP_HOME/config/jini.logging \
 	-DGP_HOME="${GP_HOME}"  \
 	-Dorg.jini.rio.groups="GPRobocode"  \

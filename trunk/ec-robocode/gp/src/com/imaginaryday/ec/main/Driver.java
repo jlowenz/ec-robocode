@@ -118,17 +118,17 @@ public class Driver implements Runnable {
     private Date endDate;
 
     private static DecimalFormat df = new DecimalFormat("00");
-    private int numGenerations = 1025;
-    private int numRandomGenerations = 25;
+    private int numGenerations = 1024;
+    private int numRandomGenerations = 24;
     private int generationCount = 0;
     private int treeDepth = 5;
     private final int alpha = 0;
     private final int beta = 2;
-	private int eliteCount = 1;
+	private int eliteCount = 2;
     private double crossoverProbability = 0.7;
-    private double mutationProbability = 0.15;
+    private double mutationProbability = 0.05;
     private int testFreq = 5;
-    private int populationSize = 25;
+    private int populationSize = 24;
     private boolean readPopulation = false;
     private String popFile = "";
     private String progLogFile = "progress.log";

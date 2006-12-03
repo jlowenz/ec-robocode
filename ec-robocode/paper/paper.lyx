@@ -2618,6 +2618,19 @@ Parameters
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Might want to compare proposed and used.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float table
 placement h
 wide false
@@ -2626,10 +2639,11 @@ status open
 
 \begin_layout Standard
 \begin_inset Tabular
-<lyxtabular version="3" rows="9" columns="2">
+<lyxtabular version="3" rows="9" columns="3">
 <features>
-<column alignment="left" valignment="top" rightline="true" width="50col%">
-<column alignment="center" valignment="top" width="40col%">
+<column alignment="left" valignment="top" rightline="true" width="35col%">
+<column alignment="center" valignment="top" width="25col%">
+<column alignment="center" valignment="top" leftline="true" width="30col%">
 <row bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -2648,7 +2662,18 @@ Parameter
 \begin_layout Standard
 
 \series bold
-Value
+Proposed Value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+Final Value
 \end_layout
 
 \end_inset
@@ -2669,6 +2694,28 @@ Population Size
 
 \begin_layout Standard
 100
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+footnotemark
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+24
 \begin_inset ERT
 status collapsed
 
@@ -2712,6 +2759,21 @@ See Section\InsetSpace ~
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+See Section\InsetSpace ~
+
+\begin_inset LatexCommand \ref{sub:Termination-Criteria}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
 </row>
 <row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
@@ -2724,6 +2786,15 @@ Crossover rate
 \end_inset
 </cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+0.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
@@ -2752,6 +2823,15 @@ Mutation rate
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+0.2
+\end_layout
+
+\end_inset
+</cell>
 </row>
 <row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
@@ -2764,6 +2844,15 @@ Reproduction rate (direct copy of parents)
 \end_inset
 </cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+0.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
@@ -2792,6 +2881,15 @@ Top 10 percent
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Top 1 Member
+\end_layout
+
+\end_inset
+</cell>
 </row>
 <row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
@@ -2812,6 +2910,15 @@ Maximum initial tree depth
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+8
+\end_layout
+
+\end_inset
+</cell>
 </row>
 <row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
@@ -2824,6 +2931,15 @@ Maximum tree depth after crossover/mutation
 \end_inset
 </cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
@@ -2879,33 +2995,74 @@ Execution Environment
 \end_layout
 
 \begin_layout Standard
-In order to perform the large number of fitness evaluations that will be
- required, we believe it will be necessary to execute the Robocode battles
- in parallel on as many computers as we can.
- To achieve this, Robocode will be slightly modified to enable it to consume
- battle specifications from a centralized server.
- Each Robocode instance will pull a battle specification from the server,
- execute the battle, and return the results to the server.
- When all of the battles have been fought, the selection and reproduction
- mechanism will generate a new population and produce a new set of battle
- specifications for the next generation.
+Given a population size of 24, and allowing for self-play, 300 fitness evaluatio
+ns are necessary for each generation.
+ If all Robocode battles ran in 5 seconds, which is optimistic, processing
+ 1000 generations would take 17.36 days.
+ In order to perform the large number of fitness evaluations necessary in
+ the time available, we implemented an architecture that allows us to distribute
+ our fitness evaluations across multiple computers.
 \end_layout
 
 \begin_layout Standard
-architecture of the system
+The architecture we have developed is based on a simple master-worker pattern.
+ The workers consist of instances of Robocode that have been slightly modified.
+ The master is a custom driver program.
+ Communication between the master and the workers is conducted through a
+ JavaSpace.
+ The operation of the architecture is:
+\end_layout
+
+\begin_layout Enumerate
+The driver program generates the initial population.
+\end_layout
+
+\begin_layout Enumerate
+The driver program generates a series of tasks that specify a battle to
+ be fought.
+ One task is generated for each robot pairing.
+ The task contains the eight GP trees necessary to define the behavior of
+ the two competing robots.
+\end_layout
+
+\begin_layout Enumerate
+The tasks are submitted to the JavaSpace.
+\end_layout
+
+\begin_layout Enumerate
+The Robocode workers pull the battle tasks from the space and execute them.
+\end_layout
+
+\begin_layout Enumerate
+When each battle concludes, the Robocode worker calculates the fitness of
+ the two contestants and submits a results object to the space.
+\end_layout
+
+\begin_layout Enumerate
+The driver program pulls the results from the space.
+\end_layout
+
+\begin_layout Enumerate
+Selection and reproduction is performed by the driver.
+\end_layout
+
+\begin_layout Enumerate
+The process repeats with the new population.
 \end_layout
 
 \begin_layout Standard
-enumerate final test configuration - 8 + 8 + 8 + 12 + 2 + 2 + 2 + 2 + 2
- + 2 + 2 + 2 +2 + 2 
-\end_layout
-
-\begin_layout Standard
-Approximately 56 processors, and 14 separate hosts.
-\end_layout
-
-\begin_layout Standard
-modifications made to robocode
+Several modification have been made to Robocode in order to integrate it
+ with this architecture.
+ These changes enable Robocode to read battle tasks from the JavaSpace and
+ to put the battle results into the space.
+ Additional changes were necessary to collect data for the exogenous fitness
+ function.
+ Some small performance enhancements were also have been made.
+ The system configuration for our final run consisted of 15 hosts with a
+ total of 59 processors.
+ Using this configuration, processing one generation took between 30 and
+ 90 seconds.
+ 
 \end_layout
 
 \begin_layout Section

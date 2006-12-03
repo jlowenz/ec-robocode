@@ -3374,6 +3374,33 @@ The process repeats with the new population.
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename javaspace.pdf
+	scale 50
+	keepAspectRatio
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Simple architecture illustration
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Several modification have been made to Robocode in order to integrate it
  with this architecture.
  These changes enable Robocode to read battle tasks from the JavaSpace and
@@ -3473,6 +3500,33 @@ Dookious is the current World Champion in the unlimited class.
 \end_inset
 
 Results
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename fitness_1.pdf
+	scale 50
+	keepAspectRatio
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Minimum, maximum and average fitness over 1200 generations
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard

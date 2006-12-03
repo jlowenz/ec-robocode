@@ -274,10 +274,10 @@ Robocode
 \end_layout
 
 \begin_layout Standard
-It provides a framework in which two or more software agents representing
+As stated previously, Robocode is a programming game.
+ It provides a framework in which two or more software agents representing
  robotic tanks (usually hand-coded by a programmer), can fight to the death.
- An objective fitness score is provided (a likely endogenous fitness measure)
- in order to rank tanks in a match.
+ An objective fitness score is provided in order to rank tanks in a match.
  Moving, shooting, colliding with walls & tanks, and getting shot by an
  enemy cost energy.
  Successfully shooting an enemy returns some energy.
@@ -2414,9 +2414,9 @@ Even though mutation is typically omitted from a GP with the claim that
 , we choose to include it for several reasons.
  We like the idea that mutation helps us explore the entire search space
  (which crossover just can't do), and since we will probably be using a
- relatively small population size due to minimal computational resources,
- mutation will help since it's unlikely that all valid operations will exist
- in the initial population.
+ relatively small population size due to time constraints and minimal computatio
+nal resources, mutation will help since it's unlikely that all valid operations
+ will exist in the initial population.
  For example, consider an operator that takes a value, such as (add 
 \begin_inset Formula $\alpha$
 \end_inset
@@ -2488,7 +2488,7 @@ The custom variation will be based on real-valued mutation, where the general
 \end_layout
 
 \begin_layout Subsection
-Evaluation and Fitness Function
+Evaluation and Fitness Functions
 \end_layout
 
 \begin_layout Standard
@@ -2546,26 +2546,90 @@ damage
  
 \end_layout
 
-\begin_layout Standard
-Previous work has abandoned coevolution in favor of training against external
- opponents that provide motivation to at least dodge bullets (if not to
- fire bullets themselves).
- We, however, propose the use of coevolution with an exogenous fitness function
- that will drive the type of behavior we'd like to see from an agent: the
- ability to dodge and accurately shoot the enemy while minimizing the damage
- incurred from enemy shots, rams, and wall collisions.
- Therefore, we must balance the reward of staying alive (which is important
- to winning, but can lead to stagnation), with actually firing bullets,
- actively killing enemies (i.e.
- by bullet or ram) and avoiding collisions in general (especially with walls).
- In addition, we propose to adapt the fitness function over time to initially
- emphasize firing bullets (accurate or not) and gradually transition to
- emphasizing accuracy when firing, after the targeting and scanning systems
- begin to mature.
+\begin_layout Subsection
+Tuning the Exogenous Fitness Function
 \end_layout
 
 \begin_layout Standard
-Our exogenous fitness function emphasizes the damage inflicted on the opponent.
+We have developed and tested several exogenous fitness functions in the
+ hopes of finding one that guides our robots in the desired evolutionary
+ direction.
+ As was stated previously, we eschewed the endogenous Robocode score because
+ it favors energy conservation and using it in a coevolutionary system leads
+ to the medioce stable state.
+ In this section we will describe the functions we tried, the motivation
+ for each function, and, for the earlier functions, the observed outcome.
+\end_layout
+
+\begin_layout Subsubsection
+The First Fitness Function
+\end_layout
+
+\begin_layout Standard
+Our first fitness function was based on the idea that we wanted the robots
+ to shoot, and we wanted to not get shot.
+ The equation was:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+F=1.0\cdot b_{dodged}+1.0\cdot b_{fired}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $b_{fired}$
+\end_inset
+
+ is the count of bullets fired, and
+\begin_inset Formula \[
+b_{dodged}=b_{fired\; by\; opponent}-b_{hit\; by\; opponent}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This fitness function was an absolute failure.
+ It quickly lead to robots that shot wildly, but took no other action.
+ The 
+\begin_inset Formula $b_{dodged}$
+\end_inset
+
+term grew quickly because any errant shot gave the opponent a point for
+ dodging, even if they did nothing.
+ This function was quickly abandoned.
+\end_layout
+
+\begin_layout Subsubsection
+The Second Fitness Function
+\end_layout
+
+\begin_layout Standard
+With the second fitness function we attempted to coax our robots to include
+ three additional desired behaviors.
+ We wanted them to move, scan for their opponent, and avoid walls.
+ The function was:
+\begin_inset Formula \[
+F=1.5\cdot b_{fired}+1.0\cdot b_{dodged}-2.0\cdot W+0.1\cdot D\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Subsubsection
+The Final Fitness Function
+\end_layout
+
+\begin_layout Standard
+Our current exogenous fitness function emphasizes the damage inflicted on
+ the opponent.
  The fitness function is:
 \end_layout
 
@@ -2624,7 +2688,6 @@ These scores are provided by Robocode.
 \emph default
 \bar default
 \noun default
-\color default
 
 \begin_inset Formula $B_{bullet}$
 \end_inset
@@ -2637,7 +2700,6 @@ These scores are provided by Robocode.
 \emph off
 \bar no
 \noun off
-\color none
 and 
 \family default
 \series default
@@ -2646,7 +2708,6 @@ and
 \emph default
 \bar default
 \noun default
-\color default
 
 \begin_inset Formula $B_{ram}$
 \end_inset
@@ -2659,7 +2720,6 @@ and
 \emph off
 \bar no
 \noun off
-\color none
 are bonuses given by Robocode for killing the opponent by bullet or by ramming,
  respectively.
  The bonuses are also provided by Robocode.
@@ -2683,7 +2743,6 @@ The term
 \emph default
 \bar default
 \noun default
-\color default
 
 \begin_inset Formula $e_{bullet}$
 \end_inset
@@ -3251,6 +3310,10 @@ frac{n^2}{2}$ matches, where a match consists of 10 combat scenarios.
 \end_layout
 
 \begin_layout Subsection
+\begin_inset LatexCommand \label{sub:Execution-Environment}
+
+\end_inset
+
 Execution Environment 
 \end_layout
 
@@ -3325,7 +3388,90 @@ Several modification have been made to Robocode in order to integrate it
  
 \end_layout
 
+\begin_layout Subsection
+Monitoring Progress
+\end_layout
+
+\begin_layout Standard
+In order to test our hypothesis, we periodically test the performance of
+ our GP agents against human coded robots.
+ These tests are conducted using the same test achitecture, we simply generate
+ new battles that pit our GP agents against the robots described below.
+ Although fitness values are calculated from these battles, they are not
+ used in the selection process.
+ Progress checks are performed after the fitness evaluations for every fifth
+ generation.
+ A total of 12 human-coded robots were used to test progress.
+ These robots varied from the very simple to the current one-on-one World
+ Champion.
+\end_layout
+
+\begin_layout Description
+Corners takes a defensive posture in a corner.
+ It cans a small arc and fires if it detects the enemy.
+\end_layout
+
+\begin_layout Description
+Crazy drives randomly over the battlefield hoping to avoid being hit.
+ It fires its gun when it detects the enemy.
+\end_layout
+
+\begin_layout Description
+Fire spins its turret and fires when it detects an enemy.
+ It remains stationary until hit, at which time it will move a small distance.
+\end_layout
+
+\begin_layout Description
+RamFire pursues its opponent to ram them.
+ Fires when it does ram.
+\end_layout
+
+\begin_layout Description
+SpinBot drives in a circle and fires when it detects its opponent.
+\end_layout
+
+\begin_layout Description
+Tracker spins its turret to scan for the oppoent.
+ When the opponent is detected, it moves towards the other robot by some
+ random amount.
+ It fires when the opponent remains in its firing arc for several clock
+ ticks.
+\end_layout
+
+\begin_layout Description
+TrackFire implements a simple target tracking gun.
+ Remains stationary and fires at a high rate.
+\end_layout
+
+\begin_layout Description
+Walls dashes to a wall and begins to drive around the perimeter of the battlefie
+ld.
+ It keeps its gun fixed pointing into the battlefield and fires when it
+ detects its opponent.
+\end_layout
+
+\begin_layout Description
+Splinter is the current World Champion for the Nano-bot class.
+ 
+\end_layout
+
+\begin_layout Description
+RaikoMicro is the current World Champion for the Micro-bot class.
+\end_layout
+
+\begin_layout Description
+Komarious is the current Workd Champion for the Mini-bot class.
+\end_layout
+
+\begin_layout Description
+Dookious is the current World Champion in the unlimited class.
+\end_layout
+
 \begin_layout Section
+\begin_inset LatexCommand \label{sec:Results}
+
+\end_inset
+
 Results
 \end_layout
 

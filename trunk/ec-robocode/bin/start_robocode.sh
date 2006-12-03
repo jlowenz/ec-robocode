@@ -40,12 +40,11 @@ export CLASSPATH="${CLASSPATH}"
 
 i=0
 while [ $i -lt $PARALLEL ]; do
-    echo "Starting worker on $HOSTNAME using $JAVA_HOME"
     nice -n20 java -Djava.security.policy=$GP_HOME/bin/.java.policy \
         -Djava.util.logging.config.file=$GP_HOME/config/jini.logging \
 	    -DGP_HOME="${GP_HOME}"  \
 	    -server \
 	    -Dorg.jini.rio.groups="GPRobocode"  \
-	    -cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -id $2$i -battle ${GP_HOME}/config/sample.battle 1>/tmp/robo_$2$i 2>/tmp/robo_$2$i &
+	    -cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -id $2$i -battle ${GP_HOME}/config/sample.battle 1> /tmp/robo_$2$i 2> /tmp/robo_$2$i &
 	i=$(($i + 1))
 done

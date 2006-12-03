@@ -21,8 +21,9 @@ do
 done
 echo $CLASSPATH
 
+LOG=$HOME/ec_driver.log
 java -Xmx800M -Djava.security.policy=$GP_HOME/bin/.java.policy \
     -Djava.util.logging.config.file=$GP_HOME/config/jini.logging \
 	-DGP_HOME="${GP_HOME}"  \
 	-Dorg.jini.rio.groups="GPRobocode"  \
-	-cp "${CLASSPATH}"  com.imaginaryday.ec.main.Driver $* 1>>/tmp/ec_driver 2>>/tmp/ec_driver
+	-cp "${CLASSPATH}"  com.imaginaryday.ec.main.Driver $* 1>>$LOG 2>>$LOG

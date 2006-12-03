@@ -131,10 +131,10 @@ public class Driver implements Runnable {
     private int populationSize = 24;
     private boolean readPopulation = false;
     private String popFile = "";
-    private String progLogFile = "progress.log";
-    private String generationLogFile = "battle.log";
-    private String robotLogFile = "robots.log";
-    private String fitnessLog = "fitness.log";
+    private String progLogFile = System.getProperty("user.home") + System.getProperty("file.separator") + "progress.log";
+    private String generationLogFile = System.getProperty("user.home") + System.getProperty("file.separator") + "battle.log";
+    private String robotLogFile = System.getProperty("user.home") + System.getProperty("file.separator") + "robots.log";
+    private String fitnessLog = System.getProperty("user.home") + System.getProperty("file.separator") + "fitness.log";
     private Writer battleWriter = null;
     private Writer robots = null;
     private Writer fitnessWriter = null;

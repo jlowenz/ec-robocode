@@ -12,7 +12,10 @@ import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,8 +61,8 @@ public class ProgressTester {
         this.space = space;
         this.transactionManager = transactionManager;
         try {
-            summaryWriter = new FileWriter("progressSummary.log", true);
-            detailsWriter = new FileWriter("progressDetails.log", true);
+            summaryWriter = new FileWriter(System.getProperty("user.home") + System.getProperty("file.separator") + "progressSummary.log", true);
+            detailsWriter = new FileWriter(System.getProperty("user.home") + System.getProperty("file.separator") + "progressDetails.log", true);
         } catch (FileNotFoundException e) {
             e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
         } catch (IOException e) {

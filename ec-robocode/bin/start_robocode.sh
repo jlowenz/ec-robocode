@@ -11,11 +11,6 @@ fi
 echo "Home is $HOME"
 echo "GP_HOME is ${GP_HOME}"
 
-if [ -z ""$JAVA_HOME ]
-then
-	echo "JAVA_HOME is not set properly: $JAVA_HOME"
-fi
-
 export CLASSPATH="${GP_HOME}"
 
 for jar in `find ${GP_HOME}/build -name \*.jar | xargs`
@@ -28,7 +23,7 @@ export CLASSPATH="${CLASSPATH}"
 i=0
 while [ $i -lt $PARALLEL ]; do
     echo "starting on $HOSTNAME..."
-    nice -n20 $JAVA_HOME/bin/java -Djava.security.policy=${GP_HOME}/bin/.java.policy \
+    nice -n20 java -Djava.security.policy=${GP_HOME}/bin/.java.policy \
         -Djava.util.logging.config.file=${GP_HOME}/config/jini.logging \
 	    -DGP_HOME="${GP_HOME}"  \
 	    -server \

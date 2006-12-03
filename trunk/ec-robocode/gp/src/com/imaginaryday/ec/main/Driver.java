@@ -44,6 +44,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -116,30 +117,31 @@ public class Driver implements Runnable {
 
     private Date endDate;
 
-    private int numGenerations = 2000;
-    private int generationCount = 0; // ??
-    private int treeDepth = 8;
+    private static DecimalFormat df = new DecimalFormat("00");
+    private int numGenerations = 1025;
+    private int numRandomGenerations = 25;
+    private int generationCount = 0;
+    private int treeDepth = 5;
     private final int alpha = 0;
     private final int beta = 2;
 	private int eliteCount = 1;
-    private double crossoverProbability = 0.8;
-    private double mutationProbability = 0.2;
+    private double crossoverProbability = 0.7;
+    private double mutationProbability = 0.15;
     private int testFreq = 5;
-    private int populationSize = 24;
+    private int populationSize = 25;
     private boolean readPopulation = false;
     private String popFile = "";
     private String progLogFile = "progress.log";
     private String generationLogFile = "battle.log";
     private String robotLogFile = "robots.log";
+    private String fitnessLog = "fitness.log";
     private Writer battleWriter = null;
     private Writer robots = null;
-    private String fitnessLog = "fitness.log";
     private Writer fitnessWriter = null;
-    private Map<Member, List<GPBattleResults>> resultMap = null;
+//    private Map<Member, List<GPBattleResults>> resultMap = null;
     private TransactionManager transactionManager;
 
     // used to retry missing tasks on timeout
-    private GPBattleTask[] taskArray;
     private static final int MAX_TAKE_COUNT = 150;
 
     public Driver() {
@@ -194,6 +196,9 @@ public class Driver implements Runnable {
             } else if (args[i].equals("-pl") && (i < args.length + 1)) {
                 d.generationLogFile = args[i + 1];
                 i++;
+            } else if (args[i].equals("-rand") && (i < args.length + 1)) {
+                d.numRandomGenerations = Integer.parseInt(args[i + 1]);
+                i++;
             } else {
                 System.out.println("Not understood: " + args[i]);
                 return;
@@ -204,22 +209,25 @@ public class Driver implements Runnable {
 
     }
 
-    public List<Member> genInitialPopulation() {
+    public List<Member> genInitialPopulation(int gen, int popSize) {
         List<Member> members = new ArrayList<Member>();
 
         NodeFactory nf = NodeFactory.getInstance();
         TreeFactory tf = new TreeFactory(nf);
 
-        for (int i = 0; i < populationSize; i++) {
-            Member m = new Member(0, i);
+        for (int i = 0; i < popSize; i++) {
+            Member m = new Member(gen, i);
             m.setMoveProgram(tf.generateRandomTree(treeDepth, DirectionPair.class));
             m.setRadarProgram(tf.generateRandomTree(treeDepth, Number.class));
             m.setShootProgram(tf.generateRandomTree(treeDepth, FiringPair.class));
             m.setTurretProgram(tf.generateRandomTree(treeDepth, Number.class));
-//            m.setName(new StringBuilder().append("Bot.").append(generationCount).append(".").append(i).toString());
             members.add(m);
         }
         return members;
+    }
+
+    private int getNumTasks(int popSize) {
+        return (popSize * (popSize - 1)) / 2 + popSize;
     }
 
     public void run() {
@@ -259,63 +267,67 @@ public class Driver implements Runnable {
         }
 
         /*
-         * Generate initial population
+         * Get initial population
          */
         List<Member> population;
+        Map<Member,List<GPBattleResults>> results;
         if (readPopulation) {
+            // this population already has fitness values
             population = readPopulation(popFile);
+            generationCount++;
         } else {
-            population = genInitialPopulation();
+            // this population doesn't have fitness values
+            long start = System.currentTimeMillis();
+            logger.info("Calculating fitness of initial population...");
+            population = genInitialPopulation(0, populationSize);
+            results = calculateFitness(population, 0);
+            printResults(battleWriter, robots, fitnessWriter, 0, results);
+            persistPopulation(0, population);
+            logger.info("execution time: " + getTime(start, System.currentTimeMillis()));
+            generationCount = 1;
         }
 
-        int numTasks = (populationSize * (populationSize - 1)) / 2 + populationSize;
-        taskArray = new GPBattleTask[numTasks];
+        while (generationCount < numRandomGenerations) {
+            long start = System.currentTimeMillis();
+            logger.info("Calculating new random population...");
+            List<Rank> rankedPopulation = rankMembers(population);
+            List<Rank> top = rankedPopulation.subList(rankedPopulation.size()-generationCount,
+                                                      rankedPopulation.size());
+            population = genInitialPopulation(generationCount, populationSize-generationCount);
+            population.addAll(F.map(new F.lambda1<Member, Rank>() {
+                protected Member _call(Rank A) {
+                    return A.member;
+                }
+            }, top));
+            results = calculateFitness(population, generationCount);
+            printResults(battleWriter, robots,  fitnessWriter, generationCount, results);
+            persistPopulation(generationCount, population);
+            logger.info("execution time: " + getTime(start, System.currentTimeMillis()));
+            generationCount++;
+        }
 
         /*
          * Main loop of the evolutionary algorithm.
          */
-        long genStart;
-        DecimalFormat df = new DecimalFormat("00");
         while (generationCount < numGenerations) {
-
-            resultMap = new HashMap<Member, List<GPBattleResults>>();
-            for (Member m : population) {
-                resultMap.put(m, new ArrayList<GPBattleResults>());
-            }
-
-            /*
-            * Build coevolutionary battle set and submit
-            */
-            genStart = System.currentTimeMillis();
-            int numBattles = submitBattles(population);
-            if (numBattles != numTasks) throw new RuntimeException("I'm stupid");
-
-            /*
-             * collect results.
-             */
-            collectResults(population, numBattles);
-            printResults();
-
+            long genStart = System.currentTimeMillis();
+            // Perform selection and generate the next generation
+            population = selectAndBreed(population, eliteCount, alpha, beta);
+            // calculate the fitness of the new population
+            results = calculateFitness(population, generationCount);
+            // record the fitness
+            printResults(battleWriter, robots, fitnessWriter, generationCount, results);
+            // snapshot the population
+            persistPopulation(generationCount, population);
             /*
              * Periodically measure against the canned bots
              */
-            if (/*generationCount != 0 &&*/ (generationCount % testFreq == 0)) {
+            if ((generationCount % testFreq) == 0) {
                 progressTester.testProgress(population, generationCount);
             }
-            persistPopulation(generationCount, population);
-            /*
-             * Perform selection and generate the next generation
-             */
-            population = selectAndBreed(population);
-
-            double delta = (double) System.currentTimeMillis() - genStart;
-            logger.info("Dlta milliseconds: " + delta);
-            double secs = delta * 0.001;
-            double mins = Math.floor(secs / 60.0);
-            secs = secs - (mins * 60.0);
-            logger.info("Generation " + generationCount + " execution time: " + df.format(mins) + ":" + df.format(secs));
-
-            ++generationCount;
+            logger.info("Generation " + generationCount + " execution time: " +
+                    getTime(genStart, System.currentTimeMillis()));
+            generationCount++;
         }
 
         try {
@@ -324,6 +336,28 @@ public class Driver implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getTime(long start, long end)
+    {
+        double delta = (double) end - start;
+        logger.fine("Delta milliseconds: " + delta);
+        double secs = delta * 0.001;
+        double mins = Math.floor(secs / 60.0);
+        secs = secs - (mins * 60.0);
+        return df.format(mins) + ":" + df.format(secs);
+    }
+
+    private Map<Member,List<GPBattleResults>> calculateFitness(List<Member> population, int gen) {
+        /*
+        * Build coevolutionary battle set and submit
+        */
+        GPBattleTask[] taskArray = submitBattles(population, gen);
+
+        /*
+         * collect results.
+         */
+        return collectResults(population, taskArray);
     }
 
     private List<Member> readPopulation(String filename) {
@@ -376,21 +410,22 @@ public class Driver implements Runnable {
         }
     }
 
-    public List<Member> selectAndBreed(List<Member> oldPopulation) {
+    public List<Member> selectAndBreed(final List<Member> oldPopulation,
+                                       int numElite,
+                                       final double alpha,
+                                       final double beta) {
         F.lambda1<Double, Rank> probDist = new F.lambda1<Double, Rank>() {
             public Double _call(Rank rank) {
-                double a = alpha;
-                double b = beta;
                 double r = rank.rank;
-                double P = populationSize;
-                return (a + (r / (P - 1) * (b - a))) / P;
+                double P = oldPopulation.size();
+                return (alpha + (r / (P - 1) * (beta - alpha))) / P;
             }
         };
         // rank members
         List<Rank> rankedPopulation = rankMembers(oldPopulation);
 
-        double P = populationSize; // 40
-        int count = (int) (P - eliteCount); // 40 - 4.0 = 36
+        double P = oldPopulation.size(); // 24
+        int count = (int) (P - numElite); // 24 - 1 = 23
         // sample members
         List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, count); // 36
         for (Member m : newPopulation) {
@@ -402,7 +437,7 @@ public class Driver implements Runnable {
         newPopulation = mutate(newPopulation);
 
         // elitism (top elitismPercentage)
-        for (int i = count; i < populationSize; i++) {
+        for (int i = count; i < P; i++) {
             newPopulation.add(new Member(oldPopulation.get(i)));
         }
 
@@ -516,12 +551,17 @@ public class Driver implements Runnable {
         return samples;
     }
 
-    public void collectResults(List<Member> population, int numBattles) {
+    private Map<Member,List<GPBattleResults>> collectResults(List<Member> population, GPBattleTask[] taskArray) {
         int takeCount = 0;
         int retrieved = 0;
         Entry template = new GPBattleResults();
 
-        while (retrieved < numBattles) {
+        Map<Member, List<GPBattleResults>> resultMap = new HashMap<Member, List<GPBattleResults>>();
+        for (Member m : population) {
+            resultMap.put(m, new LinkedList<GPBattleResults>());
+        }
+
+        while (retrieved < taskArray.length) {
             GPBattleResults res = null;
             Transaction tran = null;
             try {
@@ -529,7 +569,7 @@ public class Driver implements Runnable {
                     if (takeCount >= MAX_TAKE_COUNT) {
                         // the problem with this is that the tasks could still be in the space
                         // with NO workers to work on them!
-                        resubmitTasks();
+                        resubmitTasks(taskArray);
                         takeCount = 0;
                     }
                     tran = TransactionFactory.create(transactionManager, 60000).transaction;
@@ -589,12 +629,13 @@ public class Driver implements Runnable {
                     }
                 }
                 ++retrieved;
-                logger.info("Collected " + retrieved + " of " + numBattles + " results");
+                logger.info("Collected " + retrieved + " of " + taskArray.length + " results");
             }
         }
+        return resultMap;
     }
 
-    private void resubmitTasks() {
+    private void resubmitTasks(GPBattleTask[] taskArray) {
         logger.warning("RESUBMITTING TASKS at " + new Date());
         for (GPBattleTask t : taskArray) {
             if (t != null) {
@@ -617,11 +658,15 @@ public class Driver implements Runnable {
 
     }
 
-    private void printResults() {
+    private void printResults(Writer battleWriter,
+                              Writer robots,
+                              Writer fitnessWriter,
+                              int gen,
+                              Map<Member,List<GPBattleResults>> results) {
 
         try {
             StringBuilder sb = new StringBuilder();
-            for (java.util.Map.Entry<Member, List<GPBattleResults>> e : resultMap.entrySet()) {
+            for (java.util.Map.Entry<Member, List<GPBattleResults>> e : results.entrySet()) {
                 for (GPBattleResults r : e.getValue()) {
                     sb.append(r.getSummary_CSV()).append('\n');
                 }
@@ -632,7 +677,7 @@ public class Driver implements Runnable {
             e.printStackTrace();
         }
 
-        List<Member> l = new ArrayList<Member>(resultMap.keySet());
+        List<Member> l = new ArrayList<Member>(results.keySet());
         Collections.sort(l, new Comparator<Member>() {
             public int compare(Member o, Member o1) {
                 return o.getName().compareTo(o1.getName());
@@ -641,6 +686,7 @@ public class Driver implements Runnable {
 
         try {
             StringBuilder sb2 = new StringBuilder();
+            sb2.append(gen).append(",");
             for (Iterator iter = l.iterator(); iter.hasNext();) {
                 Member m = (Member) iter.next();
                 sb2.append(Double.toString(m.getFitness()));
@@ -661,7 +707,7 @@ public class Driver implements Runnable {
             double minFitness = Double.MAX_VALUE;
             double maxFitness = Double.MIN_VALUE;
             double sumFitness = 0.0;
-            for (Member m : resultMap.keySet()) {
+            for (Member m : results.keySet()) {
                 double f = m.getFitness();
 
                 if (f > maxFitness) maxFitness = f;
@@ -669,15 +715,13 @@ public class Driver implements Runnable {
 
                 sumFitness += f;
             }
-            double meanFitness = sumFitness / (double)populationSize;
+            double meanFitness = sumFitness / (double)results.keySet().size();
             sb3.append(minFitness).append(',').append(meanFitness).append(',').append(maxFitness).append('\n');
             fitnessWriter.write(sb3.toString());
             fitnessWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     private void submitBattle(GPBattleTask t) {
@@ -698,19 +742,19 @@ public class Driver implements Runnable {
         }
     }
 
-    public int submitBattles(List<Member> population) {
-
+    public GPBattleTask[] submitBattles(List<Member> population, int gen) {
+        GPBattleTask[] taskArray = new GPBattleTask[getNumTasks(population.size())];        
         int battle = 0;
         for (int i = 0; i < population.size(); ++i) {
             for (int j = i; j < population.size(); ++j) {
-                GPBattleTask task = new GPBattleTask(generationCount, battle, population.get(i), population.get(j));
+                GPBattleTask task = new GPBattleTask(gen, battle, population.get(i), population.get(j));
                 taskArray[battle] = task; // record the task for replay later
                 submitBattle(task);
-                battle ++;
+                battle++;
             }
 
         }
-        return battle;
+        return taskArray;
     }
 
 

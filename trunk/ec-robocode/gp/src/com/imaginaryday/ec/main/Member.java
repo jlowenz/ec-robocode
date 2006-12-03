@@ -2,9 +2,9 @@ package com.imaginaryday.ec.main;
 
 import com.imaginaryday.ec.gp.Node;
 
-import java.io.Serializable;
-import java.io.ObjectInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -15,12 +15,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * To change this template use File | Settings | File Templates.
  */
 public class Member implements Comparable<Member>, Serializable {
-
+    private static final long serialVersionUID = 1481195345545820852L;
     private static AtomicInteger ID = new AtomicInteger(0);
 
     private int generation;
     private int id;
-    private String  name;
+    private String name;
 
     private Node moveProgram;
     private Node turretProgram;
@@ -29,7 +29,6 @@ public class Member implements Comparable<Member>, Serializable {
 
     double cumulativeFitness = 0.0;
     int numBattles = 0;
-    private static final long serialVersionUID = 1481195345545820852L;
 
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();

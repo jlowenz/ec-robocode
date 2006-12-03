@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 PARALLEL=$1
 
@@ -6,6 +6,20 @@ if [ -z ""{$GP_HOME} ]
 then
 	echo "Must set GP_HOME"
 	exit
+fi
+
+echo "Home is $HOME"
+
+if [ -z ""$JAVA_HOME ]
+then
+	echo "JAVA_HOME is not set properly: $JAVA_HOME"
+	echo "trying to source bashrc..."
+	. $HOME/.bashrc
+	if [ -z ""$JAVA_HOME ] 
+	then
+		echo "Nope, didn't work, exiting: $JAVA_HOME"
+		exit;
+	fi
 fi
 
 export CLASSPATH="${GP_HOME}"
@@ -19,7 +33,7 @@ echo $CLASSPATH
 
 i=0
 while [ $i -lt $PARALLEL ]; do
-    nice -n20 java -Djava.security.policy=$GP_HOME/bin/.java.policy \
+    nice -n20 $JAVA_HOME/bin/java -Djava.security.policy=$GP_HOME/bin/.java.policy \
         -Djava.util.logging.config.file=$GP_HOME/config/jini.logging \
 	    -DGP_HOME="${GP_HOME}"  \
 	    -server \

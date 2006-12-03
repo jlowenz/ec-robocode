@@ -21,8 +21,8 @@ then
 		if [ `uname` = "Darwin ]; then
 		    JAVA=`which java`
 		else
-		    echo "giving up!"
-		    exit
+		    echo "giving up"
+		    exit;
 		fi
 	fi
 fi

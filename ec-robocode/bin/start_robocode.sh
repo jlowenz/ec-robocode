@@ -34,7 +34,7 @@ do
 	export CLASSPATH="${CLASSPATH}:${jar}"
 done
 export CLASSPATH="${CLASSPATH}"
-echo $CLASSPATH
+#echo $CLASSPATH
 
 if [ -z ""$JAVA ]; then
     JAVA=$JAVA_HOME/bin/java
@@ -48,6 +48,6 @@ while [ $i -lt $PARALLEL ]; do
 	    -DGP_HOME="${GP_HOME}"  \
 	    -server \
 	    -Dorg.jini.rio.groups="GPRobocode"  \
-	    -cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -id $2$i -battle ${GP_HOME}/config/sample.battle 1>/dev/null 2>/dev/null &
+	    -cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -id $2$i -battle ${GP_HOME}/config/sample.battle 1>/tmp/robo_$2$i 2>/tmp/robo_$2$i &
 	i=$(($i + 1))
 done

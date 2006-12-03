@@ -302,7 +302,7 @@ public class Driver implements Runnable {
             results = calculateFitness(population, generationCount);
             printResults(battleWriter, robots,  fitnessWriter, generationCount, results);
             persistPopulation(generationCount, population);
-            logger.info("execution time: " + getTime(start, System.currentTimeMillis()));
+            logger.info("Gen " + generationCount + " execution time: " + getTime(start, System.currentTimeMillis()));
             generationCount++;
         }
 
@@ -317,14 +317,12 @@ public class Driver implements Runnable {
             results = calculateFitness(population, generationCount);
             // record the fitness
             printResults(battleWriter, robots, fitnessWriter, generationCount, results);
-            // snapshot the population
-            persistPopulation(generationCount, population);
-            /*
-             * Periodically measure against the canned bots
-             */
+            // Periodically measure against the canned bots
             if ((generationCount % testFreq) == 0) {
                 progressTester.testProgress(population, generationCount);
             }
+            // snapshot the population
+            persistPopulation(generationCount, population);
             logger.info("Generation " + generationCount + " execution time: " +
                     getTime(genStart, System.currentTimeMillis()));
             generationCount++;

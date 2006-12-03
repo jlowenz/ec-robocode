@@ -26,7 +26,7 @@
 \paragraph_separation indent
 \defskip medskip
 \quotes_language english
-\papercolumns 2
+\papercolumns 1
 \papersides 1
 \paperpagestyle default
 \tracking_changes false
@@ -2544,6 +2544,250 @@ Previous work has abandoned coevolution in favor of training against external
  begin to mature.
 \end_layout
 
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+Our exogenous fitness function emphasizes the damage inflicted on the opponent.
+ The fitness function is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+F=\frac{wins}{10}\cdot\left(F_{damage}+F_{tweek}\right)+F_{activity}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The term 
+\begin_inset Formula $F_{damage}$
+\end_inset
+
+is the contribution to fitness from the damage inflicted by the robot.
+ It is defined as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+F_{damage}=D_{bullet}+D_{ram}+B_{bullet}+B_{ram}+e_{bullet}D_{bullet}+e_{scan}D_{bullet}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $D_{bullet}$
+\end_inset
+
+ is the damage inflicted by this robot against its opponent, and 
+\begin_inset Formula $D_{ram}$
+\end_inset
+
+ is the damage inflicting by ramming the opponent.
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+These scores are provided by Robocode.
+ The terms 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color default
+
+\begin_inset Formula $B_{bullet}$
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+and 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color default
+
+\begin_inset Formula $B_{ram}$
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+are bonuses given by Robocode for killing the opponent by bullet or by ramming,
+ respectively.
+ The bonuses are also provided by Robocode.
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+The term 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color default
+
+\begin_inset Formula $e_{bullet}$
+\end_inset
+
+ is bonus multiplier based on shot accuracy.
+ It is defined by: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+e_{bullet}=5\cdot\frac{Hits}{Bullets\: Fired}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The intent of the bullet efficiency term is to overcome the tendency to
+ shoot wildly that was seen when using the first fitness function.
+ Similarly, 
+\begin_inset Formula $e_{scan}$
+\end_inset
+
+is a multiplier for scan efficiency.
+ Scan efficiency expresses the number of 
+\begin_inset Quotes eld
+\end_inset
+
+Enemy Scanned
+\begin_inset Quotes erd
+\end_inset
+
+ events as a function of the angular distance the radar turns.
+ The purpose of this term is to overcome the tendency to simply spin the
+ radar and to keep the radar pointed towards the enemy instead.
+ Scan efficiency is defined by:
+\begin_inset Formula \[
+revs=\frac{Total\: Radians\: Turned}{2\pi}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+e_{scan}=\frac{Scan\; Events-revs}{4\cdot revs}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To compute the efficiency metrics and 
+\begin_inset Formula $F_{tweek}$
+\end_inset
+
+, Robocode was modified to record the number of shots, the number of hits,
+ the radians the radar turns, the number of scan events, and the total distance
+ travelled.
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Formula $F_{tweek}$
+\end_inset
+
+term is intended to give the robot some credit for moving, shooting, and
+ scanning.
+ The use of logarithms slows the growth of 
+\begin_inset Formula $F_{tweek}$
+\end_inset
+
+ and prevents it from overwhelming the 
+\begin_inset Formula $F_{damage}$
+\end_inset
+
+ score.
+ It is defined as:
+\begin_inset Formula \[
+F_{tweek}=\ln\left(Shots\; Fired\right)+\ln\left(Scan\; Events\right)+\ln\left(Distance\; Traveled\right)\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since the 
+\begin_inset Formula $F_{damage}$
+\end_inset
+
+ and 
+\begin_inset Formula $F_{tweek}$
+\end_inset
+
+ scores are scaled by the winning percentage, and wins is a Robocode-provided
+ metric, it is possible for a robot that has a good
+\begin_inset Formula $F_{damage}$
+\end_inset
+
+ and 
+\begin_inset Formula $F_{tweek}$
+\end_inset
+
+ to have its fitness zeroed by losses.
+ To avoid this, a small bonus, 
+\begin_inset Formula $F_{activity}$
+\end_inset
+
+, is added to a robot that moves, shoots, or scans during the battle.
+ The value of 
+\begin_inset Formula $F_{activity}$
+\end_inset
+
+is a constant 5.0
+\end_layout
+
 \begin_layout Subsection
 GP Algorithm Configuration
 \end_layout
@@ -2798,7 +3042,7 @@ Crossover rate
 \begin_inset Text
 
 \begin_layout Standard
-0.6
+0.7
 \end_layout
 
 \end_inset
@@ -2827,7 +3071,7 @@ Mutation rate
 \begin_inset Text
 
 \begin_layout Standard
-0.2
+0.05
 \end_layout
 
 \end_inset
@@ -2885,7 +3129,7 @@ Top 10 percent
 \begin_inset Text
 
 \begin_layout Standard
-Top 1 Member
+Top 2 members
 \end_layout
 
 \end_inset
@@ -2914,7 +3158,7 @@ Maximum initial tree depth
 \begin_inset Text
 
 \begin_layout Standard
-8
+5
 \end_layout
 
 \end_inset
@@ -2943,7 +3187,7 @@ Maximum tree depth after crossover/mutation
 \begin_inset Text
 
 \begin_layout Standard
-10
+No limit
 \end_layout
 
 \end_inset
@@ -2998,7 +3242,7 @@ Execution Environment
 Given a population size of 24, and allowing for self-play, 300 fitness evaluatio
 ns are necessary for each generation.
  If all Robocode battles ran in 5 seconds, which is optimistic, processing
- 1000 generations would take 17.36 days.
+ 1024 generations would take 17.36 days.
  In order to perform the large number of fitness evaluations necessary in
  the time available, we implemented an architecture that allows us to distribute
  our fitness evaluations across multiple computers.

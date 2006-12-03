@@ -9,6 +9,7 @@ then
 fi
 
 echo "Home is $HOME"
+echo "GP_HOME is ${GP_HOME}"
 
 if [ -z ""$JAVA_HOME ]
 then
@@ -31,7 +32,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 
 export CLASSPATH="${GP_HOME}"
 
-for jar in `find $GP_HOME/build -name \*.jar | xargs`
+for jar in `find ${GP_HOME}/build -name \*.jar | xargs`
 do
 	export CLASSPATH="${CLASSPATH}:${jar}"
 done
@@ -41,8 +42,8 @@ export CLASSPATH="${CLASSPATH}"
 i=0
 while [ $i -lt $PARALLEL ]; do
     echo "starting on $HOSTNAME..."
-    nice -n20 java -Djava.security.policy=$GP_HOME/bin/.java.policy \
-        -Djava.util.logging.config.file=$GP_HOME/config/jini.logging \
+    nice -n20 java -Djava.security.policy=${GP_HOME}/bin/.java.policy \
+        -Djava.util.logging.config.file=${GP_HOME}/config/jini.logging \
 	    -DGP_HOME="${GP_HOME}"  \
 	    -server \
 	    -Dorg.jini.rio.groups="GPRobocode"  \

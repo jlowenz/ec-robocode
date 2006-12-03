@@ -45,7 +45,7 @@ Ronald Bowers & Jason Owens
 \end_layout
 
 \begin_layout Date
-October 23, 2006
+4 December, 2006
 \end_layout
 
 \begin_layout Abstract
@@ -210,10 +210,6 @@ The "mediocre stable state" is a state where the population consists of
  
 \end_layout
 
-\begin_layout Subsection
-Robocode
-\end_layout
-
 \begin_layout Standard
 An interesting
 \begin_inset Foot
@@ -236,6 +232,45 @@ At least it's interesting from our point of view: evolving autonomous robotic
 Robocode is a Java based programming game, where the goal is to develop
  robot battle tanks to battle against competitor tanks.
  The motto of Robocode is: Build the best, destroy the rest!
+\end_layout
+
+\begin_layout Standard
+Robocode allows a two or more robots to compete, and a score is computed
+ to rank the contestants.
+ The details of the scoring and its usefulness in coevolution will be discussed
+ in 
+\begin_inset LatexCommand \ref{sec:Robocode}
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The problem we are investigating is whether or not one can use coevolution
+ to develop agents that can compete successfully against human-coded agents
+ in a Robocode battle.
+ One aspect of this problem is how we can avoid producing a mediocre stable
+ state; a failure in that respect will result in non-competive robots.
+ We had hypothesized that by using genetic programming and coevolution with
+ an exogenous fitness function (to motivate the robots to avoid the mediocre
+ stable state), we 
+\emph on
+could
+\emph default
+ evolve Robocode players that compete successfully against human-designed
+ robots.
+ Unfortunately, that goal appears harder to achieve than we thought it would
+ be.
+\end_layout
+
+\begin_layout Section
+\begin_inset LatexCommand \label{sec:Robocode}
+
+\end_inset
+
+Robocode
 \end_layout
 
 \begin_layout Standard
@@ -317,29 +352,6 @@ A robot responds to an event with some combination of logic and action execution
  set and they execute together.
  This interaction between actions, events and the executed response of the
  robot makes designing Robocode robots by hand difficult.
-\end_layout
-
-\begin_layout Section
-Problem and Hypothesis
-\end_layout
-
-\begin_layout Standard
-The problem we propose to investigate is whether or not one can use coevolution
- to develop agents that can compete successfully against human-coded agents
- in a Robocode battle.
- One aspect of this problem is how we can avoid producing a mediocre stable
- state; a failure in that respect will result in non-competive robots.
-\end_layout
-
-\begin_layout Standard
-We hypothesize that by using genetic programming and coevolution with an
- exogenous fitness function (to motivate the robots to avoid the mediocre
- stable state), we 
-\emph on
-can
-\emph default
- evolve Robocode players that compete successfully against human-designed
- robots.
 \end_layout
 
 \begin_layout Section
@@ -563,6 +575,10 @@ Some research has been performed using genetic programming systems that
  This work is in its earliest stages.
 \end_layout
 
+\begin_layout Standard
+
+\end_layout
+
 \begin_layout Subsection
 \begin_inset LatexCommand \label{sub:Robocode-based-Investigations}
 
@@ -716,6 +732,10 @@ Shichel, Ziserman, and Sipper also investigated coevolution, but found that
  After a few generations in this configuration, they would switch to a coevoluti
 onary approach.
  
+\end_layout
+
+\begin_layout Standard
+
 \end_layout
 
 \begin_layout Section
@@ -2542,10 +2562,6 @@ Previous work has abandoned coevolution in favor of training against external
  emphasize firing bullets (accurate or not) and gradually transition to
  emphasizing accuracy when firing, after the targeting and scanning systems
  begin to mature.
-\end_layout
-
-\begin_layout Standard
-
 \end_layout
 
 \begin_layout Standard

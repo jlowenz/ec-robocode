@@ -42,6 +42,6 @@ while [ $i -lt $PARALLEL ]; do
 	    -DGP_HOME="${GP_HOME}"  \
 	    -server \
 	    -Dorg.jini.rio.groups="GPRobocode"  \
-	    -cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -id $2$i -battle ${GP_HOME}/config/sample.battle 2> /tmp/robo_$2$i &
+	    -cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -id $2$i -battle ${GP_HOME}/config/sample.battle 1>/dev/null 2>/dev/null &
 	i=$(($i + 1))
 done

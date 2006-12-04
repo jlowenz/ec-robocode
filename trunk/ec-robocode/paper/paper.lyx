@@ -3757,7 +3757,7 @@ Figure\InsetSpace ~
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3788,7 +3788,7 @@ Minimum, maximum and average fitness over 1200 generations
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3818,7 +3818,7 @@ Scan Efficiency over 1200 generations
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3848,7 +3848,7 @@ Firing Accuracy over 1200 Generations
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3878,7 +3878,7 @@ Bullet damage over 1200 Generations
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3908,7 +3908,7 @@ Distance travelled over 1200 Generations
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3940,7 +3940,7 @@ Minimum, maximum and average fitness over 600 generations after parameter
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3972,7 +3972,7 @@ Progress of the agents against the human-coded bots after parameter modification
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -4003,7 +4003,7 @@ Scan Efficiency after parameter modification
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -4034,7 +4034,7 @@ Firing Accuracy after parameter modification
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -4064,7 +4064,7 @@ Bullet damage after parameter modification
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -4251,7 +4251,6 @@ The behavior of the bots depends on the interaction of their state/perception
 \emph default
 \bar default
 \noun default
-\color default
  It is possible to get a particularly good configuration of GP Agents (e.g.,
  one in the corner, and the other able to see and attack) that particularly
  inflates our fitness.
@@ -4337,6 +4336,7 @@ One significant mistake that we appear to have made is in choosing to use
 \end_inset
 
 .
+ We believe this has adversely affected our results.
 \end_layout
 
 \begin_layout Section

@@ -3735,6 +3735,12 @@ Modify the driver program to limit the size of the trees.
  This will should reduce execution times and code bloat.
 \end_layout
 
+\begin_layout Standard
+There is no guarantee that any of these efforts would result in success.
+ However, should they all fail it would give greater creedence to the idea
+ that coevolution of Robocode players is impossible.
+\end_layout
+
 \begin_layout Section
 Conclusion
 \end_layout
@@ -3744,7 +3750,8 @@ We must regretfully admit that we did not prove our hypothesis.
  We were not able to evolve competitive Robocode tanks through coevolution
  using an exogenous fitness function.
  That said, this experiment did not show the hypothesis false.
- It is not apparent that coevolution of Robocode tanks cannot succeed.
+ It is not apparent that coevolution of competitive Robocode tanks cannot
+ succeed.
  We simply have not found a way to cause it to happen.
 \end_layout
 

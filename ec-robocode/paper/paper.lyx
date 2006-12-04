@@ -3703,6 +3703,10 @@ Dookious is the current World Champion for one-on-one combat in the unlimited
 Results and Discussion
 \end_layout
 
+\begin_layout Subsection
+Results
+\end_layout
+
 \begin_layout Standard
 \begin_inset Float figure
 wide true
@@ -3775,6 +3779,32 @@ status open
 
 \begin_layout Caption
 Firing Accuracy over 1200 Generations
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status open
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename bullet_damage1.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Bullet damage over 1200 Generations
 \end_layout
 
 \end_inset
@@ -3890,8 +3920,34 @@ Firing Accuracy after parameter modification
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status open
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename bullet_damage2.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Bullet damage after parameter modification
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
-Results
+Discussion
 \end_layout
 
 \begin_layout Subsubsection

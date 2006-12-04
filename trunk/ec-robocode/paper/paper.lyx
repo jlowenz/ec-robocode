@@ -4283,6 +4283,37 @@ Scan Efficiency after parameter modification
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status collapsed
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename firing2.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Firing Accuracy after parameter modification
+\begin_inset LatexCommand \label{fig:fire2}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Of more concern however, is the progress of the agents with respect to our
  set of human-coded opponents.
  Since the ultimate goal of this research is to evolve agents that can compete
@@ -4345,38 +4376,46 @@ subjective
 \end_layout
 
 \begin_layout Standard
-To address the decline: notice that at two
+To address the decline: notice that at around generation 200, the bullet
+ damage essentially stabilizes at around an average of 880 (see Figure\InsetSpace ~
+
+\begin_inset LatexCommand \ref{fig:bull2}
+
+\end_inset
+
+).
+ This in itself is not that great, since bullet damage is a good indication
+ of an ability to damage the other player, as we see in the progress graph.
+ If it stops going up - we're not learning how to do more damage.
+ But combine this with the distance travelled in Figure\InsetSpace ~
+
+\begin_inset LatexCommand \ref{fig:dist2}
+
+\end_inset
+
+, and we see that the agents begin to move more in the last 100 generations,
+ while scan efficiency drops some.
+ Firing accuracy is almost optimal, so it seems counterintuitive for a drop
+ in performance.
+ However, our reasoning is that the agents are not firing when moving (since
+ they haven't developed any predictive firing capabilities), but while moving
+ they give the human coded bots a chance to attack and cause more damage.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
-wide true
-sideways false
-status collapsed
-
-\begin_layout Standard
-\align center
-\begin_inset Graphics
-	filename firing2.pdf
-	scale 50
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Caption
-Firing Accuracy after parameter modification
-\begin_inset LatexCommand \label{fig:fire2}
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
+Finally, the loss of genetic material is basically a red herring.
+ Having tested the agents purported to beat one of the human-coded champion
+ bots, we found that it couldn't have been true.
+ This is quite unfortunate, because it points to some possible problems:
+ either Robocode itself has a bug that allows our agent to win every once
+ in a while given the stochastic initialization of rounds, or our modifications
+ of Robocode have introduced a similar bug.
+ Having seen and worked with the innards of Robocode, our money is that
+ therein lies the bug.
+ However, all is not lost, and our results are not completely void.
+ Compared to a number of the simpler hand coded bots (as recorded in our
+ progress battles log) our agents do win, and this has been verified by
+ running them interactively in Robocode.
 \end_layout
 
 \begin_layout Standard

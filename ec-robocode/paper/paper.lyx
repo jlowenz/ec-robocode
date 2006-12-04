@@ -3707,7 +3707,7 @@ Results and Discussion
 \begin_inset Float figure
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -3734,7 +3734,59 @@ Minimum, maximum and average fitness over 1200 generations
 \begin_inset Float figure
 wide true
 sideways false
-status collapsed
+status open
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename scan1.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Scan Efficiency over 1200 generations
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status open
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename firing1.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Firing Accuracy over 1200 Generations
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status open
 
 \begin_layout Standard
 \align center

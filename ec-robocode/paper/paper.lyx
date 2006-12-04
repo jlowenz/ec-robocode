@@ -3753,6 +3753,37 @@ First run
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status collapsed
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename fitness_1.pdf
+	scale 50
+	keepAspectRatio
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+\begin_inset LatexCommand \label{fig:fit1}
+
+\end_inset
+
+Minimum, maximum and average fitness over 1200 generations
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Figure\InsetSpace ~
 
 \begin_inset LatexCommand \ref{fig:fit1}
@@ -3864,37 +3895,6 @@ good
 
  genetic material being kept around (i.e.
  too-little elitism).
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide true
-sideways false
-status collapsed
-
-\begin_layout Standard
-\align center
-\begin_inset Graphics
-	filename fitness_1.pdf
-	scale 50
-	keepAspectRatio
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Caption
-\begin_inset LatexCommand \label{fig:fit1}
-
-\end_inset
-
-Minimum, maximum and average fitness over 1200 generations
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -4152,39 +4152,6 @@ The good news from these changes was that with only half the generations
 \end_layout
 
 \begin_layout Standard
-The first issue in question is the high frequency fluctuations in the maximum
- fitness; while the first run also exhibited fluctuations, they were not
- as pronounced.
- We have seen other coevolutionary results with high-frequency fluctuations
- (
-\begin_inset LatexCommand \cite{cliff95tracking,watson01coevolutionary}
-
-\end_inset
-
-), but never with as large an amplitude variation as seen here.
- Our primary explanation (again, after observing random agent behaviors
- from the last 100 generations) is that the scan efficiency component of
- the fitness function is the main culprit (see the similarities between
- Figures 
-\begin_inset LatexCommand \ref{fig:fit2}
-
-\end_inset
-
- and 
-\begin_inset LatexCommand \ref{fig:scan2}
-
-\end_inset
-
-), and the developed behavior of the agents indicates a scanning trait that
- initially scans only the first quadrant relative to the agent's position.
- If an opponent is detected during this scan, the robot usually turns to
- face the agent using the entire platform (i.e.
- body, turret and radar), fixes the radar in place, and then tracks the
- enemy (thus leading to low radar scan radians, but lots of enemy scan events).
- However, due the stochastic nature of the starting positions, 
-\end_layout
-
-\begin_layout Standard
 \begin_inset Float figure
 wide true
 sideways false
@@ -4217,6 +4184,42 @@ Minimum, maximum and average fitness over 600 generations after parameter
 \end_layout
 
 \begin_layout Standard
+The first issue in question is the high frequency fluctuations in the maximum
+ fitness; while the first run also exhibited fluctuations, they were not
+ as pronounced.
+ We have seen other coevolutionary results with high-frequency fluctuations
+ (
+\begin_inset LatexCommand \cite{cliff95tracking,watson01coevolutionary}
+
+\end_inset
+
+), but never with as large an amplitude variation as seen here.
+ Our primary explanation (again, after observing random agent behaviors
+ from the last 100 generations) is that the scan efficiency component of
+ the fitness function is the main culprit (see the similarities between
+ Figures 
+\begin_inset LatexCommand \ref{fig:fit2}
+
+\end_inset
+
+ and 
+\begin_inset LatexCommand \ref{fig:scan2}
+
+\end_inset
+
+), and the developed behavior of the agents indicates a scanning trait that
+ initially scans only the first quadrant relative to the agent's position.
+ If an opponent is detected during this scan, the robot usually turns to
+ face the agent using the entire platform (i.e.
+ body, turret and radar), fixes the radar in place, and then tracks the
+ enemy (thus leading to low radar scan radians, but lots of enemy scan events).
+ However, due the stochastic nature of the starting positions and orientations,
+ if an agent does not initially scan an opponent, it will often do nothing,
+ leading to a very low scanning efficiency.
+ 
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 wide true
 sideways false
@@ -4246,6 +4249,68 @@ Progress of the agents against the human-coded bots after parameter modification
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Of more concern however, is the progress of the agents with respect to our
+ set of human-coded opponents.
+ Since the ultimate goal of this research is to evolve agents that can compete
+ successfully, this is our 
+\begin_inset Quotes eld
+\end_inset
+
+real-world fitness
+\begin_inset Quotes erd
+\end_inset
+
+, or as Watson and Pollack make the distinction, our 
+\emph on
+objective
+\emph default
+ fitness 
+\begin_inset LatexCommand \cite{watson01coevolutionary}
+
+\end_inset
+
+
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+The 
+\emph on
+subjective
+\emph default
+ fitness would be our exogenous fitness.
+\end_layout
+
+\end_inset
+
+.
+ As Figure\InsetSpace ~
+
+\begin_inset LatexCommand \ref{fig:progress2}
+
+\end_inset
+
+ shows, while we have done better than the first run, we are still not doing
+ too well overall.
+ In fact, the graph shows a decline beginning around generation 475 and
+ continuing until the end.
+ What happened to the genetic material that allowed the agents around generation
+ 100 to defeat up to 5 of the progress bots? We believe that Robocode itself,
+ along with Figures 
+\begin_inset LatexCommand \ref{fig:bull2}
+
+\end_inset
+
+ and 
+\begin_inset LatexCommand \ref{fig:dist2}
+
+\end_inset
+
+ hold the answers.
+ 
 \end_layout
 
 \begin_layout Standard

@@ -4179,11 +4179,19 @@ Motion did not evolve well under the final fitness function since there
  was no explicit motivation to move.
 \end_layout
 
-\begin_layout Standard
-A relate
+\begin_layout Itemize
+like to back up a lot (that works in with scan efficiency)
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
+vibrate back and forth between 0 and ~35 degrees
+\end_layout
+
+\begin_layout Itemize
+get stuck a lot
+\end_layout
+
+\begin_layout Itemize
 
 \family roman
 \series medium
@@ -4193,40 +4201,8 @@ A relate
 \bar no
 \noun off
 \color none
-For example, motion.
- part of that is due to omissions in the F, such as failing to penalize
- wall hits.
-\end_layout
-
-\begin_layout Standard
-didn't succeed, not necessarily impossible
-\end_layout
-
-\begin_layout Standard
-while fitness has not converged, the behaviors seem to have coalesced into
- some subset.
- the behaviors may have converged, it's not clear.
-\end_layout
-
-\begin_layout Standard
-the agents don't seek out other agents - they rely on the stochasm of the
- round placements.
- this doesn't always work out, and bots will sit there until robocode arbitraril
-y kills them.
- a lot of robots sit and wait until somebody does something to them, and
- then they react in appropriate ways
-\end_layout
-
-\begin_layout Standard
-like to back up a lot (that works in with scan efficiency)
-\end_layout
-
-\begin_layout Standard
-vibrate back and forth between 0 and ~35 degrees
-\end_layout
-
-\begin_layout Standard
-get stuck a lot
+part of that is due to omissions in the F, such as failing to penalize wall
+ hits.
 \end_layout
 
 \begin_layout Standard
@@ -4240,10 +4216,20 @@ maybe the fitness doesn't emphasize the survival (in order to do MORE damage)
 \end_layout
 
 \begin_layout Standard
-i suppose out of 300 battles, it's possible to get a particularly good configura
-tion of our dumb bots (i.e.
- one in the corner, and the other able to see and attack) that particularly
- inflates our fitness.
+while fitness has not converged, the behaviors seem to have coalesced into
+ some subset.
+ the behaviors may have converged, it's not clear.
+\end_layout
+
+\begin_layout Standard
+The primary motivation for the use of an exogenous fitness function was
+ that we believed that it would enable us to instill combative behaviors
+ in the robots.
+ This does not appear to be the case.
+ In general, the agents don't seek out other agents; they rely on the stochasm
+ of the round placements.
+ Many of the robots sit and wait until somebody does something to them,
+ and then they react in appropriate ways.
  
 \family roman
 \series medium
@@ -4256,16 +4242,43 @@ tion of our dumb bots (i.e.
 The behavior of the bots depends on the interaction of their state/perception
  and their trees.
  Random runs produce different events that lead to different state histories.
- These can lead to wildly variable outcomes.
- but what does that say about the trees then - they are inherently unstable
- and brittle! at least brittle.
- the evolved behavior is maladapted to the environment.
- unless we are not reflecting the environment well enough in our function.
- which may be the root of our problems
+ This can lead to wildly variable outcomes.
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color default
+ It is possible to get a particularly good configuration of GP Agents (e.g.,
+ one in the corner, and the other able to see and attack) that particularly
+ inflates our fitness.
+ However, if the initial conditions do not inspire one robot or the other
+ to make a first action, the robots will sit there until Robocode arbitrarily
+ kills them.
 \end_layout
 
 \begin_layout Standard
-lack of state (no explicit memory) may be a contributing factor
+An implication of the observed results is the the behavior trees are very
+ brittle.
+ Small changes in the event histories
+\begin_inset Foot
+status open
+
+\begin_layout Standard
+Not to mention damage from crossover and mutation
+\end_layout
+
+\end_inset
+
+, can make a robot essentially non-functional.
+ A contributing factor to this might be that the GP Agents have no explicit
+ memory.
+ That is, they remember nothing before their most recent set of events and
+ measurements.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -4274,22 +4287,11 @@ question about lack of external bot capabilities driving fitness
 
 \begin_layout Standard
 question about coevolution succeeding in competitive environments with no
- outside influence...
+ outside influence.
 \end_layout
 
 \begin_layout Standard
-law of unintended consequences (lots of behaviors we could explain through
- elements of our fitness function) 
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-look it up
-\end_layout
-
-\end_inset
-
-.
+didn't succeed, not necessarily impossible
 \end_layout
 
 \begin_layout Standard
@@ -4302,7 +4304,10 @@ how to modify the fitness function to improve the behavior (conceptual model
 Found something done on IPD - interesting quote "Cooperative strategies
  don?t always maintain their dominance after the evolution of cooperation.
  This is due to the atrophying of their ability to retaliate against exploiters.
- There is no payo? to keeping your claws sharp if you never need them." 
+ There is no payo? to keeping your claws sharp if you never need them."
+\end_layout
+
+\begin_layout Standard
 \begin_inset Note Note
 status open
 
@@ -4313,6 +4318,25 @@ can't use this without a reference
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+One significant mistake that we appear to have made is in choosing to use
+ a single population.
+ The majority of the literature considers coevolution in the context of
+ multiple populations.
+ Because we were not using multiple populations, we could not use many of
+ the coevollutionary techniques that are described in 
+\begin_inset LatexCommand \cite{dejong2004iec}
+
+\end_inset
+
+, or 
+\begin_inset LatexCommand \cite{cliff95tracking}
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section

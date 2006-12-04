@@ -2814,7 +2814,7 @@ These scores are provided by Robocode.
 \emph off
 \bar no
 \noun off
-and 
+ and 
 \family default
 \series default
 \shape default
@@ -2834,8 +2834,8 @@ and
 \emph off
 \bar no
 \noun off
-are bonuses given by Robocode for killing the opponent by bullet or by ramming,
- respectively.
+ are bonuses given by Robocode for killing the opponent by bullet or by
+ ramming, respectively.
  The bonuses are also provided by Robocode.
 \end_layout
 
@@ -2926,7 +2926,7 @@ The
 \begin_inset Formula $F_{tweek}$
 \end_inset
 
-term is intended to give the robot some credit for moving, shooting, and
+ term is intended to give the robot some credit for moving, shooting, and
  scanning.
  The use of logarithms slows the growth of 
 \begin_inset Formula $F_{tweek}$
@@ -2976,7 +2976,7 @@ Since the
 \begin_inset Formula $F_{activity}$
 \end_inset
 
-is a constant 5.0
+ is a constant 5.0
 \end_layout
 
 \begin_layout Subsection
@@ -2988,7 +2988,7 @@ Initial Tree Creation
 \end_layout
 
 \begin_layout Standard
-We will generate tree's using Koza's 
+We generate tree's using Koza's 
 \emph on
 ramped half-and-half
 \emph default
@@ -3007,7 +3007,7 @@ ramped half-and-half
  FULL differs from the GROW algorithm by always choosing non-terminals in
  order to always generate full trees.
  Each tree in our forest-based genome can have it's own set of parameters
- (max/min depth), however in practice we will probably set them equal.
+ (max/min depth), however we set them all equal.
 \end_layout
 
 \begin_layout Subsubsection
@@ -3015,8 +3015,8 @@ Selection and Replacement
 \end_layout
 
 \begin_layout Standard
-We will select individuals using the ranked-order method.
- Replacement will be generational, with elitism 
+We select individuals using the ranked-order method.
+ Replacement is generational, with elitism 
 \begin_inset LatexCommand \cite{Sheppard:2006uq}
 
 \end_inset
@@ -3029,23 +3029,8 @@ We will select individuals using the ranked-order method.
 \end_inset
 
 .
- We reserve the right to tweak these parameters once we run some initial
- experiments.
-\end_layout
-
-\begin_layout Subsubsection
-\begin_inset LatexCommand \label{sub:Termination-Criteria}
-
-\end_inset
-
-Termination Criteria
-\end_layout
-
-\begin_layout Standard
-In our case, the termination criteria will be based on one of two conditions:
- fitness stops changing significantly over a given period of time (i.e.
- 20 generations), or we run out of time (lack of resources).
- 
+ As is the case in many evolutionary computation experiments, we have tweak
+ the parameters several times during our investigations.
 \end_layout
 
 \begin_layout Subsubsection
@@ -3532,7 +3517,7 @@ Several modification have been made to Robocode in order to integrate it
  to put the battle results into the space.
  Additional changes were necessary to collect data for the exogenous fitness
  function.
- Some small performance enhancements were also have been made.
+ Some small performance enhancements also have been made.
  The system configuration for our final run consisted of 15 hosts with a
  total of 59 processors.
  Using this configuration, processing one generation took between 30 and
@@ -3560,7 +3545,7 @@ In order to test our hypothesis, we periodically test the performance of
 
 \begin_layout Description
 Corners takes a defensive posture in a corner.
- It cans a small arc and fires if it detects the enemy.
+ It scans a small arc and fires if it detects the enemy.
 \end_layout
 
 \begin_layout Description
@@ -3570,12 +3555,13 @@ Crazy drives randomly over the battlefield hoping to avoid being hit.
 
 \begin_layout Description
 Fire spins its turret and fires when it detects an enemy.
- It remains stationary until hit, at which time it will move a small distance.
+ It remains stationary until hit, at which time it will move a small distance
+ either forward or backward.
 \end_layout
 
 \begin_layout Description
 RamFire pursues its opponent to ram them.
- Fires when it does ram.
+ Fires when it makes contact with the enemy.
 \end_layout
 
 \begin_layout Description
@@ -3616,7 +3602,8 @@ Komarious is the current Workd Champion for the Mini-bot class.
 \end_layout
 
 \begin_layout Description
-Dookious is the current World Champion in the unlimited class.
+Dookious is the current World Champion for one-on-one combat in the unlimited
+ class.
 \end_layout
 
 \begin_layout Section
@@ -3715,6 +3702,42 @@ The primary result we intend to report is the performance of our evolved
  agents against some set of human-coded Robocode agents.
  We will evaluate our agents periodically and report their progress (whether
  positive or negative) as a function of generation count.
+\end_layout
+
+\begin_layout Section
+Future Work
+\end_layout
+
+\begin_layout Standard
+Although this experiment was not immediately successful, it does point the
+ way towards many interesting future investigations.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Continue experimenting with the exogenous fitness function, the node set,
+ and the reproduction parameters to attempt to succeed with the coevolutionary
+ approach.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Incorporate the results from the progress measurement rounds into the selection
+ process.
+\end_layout
+
+\begin_layout Enumerate
+Modify the driver program to limit the size of the trees.
+ This will should reduce execution times and code bloat.
+\end_layout
+
+\begin_layout Section
+Conclusion
+\end_layout
+
+\begin_layout Standard
+It is not apparent that coevolution of Robocode tanks cannot succeed.
+ We simply have not found a way to cause it to happen.
 \end_layout
 
 \begin_layout Standard

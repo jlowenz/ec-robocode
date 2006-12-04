@@ -3833,7 +3833,7 @@ Bullet damage over 1200 Generations
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3915,7 +3915,7 @@ Progress of the agents against the human-coded bots after parameter modification
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3930,6 +3930,11 @@ status open
 
 \begin_layout Caption
 Scan Efficiency after parameter modification
+\begin_inset LatexCommand \label{fig:Scan-Efficiency-after}
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -3956,6 +3961,11 @@ status open
 
 \begin_layout Caption
 Firing Accuracy after parameter modification
+\begin_inset LatexCommand \label{fig:Firing-Accuracy-after}
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -3967,7 +3977,7 @@ Firing Accuracy after parameter modification
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -4052,12 +4062,18 @@ As was intended, the exogenous fitness function guides the evolution of
 \end_layout
 
 \begin_layout Standard
-The extremely large scan efficiency scores, and thus the dominance of scan
- efficiency over all other factors, was due to an unforseen development.
+Scanning efficiency was pushed up high due to its emphasis in the fitness,
+ therefore some observed scanning behavior is excellent if not always consistent.
+ However, the extremely large scan efficiency scores, and thus the dominance
+ of scan efficiency over all other factors, was due primarily to an unforseen
+ development.
  Robots learned to greatly reduce the turning of their radar and to seek
- their opponent primarily through body or turret motion.
- A large number of scan events divided by a small rotation value yeilds
- a very large efficiency bonus and a great fitness value.
+ their opponent largely through body motion.
+ Robots back up frequently, and others have been observed vibrating back
+ and forth.
+ In the fitness function, a large number of scan events divided by a small
+ cumulative rotation value yeilds a very large efficiency bonus and a great
+ fitness value.
  When we designed the final fitness function, 
 \family roman
 \series medium
@@ -4069,11 +4085,37 @@ The extremely large scan efficiency scores, and thus the dominance of scan
 \color none
 we believed a good scanning technique would produce at least 4 scan events
  per radar rotation.
+ As is evidenced by 
+\begin_inset LatexCommand \ref{fig:Scan-Efficiency-after}
+
+\end_inset
+
+, we were wrong.
  
 \end_layout
 
 \begin_layout Standard
-There we
+Another aspect of robot behavior that appears to have evolved well was shot
+ accuracy.
+ As is shown in 
+\begin_inset LatexCommand \ref{fig:Firing-Accuracy-after}
+
+\end_inset
+
+, on average the robots were hitting with between 80 and 90 percent of their
+ shots.
+ However, this did not mean that the robots developed any sort of robust
+ tracking algorithm, rather, they seem to be benefitting from immobile opponents.
+ If the opponent does not move, then it is trivial to hit it.
+\end_layout
+
+\begin_layout Standard
+Motion did not evolve well under the final fitness function since there
+ was no explicit motivation to move.
+\end_layout
+
+\begin_layout Standard
+A relate
 \end_layout
 
 \begin_layout Standard
@@ -4099,14 +4141,6 @@ didn't succeed, not necessarily impossible
 while fitness has not converged, the behaviors seem to have coalesced into
  some subset.
  the behaviors may have converged, it's not clear.
-\end_layout
-
-\begin_layout Standard
-scanning efficiency was pushed up high due to the emphasis in the fitness,
- therefore some observed scanning behavior is rather excellent (but not
- always consistent).
- also - firing accuracy is pushed up - but this tends prevent the bots from
- firing sometimes
 \end_layout
 
 \begin_layout Standard
@@ -4214,13 +4248,6 @@ can't use this without a reference
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-The primary result we intend to report is the performance of our evolved
- agents against some set of human-coded Robocode agents.
- We will evaluate our agents periodically and report their progress (whether
- positive or negative) as a function of generation count.
 \end_layout
 
 \begin_layout Section

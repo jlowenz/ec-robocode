@@ -26,7 +26,7 @@
 \paragraph_separation indent
 \defskip medskip
 \quotes_language english
-\papercolumns 1
+\papercolumns 2
 \papersides 1
 \paperpagestyle default
 \tracking_changes false
@@ -2555,8 +2555,8 @@ We have developed and tested several exogenous fitness functions in the
  hopes of finding one that guides our robots in the desired evolutionary
  direction.
  As was stated previously, we eschewed the endogenous Robocode score because
- it favors energy conservation and using it in a coevolutionary system leads
- to the medioce stable state.
+ it favors energy conservation in general and using it in a coevolutionary
+ system can easily lead to mediocre stable states.
  In this section we will describe the functions we tried, the motivation
  for each function, and, for the earlier functions, the observed outcome.
 \end_layout
@@ -2566,14 +2566,14 @@ The First Fitness Function
 \end_layout
 
 \begin_layout Standard
-Our first fitness function was based on the idea that we wanted the robots
- to shoot, and we wanted to not get shot.
- The equation was:
+Our initial fitness function was based on the idea that the robots should
+ shoot and not get shot.
+ Thus we formulated the simple equation:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula \[
-F=1.0\cdot b_{dodged}+1.0\cdot b_{fired}\]
+F=W_{d}\cdot b_{dodged}+W_{f}\cdot b_{fired}\]
 
 \end_inset
 
@@ -2582,12 +2582,29 @@ F=1.0\cdot b_{dodged}+1.0\cdot b_{fired}\]
 
 \begin_layout Standard
 Where 
-\begin_inset Formula $b_{fired}$
+\begin_inset Formula $b_{\mathit{fired}}$
 \end_inset
 
- is the count of bullets fired, and
-\begin_inset Formula \[
-b_{dodged}=b_{fired\; by\; opponent}-b_{hit\; by\; opponent}\]
+ is the count of bullets fired, 
+\begin_inset Formula $b_{dodged}$
+\end_inset
+
+ is defined in 
+\begin_inset LatexCommand \ref{eq:dodged}
+
+\end_inset
+
+, and 
+\begin_inset Formula $W_{d}=1$
+\end_inset
+
+ and 
+\begin_inset Formula $W_{f}=1$
+\end_inset
+
+
+\begin_inset Formula \begin{equation}
+b_{dodged}=b_{\mathit{fired\, by\, opponent}}-b_{hit\; by\; opponent}\label{eq:dodged}\end{equation}
 
 \end_inset
 
@@ -2596,13 +2613,14 @@ b_{dodged}=b_{fired\; by\; opponent}-b_{hit\; by\; opponent}\]
 
 \begin_layout Standard
 This fitness function was an absolute failure.
- It quickly lead to robots that shot wildly, but took no other action.
+ It quickly led to robots that shot wildly, but generally took no other
+ action.
  The 
 \begin_inset Formula $b_{dodged}$
 \end_inset
 
-term grew quickly because any errant shot gave the opponent a point for
- dodging, even if they did nothing.
+ term dominated the fitness value because any errant shot gave the opponent
+ a point for dodging, even if they did nothing.
  This function was quickly abandoned.
 \end_layout
 
@@ -2612,15 +2630,118 @@ The Second Fitness Function
 
 \begin_layout Standard
 With the second fitness function we attempted to coax our robots to include
- three additional desired behaviors.
- We wanted them to move, scan for their opponent, and avoid walls.
+ three additional desired behaviors: movement, enemy sensing, and wall avoidance.
  The function was:
-\begin_inset Formula \[
-F=1.5\cdot b_{fired}+1.0\cdot b_{dodged}-2.0\cdot W+0.1\cdot D\]
+\begin_inset Formula \begin{equation}
+F=\begin{array}{cc}
+W_{f}\cdot b_{fired}+W_{d}\cdot b_{dodged}+\\
+W_{h}\cdot h+W_{s}\cdot s+W_{m}\cdot m\end{array}\label{eq:fit2}\end{equation}
 
 \end_inset
 
- 
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $W_{f}=1.5$
+\end_inset
+
+, 
+\begin_inset Formula $W_{d}=1.0$
+\end_inset
+
+, 
+\begin_inset Formula $W_{h}=-2.0$
+\end_inset
+
+, 
+\begin_inset Formula $W_{s}=1.0$
+\end_inset
+
+, and 
+\begin_inset Formula $W_{m}=0.1$
+\end_inset
+
+ are the weights for bullets fired, bullets dodged, walls hit, number of
+ enemy scans, and distance travelled (movement) respectively, while the
+ new values 
+\begin_inset Formula $h$
+\end_inset
+
+, 
+\begin_inset Formula $s$
+\end_inset
+
+ and 
+\begin_inset Formula $m$
+\end_inset
+
+ are the number of registered wall hits, scans of the enemy and raw distance
+ travelled.
+ This fitness did improve upon the first, in that the bots learned to keep
+ moving (and move great distances at that), generally avoid walls, fire
+ all the time and spin their radars constantly.
+ They rapidly converged to this state, and didn't make much progress after
+ that.
+\end_layout
+
+\begin_layout Subsubsection
+The Third Fitness Function
+\end_layout
+
+\begin_layout Standard
+The third fitness function was the first to take Robocode wins into consideratio
+n.
+ It also adjusted the distance measurement to better compare values.
+ The 
+\begin_inset Formula $m$
+\end_inset
+
+ term in equation 
+\begin_inset LatexCommand \ref{eq:fit2}
+
+\end_inset
+
+ was replaced with:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+m=\frac{d_{robot}}{d_{robot}+d_{opponent}}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+a ratio of distance travelled relative to the total distance travelled of
+ each robot.
+ Thus, the weight was adjusted to 
+\begin_inset Formula $W_{m}=100$
+\end_inset
+
+.
+ The additional wins term took the form: 
+\begin_inset Formula $W_{w}\cdot w$
+\end_inset
+
+ where 
+\begin_inset Formula $w$
+\end_inset
+
+ was the number of times the robot won the battle (out of the 10 stochastic
+ rounds) and 
+\begin_inset Formula $W_{w}=100$
+\end_inset
+
+ as well.
+ This function also improved somewhat on the previous fitness, since it
+ deemphasized the distance and actually took into consideration whether
+ a robot beat the opponent.
+ However, the bots still converged to suboptimal behavior, which primarily
+ took the form of heading toward walls and firing all the time.
 \end_layout
 
 \begin_layout Subsubsection
@@ -2653,7 +2774,9 @@ is the contribution to fitness from the damage inflicted by the robot.
 
 \begin_layout Standard
 \begin_inset Formula \[
-F_{damage}=D_{bullet}+D_{ram}+B_{bullet}+B_{ram}+e_{bullet}D_{bullet}+e_{scan}D_{bullet}\]
+F_{damage}=\begin{array}{cc}
+D_{bullet}+D_{ram}+B_{bullet}+B_{ram}+\\
+e_{bullet}D_{bullet}+e_{scan}D_{bullet}\end{array}\]
 
 \end_inset
 
@@ -2824,8 +2947,10 @@ term is intended to give the robot some credit for moving, shooting, and
 
  score.
  It is defined as:
-\begin_inset Formula \[
-F_{tweek}=\ln\left(Shots\; Fired\right)+\ln\left(Scan\; Events\right)+\ln\left(Distance\; Traveled\right)\]
+\begin_inset Formula \begin{eqnarray*}
+F_{tweek} & = & \ln\left(Shots\; Fired\right)+\\
+ &  & \ln\left(Scan\; Events\right)+\\
+ &  & \ln\left(Distance\; Traveled\right)\end{eqnarray*}
 
 \end_inset
 
@@ -2960,7 +3085,7 @@ status open
 \begin_inset Tabular
 <lyxtabular version="3" rows="9" columns="3">
 <features>
-<column alignment="left" valignment="top" rightline="true" width="35col%">
+<column alignment="left" valignment="top" rightline="true" width="30col%">
 <column alignment="center" valignment="top" width="25col%">
 <column alignment="center" valignment="top" leftline="true" width="30col%">
 <row bottomline="true">
@@ -3244,7 +3369,7 @@ Maximum initial tree depth
 \begin_inset Text
 
 \begin_layout Standard
-Maximum tree depth after crossover/mutation
+Maximum tree depth after crossover & mutation
 \end_layout
 
 \end_inset
@@ -3328,7 +3453,12 @@ ns are necessary for each generation.
 \end_layout
 
 \begin_layout Standard
-The architecture we have developed is based on a simple master-worker pattern.
+The architecture we have developed (shown in Figure 
+\begin_inset LatexCommand \ref{fig:Simple-architecture-illustration}
+
+\end_inset
+
+) is based on a simple master-worker pattern.
  The workers consist of instances of Robocode that have been slightly modified.
  The master is a custom driver program.
  Communication between the master and the workers is conducted through a
@@ -3375,7 +3505,7 @@ The process repeats with the new population.
 
 \begin_layout Standard
 \begin_inset Float figure
-wide false
+wide true
 sideways false
 status open
 
@@ -3392,6 +3522,10 @@ status open
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{fig:Simple-architecture-illustration}
+
+\end_inset
+
 Simple architecture illustration
 \end_layout
 
@@ -3504,9 +3638,9 @@ Results
 
 \begin_layout Standard
 \begin_inset Float figure
-wide false
+wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3522,6 +3656,62 @@ status open
 
 \begin_layout Caption
 Minimum, maximum and average fitness over 1200 generations
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status collapsed
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename fitness_2.pdf
+	scale 50
+	keepAspectRatio
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Minimum, maximum and average fitness over 600 generations after parameter
+ modifications
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status collapsed
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename progress_2.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Progress of the agents against the human-coded bots.
+ Both the maximum number of bot types beaten and total percentage of agents
+ winning against a human coded bot are shown.
 \end_layout
 
 \end_inset

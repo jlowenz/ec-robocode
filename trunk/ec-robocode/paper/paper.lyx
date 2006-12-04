@@ -3029,12 +3029,23 @@ We select individuals using the ranked-order method.
 \end_inset
 
 .
- As is the case in many evolutionary computation experiments, we have tweak
+ As is the case in many evolutionary computation experiments, we have tweaked
  the parameters several times during our investigations.
+ The values are shown in Table\InsetSpace ~
+
+\begin_inset LatexCommand \ref{tab:Algorithm-parameters}
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsubsection
 Parameters
+\end_layout
+
+\begin_layout Standard
+Comparison of proposed and used:
 \end_layout
 
 \begin_layout Standard
@@ -3052,16 +3063,16 @@ Might want to compare proposed and used.
 
 \begin_layout Standard
 \begin_inset Float table
-placement h
-wide false
+wide true
 sideways false
 status open
 
 \begin_layout Standard
 \begin_inset Tabular
-<lyxtabular version="3" rows="9" columns="3">
+<lyxtabular version="3" rows="9" columns="4">
 <features>
-<column alignment="left" valignment="top" rightline="true" width="30col%">
+<column alignment="left" valignment="top" rightline="true" width="50col%">
+<column alignment="center" valignment="top" width="25col%">
 <column alignment="center" valignment="top" width="25col%">
 <column alignment="center" valignment="top" leftline="true" width="30col%">
 <row bottomline="true">
@@ -3083,6 +3094,17 @@ Parameter
 
 \series bold
 Proposed Value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\series bold
+First Run Value
 \end_layout
 
 \end_inset
@@ -3127,6 +3149,15 @@ footnotemark
 \end_inset
 
 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+24
 \end_layout
 
 \end_inset
@@ -3179,17 +3210,20 @@ See Section\InsetSpace ~
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+1000
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
-See Section\InsetSpace ~
-
-\begin_inset LatexCommand \ref{sub:Termination-Criteria}
-
-\end_inset
-
-
+600
 \end_layout
 
 \end_inset
@@ -3210,6 +3244,15 @@ Crossover rate
 
 \begin_layout Standard
 0.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+.8
 \end_layout
 
 \end_inset
@@ -3243,6 +3286,15 @@ Mutation rate
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+.2
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -3268,6 +3320,15 @@ Reproduction rate (direct copy of parents)
 
 \begin_layout Standard
 0.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+0
 \end_layout
 
 \end_inset
@@ -3301,6 +3362,15 @@ Top 10 percent
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Top agent
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -3317,6 +3387,15 @@ Top 2 members
 
 \begin_layout Standard
 Maximum initial tree depth
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+8
 \end_layout
 
 \end_inset
@@ -3355,6 +3434,15 @@ Maximum tree depth after crossover & mutation
 
 \begin_layout Standard
 10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+No limit
 \end_layout
 
 \end_inset
@@ -3483,7 +3571,7 @@ The process repeats with the new population.
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3611,7 +3699,7 @@ Dookious is the current World Champion for one-on-one combat in the unlimited
 
 \end_inset
 
-Results
+Results and Discussion
 \end_layout
 
 \begin_layout Standard
@@ -3690,6 +3778,169 @@ status collapsed
 Progress of the agents against the human-coded bots.
  Both the maximum number of bot types beaten and total percentage of agents
  winning against a human coded bot are shown.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Results
+\end_layout
+
+\begin_layout Subsubsection
+Fitness and progress scoring
+\end_layout
+
+\begin_layout Subsubsection
+Agent behavior
+\end_layout
+
+\begin_layout Subsubsection
+Evolution by fitness function
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+Ok.
+ Point 1 - the exogenous fitness function (obviously) drives the evolution
+ of the bots.
+ However we could not design a function that evolved a completely functional
+ bot.
+ some aspects of good behavior did appear, such as good scanning technique.but
+ other behaviors did not evolve well.
+ For example, motion.
+ part of that is due to omissions in the F, such as failing to penalize
+ wall hits.
+\end_layout
+
+\begin_layout Standard
+didn't succeed, not necessarily impossible
+\end_layout
+
+\begin_layout Standard
+while fitness has not converged, the behaviors seem to have coalesced into
+ some subset.
+ the behaviors may have converged, it's not clear.
+\end_layout
+
+\begin_layout Standard
+scanning efficiency was pushed up high due to the emphasis in the fitness,
+ therefore some observed scanning behavior is rather excellent (but not
+ always consistent).
+ also - firing accuracy is pushed up - but this tends prevent the bots from
+ firing sometimes
+\end_layout
+
+\begin_layout Standard
+the agents don't seek out other agents - they rely on the stochasm of the
+ round placements.
+ this doesn't always work out, and bots will sit there until robocode arbitraril
+y kills them.
+ a lot of robots sit and wait until somebody does something to them, and
+ then they react in appropriate ways
+\end_layout
+
+\begin_layout Standard
+like to back up a lot (that works in with scan efficiency)
+\end_layout
+
+\begin_layout Standard
+vibrate back and forth between 0 and ~35 degrees
+\end_layout
+
+\begin_layout Standard
+get stuck a lot
+\end_layout
+
+\begin_layout Standard
+maybe the fitness doesn't emphasize the survival (in order to do MORE damage)
+ enough Why would they? so they could dodge and stay alive long enough to
+ have a chance at the damaging the other guy but it wasn't important enough
+ to do that scan well - only fire when going to hit when they fire - it
+ really seems to be when they can hit the other guy but then they just continue
+ to exchange shots and do nothing to get out of the way e.g.
+ dookious and his wave movement crazy and his random movement
+\end_layout
+
+\begin_layout Standard
+i suppose out of 300 battles, it's possible to get a particularly good configura
+tion of our dumb bots (i.e.
+ one in the corner, and the other able to see and attack) that particularly
+ inflates our fitness.
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+The behavior of the bots depends on the interaction of their state/perception
+ and their trees.
+ Random runs produce different events that lead to different state histories.
+ These can lead to wildly variable outcomes.
+ but what does that say about the trees then - they are inherently unstable
+ and brittle! at least brittle.
+ the evolved behavior is maladapted to the environment.
+ unless we are not reflecting the environment well enough in our function.
+ which may be the root of our problems
+\end_layout
+
+\begin_layout Standard
+lack of state (no explicit memory) may be a contributing factor
+\end_layout
+
+\begin_layout Standard
+question about lack of external bot capabilities driving fitness
+\end_layout
+
+\begin_layout Standard
+question about coevolution succeeding in competitive environments with no
+ outside influence...
+\end_layout
+
+\begin_layout Standard
+law of unintended consequences (lots of behaviors we could explain through
+ elements of our fitness function) 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+look it up
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+how to modify the fitness function to improve the behavior (conceptual model
+ of fitness function defining how a battle should occur given our domain
+ knowledge)
+\end_layout
+
+\begin_layout Standard
+Found something done on IPD - interesting quote "Cooperative strategies
+ don?t always maintain their dominance after the evolution of cooperation.
+ This is due to the atrophying of their ability to retaliate against exploiters.
+ There is no payo? to keeping your claws sharp if you never need them." 
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+can't use this without a reference
 \end_layout
 
 \end_inset

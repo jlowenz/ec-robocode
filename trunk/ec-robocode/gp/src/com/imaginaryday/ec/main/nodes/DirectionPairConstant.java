@@ -6,6 +6,7 @@ import com.imaginaryday.util.VectorUtils;
 import org.jscience.mathematics.vectors.VectorFloat64;
 
 import java.util.Random;
+import java.util.Set;
 
 /**
  * <b>
@@ -51,8 +52,14 @@ public class DirectionPairConstant extends RoboNode {
         return p;
     }
 
+
+    @Override
+    public String toCodeString(Set<Class> imports) {
+        imports.add(VectorFloat64.class);
+        return super.toCodeString(imports);
+    }
     @Override
     protected String getConstructorParam() {
-        return "VectorFloat64.valueOf(" + p.first().getValue(0) + "," + p.first().getValue(1) + ")," + Boolean.toString(p.second());
+        return "VectorFloat64.valueOf(new double[] {" + p.first().getValue(0) + "," + p.first().getValue(1) + "})," + Boolean.toString(p.second());
     }
 }

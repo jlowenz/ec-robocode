@@ -35,4 +35,10 @@ public class VectorFromHeading extends RoboNode {
         double a = Stuff.clampZero(((Number)child[0].evaluate()).doubleValue());
         return VectorUtils.vecFromDir(a);
     }
+
+
+//    @Override
+//    public String toCodeString(Set<Class> imports) {
+//        return super.toCodeString(imports);
+//    }
 }

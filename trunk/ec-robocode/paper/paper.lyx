@@ -3748,9 +3748,114 @@ better
  
 \end_layout
 
+\begin_layout Subsubsection
+First run
+\end_layout
+
 \begin_layout Standard
 Figure\InsetSpace ~
 
+\begin_inset LatexCommand \ref{fig:fit1}
+
+\end_inset
+
+ illustrates the instantaneous maximum, average, and minimum fitness values
+ over the entire first run.
+ Note the interesting surge in overall fitness between generations 700--1000.
+ Figures 
+\begin_inset LatexCommand \ref{fig:scn1}
+
+\end_inset
+
+ and 
+\begin_inset LatexCommand \ref{fig:fir1}
+
+\end_inset
+
+, illustrate the scanning efficiency and firing accuracy, both important
+ aspects of the fitness, and they also indicate the same surge in capability,
+ as one would expect.
+ Bullet damage didn't show quite the same surge, but it is noticeable between
+ 800--1000.
+ The distance travelled showed the interesting property of converging around
+ 20K pixels.
+ This doesn't necessarily make sense, until one actually looks at the behavior
+ of the bots (which we do below).
+\end_layout
+
+\begin_layout Standard
+Unfortunately, the most important aspect of the first run is the figure
+ that is missing, the progress tests.
+ The reason it's missing is that there was nothing interesting to graph!
+ Only 8 out of 1200 generations produced a robot that beat 1 human coded
+ bot.
+ In other words, the first run was a failure.
+ 
+\end_layout
+
+\begin_layout Standard
+In observing the behavior of the robots throughout the last 200 generations
+ (done by randomly hand-picking agents and pitting them against a hand-coded
+ bot under interactive Robocode), it was apparent that while the fitness
+ hadn't exactly converged (although the slight downward trend is not encouraging
+), the agents' behaviors were 
+\emph on
+very
+\emph default
+ similar to one another, and the behavior was horrible.
+ As mentioned above, the fact that the distance metric converged under stochasti
+c initial conditions was puzzling.
+ However, the observed behavior indicated that the widespread tactic was
+ to immediately head for a wall, possibly scan for an opponent, and possibly
+ shoot.
+ Re-examining the Robocode source indicates that we were recording 
+\emph on
+desired
+\emph default
+ positional deltas, not 
+\emph on
+actual
+\emph default
+ potential deltas.
+ This problem is also present in the second run.
+ 
+\end_layout
+
+\begin_layout Standard
+After some thought (and definitely not enough analysis), we postulated that
+ this was due to a too-high mutation
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+The reason our initial setting of mutation was so high is that we were concerned
+ with the need to use a small population size.
+ A small population size may not have enough diversity, and a higher mutation
+ rate may help replace that deficiency.
+\end_layout
+
+\end_inset
+
+ and crossover rate
+\begin_inset Foot
+status collapsed
+
+\begin_layout Standard
+The crossover rate was also set higher due to the same logic.
+\end_layout
+
+\end_inset
+
+, and not enough 
+\begin_inset Quotes eld
+\end_inset
+
+good
+\begin_inset Quotes erd
+\end_inset
+
+ genetic material being kept around (i.e.
+ too-little elitism).
 \end_layout
 
 \begin_layout Standard
@@ -3902,6 +4007,134 @@ Distance travelled over 1200 Generations
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsubsection
+Second Run
+\end_layout
+
+\begin_layout Standard
+The failure of the first run prompted us to modify the algorithm parameters
+ to reduce the mutation significantly (closer to others' research parameters),
+ and slightly reduce the crossover rate.
+ We also reduced the initial tree depth, since we had experimented with
+ manually constructing very 
+\emph on
+simple
+\emph default
+ shallow trees by hand that could reliably defeat a reasonable portion of
+ the hand-coded bots.
+ 
+\end_layout
+
+\begin_layout Standard
+Finally, we augmented the traditional tree creation to support 
+\begin_inset Formula $n$
+\end_inset
+
+ generations of random tree creation before starting reproduction.
+ This augmentation is described below:
+\end_layout
+
+\begin_layout Enumerate
+Let 
+\begin_inset Formula $G=0$
+\end_inset
+
+ be the current generation, 
+\begin_inset Formula $R=0$
+\end_inset
+
+ be the current random generation, and 
+\begin_inset Formula $P$
+\end_inset
+
+ be the population size
+\end_layout
+
+\begin_layout Enumerate
+Generate initial random population of size 
+\begin_inset Formula $P$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Enumerate
+Evaluate the fitness of all individuals
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $G\leftarrow G+1$
+\end_inset
+
+ and 
+\begin_inset Formula $R\leftarrow R+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+While 
+\begin_inset Formula $R<R_{max}$
+\end_inset
+
+ do:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Pick the best 
+\begin_inset Formula $R$
+\end_inset
+
+ individuals from the current population
+\end_layout
+
+\begin_layout Enumerate
+Randomly create 
+\begin_inset Formula $P-R$
+\end_inset
+
+ new individuals
+\end_layout
+
+\begin_layout Enumerate
+Evaluate the fitness of all individuals
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $G\leftarrow G+1$
+\end_inset
+
+ and 
+\begin_inset Formula $R\leftarrow R+1$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Begin the standard GP algorithm
+\end_layout
+
+\begin_layout Standard
+While relatively simple, the idea was an attempt to bootstrap the population
+ with high-fitness random individuals and let evolution proceed with 
+\emph on
+less
+\emph default
+ mutation from that point onward.
+ All of this was based on our perception that we didn't have enough good
+ genetic material in the first place, and the genetic material we did have
+ wasn't being utilized well.
+\end_layout
+
+\begin_layout Standard
+The good news from these changes was that over only half the generations
+ of the first round, we achieved higher fitness, 
 \end_layout
 
 \begin_layout Standard

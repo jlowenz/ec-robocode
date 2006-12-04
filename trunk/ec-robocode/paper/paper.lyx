@@ -3711,7 +3711,7 @@ Results
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3738,7 +3738,7 @@ Minimum, maximum and average fitness over 1200 generations
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3764,7 +3764,7 @@ Scan Efficiency over 1200 generations
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3790,7 +3790,7 @@ Firing Accuracy over 1200 Generations
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3844,7 +3844,7 @@ Minimum, maximum and average fitness over 600 generations after parameter
 \begin_inset Float figure
 wide true
 sideways false
-status open
+status collapsed
 
 \begin_layout Standard
 \align center
@@ -3972,14 +3972,52 @@ Evolution by fitness function
 \bar no
 \noun off
 \color none
-Ok.
- Point 1 - the exogenous fitness function (obviously) drives the evolution
- of the bots.
- However we could not design a function that evolved a completely functional
- bot.
- some aspects of good behavior did appear, such as good scanning technique.but
- other behaviors did not evolve well.
- For example, motion.
+As was intended, the exogenous fitness function guides the evolution of
+ the robots.
+ However, it did not guide it in quite the direction we intended.
+ We could not design a fitness function that evolved a completely functional
+ robot.
+ Some aspects of good behavior did appear, such as good scanning techniques,
+ but other behaviors did not evolve well.
+ 
+\end_layout
+
+\begin_layout Standard
+The extremely large scan efficiency scores, and thus the dominance of scan
+ efficiency over all other factors, was due to an unforseen development.
+ Robots learned to greatly reduce the turning of their radar and to seek
+ their opponent primarily through body or turret motion.
+ A large number of scan events divided by a small rotation value yeilds
+ a very large efficiency bonus and a great fitness value.
+ When we designed the final fitness function, 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+we believed a good scanning technique would produce at least 4 scan events
+ per radar rotation.
+ 
+\end_layout
+
+\begin_layout Standard
+There we
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+For example, motion.
  part of that is due to omissions in the F, such as failing to penalize
  wall hits.
 \end_layout
@@ -4134,12 +4172,18 @@ Continue experimenting with the exogenous fitness function, the node set,
 \end_layout
 
 \begin_layout Enumerate
-Experiment with multiple population structures.
+Incorporate the results from the progress measurement rounds into the selection
+ process.
 \end_layout
 
 \begin_layout Enumerate
-Incorporate the results from the progress measurement rounds into the selection
- process.
+Replace the single population model with a dual population model and envestigate
+ the efficacy of the evaluation approaches specified in 
+\begin_inset LatexCommand \cite{dejong2004iec}
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Enumerate

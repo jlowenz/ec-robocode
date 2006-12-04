@@ -3068,6 +3068,7 @@ sideways false
 status open
 
 \begin_layout Standard
+\align center
 \begin_inset Tabular
 <lyxtabular version="3" rows="9" columns="4">
 <features>
@@ -3761,7 +3762,7 @@ Minimum, maximum and average fitness over 600 generations after parameter
 \begin_inset Float figure
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -3775,9 +3776,61 @@ status collapsed
 \end_layout
 
 \begin_layout Caption
-Progress of the agents against the human-coded bots.
+Progress of the agents against the human-coded bots after parameter modification.
  Both the maximum number of bot types beaten and total percentage of agents
  winning against a human coded bot are shown.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status open
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename scan2.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Scan Efficiency after parameter modification
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status open
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename firing2.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Firing Accuracy after parameter modification
 \end_layout
 
 \end_inset

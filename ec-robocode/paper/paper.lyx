@@ -935,7 +935,7 @@ standards
 
 \begin_layout Standard
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Standard
 Update these tables! Missing some nodes
@@ -950,7 +950,7 @@ Update these tables! Missing some nodes
 \begin_inset Float table
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -1063,7 +1063,7 @@ mult
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
@@ -1094,7 +1094,7 @@ div
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
@@ -1120,7 +1120,7 @@ div
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
@@ -1146,7 +1146,7 @@ div
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
@@ -1172,7 +1172,7 @@ div
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
@@ -1198,7 +1198,7 @@ div
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
@@ -1224,7 +1224,7 @@ div
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
@@ -1259,7 +1259,7 @@ if-then-else
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
@@ -1278,17 +1278,17 @@ First if
 \begin_inset Text
 
 \begin_layout Standard
-rand-for-type
+constant_boolean
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
-random 
-\begin_inset Formula $\tau$
+constant 
+\begin_inset Formula $\beta$
 \end_inset
 
  value
@@ -1302,17 +1302,17 @@ random
 \begin_inset Text
 
 \begin_layout Standard
-erc-for-type
+constant
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Standard
 constant 
-\begin_inset Formula $\tau$
+\begin_inset Formula $\lambda$
 \end_inset
 
  value
@@ -1345,7 +1345,7 @@ Standard nodes
 \begin_inset Float table
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \begin_inset Tabular
@@ -3624,11 +3624,12 @@ Several modification have been made to Robocode in order to integrate it
  Additional changes were necessary to collect data for the exogenous fitness
  function.
  Some small performance enhancements also have been made.
- The system configuration for our final run consisted of 15 hosts with a
+ The system configuration for our first run consisted of 15 hosts with a
  total of 59 processors.
  Using this configuration, processing one generation took between 30 and
  90 seconds.
- 
+ The number of processors used for the second run was slightly less, and
+ the generation times were in excess of two minutes.
 \end_layout
 
 \begin_layout Subsection

@@ -79,6 +79,7 @@ public class ExtractBots {
                 for (Class c : imports) cc.getClassPool().importPackage(c.getPackage().getName());
                 CtMethod turret = CtNewMethod.make(Modifier.PROTECTED,
                         node,
+                        
                         "initTurretTree",
                         new CtClass[0],
                         new CtClass[0],

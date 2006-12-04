@@ -3716,9 +3716,13 @@ Although this experiment was not immediately successful, it does point the
 
 \begin_layout Enumerate
 Continue experimenting with the exogenous fitness function, the node set,
- and the reproduction parameters to attempt to succeed with the coevolutionary
- approach.
+ population size, and the reproduction parameters to attempt to succeed
+ with the coevolutionary approach.
  
+\end_layout
+
+\begin_layout Enumerate
+Experiment with multiple population structures.
 \end_layout
 
 \begin_layout Enumerate
@@ -3736,7 +3740,11 @@ Conclusion
 \end_layout
 
 \begin_layout Standard
-It is not apparent that coevolution of Robocode tanks cannot succeed.
+We must regretfully admit that we did not prove our hypothesis.
+ We were not able to evolve competitive Robocode tanks through coevolution
+ using an exogenous fitness function.
+ That said, this experiment did not show the hypothesis false.
+ It is not apparent that coevolution of Robocode tanks cannot succeed.
  We simply have not found a way to cause it to happen.
 \end_layout
 

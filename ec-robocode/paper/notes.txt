@@ -23,5 +23,14 @@ test architecture
 
 results and analysis.
 
-	- speculation on the big drop-off
+	- describe what we are seeing, for completeness.
+	- speculation on the big drop-offs
+	- why is fitness so noisy
+	- why are fitnesses generally increasing, while progress is not.
+	- what can be done to improve the fitness function?
+		- inspire evasive action / dodging - was not successful originally.
+		- work on balance between survivala 
+	- are the trees brittle?
+	- no fitness atribution.
+	- 
 	

@@ -3775,10 +3775,18 @@ Figure\InsetSpace ~
 , illustrate the scanning efficiency and firing accuracy, both important
  aspects of the fitness, and they also indicate the same surge in capability,
  as one would expect.
- Bullet damage didn't show quite the same surge, but it is noticeable between
- 800--1000.
- The distance travelled showed the interesting property of converging around
- 20K pixels.
+ Bullet damage (see Figure 
+\begin_inset LatexCommand \ref{fig:bul1}
+
+\end_inset
+
+) didn't show quite the same surge, but it is noticeable between 800--1000.
+ The distance travelled (shown in Figure 
+\begin_inset LatexCommand \ref{fig:dist1}
+
+\end_inset
+
+) showed the interesting property of converging around 20K pixels.
  This doesn't necessarily make sense, until one actually looks at the behavior
  of the bots (which we do below).
 \end_layout
@@ -4133,8 +4141,47 @@ less
 \end_layout
 
 \begin_layout Standard
-The good news from these changes was that over only half the generations
- of the first round, we achieved higher fitness, 
+The good news from these changes was that with only half the generations
+ of the first round, we achieved higher fitness, better scan efficiency,
+ almost optimal firing accuracy, and just over 6.8 times the average bullet
+ damage.
+ The bad news is that since we augmented the algorithm and changed so many
+ parameters, it's quite impossible to tell what contributed to the overall
+ improvement.
+ There are, however, still some issues with the results of this run.
+\end_layout
+
+\begin_layout Standard
+The first issue in question is the high frequency fluctuations in the maximum
+ fitness; while the first run also exhibited fluctuations, they were not
+ as pronounced.
+ We have seen other coevolutionary results with high-frequency fluctuations
+ (
+\begin_inset LatexCommand \cite{cliff95tracking,watson01coevolutionary}
+
+\end_inset
+
+), but never with as large an amplitude variation as seen here.
+ Our primary explanation (again, after observing random agent behaviors
+ from the last 100 generations) is that the scan efficiency component of
+ the fitness function is the main culprit (see the similarities between
+ Figures 
+\begin_inset LatexCommand \ref{fig:fit2}
+
+\end_inset
+
+ and 
+\begin_inset LatexCommand \ref{fig:scan2}
+
+\end_inset
+
+), and the developed behavior of the agents indicates a scanning trait that
+ initially scans only the first quadrant relative to the agent's position.
+ If an opponent is detected during this scan, the robot usually turns to
+ face the agent using the entire platform (i.e.
+ body, turret and radar), fixes the radar in place, and then tracks the
+ enemy (thus leading to low radar scan radians, but lots of enemy scan events).
+ However, due the stochastic nature of the starting positions, 
 \end_layout
 
 \begin_layout Standard

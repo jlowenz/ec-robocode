@@ -283,10 +283,10 @@ As stated previously, Robocode is a programming game.
  Successfully shooting an enemy returns some energy.
  A typical Robocode match consists of ten combat scenarios with the contestants
  starting in random orientations.
- The Robocode distribution comes with a set of relatively simple robots,
- with advanced robots available online.
+ The Robocode distribution comes with a set of relatively simple bots, with
+ advanced bots available online.
  There is also a tournament system that allows developers to compete against
- other robots that have been submitted.
+ other bots that have been submitted.
 \end_layout
 
 \begin_layout Standard
@@ -314,9 +314,9 @@ advanced
 \end_layout
 
 \begin_layout Standard
-Each robot executes in its own thread and is event driven.
- The Robocode system synchronizes robot actions and sends messages to a
- robot when various events occur.
+Each bot executes in its own thread and is event driven.
+ The Robocode system synchronizes bot actions and sends messages to a bot
+ when various events occur.
  These events include:
 \end_layout
 
@@ -337,21 +337,21 @@ RobotCollision running into another robot
 \end_layout
 
 \begin_layout Description
-BulletHit hitting another robot with your bullet 
+BulletHit hitting another bot with your bullet 
 \end_layout
 
 \begin_layout Description
-BulletMiss missing any robot with your bullet
+BulletMiss missing any bot with your bullet
 \end_layout
 
 \begin_layout Standard
-A robot responds to an event with some combination of logic and action execution.
+A bot responds to an event with some combination of logic and action execution.
  Any actions are enqueued and subsequently take some time to execute.
  If another event occurs before the first set of actions is completed, the
  actions inspired by the second event are layered on top of the previous
  set and they execute together.
  This interaction between actions, events and the executed response of the
- robot makes designing Robocode robots by hand difficult.
+ bot makes designing Robocode bots by hand difficult.
 \end_layout
 
 \begin_layout Section
@@ -413,7 +413,7 @@ Uchibe and Asasa
 \end_inset
 
  were able to use coevolution to evolve both competitive and cooperative
- behaviors in soccer playing robots.
+ behaviors in soccer playing bots.
 \end_layout
 
 \begin_layout Standard
@@ -609,7 +609,7 @@ Eisenstein
  built his Robocode tank using a subsumption architecture that was evolved
  using a GA.
  Coevolution was attempted, but failed to produce any progress towards competiti
-ve robots.
+ve bots.
  Indeed, he says 
 \begin_inset Quotes eld
 \end_inset
@@ -618,15 +618,15 @@ after several generations, I found the population rife with catatonics.
 \begin_inset Quotes erd
 \end_inset
 
- The experiment proceeded using the standard Robocode robots plus one high-perfo
-rmance robot as the opposition.
+ The experiment proceeded using the standard Robocode bots plus one high-perform
+ance bot as the opposition.
  Eisenstein also explicitly points out that targeting behaviors were very
  hard to evolve.
  
 \end_layout
 
 \begin_layout Standard
-The robots were evolved in four, increasingly complex, environments.
+The bots were evolved in four, increasingly complex, environments.
 \end_layout
 
 \begin_layout Itemize
@@ -658,7 +658,7 @@ Multiple adversaries, multiple starting positions
 \end_layout
 
 \begin_layout Standard
-For the single adversary, single starting position case, robots that could
+For the single adversary, single starting position case, bots that could
  reliably defeat their opposition evolved quickly.
  However, as the complexity of the environment increased, success became
  less common.
@@ -703,7 +703,7 @@ A third experiment was performed by Shichel, Ziserman, and Sipper
 \end_inset
 
 .They chose to limit their investigation to a particular class of Robocode
- robot, the 
+ bot, the 
 \noun on
 Haiku bot
 \noun default
@@ -715,7 +715,7 @@ Haiku bot
  This had the extra benefit of allowing complex expressions since the the
  Haiku bot class places no limit on the number of parentheses (and thus
  the size of the expression).
- After completing the evolution process, the highest performing robot was
+ After completing the evolution process, the highest performing bot was
  entered into the Robocode Haiku Bot tournament.
  Remarkably, it finished third out of 27 contestants, where all other contestant
 s were hand-coded.
@@ -724,11 +724,11 @@ s were hand-coded.
 
 \begin_layout Standard
 Shichel, Ziserman, and Sipper also investigated coevolution, but found that
- the coevolved robots showed primitive behavior and were easily defeated
- by human-coded robots.
+ the coevolved bots showed primitive behavior and were easily defeated by
+ human-coded bots.
  To overcome the mediocre steady state that arose rapidly in Eisenstein's
  work, they propose in future work to bootstrap the evolutionary process
- with competition against human-coded robots.
+ with competition against human-coded bots.
  After a few generations in this configuration, they would switch to a coevoluti
 onary approach.
  
@@ -819,8 +819,8 @@ Representation
 The genome for an individual in the population consists of a forest of expressio
 n trees.
  Using our knowledge of the Robocode domain, we identified four primary
- tasks for the robot: manage movement, manage the radar, manage turret/targeting
-, and manage firing; thus, we require four separate controllers.
+ tasks for the bot: manage movement, manage the radar, manage turret/targeting,
+ and manage firing; thus, we require four separate controllers.
  To reduce the complexity of the problem somewhat, we assume that the "robotic
  platform" we are "executing" on accepts the following input from our controller
 s: a vector indicating movement, an angle relative to the heading for the
@@ -830,7 +830,7 @@ s: a vector indicating movement, an angle relative to the heading for the
  We believed this assumption would allow the algorithm to converge more
  quickly since it constrains the hyperspace of possible solutions; however,
  it may put an upper bound on the performance of the evolved agents; a deficienc
-y that could hinder an agent's capability to beat a human-coded robot.
+y that could hinder an agent's capability to beat a human-coded bot.
 \begin_inset Note Note
 status collapsed
 
@@ -1439,7 +1439,7 @@ isMoving
 \begin_inset Text
 
 \begin_layout Standard
-Is the robot moving?
+Is the bot moving?
 \end_layout
 
 \end_inset
@@ -1471,7 +1471,7 @@ currentVector
 \begin_inset Text
 
 \begin_layout Standard
-Where is the robot is currently going?
+Where is the bot is currently going?
 \end_layout
 
 \end_inset
@@ -1503,7 +1503,7 @@ isTurretMoving
 \begin_inset Text
 
 \begin_layout Standard
-Is the robot's turret moving?
+Is the bot's turret moving?
 \end_layout
 
 \end_inset
@@ -1567,7 +1567,7 @@ isRadarMoving
 \begin_inset Text
 
 \begin_layout Standard
-Is the robot's radar moving?
+Is the bot's radar moving?
 \end_layout
 
 \end_inset
@@ -1631,7 +1631,7 @@ energyLevel
 \begin_inset Text
 
 \begin_layout Standard
-The robot's current energy level.
+The bot's current energy level.
 \end_layout
 
 \end_inset
@@ -1699,7 +1699,7 @@ vectorToForwardWall
 \begin_inset Text
 
 \begin_layout Standard
-The vector to the wall directly in front of the robot.
+The vector to the wall directly in front of the bot.
 \end_layout
 
 \end_inset
@@ -1731,7 +1731,7 @@ vectorToNearestWall
 \begin_inset Text
 
 \begin_layout Standard
-The vector to the nearest wall, relative to the robot's heading.
+The vector to the nearest wall, relative to the bot's heading.
 \end_layout
 
 \end_inset
@@ -1763,7 +1763,7 @@ recentlyHitWall
 \begin_inset Text
 
 \begin_layout Standard
-Did the robot hit the wall since the last time this sensor was read?
+Did the bot hit the wall since the last time this sensor was read?
 \end_layout
 
 \end_inset
@@ -1795,7 +1795,7 @@ recentlyHitByBullet
 \begin_inset Text
 
 \begin_layout Standard
-Was the robot hit by a bullet since the last time this sensor was read?
+Was the bot hit by a bullet since the last time this sensor was read?
 \end_layout
 
 \end_inset
@@ -1827,7 +1827,7 @@ recentlyRammed
 \begin_inset Text
 
 \begin_layout Standard
-Was the robot rammed since the last time this sensor was read?
+Was the bot rammed since the last time this sensor was read?
 \end_layout
 
 \end_inset
@@ -1891,7 +1891,7 @@ bulletBearing
 \begin_inset Text
 
 \begin_layout Standard
-Where did the bullet come from (relative to robot heading when hit).
+Where did the bullet come from (relative to bot heading when hit).
 \end_layout
 
 \end_inset
@@ -1987,7 +1987,7 @@ rammerBearing
 \begin_inset Text
 
 \begin_layout Standard
-Where did the ramming robot come from (relative to robot heading when hit).
+Where did the ramming bot come from (relative to bot heading when hit).
 \end_layout
 
 \end_inset
@@ -2638,8 +2638,7 @@ nal resources, mutation will help since it's unlikely that all valid operations
 \end_layout
 
 \begin_layout Standard
-The mutation operator itself will consist of all four primary variations
- 
+The mutation operator itself consists of all four primary variations 
 \begin_inset LatexCommand \cite{Sheppard:2006fk}
 
 \end_inset
@@ -2662,7 +2661,7 @@ automatically
 \end_layout
 
 \begin_layout Standard
-The custom variation will be based on real-valued mutation, where the general
+The custom variation is based on real-valued mutation, where the general
  form is 
 \begin_inset Formula $x'=x+m$
 \end_inset
@@ -2721,15 +2720,15 @@ As mentioned previously, we believe the failures encountered with previous
  occurred due to the use of the natural endogenous fitness function: the
  score provided by Robocode.
  This score is based on various factors including: survival relative to
- other robots, last robot alive bonus, bullet damage to enemies, bullet
- kill bonus, ram damage to enemies, and ram kill bonus 
+ other bots, last bot alive bonus, bullet damage to enemies, bullet kill
+ bonus, ram damage to enemies, and ram kill bonus 
 \begin_inset LatexCommand \cite{Nelson:2006kx}
 
 \end_inset
 
 .
- Note that firing a bullet, getting hit by a bullet, ramming a robot (or
- getting rammed), and colliding with a wall all cause 
+ Note that firing a bullet, getting hit by a bullet, ramming a bot (or getting
+ rammed), and colliding with a wall all cause 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2738,8 +2737,8 @@ damage
 \end_inset
 
  in the form of reducing the overall energy level of the robot.
- When the energy level drops to zero, the robot is dead.
- Since robots in a coevolutionary environment start at about the same level
+ When the energy level drops to zero, the bot is dead.
+ Since bots in a coevolutionary environment start at about the same level
  with very primitive movement, firing, targeting and scanning skills, the
  most productive thing (i.e.
  the one generating the highest relative score) to do is sit still.
@@ -2756,7 +2755,7 @@ Tuning the Exogenous Fitness Function
 
 \begin_layout Standard
 We have developed and tested several exogenous fitness functions in the
- hopes of finding one that guides our robots in the desired evolutionary
+ hopes of finding one that guides our GP agents in the desired evolutionary
  direction.
  As was stated previously, we eschewed the endogenous Robocode score because
  it favors energy conservation in general and using it in a coevolutionary
@@ -2770,7 +2769,7 @@ The First Fitness Function
 \end_layout
 
 \begin_layout Standard
-Our initial fitness function was based on the idea that the robots should
+Our initial fitness function was based on the idea that the GP agents should
  shoot and not get shot.
  Thus we formulated the simple equation:
 \end_layout
@@ -2817,7 +2816,7 @@ b_{dodged}=b_{\mathit{fired\, by\, opponent}}-b_{hit\; by\; opponent}\label{eq:d
 
 \begin_layout Standard
 This fitness function was an absolute failure.
- It quickly led to robots that shot wildly, but generally took no other
+ It quickly led to agents that shot wildly, but generally took no other
  action.
  The 
 \begin_inset Formula $b_{dodged}$
@@ -2833,7 +2832,7 @@ The Second Fitness Function
 \end_layout
 
 \begin_layout Standard
-With the second fitness function we attempted to coax our robots to include
+With the second fitness function we attempted to coax our agents to include
  three additional desired behaviors: movement, enemy sensing, and wall avoidance.
  The function was:
 \begin_inset Formula \begin{equation}
@@ -2883,9 +2882,9 @@ where
 
  are the number of registered wall hits, scans of the enemy and raw distance
  travelled.
- This fitness did improve upon the first, in that the bots learned to keep
- moving (and move great distances at that), generally avoid walls, fire
- all the time and spin their radars constantly.
+ This fitness did improve upon the first, in that the agents learned to
+ keep moving (and move great distances at that), generally avoid walls,
+ fire all the time and spin their radars constantly.
  They rapidly converged to this state, and didn't make much progress after
  that.
 \end_layout
@@ -2921,7 +2920,7 @@ m=\frac{d_{robot}}{d_{robot}+d_{opponent}}\]
 
 \begin_layout Standard
 a ratio of distance travelled relative to the total distance travelled of
- each robot.
+ each agent.
  Thus, the weight was adjusted to 
 \begin_inset Formula $W_{m}=100$
 \end_inset
@@ -2944,7 +2943,7 @@ a ratio of distance travelled relative to the total distance travelled of
  This function also improved somewhat on the previous fitness, since it
  deemphasized the distance and actually took into consideration whether
  a robot beat the opponent.
- However, the bots still converged to suboptimal behavior, which primarily
+ However, the agents still converged to suboptimal behavior, which primarily
  took the form of heading toward walls and firing all the time.
 \end_layout
 
@@ -3139,7 +3138,7 @@ The
 \begin_inset Formula $F_{tweak}$
 \end_inset
 
- term is intended to give the robot some credit for moving, shooting, and
+ term is intended to give the agent some credit for moving, shooting, and
  scanning.
  The use of logarithms slows the growth of 
 \begin_inset Formula $F_{tweek}$
@@ -3175,7 +3174,7 @@ Since the
 \end_inset
 
  scores are scaled by the winning percentage, and wins is a Robocode-provided
- metric, it is possible for a robot that has a good
+ metric, it is possible for an agent that has a good
 \begin_inset Formula $F_{damage}$
 \end_inset
 
@@ -3188,7 +3187,7 @@ Since the
 \begin_inset Formula $F_{activity}$
 \end_inset
 
-, is added to a robot that moves, shoots, or scans during the battle.
+, is added to a bot that moves, shoots, or scans during the battle.
  The value of 
 \begin_inset Formula $F_{activity}$
 \end_inset
@@ -3838,15 +3837,23 @@ Monitoring Progress
 
 \begin_layout Standard
 In order to test our hypothesis, we periodically test the performance of
- our GP agents against human coded robots.
+ our GP agents against human-coded bots.
  These tests are conducted using the same test architecture, we simply generate
- new battles that pit our GP agents against the robots described below.
+ new battles that pit our GP agents against the bots described below.
  Although fitness values are calculated from these battles, they are not
  used in the selection process.
  Progress checks are performed after the fitness evaluations for every fifth
  generation.
- A total of 12 human-coded robots were used to test progress.
- These robots varied from the very simple to the current one-on-one World
+ A total of 12 human-coded 
+\begin_inset Quotes eld
+\end_inset
+
+progress bots
+\begin_inset Quotes erd
+\end_inset
+
+ were used to test progress.
+ These bots varied from the very simple to the current one-on-one World
  Champion.
 \end_layout
 
@@ -4020,21 +4027,21 @@ Figure\InsetSpace ~
 
 ) showed the interesting property of converging around 20K pixels.
  This doesn't necessarily make sense, until one actually looks at the behavior
- of the bots (which we do below).
+ of the GP agents (which we do below).
 \end_layout
 
 \begin_layout Standard
 Unfortunately, the most important aspect of the first run is the figure
  that is missing, the progress tests.
  The reason it's missing is that there was nothing interesting to graph!
- Only 8 out of 1200 generations produced a robot that beat 1 human coded
+ Only 8 out of 1200 generations produced an agent that beat 1 human-coded
  bot.
  In other words, the first run was a failure.
  
 \end_layout
 
 \begin_layout Standard
-In observing the behavior of the robots throughout the last 200 generations
+In observing the behavior of the agents throughout the last 200 generations
  (done by randomly hand-picking agents and pitting them against a hand-coded
  bot under interactive Robocode), it was apparent that while the fitness
  hadn't exactly converged (although the slight downward trend is not encouraging
@@ -4410,8 +4417,8 @@ The first issue in question is the high frequency fluctuations in the maximum
 
 ), and the developed behavior of the agents indicates a scanning trait that
  initially scans only the first quadrant relative to the agent's position.
- If an opponent is detected during this scan, the robot usually turns to
- face the agent using the entire platform (i.e.
+ If an opponent is detected during this scan, the agent usually turns to
+ face the enemy using the entire platform (i.e.
  body, turret and radar), fixes the radar in place, and then tracks the
  enemy (thus leading to low radar scan radians, but lots of enemy scan events).
  However, due the stochastic nature of the starting positions and orientations,
@@ -4600,7 +4607,7 @@ To address the decline: notice that at around generation 200, the bullet
  in performance.
  However, our reasoning is that the agents are not firing when moving (since
  they haven't developed any predictive firing capabilities), but while moving
- they give the human coded bots a chance to attack and cause more damage.
+ they give the human-coded bots a chance to attack and cause more damage.
 \end_layout
 
 \begin_layout Standard
@@ -4614,7 +4621,7 @@ Finally, the loss of genetic material is basically a red herring.
  Having seen and worked with the innards of Robocode, our money is that
  therein lies the bug.
  However, all is not lost, and our results are not completely void.
- Compared to a number of the simpler hand coded bots (as recorded in our
+ Compared to a number of the simpler human-coded bots (as recorded in our
  progress battles log) our agents do win, and this has been verified by
  running them interactively in Robocode.
 \end_layout
@@ -4717,7 +4724,7 @@ is
 \emph off
 \bar no
 \noun off
- guiding the evolution of the robots.
+ guiding the evolution of the GP agnets.
  However, it did not guide it in quite the direction we intended: unfortunately,
  we did not design a fitness function that evolved an effectively competitive
  agent.
@@ -4829,9 +4836,9 @@ stuck
 \bar no
 \noun off
 \color none
-Some portion of the movement faults are due in part from omissions in F,
- such as failing to penalize wall hits, while other seem to be cause by
- deficiencies in the representation; i.e.
+Some portion of the movement faults are due in part from omissions in the
+ fitness function, such as failing to penalize wall hits, while other seem
+ to be cause by deficiencies in the representation; i.e.
  the nodes do not provide the tools needed for the agents to fully determine
  their state and respond appropriately.
  Theoretically evolution should work around those limitations
@@ -4906,8 +4913,8 @@ On the other side of the coin (the negative side, if one does exist), the
  For example, it is possible to get a particularly good configuration of
  GP agents (i.e., one stuck in the corner and the other able to see and attack
  the first) that particularly inflates our fitness.
- However, if the initial conditions do not inspire one robot or the other
- to make a first action, the robots will sit there until Robocode arbitrarily
+ However, if the initial conditions do not inspire one agent or the other
+ to make a first action, the agents will sit there until Robocode arbitrarily
  kills them.
 \end_layout
 

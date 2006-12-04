@@ -4683,12 +4683,8 @@ Distance travelled after parameter modification
 Discussion
 \end_layout
 
-\begin_layout Subsubsection
-Fitness and progress scoring
-\end_layout
-
-\begin_layout Subsubsection
-Agent behavior
+\begin_layout Standard
+So, what means these results?
 \end_layout
 
 \begin_layout Subsubsection
@@ -4705,29 +4701,41 @@ Evolution by fitness function
 \bar no
 \noun off
 \color none
-As was intended, the exogenous fitness function guides the evolution of
- the robots.
- However, it did not guide it in quite the direction we intended.
- We could not design a fitness function that evolved a completely functional
- robot.
- Some aspects of good behavior did appear, such as good scanning techniques,
- but other behaviors did not evolve well.
- 
+As intended, the exogenous fitness function 
+\family default
+\series bold
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+is
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+ guiding the evolution of the robots.
+ However, it did not guide it in quite the direction we intended: unfortunately,
+ we did not design a fitness function that evolved an effectively competitive
+ agent.
+ Some aspects of good behavior did appear, such as efficient scanning enemy
+ scanning, but other behaviors did not evolve well or at all.
 \end_layout
 
 \begin_layout Standard
-Scanning efficiency was pushed up high due to its emphasis in the fitness,
- therefore some observed scanning behavior is excellent if not always consistent.
- However, the extremely large scan efficiency scores, and thus the dominance
- of scan efficiency over all other factors, was due primarily to an unforseen
- development.
- Robots learned to greatly reduce the turning of their radar and to seek
+Scanning efficiency was elevated due to its emphasis in the fitness, therefore
+ some observed scanning behavior is excellent if not always consistent.
+ However, the scan efficiency scores were much larger than expected (and
+ thus dominated all other factors) due primarily to an unforseen development:
+ agents learned to greatly reduce the movement of their radar and to seek
  their opponent largely through body motion.
- Robots back up frequently, and others have been observed vibrating back
- and forth.
- In the fitness function, a large number of scan events divided by a small
- cumulative rotation value yeilds a very large efficiency bonus and a great
- fitness value.
+ This allowed them to track and obtain scan events, while essentially never
+ rotating their scanner.
+ Future implementations of the fitness function will have to take this into
+ consideration.
  When we designed the final fitness function, 
 \family roman
 \series medium
@@ -4739,7 +4747,8 @@ Scanning efficiency was pushed up high due to its emphasis in the fitness,
 \color none
 we believed a good scanning technique would produce at least 4 scan events
  per radar rotation.
- As is evidenced by 
+ As evidenced by Figure\InsetSpace ~
+
 \begin_inset LatexCommand \ref{fig:scan2}
 
 \end_inset
@@ -4749,38 +4758,68 @@ we believed a good scanning technique would produce at least 4 scan events
 \end_layout
 
 \begin_layout Standard
-Another aspect of robot behavior that appears to have evolved well was shot
+Another aspect of agent behavior that appears to have evolved well is shot
  accuracy.
- As is shown in 
+ As shown in Figure\InsetSpace ~
+
 \begin_inset LatexCommand \ref{fig:fire2}
 
 \end_inset
 
-, on average the robots were hitting with between 80 and 90 percent of their
- shots.
- However, this did not mean that the robots developed any sort of robust
- tracking algorithm, rather, they seem to be benefitting from immobile opponents.
+, over the last 150 generations the agents were hitting with an average
+ of 80 percent of their shots.
+ However, this does not mean that the agents developed any sort of robust
+ targeting algorithm; rather, they seemed to be benefitting from immobile
+ opponents.
  If the opponent does not move, then it is trivial to hit it.
+ Also, they'd only have to fire a few shots to get a good efficiency.
+ However, this tactic is balanced by the need to do actual damage.
 \end_layout
 
 \begin_layout Standard
-Motion did not evolve well under the final fitness function since there
- was no explicit motivation to move.
+Motion is an agent behavior that did not evolve so well under the final
+ fitness function since there was no explicit motivation to move.
+ In general, the agents
 \end_layout
 
 \begin_layout Itemize
-like to back up a lot (that works in with scan efficiency)
+liked to back up a lot (that works in with scan efficiency and bullet damage,
+ since as they back up, they can full-body track an opponent and fire at
+ the same time)
 \end_layout
 
 \begin_layout Itemize
-vibrate back and forth between 0 and ~35 degrees
+vibrate back and forth between 0 and ~35 degrees (scanning that arc without
+ moving the radar)
 \end_layout
 
 \begin_layout Itemize
-get stuck a lot
+get stuck a lot (no explicit sensor or memory indicating 
+\begin_inset Quotes eld
+\end_inset
+
+stuckness
+\begin_inset Quotes erd
+\end_inset
+
+)
 \end_layout
 
+\begin_deeper
 \begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+stuck
+\begin_inset Quotes erd
+\end_inset
+
+ can be defined as against the wall, in a corner, or against an opponent
+ that prevents them from turning or moving in their desired direction
+\end_layout
+
+\end_deeper
+\begin_layout Standard
 
 \family roman
 \series medium
@@ -4790,36 +4829,58 @@ get stuck a lot
 \bar no
 \noun off
 \color none
-part of that is due to omissions in the F, such as failing to penalize wall
- hits.
+Some portion of the movement faults are due in part from omissions in F,
+ such as failing to penalize wall hits, while other seem to be cause by
+ deficiencies in the representation; i.e.
+ the nodes do not provide the tools needed for the agents to fully determine
+ their state and respond appropriately.
+ Theoretically evolution should work around those limitations
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\SpecialChar \ldots{}
+ but in our experiment, that doesn't work due to an incomplete fitness function.
 \end_layout
 
 \begin_layout Standard
-maybe the fitness doesn't emphasize the survival (in order to do MORE damage)
- enough Why would they? so they could dodge and stay alive long enough to
- have a chance at the damaging the other guy but it wasn't important enough
- to do that scan well - only fire when going to hit when they fire - it
- really seems to be when they can hit the other guy but then they just continue
- to exchange shots and do nothing to get out of the way e.g.
- dookious and his wave movement crazy and his random movement
+For example, maybe the fitness doesn't emphasize the survival enough.
+ Why should it? Quite possibly so the agents can dodge and stay alive long
+ enough to have a chance at damaging the opponent.
+ When observing the best evolved agents against the best human-coded bots
+ it becomes painfully obvious: e.g.
+ dookious and his wave movement continuously moves and accurately fires
+ at an agent that for half the time will not attempt to dodge the bullets;
+ and there are sufficient nodes to determine that information and react
+ in some manner.
 \end_layout
 
 \begin_layout Standard
-while fitness has not converged, the behaviors seem to have coalesced into
- some subset.
- the behaviors may have converged, it's not clear.
+The primary motivation for using an exogenous fitness function was to enable
+ us to instill combative behaviors in the robots.
+ We did not succeed in our ambitious goal.
+ However, we must state clearly that our agents are 
+\series bold
+not
+\series default
+ catatonic (as reported by others, i.e.
+ Eisenstein 
+\begin_inset LatexCommand \cite{Eisenstein:2003wd}
+
+\end_inset
+
+).
+ While in general our agents don't seek out other agents and rely on the
+ stochasm of the round placements, some will react in appropriate ways if
+ they scan an opponent or are attacked, and this does enable them to beat
+ some very simple human-coded bots.
 \end_layout
 
 \begin_layout Standard
-The primary motivation for the use of an exogenous fitness function was
- that we believed that it would enable us to instill combative behaviors
- in the robots.
- This does not appear to be the case.
- In general, the agents don't seek out other agents; they rely on the stochasm
- of the round placements.
- Many of the robots sit and wait until somebody does something to them,
- and then they react in appropriate ways.
- 
+
 \family roman
 \series medium
 \shape up
@@ -4828,10 +4889,12 @@ The primary motivation for the use of an exogenous fitness function was
 \bar no
 \noun off
 \color none
-The behavior of the bots depends on the interaction of their state/perception
- and their trees.
- Random runs produce different events that lead to different state histories.
- This can lead to wildly variable outcomes.
+On the other side of the coin (the negative side, if one does exist), the
+ behavior of the bots depends on the interaction of their state/perceptions
+ and their trees, which is obvious, but random runs can produce different
+ events that lead to different state histories.
+ Thus, for our agents and fitness function, we see this lead to wildly variable
+ outcomes.
 
 \family default
 \series default
@@ -4840,20 +4903,24 @@ The behavior of the bots depends on the interaction of their state/perception
 \emph default
 \bar default
 \noun default
- It is possible to get a particularly good configuration of GP Agents (e.g.,
- one in the corner, and the other able to see and attack) that particularly
- inflates our fitness.
+ For example, it is possible to get a particularly good configuration of
+ GP agents (i.e., one stuck in the corner and the other able to see and attack
+ the first) that particularly inflates our fitness.
  However, if the initial conditions do not inspire one robot or the other
  to make a first action, the robots will sit there until Robocode arbitrarily
  kills them.
 \end_layout
 
+\begin_layout Subsubsection
+Agent behavior
+\end_layout
+
 \begin_layout Standard
-An implication of the observed results is the the behavior trees are very
- brittle.
- Small changes in the event histories
+An implication of the observed results is that the behavior generated by
+ the trees is very brittle.
+ Small changes in the event histories 
 \begin_inset Foot
-status open
+status collapsed
 
 \begin_layout Standard
 Not to mention damage from crossover and mutation
@@ -4861,12 +4928,56 @@ Not to mention damage from crossover and mutation
 
 \end_inset
 
-, can make a robot essentially non-functional.
- A contributing factor to this might be that the GP Agents have no explicit
- memory.
+, can make an agent essentially non-functional.
+ We believe this is evidenced by the fact that the min fitness is always
+ very close to zero.
+ One contributing factor to this phenomenon (hinted at above) is that the
+ GP agents have no explicit memory.
  That is, they remember nothing before their most recent set of events and
  measurements.
  
+\end_layout
+
+\begin_layout Standard
+One aspect of agent behavior we can't explain is the similarity among individual
+s at the end of the run.
+ We saw this effect in both runs, even when the mutation rate was high.
+ The only explanation we have for now is that the fitness drives the scan
+ efficiency so hard that an early high-performing radar tree is elevated
+ and becomes the only genetic trait left to the population.
+\end_layout
+
+\begin_layout Subsubsection
+Our deficiencies
+\end_layout
+
+\begin_layout Standard
+One significant mistake that we appear to have made is in choosing to use
+ a single population.
+ The majority of the literature considers coevolution in the context of
+ multiple populations.
+ Because we were not using multiple populations, we could not use many of
+ the coevollutionary techniques that are described in 
+\begin_inset LatexCommand \cite{dejong2004iec}
+
+\end_inset
+
+, or 
+\begin_inset LatexCommand \cite{cliff95tracking}
+
+\end_inset
+
+.
+ We believe this has adversely affected our results.
+\end_layout
+
+\begin_layout Standard
+Talk about progress monitoring ala cliff\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Subsubsection
+Questions
 \end_layout
 
 \begin_layout Standard
@@ -4908,26 +5019,6 @@ can't use this without a reference
 
 \end_layout
 
-\begin_layout Standard
-One significant mistake that we appear to have made is in choosing to use
- a single population.
- The majority of the literature considers coevolution in the context of
- multiple populations.
- Because we were not using multiple populations, we could not use many of
- the coevollutionary techniques that are described in 
-\begin_inset LatexCommand \cite{dejong2004iec}
-
-\end_inset
-
-, or 
-\begin_inset LatexCommand \cite{cliff95tracking}
-
-\end_inset
-
-.
- We believe this has adversely affected our results.
-\end_layout
-
 \begin_layout Section
 Future Work
 \end_layout
@@ -4940,7 +5031,7 @@ Although this experiment was not immediately successful, it does point the
 
 \begin_layout Enumerate
 Continue experimenting with the exogenous fitness function, the node set,
- population size, and the reproduction parameters to attempt to succeed
+ population size, and the reproduction parameters in an attempt to succeed
  with the coevolutionary approach.
  
 \end_layout
@@ -4951,9 +5042,14 @@ Incorporate the results from the progress measurement rounds into the selection
 \end_layout
 
 \begin_layout Enumerate
-Replace the single population model with a dual population model and envestigate
+Replace the single population model with a dual population model and investigate
  the efficacy of the evaluation approaches specified in 
 \begin_inset LatexCommand \cite{dejong2004iec}
+
+\end_inset
+
+ or 
+\begin_inset LatexCommand \cite{Bader-Natal:2005fk}
 
 \end_inset
 

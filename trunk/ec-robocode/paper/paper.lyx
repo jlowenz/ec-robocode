@@ -4252,6 +4252,37 @@ Progress of the agents against the human-coded bots after parameter modification
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status collapsed
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename scan2.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Scan Efficiency after parameter modification
+\begin_inset LatexCommand \label{fig:scan2}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Of more concern however, is the progress of the agents with respect to our
  set of human-coded opponents.
  Since the ultimate goal of this research is to evolve agents that can compete
@@ -4314,34 +4345,7 @@ subjective
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
-wide true
-sideways false
-status collapsed
-
-\begin_layout Standard
-\align center
-\begin_inset Graphics
-	filename scan2.pdf
-	scale 50
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Caption
-Scan Efficiency after parameter modification
-\begin_inset LatexCommand \label{fig:scan2}
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
+To address the decline: notice that at two
 \end_layout
 
 \begin_layout Standard

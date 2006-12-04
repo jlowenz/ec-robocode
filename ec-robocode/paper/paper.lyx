@@ -69,7 +69,7 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-One of the most intriquing ideas in AI is that of learning through self-play.
+One of the most intriguing ideas in AI is that of learning through self-play.
  Self-play, or 
 \begin_inset Quotes eld
 \end_inset
@@ -185,7 +185,7 @@ status collapsed
 \begin_layout Standard
 The "mediocre stable state" is a state where the population consists of
  members who do absolutely nothing.
- This phenemonen occurs because every action away from the initial condition
+ This phenomenon occurs because every action away from the initial condition
  incurs a cost.
  Thus, the starting state it is a local optima for all contestants.
 \end_layout
@@ -252,7 +252,7 @@ The problem we are investigating is whether or not one can use coevolution
  to develop agents that can compete successfully against human-coded agents
  in a Robocode battle.
  One aspect of this problem is how we can avoid producing a mediocre stable
- state; a failure in that respect will result in non-competive robots.
+ state; a failure in that respect will result in non-competitive robots.
  We had hypothesized that by using genetic programming and coevolution with
  an exogenous fitness function (to motivate the robots to avoid the mediocre
  stable state), we 
@@ -398,7 +398,7 @@ Floreano, Nolfi and Mondada
 
 \end_inset
 
- found that competive coevolution can generate efficient chasing and escaping
+ found that competitive coevolution can generate efficient chasing and escaping
  strategies in a predator/prey environment.
  They also found that this capability evolved even more quickly than "simple"
  wall avoidance They postulate that competitive coevolution generates solutions
@@ -442,8 +442,8 @@ mediocre stable state.
  not be stressed enough to improve; on the other hand, if the environment
  is too hard members will be too stressed; this can lead to low fitness
  and make it difficult to progress.
- They concluded that open-ended coevolution is not necessarily synomous
- with a purely competive framework.
+ They concluded that open-ended coevolution is not necessarily synonymous
+ with a purely competitive framework.
  Instead, it's necessary to provide a mixture of competitive and cooperative
  pressures in order to avoid the mediocre stable state.
 \end_layout
@@ -488,8 +488,8 @@ In
  by the agent.
  The base endogenous score was then modified: positively for good acts,
  negatively for bad acts.
- By using this exogenous fitness function they were able to induce the aggresive
- behavior that they desired.
+ By using this exogenous fitness function they were able to induce the aggressiv
+e behavior that they desired.
 \end_layout
 
 \begin_layout Subsection
@@ -588,7 +588,7 @@ Robocode-based Investigations
 \end_layout
 
 \begin_layout Standard
-There have been several projects which have attempted to evolve robocode
+There have been several projects which have attempted to evolve Robocode
  combatants.
  
 \begin_inset LatexCommand \cite{Eisenstein:2003wd,Hong:2004rr,Shichel:2005eu}
@@ -644,7 +644,7 @@ status collapsed
 
 \begin_layout Standard
 Multiple adversaries means that a combination of pre-defined tanks were
- faught.
+ fought.
  Combat was still one-on-one.
 \end_layout
 
@@ -716,7 +716,7 @@ Haiku bot
  Haiku bot class places no limit on the number of parentheses (and thus
  the size of the expression).
  After completing the evolution process, the highest performing robot was
- entered into the Robocode Haiku Bot tournamemt.
+ entered into the Robocode Haiku Bot tournament.
  Remarkably, it finished third out of 27 contestants, where all other contestant
 s were hand-coded.
  
@@ -806,18 +806,9 @@ motivated
 \end_layout
 
 \begin_layout Standard
-The following subsections describe the high-level aspects of our proposed
- experiment, including the representation, operators, evaluation, initial
- algorithm configuration, and some notes on the planned execution environment.
-\end_layout
-
-\begin_layout Standard
-As stated previously, our system is essentially open-ended, unless a member
- of the population is able to always defeat all opposition, both evolved
- and human-designed.
- Since this is not likely, the experiment will be terminated after some
- number of generations.
- The exact number will depend on our processing speed.
+The following subsections describe the high-level aspects of our experiment,
+ including the representation, operators, evaluation, algorithm configuration,
+ and the execution environment.
 \end_layout
 
 \begin_layout Subsection
@@ -833,13 +824,13 @@ n trees.
  To reduce the complexity of the problem somewhat, we assume that the "robotic
  platform" we are "executing" on accepts the following input from our controller
 s: a vector indicating movement, an angle relative to the heading for the
- radar dir, an angle relative to the heading for the turret direction, and
- a boolean/energy pair indicating whether to fire and how much energy the
- bullet should have.
- We believe this assumption will allow the algorithm to converge more quickly
- since it constrains the hyperspace of possible solutions; however, it may
- put an upper bound on the performance of the evolved agents; a deficiency
- that could hinder an agent's capability to beat a human-coded robot.
+ radar direction, an angle relative to the heading for the turret direction,
+ and a boolean/energy pair indicating whether to fire and how much energy
+ the bullet should have.
+ We believed this assumption would allow the algorithm to converge more
+ quickly since it constrains the hyperspace of possible solutions; however,
+ it may put an upper bound on the performance of the evolved agents; a deficienc
+y that could hinder an agent's capability to beat a human-coded robot.
 \begin_inset Note Note
 status collapsed
 
@@ -854,7 +845,7 @@ diagram of robotic platform and inputs to existing controller from GP forest
 
 \begin_layout Standard
 Each executable tree is recursively constructed of functions (or non-terminals,
- as we prefer) of various arity, and non-terminals with 0 arity.
+ as we prefer) of various arity, and terminals with 0 arity.
  The nodes (both terminals and non-terminals) are strongly typed, after
  an adaptation of strongly-typed genetic programming described in 
 \begin_inset LatexCommand \cite{montana93strongly}
@@ -3556,7 +3547,7 @@ Monitoring Progress
 \begin_layout Standard
 In order to test our hypothesis, we periodically test the performance of
  our GP agents against human coded robots.
- These tests are conducted using the same test achitecture, we simply generate
+ These tests are conducted using the same test architecture, we simply generate
  new battles that pit our GP agents against the robots described below.
  Although fitness values are calculated from these battles, they are not
  used in the selection process.
@@ -3592,7 +3583,7 @@ SpinBot drives in a circle and fires when it detects its opponent.
 \end_layout
 
 \begin_layout Description
-Tracker spins its turret to scan for the oppoent.
+Tracker spins its turret to scan for the opponent.
  When the opponent is detected, it moves towards the other robot by some
  random amount.
  It fires when the opponent remains in its firing arc for several clock

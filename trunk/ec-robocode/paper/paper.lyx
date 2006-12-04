@@ -2759,8 +2759,8 @@ Our current exogenous fitness function emphasizes the damage inflicted on
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula \[
-F=\frac{wins}{10}\cdot\left(F_{damage}+F_{tweek}\right)+F_{activity}\]
+\begin_inset Formula \begin{equation}
+F=\frac{wins}{10}\cdot\left(F_{damage}+F_{tweak}\right)+F_{activity}\label{eq:final_fitness}\end{equation}
 
 \end_inset
 
@@ -2926,7 +2926,7 @@ e_{scan}=\frac{Scan\; Events-revs}{4\cdot revs}\]
 
 \begin_layout Standard
 To compute the efficiency metrics and 
-\begin_inset Formula $F_{tweek}$
+\begin_inset Formula $F_{tweak}$
 \end_inset
 
 , Robocode was modified to record the number of shots, the number of hits,
@@ -2936,7 +2936,7 @@ To compute the efficiency metrics and
 
 \begin_layout Standard
 The 
-\begin_inset Formula $F_{tweek}$
+\begin_inset Formula $F_{tweak}$
 \end_inset
 
  term is intended to give the robot some credit for moving, shooting, and
@@ -2971,7 +2971,7 @@ Since the
 \end_inset
 
  and 
-\begin_inset Formula $F_{tweek}$
+\begin_inset Formula $F_{tweak}$
 \end_inset
 
  scores are scaled by the winning percentage, and wins is a Robocode-provided
@@ -2980,7 +2980,7 @@ Since the
 \end_inset
 
  and 
-\begin_inset Formula $F_{tweek}$
+\begin_inset Formula $F_{tweak}$
 \end_inset
 
  to have its fitness zeroed by losses.
@@ -3725,10 +3725,39 @@ Results
 \end_layout
 
 \begin_layout Standard
+After some experimentation, we ran two runs using the fitness defined in
+ equation\InsetSpace ~
+
+\begin_inset LatexCommand \ref{eq:final_fitness}
+
+\end_inset
+
+.
+ The first run covered 1200 generations, the second run covered only 600
+ generations (due to time constraints).
+ Although the second run was shorter, the fitness values obtained and the
+ progress statistics are 
+\begin_inset Quotes eld
+\end_inset
+
+better
+\begin_inset Quotes erd
+\end_inset
+
+ in general.
+ 
+\end_layout
+
+\begin_layout Standard
+Figure\InsetSpace ~
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -3743,6 +3772,10 @@ status collapsed
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{fig:fit1}
+
+\end_inset
+
 Minimum, maximum and average fitness over 1200 generations
 \end_layout
 
@@ -3755,7 +3788,7 @@ Minimum, maximum and average fitness over 1200 generations
 \begin_inset Float figure
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -3769,6 +3802,10 @@ status collapsed
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{fig:scn1}
+
+\end_inset
+
 Scan Efficiency over 1200 generations
 \end_layout
 
@@ -3795,6 +3832,10 @@ status open
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{fig:fir1}
+
+\end_inset
+
 Firing Accuracy over 1200 Generations
 \end_layout
 
@@ -3821,6 +3862,10 @@ status open
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{fig:bul1}
+
+\end_inset
+
 Bullet damage over 1200 Generations
 \end_layout
 
@@ -3833,7 +3878,7 @@ Bullet damage over 1200 Generations
 \begin_inset Float figure
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -3847,6 +3892,10 @@ status collapsed
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{fig:dist1}
+
+\end_inset
+
 Distance travelled over 1200 Generations
 \end_layout
 
@@ -3874,6 +3923,10 @@ status open
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{fig:fit2}
+
+\end_inset
+
 Minimum, maximum and average fitness over 600 generations after parameter
  modifications
 \end_layout
@@ -3887,7 +3940,7 @@ Minimum, maximum and average fitness over 600 generations after parameter
 \begin_inset Float figure
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -3901,6 +3954,10 @@ status collapsed
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{fig:progress2}
+
+\end_inset
+
 Progress of the agents against the human-coded bots after parameter modification.
  Both the maximum number of bot types beaten and total percentage of agent
  wins against bots are shown.
@@ -3915,7 +3972,7 @@ Progress of the agents against the human-coded bots after parameter modification
 \begin_inset Float figure
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -3930,7 +3987,7 @@ status collapsed
 
 \begin_layout Caption
 Scan Efficiency after parameter modification
-\begin_inset LatexCommand \label{fig:Scan-Efficiency-after}
+\begin_inset LatexCommand \label{fig:scan2}
 
 \end_inset
 
@@ -3961,7 +4018,7 @@ status open
 
 \begin_layout Caption
 Firing Accuracy after parameter modification
-\begin_inset LatexCommand \label{fig:Firing-Accuracy-after}
+\begin_inset LatexCommand \label{fig:fire2}
 
 \end_inset
 
@@ -3977,7 +4034,7 @@ Firing Accuracy after parameter modification
 \begin_inset Float figure
 wide true
 sideways false
-status collapsed
+status open
 
 \begin_layout Standard
 \align center
@@ -3991,6 +4048,10 @@ status collapsed
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{fig:bull2}
+
+\end_inset
+
 Bullet damage after parameter modification
 \end_layout
 
@@ -4017,6 +4078,10 @@ status open
 \end_layout
 
 \begin_layout Caption
+\begin_inset LatexCommand \label{fig:dist2}
+
+\end_inset
+
 Distance travelled after parameter modification
 \end_layout
 
@@ -4086,7 +4151,7 @@ Scanning efficiency was pushed up high due to its emphasis in the fitness,
 we believed a good scanning technique would produce at least 4 scan events
  per radar rotation.
  As is evidenced by 
-\begin_inset LatexCommand \ref{fig:Scan-Efficiency-after}
+\begin_inset LatexCommand \ref{fig:scan2}
 
 \end_inset
 
@@ -4098,7 +4163,7 @@ we believed a good scanning technique would produce at least 4 scan events
 Another aspect of robot behavior that appears to have evolved well was shot
  accuracy.
  As is shown in 
-\begin_inset LatexCommand \ref{fig:Firing-Accuracy-after}
+\begin_inset LatexCommand \ref{fig:fire2}
 
 \end_inset
 

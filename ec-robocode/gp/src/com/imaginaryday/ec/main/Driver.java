@@ -118,7 +118,7 @@ public class Driver implements Runnable {
     private Date endDate;
 
     private static DecimalFormat df = new DecimalFormat("00");
-    private int numGenerations = 1024;
+    private int numGenerations = 600;
     private int numRandomGenerations = 24;
     private int generationCount = 0;
     private int treeDepth = 5;

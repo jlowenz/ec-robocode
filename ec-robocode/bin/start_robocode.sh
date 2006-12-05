@@ -20,15 +20,26 @@ done
 export CLASSPATH="${CLASSPATH}"
 #echo $CLASSPATH
 
+blah() {
+    nohup nice -n20 java -Djava.security.policy=${GP_HOME}/bin/.java.policy \
+         -Djava.util.logging.config.file=${GP_HOME}/config/jini.logging \
+	 -DGP_HOME="${GP_HOME}"  \
+	 -server \
+	 -Dorg.jini.rio.groups="GPRobocode"  \
+	 -cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -id $2$i -battle ${GP_HOME}/config/sample.battle >$NAME 2>&1
+}
+
+if [[ $HOME = "/" ]]; then
+	HOME="/tmp"
+fi
+
 i=0
 while [ $i -lt $PARALLEL ]; do
     echo "starting on $HOSTNAME..."
     NAME=$HOME/robo$2$i.log
-    nice -n20 java -Djava.security.policy=${GP_HOME}/bin/.java.policy \
-        -Djava.util.logging.config.file=${GP_HOME}/config/jini.logging \
-	    -DGP_HOME="${GP_HOME}"  \
-	    -server \
-	    -Dorg.jini.rio.groups="GPRobocode"  \
-	    -cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -id $2$i -battle ${GP_HOME}/config/sample.battle 2>>$NAME 1>>$NAME &
-	i=$(($i + 1))
+    blah &
+    echo "return status $?"
+    i=$(($i + 1))
 done
+
+

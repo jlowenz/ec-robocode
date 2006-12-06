@@ -147,27 +147,6 @@ public class GPBattleResults implements Entry {
                 .append(fitness2).toString();
     }
 
-    public String getSummary() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("    vs. ").append(robot2);
-        sb.append(" F: ").append(fitness1).append("|").append(fitness2);
-        sb.append(" R: ").append(rank1).append("|").append(rank2);
-        sb.append(" Sc: ").append(score1).append("|").append(score2);
-        sb.append(" Su: ").append(survival1).append("|").append(survival2);
-        sb.append(" Lsb: ").append(lastSurvivorBonus1).append("|").append(lastSurvivorBonus2);
-        sb.append(" Bd: ").append(bulletDamage1).append("|").append(bulletDamage2);
-        sb.append(" Bdb: ").append(bulletDamageBonus1).append("|").append(bulletDamageBonus2);
-        sb.append(" Rd: ").append(ramDamage1).append("|").append(ramDamage2);
-        sb.append(" Rdb: ").append(ramDamageBonus1).append("|").append(ramDamageBonus2);
-        sb.append(" Bf: ").append(numBulletsFired1).append("|").append(numBulletsFired2);
-        sb.append(" Bh: ").append(numBulletHits1).append("|").append(numBulletHits2);
-        sb.append(" Dt: ").append(distanceTravelled1).append("|").append(distanceTravelled2);
-        sb.append(" Se: ").append(numScanEvents1).append("|").append(numScanEvents2);
-        sb.append(" Sr: ").append(scanRadians1).append("|").append(scanRadians2);
-        sb.append(" Wh: ").append(numWallsHit1).append("|").append(numWallsHit2);
-        return sb.toString();
-    }
-
     public String getSummary_CSV() {
       StringBuilder sb = new StringBuilder();
         sb.append(generation).append(',').append(robot1).append(',').append(robot2);
@@ -187,7 +166,8 @@ public class GPBattleResults implements Entry {
         sb.append(',').append(scanRadians1).append(',').append(scanRadians2);
         sb.append(',').append(numWallsHit1).append(',').append(numWallsHit2);
         sb.append(',').append(firsts1).append(',').append(firsts2);
-        sb.append(',').append(seconds1).append(',').append(seconds2);        
+        sb.append(',').append(seconds1).append(',').append(seconds2);
+	    sb.append(",").append(battleLength1).append(",").append(battleLength2);			    
         return sb.toString();
     }
 }

@@ -34,6 +34,7 @@ public class GPBattleResults implements Entry {
     public Double scanRadians1;
     public Integer firsts1;
     public Integer seconds1;
+    public Integer battleLength1;
 
 
     public Integer rank2;
@@ -52,6 +53,7 @@ public class GPBattleResults implements Entry {
     public Double scanRadians2;
     public Integer firsts2;
     public Integer seconds2;
+    public Integer battleLength2;
 
 
     public GPBattleResults() {
@@ -85,6 +87,7 @@ public class GPBattleResults implements Entry {
         this.scanRadians1 = results1.getScanRadians();
         this.firsts1 = results1.getFirsts();
         this.seconds1 = results1.getSeconds();
+        this.battleLength1 = results1.getBattleLength();
 
 
         this.rank2 = results2.getRank();
@@ -103,7 +106,7 @@ public class GPBattleResults implements Entry {
         this.scanRadians2 = results2.getScanRadians();
         this.firsts2 = results2.getFirsts();
         this.seconds2 = results2.getSeconds();
-
+        this.battleLength2 = results2.getBattleLength();
 
         System.err.println(this);
     }

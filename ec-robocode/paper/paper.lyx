@@ -3261,7 +3261,12 @@ Parameters
 \end_layout
 
 \begin_layout Standard
-Comparison of proposed and used:
+Comparison of proposed and used parameters is shown in Table 
+\begin_inset LatexCommand \ref{tab:Algorithm-parameters}
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -3290,7 +3295,7 @@ status open
 <features>
 <column alignment="left" valignment="top" rightline="true" width="50col%">
 <column alignment="center" valignment="top" width="25col%">
-<column alignment="center" valignment="top" width="25col%">
+<column alignment="center" valignment="top" leftline="true" width="25col%">
 <column alignment="center" valignment="top" leftline="true" width="30col%">
 <row bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
@@ -3353,19 +3358,6 @@ Population Size
 
 \begin_layout Standard
 100
-\begin_inset ERT
-status collapsed
-
-\begin_layout Standard
-
-
-\backslash
-footnotemark
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \end_inset
@@ -3416,12 +3408,7 @@ Maximum Generations
 \begin_inset Text
 
 \begin_layout Standard
-See Section\InsetSpace ~
-
-\begin_inset LatexCommand \ref{sub:Termination-Criteria}
-
-\end_inset
-
+Until convergence\SpecialChar \ldots{}
 
 \end_layout
 
@@ -3696,7 +3683,7 @@ Algorithm parameters
 
 \begin_layout Standard
 \begin_inset ERT
-status collapsed
+status open
 
 \begin_layout Standard
 
@@ -3705,7 +3692,7 @@ status collapsed
 footnotetext{The population size is so small due to the nature of the evaluation
 : there will be $
 \backslash
-frac{n^2}{2}$ matches, where a match consists of 10 combat scenarios.
+frac{n(n-1)}{2}+n$ matches, where a match consists of 10 combat scenarios.
  Thus, the total number of game "runs" per generation will be 50000, and
  if each run takes .5 seconds, it's still 6.9 cpu hours per generation.}
 \end_layout
@@ -4522,6 +4509,66 @@ Firing Accuracy after parameter modification
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status collapsed
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename bullet_damage2.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+\begin_inset LatexCommand \label{fig:bull2}
+
+\end_inset
+
+Bullet damage after parameter modification
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status collapsed
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename dist_travelled2.pdf
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+\begin_inset LatexCommand \label{fig:dist2}
+
+\end_inset
+
+Distance travelled after parameter modification
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Of more concern however, is the progress of the agents with respect to our
  set of human-coded opponents.
  Since the ultimate goal of this research is to evolve agents that can compete
@@ -4626,72 +4673,12 @@ Finally, the loss of genetic material is basically a red herring.
  running them interactively in Robocode.
 \end_layout
 
-\begin_layout Standard
-\begin_inset Float figure
-wide true
-sideways false
-status collapsed
-
-\begin_layout Standard
-\align center
-\begin_inset Graphics
-	filename bullet_damage2.pdf
-	scale 50
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Caption
-\begin_inset LatexCommand \label{fig:bull2}
-
-\end_inset
-
-Bullet damage after parameter modification
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide true
-sideways false
-status collapsed
-
-\begin_layout Standard
-\align center
-\begin_inset Graphics
-	filename dist_travelled2.pdf
-	scale 50
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Caption
-\begin_inset LatexCommand \label{fig:dist2}
-
-\end_inset
-
-Distance travelled after parameter modification
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Subsection
 Discussion
 \end_layout
 
 \begin_layout Standard
-So, what means these results?
+So, what do these results mean?
 \end_layout
 
 \begin_layout Subsubsection
@@ -4859,17 +4846,17 @@ For example, maybe the fitness doesn't emphasize the survival enough.
  enough to have a chance at damaging the opponent.
  When observing the best evolved agents against the best human-coded bots
  it becomes painfully obvious: e.g.
- dookious and his wave movement continuously moves and accurately fires
- at an agent that for half the time will not attempt to dodge the bullets;
- and there are sufficient nodes to determine that information and react
- in some manner.
+ Dookious continuously moves in a wave movement and accurately fires at
+ an evolved agent that for more than half the time will not attempt to dodge
+ the bullets; and there are sufficient nodes to determine that information
+ and react in some manner.
 \end_layout
 
 \begin_layout Standard
 The primary motivation for using an exogenous fitness function was to enable
  us to instill combative behaviors in the robots.
  We did not succeed in our ambitious goal.
- However, we must state clearly that our agents are 
+ However, we must state that our agents are 
 \series bold
 not
 \series default
@@ -4880,10 +4867,10 @@ not
 \end_inset
 
 ).
- While in general our agents don't seek out other agents and rely on the
- stochasm of the round placements, some will react in appropriate ways if
- they scan an opponent or are attacked, and this does enable them to beat
- some very simple human-coded bots.
+ While in general our agents don't always seek out other agents and instead
+ rely on the stochasm of the round placements, some will react in appropriate
+ ways if they scan an opponent or are attacked, and this does enable them
+ to beat some very simple human-coded bots.
 \end_layout
 
 \begin_layout Standard
@@ -4952,6 +4939,7 @@ s at the end of the run.
  The only explanation we have for now is that the fitness drives the scan
  efficiency so hard that an early high-performing radar tree is elevated
  and becomes the only genetic trait left to the population.
+ It seems a form of convergence, and it probably is, but only 
 \end_layout
 
 \begin_layout Subsubsection
@@ -4962,14 +4950,16 @@ Our deficiencies
 One significant mistake that we appear to have made is in choosing to use
  a single population.
  The majority of the literature considers coevolution in the context of
- multiple populations.
- Because we were not using multiple populations, we could not use many of
- the coevollutionary techniques that are described in 
+ multiple populations often performing two different roles but with each
+ affecting the others fitness landscape.
+ Because we were not using multiple populations, it wasn't apparent how
+ we could make use of many of the coevolutionary techniques that are described
+ in 
 \begin_inset LatexCommand \cite{dejong2004iec}
 
 \end_inset
 
-, or 
+ or 
 \begin_inset LatexCommand \cite{cliff95tracking}
 
 \end_inset
@@ -4979,51 +4969,95 @@ One significant mistake that we appear to have made is in choosing to use
 \end_layout
 
 \begin_layout Standard
-Talk about progress monitoring ala cliff\SpecialChar \ldots{}
-
+In Cliff and Miller's paper, they discuss issues and techniques that seem
+ to directly apply to our issues and observations, for example:
 \end_layout
 
-\begin_layout Subsubsection
-Questions
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+Instantaneous fitness tells us little
+\begin_inset Quotes erd
+\end_inset
+
+---Essentially, it's not clear that simply plotting the instantaneous fitness
+ at every generation is sufficient to garner the information we need to
+ determine success or failure of the evolution.
+ They present the term 
+\begin_inset Quotes eld
+\end_inset
+
+fitness ambiguities
+\begin_inset Quotes erd
+\end_inset
+
+ to refer to situations where one may be able to interpret results as both
+ success or failure, but is unable to know definitively.
+ This arises due to the 
+\begin_inset Quotes eld
+\end_inset
+
+Red Queen effect
+\begin_inset Quotes erd
+\end_inset
+
+: the fitness landscape continuously changes as a result of the populations
+ simultaneous changes within that landscape.
+\end_layout
+
+\begin_layout Itemize
+CIAO: the Current Individual vs.
+ Ancestral Opponents measure.
+ This is a mechanism that directly mirrors its name: evaluate the current
+ population of individuals against its past set of opponents, generally
+ up to some 
+\begin_inset Formula $n$
+\end_inset
+
+ generations prior.
+ This can give indications about whether the evolution is actually progressing
+ or degressing.
 \end_layout
 
 \begin_layout Standard
-question about lack of external bot capabilities driving fitness
-\end_layout
-
-\begin_layout Standard
-question about coevolution succeeding in competitive environments with no
- outside influence.
-\end_layout
-
-\begin_layout Standard
-didn't succeed, not necessarily impossible
-\end_layout
-
-\begin_layout Standard
-how to modify the fitness function to improve the behavior (conceptual model
- of fitness function defining how a battle should occur given our domain
- knowledge)
-\end_layout
-
-\begin_layout Standard
-Found something done on IPD - interesting quote "Cooperative strategies
- don?t always maintain their dominance after the evolution of cooperation.
- This is due to the atrophying of their ability to retaliate against exploiters.
- There is no payo? to keeping your claws sharp if you never need them."
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Standard
-can't use this without a reference
-\end_layout
+If we had known more about some of the issues with coevolution that have
+ plagued researchers in the past, like focussing 
+\begin_inset LatexCommand \cite{watson01coevolutionary}
 
 \end_inset
 
+, disengagement, and learning-and-forgetting 
+\begin_inset LatexCommand \cite{Bader-Natal:2005fk}
 
+\end_inset
+
+, we may have been more careful of monitoring progress which would have
+ provided more opportunities for exploring the parameter space.
+\end_layout
+
+\begin_layout Subsubsection
+Our Open Questions
+\end_layout
+
+\begin_layout Enumerate
+Can coevolution in general succeed in multi-dimensional one-population competiti
+ve environments without outside influence?
+\end_layout
+
+\begin_layout Enumerate
+Does this environment 
+\emph on
+need
+\emph default
+ the insertion of external human-coded bots to drive fitness adjustments?
+\end_layout
+
+\begin_layout Enumerate
+How do we modify the fitness function to improve behavior? Essentially,
+ it seems that one might think of the fitness function as defining how a
+ battle should occur given our domain knowledge.
+ Thus, the question is how to encode the modelled outcome?
 \end_layout
 
 \begin_layout Section
@@ -5068,10 +5102,15 @@ Modify the driver program to limit the size of the trees.
  This will should reduce execution times and code bloat.
 \end_layout
 
+\begin_layout Enumerate
+Address some of the open questions\SpecialChar \ldots{}
+
+\end_layout
+
 \begin_layout Standard
 There is no guarantee that any of these efforts would result in success.
- However, should they all fail it would give greater creedence to the idea
- that coevolution of Robocode players is impossible.
+ However, should they all fail it would give greater credence to the idea
+ that coevolution of a human-competitive Robocode agent is not possible.
 \end_layout
 
 \begin_layout Section

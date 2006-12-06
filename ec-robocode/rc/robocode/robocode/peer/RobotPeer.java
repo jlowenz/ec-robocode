@@ -190,8 +190,9 @@ public class RobotPeer implements Runnable, ContestantPeer {
 	// Robot state
 	protected int robotState;
 	protected int oldRobotState;
+    private int currentTime = 0;
 
-	public TextPeer getSayTextPeer() {
+    public TextPeer getSayTextPeer() {
 		return sayTextPeer;
 	}
 
@@ -757,7 +758,8 @@ public class RobotPeer implements Runnable, ContestantPeer {
 	}
 
 	public final synchronized void update() {
-		oldRobotState = robotState;
+        statistics.updateTimeStep();
+        oldRobotState = robotState;
 		robotState = isDead ? ROBOT_STATE_DEAD : ROBOT_STATE_ALIVE;
 		updateGunHeat();
 
@@ -1105,7 +1107,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		this.x = lastX = x;
 		this.y = lastY = y;
 
-		this.heading = gunHeading = radarHeading = lastHeading = lastGunHeading = lastRadarHeading = heading;
+        this.heading = gunHeading = radarHeading = lastHeading = lastGunHeading = lastRadarHeading = heading;
 
 		acceleration = velocity = 0;
 

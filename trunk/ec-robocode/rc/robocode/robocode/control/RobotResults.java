@@ -41,6 +41,7 @@ public class RobotResults {
     private int numScanEvents;
     private int numWallsHit;
     private double scanRadians;
+    private int battleLength;
 
     public double getScanRadians() {
         return scanRadians;
@@ -116,8 +117,13 @@ public class RobotResults {
         this.numScanEvents = stats.getScanEvents();
         this.numWallsHit = stats.getNumWallsHit();
         this.scanRadians = stats.getScanRadians();
+        this.battleLength = stats.getBattleLength();
     }
 
+
+    public int getBattleLength() {
+        return battleLength;
+    }
     /**
      * Gets the robot these results are for.
      *

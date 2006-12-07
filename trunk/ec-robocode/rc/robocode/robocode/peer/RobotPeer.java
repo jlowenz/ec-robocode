@@ -468,7 +468,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		return isAdjustRadarForGunTurn;
 	}
 
-	public boolean isDead() {
+	public synchronized boolean isDead() {
 		return isDead;
 	}
 
@@ -694,16 +694,18 @@ public class RobotPeer implements Runnable, ContestantPeer {
 			// Notify the battle that we are now asleep.
 			// This ends any pending wait() call in battle.runRound().
 			// Should not actually take place until we release the lock in wait(), below.
-			isSleeping = true;
+			setSleeping(true);
 			this.notifyAll();
 			// Notifying battle that we're asleep
 			// Sleeping and waiting for battle to wake us up.
-			try {
-				this.wait();
-			} catch (InterruptedException e) {
-				log("Wait interrupted");
+			while (isSleeping()) {
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					log("Wait interrupted");
+				}
 			}
-			isSleeping = false;
+
 			// Notify battle thread, which is waiting in
 			// our wakeup() call, to return.
 			// It's quite possible, by the way, that we'll be back in sleep (above)
@@ -720,6 +722,10 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		eventManager.processEvents();
 
 		out.resetCounter();
+	}
+
+	private synchronized void setSleeping(boolean b) {
+		isSleeping = b;
 	}
 
 	public synchronized final void setTurnGun(double radians) {
@@ -1057,8 +1063,9 @@ public class RobotPeer implements Runnable, ContestantPeer {
 	}
 
 	public synchronized void wakeup(Battle b) {
-		if (isSleeping) {
+		if (isSleeping()) {
 			// Wake up the thread
+			setSleeping(false);
 			this.notifyAll();
 			try {
 				this.wait(10000);
@@ -1498,7 +1505,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		this.isRunning = running;
 	}
 
-	public boolean isSleeping() {
+	public synchronized  boolean isSleeping() {
 		return isSleeping;
 	}
 

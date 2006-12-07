@@ -83,6 +83,7 @@ public class GPAgent extends AdvancedRobot {
     private static final int WALL_HIT_AGE_LIMIT = 50;
     private static final int RAMMED_AGE_LIMIT = 50;
     private static final int SCANNED_AGE_LIMIT = 50;
+    private boolean forward;
 
     public GPAgent() {
         radarTree = initRadarTree();
@@ -187,6 +188,9 @@ public class GPAgent extends AdvancedRobot {
     public double getEnemyHeading() {return enemyHeading;}
     public double getEnemySpeed() {return enemySpeed;}
     public double getEnemyEnergy() {return enemyEnergy;}
+    public boolean isGoingForward() {
+        return forward;
+    }
 
 
     private static enum Wall {
@@ -379,10 +383,13 @@ public class GPAgent extends AdvancedRobot {
                 setMaxVelocity(scale * 8.0);
                 double dist = clampZero(movementPair.first().normValue());
                 if (dist > 1.0) {
-                    if (movementPair.second())
+                    if (movementPair.second()) {
                         setAhead(dist);
-                    else
+                        forward = true;
+                    } else {
                         setBack(dist);
+                        forward = false;
+                    }
                 }
 
                 if (bulletHitAge > BULLET_HIT_AGE_LIMIT) resetBulletHit();

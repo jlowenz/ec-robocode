@@ -10,6 +10,8 @@ import robocode.control.RobotResults;
 public class GPFitnessCalc {
     private static final double ACCURACY_SCALE = 5.0;
     private static final double EFFICIENCY_SCALE = 4.0;
+    private static double minBattleLength = Double.MAX_VALUE;
+    private static final double SHORT_BATTLE_SCALE = 1.1;
 
     public static double getFitness(int numGenerations, RobotResults robot, RobotResults opponent) {
 
@@ -24,7 +26,7 @@ public class GPFitnessCalc {
 
         /*
          * Add a bonus for scan efficiency.
-         * Efficiency is getting more than one scan event per complete rotation.
+         * Efficiency is getting one scan even per battle "tick"
          */
         double scanEfficiency;
         if (robot.getNumScanEvents() > 0 && robot.getBattleLength() > 0) {
@@ -35,8 +37,17 @@ public class GPFitnessCalc {
         }
         double scanEfficiencyBonus = EFFICIENCY_SCALE * scanEfficiency * robot.getBulletDamage();
 
+        minBattleLength = Math.min(minBattleLength, robot.getBattleLength());
+        double shortBattle;
+        if (robot.getBattleLength() > 0) {
+            shortBattle = minBattleLength / robot.getBattleLength();
+        } else {
+            shortBattle = 0.0;
+        }
+        double shortBattleBonus = SHORT_BATTLE_SCALE * shortBattle * robot.getBulletDamage();
+
         double damageFitness = robot.getBulletDamage() + robot.getBulletDamageBonus() + robot.getRamDamage()
-                + robot.getRamDamageBonus() + accuracyBonus + scanEfficiencyBonus;
+                + robot.getRamDamageBonus() + accuracyBonus + scanEfficiencyBonus + shortBattleBonus;
 
         double d = (robot.getDistanceTravelled() < 1) ? 1.0 : robot.getDistanceTravelled();
         double b = (robot.getNumBulletsFired() < 1) ? 1.0 : robot.getNumBulletsFired();
@@ -54,4 +65,7 @@ public class GPFitnessCalc {
         return winningFraction * (damageFitness + tweekFitness) + doSomethingBonus;
     }
 
+    public static double getMinBattleLength() {
+        return minBattleLength;
+    }
 }

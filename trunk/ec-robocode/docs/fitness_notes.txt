@@ -10,5 +10,15 @@ gp_395_11257 - beat ramfire (small margin)
 
 
 Run #5
-- add the mySpeed node, currentvector (back in) and goingforward
-- modified fitness to give bonus on shorter battles
++ add the mySpeed node, currentvector (back in) and goingforward
++ modified fitness to give bonus on shorter battles
+- terrible performance
+
+in general, been seeing a ridiculous amount of similar behavior, behavior convergence?
+
+Run #6
++ remove battle length
+- run with slightly more mutation? (0.8 crossover, 0.1 mutation -- wait for run 7!)
+- remove random seeding? (next run?)
++ add a small bonus for survival?
+

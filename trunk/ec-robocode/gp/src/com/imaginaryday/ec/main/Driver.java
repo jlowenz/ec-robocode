@@ -121,7 +121,7 @@ public class Driver implements Runnable {
     private Date endDate;
 
     private static DecimalFormat df = new DecimalFormat("00");
-    private int numGenerations = 600;
+    private int numGenerations = 601;
     private int numRandomGenerations = 24;
     private int generationCount = 0;
     private int treeDepth = 5;
@@ -426,11 +426,11 @@ public class Driver implements Runnable {
         List<Rank> rankedPopulation = rankMembers(oldPopulation);
 
         double P = oldPopulation.size(); // 24
-        int count = (int) (P - numElite); // 24 - 1 = 23
+        int count = (int) (P - numElite); // 24 - 2 = 22
         // sample members
-        List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, count); // 36
+        List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, count); // 22
         for (Member m : newPopulation) {
-            m.setGeneration(m.getGeneration() + 1);
+            m.incrementGeneration();
         }
         // crossover/recombine
         newPopulation = crossover(newPopulation);
@@ -439,7 +439,7 @@ public class Driver implements Runnable {
 
         // elitism (top elitismPercentage)
         for (int i = count; i < P; i++) {
-            newPopulation.add(new Member(oldPopulation.get(i)));
+            newPopulation.add(new Member(rankedPopulation.get(i).member));
         }
 
         if (newPopulation.size() != oldPopulation.size()) throw new RuntimeException("Bad population size!");

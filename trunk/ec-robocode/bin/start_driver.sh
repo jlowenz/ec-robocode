@@ -22,8 +22,4 @@ done
 echo $CLASSPATH
 
 LOG=$HOME/ec_driver.log
-java -Xmx800M -Djava.security.policy=$GP_HOME/bin/.java.policy \
-    -Djava.util.logging.config.file=$GP_HOME/config/jini.logging \
-	-DGP_HOME="${GP_HOME}"  \
-	-Dorg.jini.rio.groups="GPRobocode"  \
-	-cp "${CLASSPATH}"  com.imaginaryday.ec.main.Driver $* 1>>$LOG 2>>$LOG
+java -Xmx800m -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Djava.security.policy=$GP_HOME/bin/.java.policy -Djava.util.logging.config.file=$GP_HOME/config/jini.logging -DGP_HOME="${GP_HOME}" -Dorg.jini.rio.groups="GPRobocode"   -cp "${CLASSPATH}"  com.imaginaryday.ec.main.Driver $* 1>>$LOG 2>>$LOG

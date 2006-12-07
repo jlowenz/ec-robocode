@@ -52,6 +52,7 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 	private double totalRammingDamageReceived;
     public double scanRadians;
 
+	private double energy = 0.0;
     private int battleLength = 0;
     private double distanceTravelled;
     private int numScanEvents;
@@ -82,7 +83,12 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 		rammingDamageReceived += damage;
 	}
 
-    public int getBattleLength() {
+
+	public double getEnergy() {
+		return energy;
+	}
+
+	public int getBattleLength() {
         return battleLength;
     }
 
@@ -363,4 +369,7 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
         battleLength++;
     }
 
+	public void recordEnergy(double energy) {
+		this.energy = energy;
+	}
 }

@@ -116,6 +116,8 @@ public class Battle implements Runnable {
 
 	// Sound manager
 	private SoundManager soundManager;
+	private static final int MAX_TRIES = 3;
+
 
 	/**
 	 * Battle constructor
@@ -179,14 +181,26 @@ public class Battle implements Runnable {
 				battleView.setTitle("Robocode: Starting Round " + (roundNum+1) + " of " + numRounds);
 			}
 			try {
-				setupRound();
-				battleManager.setBattleRunning(true);
-				if (battleView != null) {
-					battleView.setTitle("Robocode: Round " + (roundNum+1) + " of " + numRounds);
+				boolean done = false;
+				int numTries = 0;
+				while (!done && numTries < MAX_TRIES) {
+					setupRound();
+					battleManager.setBattleRunning(true);
+					if (battleView != null) {
+						battleView.setTitle("Robocode: Round " + (roundNum+1) + " of " + numRounds);
+					}
+					try {
+						runRound();
+					} catch (Exception e) {
+						e.printStackTrace();
+						done = false;
+						numTries++;
+						continue;
+					}
+					battleManager.setBattleRunning(false);
+					cleanupRound();
+					done = true;
 				}
-				runRound();
-				battleManager.setBattleRunning(false);
-				cleanupRound();
 			} catch (NullPointerException e) {
 				if (!abortBattles) {
 					Utils.log("Null pointer exception running a battle");
@@ -366,6 +380,7 @@ public class Battle implements Runnable {
 //	}
 
 	public void initialize() {
+		System.err.println("Battle.initialize() called");
 		setOptions();
 
 		// Starting loader thread
@@ -452,7 +467,7 @@ public class Battle implements Runnable {
 		return exitOnComplete;
 	}
 
-	public boolean isRobotsLoaded() {
+	public synchronized boolean isRobotsLoaded() {
 		return robotsLoaded;
 	}
 
@@ -542,6 +557,11 @@ public class Battle implements Runnable {
 				if (!r.isDead()) {
 					// setWinner was here
 					r.update();
+				} else {
+					if (currentTime == 0) {
+						System.err.println("FRAK robot is dead at start!");
+						(new Throwable()).printStackTrace();
+					}
 				}
 				if ((zap || abortBattles) && !r.isDead()) {
 					if (abortBattles) {
@@ -1181,7 +1201,7 @@ public class Battle implements Runnable {
 	 *
 	 * @return Returns a boolean
 	 */
-	public boolean isUnsafeLoaderThreadRunning() {
+	public synchronized boolean isUnsafeLoaderThreadRunning() {
 		return unsafeLoaderThreadRunning;
 	}
 

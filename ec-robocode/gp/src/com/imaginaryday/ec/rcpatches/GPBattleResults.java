@@ -17,6 +17,7 @@ public class GPBattleResults implements Entry {
     public String robot2;
     public Double fitness1;
     public Double fitness2;
+    public Double minBattleLength;
 
     public Integer rank1;
     public Integer score1;
@@ -64,6 +65,7 @@ public class GPBattleResults implements Entry {
         this.id = id;
         this.generation = task.generation;
         this.battle = task.battle;
+        this.minBattleLength = GPFitnessCalc.getMinBattleLength();
 
         this.robot1 = results1.getName();
         this.robot2 = results2.getName();
@@ -167,7 +169,8 @@ public class GPBattleResults implements Entry {
         sb.append(',').append(numWallsHit1).append(',').append(numWallsHit2);
         sb.append(',').append(firsts1).append(',').append(firsts2);
         sb.append(',').append(seconds1).append(',').append(seconds2);
-	    sb.append(",").append(battleLength1).append(",").append(battleLength2);			    
+	    sb.append(",").append(battleLength1).append(",").append(battleLength2);
+        sb.append(",").append(minBattleLength);
         return sb.toString();
     }
 }

@@ -99,6 +99,9 @@ public class Driver implements Runnable {
             nf.loadNode(DotProduct.class);
             nf.loadNode(NegateVector.class);
             nf.loadNode(VectorFromHeading.class);
+            nf.loadNode(GoingForward.class);
+            nf.loadNode(MySpeed.class);
+            nf.loadNode(CurrentVector.class);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {

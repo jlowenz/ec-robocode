@@ -6,32 +6,28 @@ import com.imaginaryday.ec.main.RoboNode;
 /**
  * <b>
  * User: jlowens<br>
- * Date: Oct 31, 2006<br>
- * Time: 9:49:00 PM<br>
+ * Date: Dec 6, 2006<br>
+ * Time: 6:56:23 PM<br>
  * </b>
  */
-public class IsMoving extends RoboNode {
-    private static final long serialVersionUID = 7758950686588590812L;
+public class GoingForward extends RoboNode {
+    private static final long serialVersionUID = -2886080237772408270L;
 
     protected Node[] children() {
         return NONE;
     }
-
     public String getName() {
-        return "isMoving";
+        return "goingForward";
     }
-
     public Class getInputType(int id) {
         return null;
     }
-
     public Class getOutputType() {
         return Boolean.class;
     }
 
+    @Override
     public Object evaluate() {
-	    double dr = getOwner().getDistanceRemaining();
-	    double tr = getOwner().getTurnRemainingRadians();
-        return Math.abs(dr) >= 0.0001 && Math.abs(tr) >= 0.0001;
+        return getOwner().isGoingForward();
     }
 }

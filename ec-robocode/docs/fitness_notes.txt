@@ -3,3 +3,12 @@ Run #4
 Fitness change - reduce magnitude of scan efficiency by clamping the minimum revolutions to 1 (instead of 0.0001).
 Ok never mind. We shall do this: record the total time steps of a battle, and make ratio of scans to total steps. If they were
 perfectly efficient, then the value would be 1. This allows us to scale freely.
+
+
+// from what? endogenous????
+gp_395_11257 - beat ramfire (small margin)
+
+
+Run #5
+- add the mySpeed node, currentvector (back in) and goingforward
+- modified fitness to give bonus on shorter battles

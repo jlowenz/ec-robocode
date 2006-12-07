@@ -42,8 +42,14 @@ public class RobotResults {
     private int numWallsHit;
     private double scanRadians;
     private int battleLength;
+	private double energy;
 
-    public double getScanRadians() {
+
+	public double getEnergy() {
+		return energy;
+	}
+
+	public double getScanRadians() {
         return scanRadians;
     }
 
@@ -118,6 +124,7 @@ public class RobotResults {
         this.numWallsHit = stats.getNumWallsHit();
         this.scanRadians = stats.getScanRadians();
         this.battleLength = stats.getBattleLength();
+	    this.energy = stats.getEnergy();
     }
 
 

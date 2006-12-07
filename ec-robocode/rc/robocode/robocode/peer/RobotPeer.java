@@ -1217,6 +1217,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 	public void setWinner(boolean newWinner) {
 		isWinner = newWinner;
 		if (isWinner) {
+			statistics.recordEnergy(energy);
 			out.println("SYSTEM: " + getName() + " wins the round.");
 			eventManager.add(new WinEvent());
 		}

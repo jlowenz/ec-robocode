@@ -71,11 +71,11 @@ public class Member implements Comparable<Member>, Serializable {
         return generation;
     }
 
-    public void setGeneration(int generation) {
-        this.generation = generation;
-        name = null;
-    }
-
+	public void incrementGeneration() {
+		this.generation++;
+		name = null;
+	}
+	
     public int getId() {
         return id;
     }

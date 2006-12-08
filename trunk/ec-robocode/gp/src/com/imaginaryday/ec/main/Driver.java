@@ -125,11 +125,11 @@ public class Driver implements Runnable {
     private int numRandomGenerations = 24;
     private int generationCount = 0;
     private int treeDepth = 5;
-    private final int alpha = 0;
-    private final int beta = 2;
+    private final double alpha = .5;
+    private final double beta = 1.5;
 	private int eliteCount = 2;
-    private double crossoverProbability = 0.7;
-    private double mutationProbability = 0.05;
+    private double crossoverProbability = 0.9;
+    private double mutationProbability = 0.1;
     private int testFreq = 5;
     private int populationSize = 24;
     private boolean readPopulation = false;
@@ -547,6 +547,7 @@ public class Driver implements Runnable {
                 c++;
                 u = u + 1.0 / (double) count;
             }
+            logger.fine("Rank " + r.rank + " gets " + c + " individuals!");
             for (int j = 0; j < c; j++) samples.add(new Member(r.member));
         }
         return samples;

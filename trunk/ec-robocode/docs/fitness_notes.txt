@@ -22,3 +22,10 @@ Run #6
 - remove random seeding? (next run?)
 + add a small bonus for survival?
 
+Run #7 (experimentation)
++ add movement penalty
++ add bullet penalty
++ adjust alpha/beta
++ change crossover/mutation rate
++ raise survival bonus
++ adjust bonus for efficiency by full circle scan (not completely correct)

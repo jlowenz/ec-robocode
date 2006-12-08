@@ -186,7 +186,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 
 	private boolean paintEnabled;
 	private boolean sgPaintEnabled;
-
+    
 	// Robot state
 	protected int robotState;
 	protected int oldRobotState;
@@ -294,7 +294,9 @@ public class RobotPeer implements Runnable, ContestantPeer {
 					r.eventManager.add(
 							new HitRobotEvent(getName(), normalRelativeAngle(PI + angle - r.heading), energy, false));
 
-			} // if robot active & not me & hit
+                statistics.scoreDistanceTravelled(-Math.sqrt(movedx*movedx + movedy*movedy));
+
+            } // if robot active & not me & hit
 		} // for robots
 		if (inCollision) {
 			robotState = ROBOT_STATE_HIT_ROBOT;
@@ -373,7 +375,9 @@ public class RobotPeer implements Runnable, ContestantPeer {
 			x += dx;
 			y += dy;
 
-			// Update energy, but do not reset inactiveTurnCount
+            statistics.scoreDistanceTravelled(-Math.sqrt(dx*dx + dy*dy));
+
+            // Update energy, but do not reset inactiveTurnCount
 			if (robot instanceof robocode.AdvancedRobot) {
 				this.setEnergy(energy - Rules.getWallHitDamage(velocity), false);
 			}
@@ -842,7 +846,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 	public void updateHeading() {
 		boolean normalizeHeading = true;
 
-		turnRate = min(maxTurnRate, (.4 + .6 * (1 - (abs(velocity) / Rules.MAX_VELOCITY))) * Rules.MAX_TURN_RATE_RADIANS);
+		turnRate = min(getMaxTurnRate(), (.4 + .6 * (1 - (abs(velocity) / Rules.MAX_VELOCITY))) * Rules.MAX_TURN_RATE_RADIANS);
 
 		if (turnRemaining > 0) {
 			if (turnRemaining < turnRate) {
@@ -1015,6 +1019,9 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		y += dy;
 
         statistics.scoreDistanceTravelled(Math.sqrt(dx*dx + dy*dy));
+        if (Math.abs(dx) < 0.01 && Math.abs(dy) < 0.01) {
+            statistics.scoreMovementPenalty();
+        }
 
         boolean updateBounds = false;
 
@@ -1174,7 +1181,12 @@ public class RobotPeer implements Runnable, ContestantPeer {
 		maxTurnRate = min(toRadians(abs(newTurnRate)), Rules.MAX_TURN_RATE_RADIANS);
 	}
 
-	public synchronized void setMaxVelocity(double newVelocity) {
+
+    public synchronized double getMaxTurnRate() {
+        return maxTurnRate;
+    }
+
+    public synchronized void setMaxVelocity(double newVelocity) {
 		if (Double.isNaN(newVelocity)) {
 			out.println("You cannot setMaxVelocity to: " + newVelocity);
 			return;

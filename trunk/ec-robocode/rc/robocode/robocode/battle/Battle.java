@@ -996,7 +996,7 @@ public class Battle implements Runnable {
 			}
 		}
 
-		activeRobots = robots.size();
+		setActiveRobots(robots.size());
 		manager.getThreadManager().reset();
 
 		// Turning on robots

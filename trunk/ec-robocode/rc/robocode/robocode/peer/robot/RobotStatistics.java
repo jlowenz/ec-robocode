@@ -65,8 +65,9 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 	private int totalThirds;
 
 	private double robotDamage[] = null;
+    private int movementPenalty = 0;
 
-	/**
+    /**
 	 * RobotStatistics constructor comment.
 	 */
 	public RobotStatistics(RobotPeer robotPeer) {
@@ -84,7 +85,10 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 	}
 
 
-	public double getEnergy() {
+    public int getMovementPenalty() {
+        return movementPenalty;
+    }
+    public double getEnergy() {
 		return energy;
 	}
 
@@ -372,4 +376,7 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 	public void recordEnergy(double energy) {
 		this.energy = energy;
 	}
+    public void scoreMovementPenalty() {
+        movementPenalty++;
+    }
 }

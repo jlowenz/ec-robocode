@@ -6,6 +6,12 @@ then
 	exit
 fi
 
+if [ -z ""{$GP_GROUP} ]
+then
+	echo "Setting group to GPRobocode"
+	GP_GROUP="GPRobocode"
+fi
+
 export CLASSPATH="${GP_HOME}"
 
 for JAR in 	gp.jar rc.jar jsk-dl.jar rio.jar jscience.jar \
@@ -20,5 +26,5 @@ echo $CLASSPATH
 java -Djava.security.policy=/home/rbowers/.java.policy \
      -DGP_HOME="${GP_HOME}"  \
 	 -server \
-	 -Dorg.jini.rio.groups="GPRobocode"  \
+	 -Dorg.jini.rio.groups="${GP_GROUP}"  \
 	 -cp "${CLASSPATH}" com.imaginaryday.ec.main.Killer $* &

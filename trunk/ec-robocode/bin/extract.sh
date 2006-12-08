@@ -19,5 +19,5 @@ echo $CLASSPATH
 
 java -Djava.security.policy=bin/.java.policy \
 	-DGP_HOME="${GP_HOME}"  \
-	-Dorg.jini.rio.groups="GPRobocode"  \
+	-Dorg.jini.rio.groups="${GROUP_NAME}"  \
 	-cp "${CLASSPATH}" com.imaginaryday.ec.main.ExtractBots $*

@@ -121,8 +121,8 @@ public class Driver implements Runnable {
     private Date endDate;
 
     private static DecimalFormat df = new DecimalFormat("00");
-    private int numGenerations = 601;
-    private int numRandomGenerations = 24;
+    private int numGenerations = 1;
+    private int numRandomGenerations = 1;
     private int generationCount = 0;
     private int treeDepth = 5;
     private final double alpha = .5;
@@ -235,6 +235,7 @@ public class Driver implements Runnable {
 
     public void run() {
         ProgressTester progressTester;
+        FinalBotTester finalBotTester;
 
         while (transactionManager == null) {
             try {
@@ -263,6 +264,7 @@ public class Driver implements Runnable {
             }
             System.err.println("Looking for space");
             progressTester = new ProgressTester(space, progLogFile, transactionManager);
+            finalBotTester = new FinalBotTester(space, progLogFile, transactionManager);
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe("Could not find space");
@@ -330,6 +332,9 @@ public class Driver implements Runnable {
                     getTime(genStart, System.currentTimeMillis()));
             generationCount++;
         }
+
+        // Test the population against the entire set of bots.
+        finalBotTester.testProgress(population, generationCount);
 
         try {
             battleWriter.close();
@@ -486,7 +491,7 @@ public class Driver implements Runnable {
             Member n = selection.get(rand.nextInt(selection.size()));
             selection.remove(n);
 
-            if (rand.nextDouble() < crossoverProbability) { 
+            if (rand.nextDouble() < crossoverProbability) {
                 Node moveA = pseudoRoot(m.getMoveProgram());
                 Node turretA = pseudoRoot(m.getTurretProgram());
                 Node radarA = pseudoRoot(m.getRadarProgram());
@@ -495,7 +500,7 @@ public class Driver implements Runnable {
                 Node moveB = pseudoRoot(n.getMoveProgram());
                 Node turretB = pseudoRoot(n.getTurretProgram());
                 Node radarB = pseudoRoot(n.getRadarProgram());
-                Node firingB = pseudoRoot(n.getShootProgram());                
+                Node firingB = pseudoRoot(n.getShootProgram());
 
                 Tuple.Two<Node, Node> move = ops.crossover(moveA, moveB);
                 Tuple.Two<Node, Node> turret = ops.crossover(turretA, turretB);
@@ -745,7 +750,7 @@ public class Driver implements Runnable {
     }
 
     public GPBattleTask[] submitBattles(List<Member> population, int gen) {
-        GPBattleTask[] taskArray = new GPBattleTask[getNumTasks(population.size())];        
+        GPBattleTask[] taskArray = new GPBattleTask[getNumTasks(population.size())];
         int battle = 0;
         for (int i = 0; i < population.size(); ++i) {
             for (int j = i; j < population.size(); ++j) {

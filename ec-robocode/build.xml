@@ -36,7 +36,7 @@
         <include name="**/?*.tld"/>
     </patternset>
 
-    <property name="module.gp.basedir" value="${basedir}/gp"/>    
+    <property name="module.gp.basedir" value="${basedir}/gp"/>
 
     <!-- Project Libraries -->
 
@@ -152,10 +152,60 @@
         <pathelement location="${module.gp.basedir}/lib/rio/rio.jar"/>
         <pathelement location="${rc.output.dir}"/>
         <pathelement location="${module.gp.basedir}/lib/javassist.jar"/>
-	    <pathelement location="${module.gp.basedir}/lib/jam.micro.RaikoMicro_1.44.jar"/>
-	    <pathelement location="${module.gp.basedir}/lib/kc.nano.Splinter_1.1.jar"/>
-	    <pathelement location="${module.gp.basedir}/lib/voidious.Dookious_1.25.jar"/>
-	    <pathelement location="${module.gp.basedir}/lib/voidious.mini.Komarious_1.56.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jam.micro.RaikoMicro_1.44.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/kc.nano.Splinter_1.1.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/voidious.Dookious_1.25.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/voidious.mini.Komarious_1.56.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/ahf.NanoAndrew_.4.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/amk.ChumbaWumba_0.3.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/apv.AspidMovement_1.0.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/axeBots.Okami_1.04.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/axeBots.SilverSurfer_2.53.33.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/bvh.fry.Freya_0.80.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/bvh.mini.Wodan_0.50.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/cf.mini.Chiva_1.0.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/cjk.Merkava_0.3.0.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/cx.micro.Smoke_0.96.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/cx.mini.Nimrod_0.55.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/cx.nano.Smog_2.6.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/dft.Virgin_1.25.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/dmp.nano.Eve_3.41.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/fnc.bandit.Bandit_5.2.0.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/gg.Wolverine_2.0_source.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jasolo.Sonda_0.55.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jep.nano.Hawkwing_0.4.1.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jep.Terrible_0.4.1.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/kc.nano.Splinter_1.1.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/kcn.percept.PerceptBot_2.3.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/lorneswork.Predator_1.0.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/matt.UnderDark3_2.4.34.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/md.Pasta_1.1.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/mld.DustBunny_2.0.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/mue.Ascendant_1.2.20.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/mue.Hyperion_0.8.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/muf.CrazyKitten_0.9.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/myl.micro.Predator_1.50.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/mz.Movement_1.8.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/mz.NanoGod_2.02.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/pedersen.Ugluk_0.4.0.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/peterPark.StationaryGrumpy_1.019.31.1.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/pez.gloom.GloomyDark_0.9.2.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/pez.mako.Mako_1.5.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/pez.rumble.Ali_0.4.9.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/pi.DarkFinal.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/radnor.FUSiON_1.2.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/radnor.RamRod_1.0.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/rapture.Rapture_2.13.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/stelo.Mirror_1.1.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/stelo.MirrorNano_1.3.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/tobe.micro.Squirtle_1.5.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/tobe.mini.Charon_0.9.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/tobe.Pandora_1.2.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/tobe.Squirrel_toddler.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/tzu.TheArtOfWar_1.2TC.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/vuen.Fractal_0.55.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/whind.Wisdom_0.5.1.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/Evader.jar"/>
     </path>
 
 
@@ -212,17 +262,18 @@
 
     <target name="dist" depends="compile.module.rc, compile.module.gp">
         <delete dir="${gp.build.dir}"/>
-	    <mkdir dir="${gp.build.dir}"/>
+        <mkdir dir="${gp.build.dir}"/>
         <jar destfile="${gp.build.dir}/gp.jar">
             <manifest>
                 <attribute name="Main-Class" value="com.imaginaryday.ec.rcpatches.GPRobocodeMain"/>
-                <attribute name="Class-Path" value="jsk-debug-policy.jar jsk-dl.jar jsk-lib.jar jsk-platform.jar jsk-policy.jar jsk-resources.jar rio.jar jscience.jar junit-4.1.jar jam.micro.RaikoMicro_1.44.jar kc.nano.Splinter_1.1.jar voidious.Dookious_1.25.jar voidious.mini.Komarious_1.56.jar"/>                
+                <attribute name="Class-Path"
+                           value="jsk-debug-policy.jar jsk-dl.jar jsk-lib.jar jsk-platform.jar jsk-policy.jar jsk-resources.jar rio.jar jscience.jar junit-4.1.jar jam.micro.RaikoMicro_1.44.jar kc.nano.Splinter_1.1.jar voidious.Dookious_1.25.jar voidious.mini.Komarious_1.56.jar ahf.NanoAndrew_.4.jar amk.ChumbaWumba_0.3.jar apv.AspidMovement_1.0.jar axeBots.Okami_1.04.jar axeBots.SilverSurfer_2.53.33.jar bvh.fry.Freya_0.80.jar bvh.mini.Wodan_0.50.jar cf.mini.Chiva_1.0.jar cjk.Merkava_0.3.0.jar cx.micro.Smoke_0.96.jar cx.mini.Nimrod_0.55.jar cx.nano.Smog_2.6.jar dft.Virgin_1.25.jar dmp.nano.Eve_3.41.jar Evader.jar fnc.bandit.Bandit_5.2.0.jar gg.Wolverine_2.0_source.jar gp.jar jasolo.Sonda_0.55.jar jep.nano.Hawkwing_0.4.1.jar jep.Terrible_0.4.1.jar kcn.percept.PerceptBot_2.3.jar lorneswork.Predator_1.0.jar matt.UnderDark3_2.4.34.jar md.Pasta_1.1.jar mld.DustBunny_2.0.jar mue.Ascendant_1.2.20.jar mue.Hyperion_0.8.jar muf.CrazyKitten_0.9.jar myl.micro.Predator_1.50.jar mz.Movement_1.8.jar mz.NanoGod_2.02.jar pedersen.Ugluk_0.4.0.jar peterPark.StationaryGrumpy_1.019.31.1.jar pez.gloom.GloomyDark_0.9.2.jar pez.mako.Mako_1.5.jar pez.rumble.Ali_0.4.9.jar pi.DarkFinal.jar radnor.FUSiON_1.2.jar radnor.RamRod_1.0.jar rapture.Rapture_2.13.jar rio.jar stelo.Mirror_1.1.jar stelo.MirrorNano_1.3.jar tobe.micro.Squirtle_1.5.jar tobe.mini.Charon_0.9.jar tobe.Pandora_1.2.jar tobe.Squirrel_toddler.jar tzu.TheArtOfWar_1.2TC.jar vuen.Fractal_0.55.jar whind.Wisdom_0.5.1.jar"/>
             </manifest>
             <fileset dir="${gp.output.dir}"/>
             <fileset dir="${rc.output.dir}"/>
         </jar>
         <copy todir="${gp.build.dir}" flatten="true">
-            <fileset dir="${module.gp.basedir}/lib" >
+            <fileset dir="${module.gp.basedir}/lib">
                 <include name="jini/jsk-debug-policy.jar"/>
                 <include name="jini/jsk-dl.jar"/>
                 <include name="jini/jsk-lib.jar"/>
@@ -230,13 +281,9 @@
                 <include name="jini/jsk-policy.jar"/>
                 <include name="jini/jsk-resources.jar"/>
                 <include name="rio/rio.jar"/>
-                <include name="jscience.jar"/>
-                <include name="junit-4.1.jar"/>
-                <include name="javassist.jar"/>
-	            <include name="jam.micro.RaikoMicro_1.44.jar"/>
-	            <include name="kc.nano.Splinter_1.1.jar"/>
-	            <include name="voidious.Dookious_1.25.jar"/>
-	            <include name="voidious.mini.Komarious_1.56.jar"/>
+            </fileset>
+            <fileset dir="${module.gp.basedir}/lib">
+                <include name="*.jar"/>
             </fileset>
         </copy>
 
@@ -278,7 +325,7 @@
             </fileset>
         </copy>
 
-        <java fork="true" dir="${module.gp.basedir}" classname="com.imaginaryday.ec.main.ExtractBots" >
+        <java fork="true" dir="${module.gp.basedir}" classname="com.imaginaryday.ec.main.ExtractBots">
             <arg value="${gp.population}"/>
             <arg value="${module.gp.basedir}/bots"/>
             <classpath refid="gp.module.classpath"/>

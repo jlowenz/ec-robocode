@@ -36,6 +36,7 @@ public class GPBattleResults implements Entry {
     public Integer firsts1;
     public Integer seconds1;
     public Integer battleLength1;
+    public Integer movementPenalty1;
 
 
     public Integer rank2;
@@ -55,6 +56,9 @@ public class GPBattleResults implements Entry {
     public Integer firsts2;
     public Integer seconds2;
     public Integer battleLength2;
+    public Double energy1;
+    public Double energy2;
+    public Integer movementPenalty2;
 
 
     public GPBattleResults() {
@@ -90,6 +94,8 @@ public class GPBattleResults implements Entry {
         this.firsts1 = results1.getFirsts();
         this.seconds1 = results1.getSeconds();
         this.battleLength1 = results1.getBattleLength();
+        this.energy1 = results1.getEnergy();
+        this.movementPenalty1 = results1.getMovementPenalty();
 
 
         this.rank2 = results2.getRank();
@@ -109,9 +115,14 @@ public class GPBattleResults implements Entry {
         this.firsts2 = results2.getFirsts();
         this.seconds2 = results2.getSeconds();
         this.battleLength2 = results2.getBattleLength();
+        this.energy2 = results2.getEnergy();
+        this.movementPenalty2 = results1.getMovementPenalty();
+
 
         System.err.println(this);
     }
+
+
 
     public int getGeneration() {
         return generation;
@@ -169,7 +180,9 @@ public class GPBattleResults implements Entry {
         sb.append(',').append(numWallsHit1).append(',').append(numWallsHit2);
         sb.append(',').append(firsts1).append(',').append(firsts2);
         sb.append(',').append(seconds1).append(',').append(seconds2);
-	    sb.append(",").append(battleLength1).append(",").append(battleLength2);
+        sb.append(",").append(battleLength1).append(",").append(battleLength2);
+        sb.append(",").append(energy1).append(",").append(energy2);
+        sb.append(",").append(movementPenalty1).append(",").append(movementPenalty2);
         sb.append(",").append(minBattleLength);
         return sb.toString();
     }

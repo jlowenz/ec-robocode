@@ -109,7 +109,7 @@ public class BulletPeer {
 		this.lastBulletState = BULLET_STATE_SHOT;
 	}
 
-	public void checkBulletCollision() {
+	public synchronized void checkBulletCollision() {
         Vector<BulletPeer> v = battle.getBullets();
 //        for (BulletPeer b : battle.getBullets()) {
         int size = v.size();
@@ -187,7 +187,7 @@ public class BulletPeer {
 				owner.setEnergy(owner.getEnergy() + Rules.getBulletHitBonus(power));
 
 				r.getEventManager().add(
-						new HitByBulletEvent(robocode.util.Utils.normalRelativeAngle(heading + Math.PI - r.getHeading()),
+						new HitByBulletEvent(robocode.util.Utils.normalRelativeAngle(getHeading() + Math.PI - r.getHeading()),
 						getBullet()));
 				bulletState = BULLET_STATE_HIT_VICTIM;
 				owner.getEventManager().add(new BulletHitEvent(r.getName(), r.getEnergy(), bullet));
@@ -242,7 +242,7 @@ public class BulletPeer {
 		return frame;
 	}
 
-	public double getHeading() {
+	public synchronized double getHeading() {
 		return heading;
 	}
 

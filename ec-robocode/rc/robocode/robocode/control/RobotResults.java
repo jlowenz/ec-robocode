@@ -43,9 +43,10 @@ public class RobotResults {
     private double scanRadians;
     private int battleLength;
 	private double energy;
+    private int movementPenalty;
 
 
-	public double getEnergy() {
+    public double getEnergy() {
 		return energy;
 	}
 
@@ -125,9 +126,13 @@ public class RobotResults {
         this.scanRadians = stats.getScanRadians();
         this.battleLength = stats.getBattleLength();
 	    this.energy = stats.getEnergy();
+        this.movementPenalty = stats.getMovementPenalty();
     }
 
 
+    public int getMovementPenalty() {
+        return movementPenalty;
+    }
     public int getBattleLength() {
         return battleLength;
     }

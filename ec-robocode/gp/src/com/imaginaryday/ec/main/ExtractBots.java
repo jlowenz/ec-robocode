@@ -28,7 +28,7 @@ import java.util.Set;
  */
 public class ExtractBots {
     public static void main(String args[]) {
-        if (args.length != 2) {
+        if (args.length < 2) {
             System.out.println("Usage: ExtractBots <pop_file> <to_dir>");
             System.out.println("  - don't forget to set the classpath properly");
             System.exit(0);
@@ -41,6 +41,11 @@ public class ExtractBots {
         File dest = new File(args[1]);
         if (!dest.exists()) {
             dest.mkdirs();
+        }
+
+        String botName = "GPAgent";
+        if (args.length > 2) {
+            botName = args[2];
         }
 
         FileInputStream fr = null;
@@ -58,7 +63,7 @@ public class ExtractBots {
             for (Member m : members) {
                 CtClass gpagent = pool.get("ec.GPAgent");
                 CtClass node = pool.get("com.imaginaryday.ec.gp.Node");
-                CtClass cc = pool.makeClass("ec.GPAgent_" + m.getGeneration() + "_" + m.getId(), gpagent);
+                CtClass cc = pool.makeClass("ec." + botName +"_" + m.getGeneration() + "_" + m.getId(), gpagent);
                 cc.getClassPool().importPackage("ec");                        
 
                 System.out.println("Creating class: " + cc.getName());

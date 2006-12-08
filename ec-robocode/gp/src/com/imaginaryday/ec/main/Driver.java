@@ -121,17 +121,18 @@ public class Driver implements Runnable {
     private Date endDate;
 
     private static DecimalFormat df = new DecimalFormat("00");
-    private int numGenerations = 1;
-    private int numRandomGenerations = 1;
+    private int numGenerations = 601;
+    private int numRandomGenerations = 0;
     private int generationCount = 0;
     private int treeDepth = 5;
     private final double alpha = .5;
     private final double beta = 1.5;
-	private int eliteCount = 2;
+	private int eliteCount = 1;
+    private int cullCount = 2;
     private double crossoverProbability = 0.9;
-    private double mutationProbability = 0.1;
+    private double mutationProbability = 0.05;
     private int testFreq = 5;
-    private int populationSize = 24;
+    private int populationSize = 25;
     private boolean readPopulation = false;
     private String popFile = "";
     private String progLogFile = System.getProperty("user.home") + System.getProperty("file.separator") + "progress.log";
@@ -317,7 +318,7 @@ public class Driver implements Runnable {
         while (generationCount < numGenerations) {
             long genStart = System.currentTimeMillis();
             // Perform selection and generate the next generation
-            population = selectAndBreed(population, eliteCount, alpha, beta);
+            population = selectAndBreed(population, generationCount, eliteCount, alpha, beta);
             // calculate the fitness of the new population
             results = calculateFitness(population, generationCount);
             // record the fitness
@@ -417,6 +418,7 @@ public class Driver implements Runnable {
     }
 
     public List<Member> selectAndBreed(final List<Member> oldPopulation,
+                                       int gen,
                                        int numElite,
                                        final double alpha,
                                        final double beta) {
@@ -433,10 +435,22 @@ public class Driver implements Runnable {
         double P = oldPopulation.size(); // 24
         int count = (int) (P - numElite); // 24 - 2 = 22
         // sample members
+
+        // SUS implementation is order preserving
         List<Member> newPopulation = stochasticUniversalSampling(rankedPopulation, probDist, count); // 22
         for (Member m : newPopulation) {
-            m.incrementGeneration();
+            m.setGeneration(gen+1);
         }
+
+        // culling
+        if (cullCount > 0) {
+            List<Member> newMaterial = genInitialPopulation(gen+1, cullCount);
+            for (int i = 0; i < cullCount; i++) {
+                newPopulation.remove(0);
+            }
+            newPopulation.addAll(newMaterial);
+        }
+
         // crossover/recombine
         newPopulation = crossover(newPopulation);
         // mutation

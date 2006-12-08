@@ -132,6 +132,7 @@
     <property name="compiler.args.gp" value="${compiler.args}"/>
 
     <property name="gp.population" value="oogabooga"/>
+    <property name="gp.bot.name" value="GPAgent"/>
     <property name="gp.build.dir" value="${module.gp.basedir}/../build"/>
     <property name="gp.output.dir" value="${module.gp.basedir}/robo_build"/>
     <property name="gp.testoutput.dir" value="${module.gp.basedir}/robo_build"/>
@@ -328,6 +329,7 @@
         <java fork="true" dir="${module.gp.basedir}" classname="com.imaginaryday.ec.main.ExtractBots">
             <arg value="${gp.population}"/>
             <arg value="${module.gp.basedir}/bots"/>
+            <arg value="${gp.bot.name}"/>
             <classpath refid="gp.module.classpath"/>
             <classpath>
                 <path location="${module.gp.basedir}/bots"/>

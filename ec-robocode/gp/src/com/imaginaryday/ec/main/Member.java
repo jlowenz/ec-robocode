@@ -140,4 +140,8 @@ public class Member implements Comparable<Member>, Serializable {
     }
 
 
+    public void setGeneration(int i) {
+        this.generation = i;
+        this.name = null;
+    }
 }

@@ -1,5 +1,6 @@
 #!/bin/bash
-if [ -z ""{$GP_GROUP} ]
+
+if [ -z ""$GP_GROUP ]
 then
 	echo "Setting group to GPRobocode"
 	GP_GROUP="GPRobocode"

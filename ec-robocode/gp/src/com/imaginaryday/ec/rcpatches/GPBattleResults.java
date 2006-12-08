@@ -116,7 +116,7 @@ public class GPBattleResults implements Entry {
         this.seconds2 = results2.getSeconds();
         this.battleLength2 = results2.getBattleLength();
         this.energy2 = results2.getEnergy();
-        this.movementPenalty2 = results1.getMovementPenalty();
+        this.movementPenalty2 = results2.getMovementPenalty();
 
 
         System.err.println(this);

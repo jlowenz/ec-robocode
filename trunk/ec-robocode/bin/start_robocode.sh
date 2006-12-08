@@ -8,8 +8,11 @@ then
 	exit
 fi
 
-echo "Home is $HOME"
-echo "GP_HOME is ${GP_HOME}"
+if [ -z ""{$GP_GROUP} ]
+then
+	echo "Setting group to GPRobocode"
+	GP_GROUP="GPRobocode"
+fi
 
 export CLASSPATH="${GP_HOME}"
 
@@ -18,14 +21,14 @@ do
 	export CLASSPATH="${CLASSPATH}:${jar}"
 done
 export CLASSPATH="${CLASSPATH}"
-#echo $CLASSPATH
+echo $CLASSPATH
 
 blah() {
     nohup nice -n20 java -Djava.security.policy=${GP_HOME}/bin/.java.policy \
          -Djava.util.logging.config.file=${GP_HOME}/config/jini.logging \
 	 -DGP_HOME="${GP_HOME}"  \
 	 -server \
-	 -Dorg.jini.rio.groups="GPRobocode"  \
+	 -Dorg.jini.rio.groups="${GP_GROUP}"  \
 	 -cp "${CLASSPATH}" -jar ${GP_HOME}/build/gp.jar -id $2$i -battle ${GP_HOME}/config/sample.battle >$NAME 2>&1
 }
 

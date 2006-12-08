@@ -2,13 +2,13 @@
 
 PARALLEL=$1
 
-if [ -z ""{$GP_HOME} ]
+if [ -z ""$GP_HOME ]
 then
 	echo "Must set GP_HOME"
 	exit
 fi
 
-if [ -z ""{$GP_GROUP} ]
+if [ -z ""$GP_GROUP ]
 then
 	echo "Setting group to GPRobocode"
 	GP_GROUP="GPRobocode"

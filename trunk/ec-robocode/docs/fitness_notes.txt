@@ -26,6 +26,15 @@ Run #7 (experimentation)
 + add movement penalty
 + add bullet penalty
 + adjust alpha/beta
-+ change crossover/mutation rate
++ change crossover/mutation rate (90%,10%)
 + raise survival bonus
 + adjust bonus for efficiency by full circle scan (not completely correct)
+
+
+Run #8
++ remove random generation
++ raise pop size by 1
++ reduce elitism count to 1
++ add random member creation and cull lowest 2 forests
++ reduce mutation rate back to 5%
++ keep crossover at 90%

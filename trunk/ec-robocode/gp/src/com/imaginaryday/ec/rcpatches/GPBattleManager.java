@@ -29,11 +29,7 @@ import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
 import net.jini.core.lease.LeaseDeniedException;
-import net.jini.core.transaction.CannotAbortException;
-import net.jini.core.transaction.Transaction;
-import net.jini.core.transaction.TransactionException;
-import net.jini.core.transaction.TransactionFactory;
-import net.jini.core.transaction.UnknownTransactionException;
+import net.jini.core.transaction.*;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 import robocode.battle.Battle;
@@ -52,18 +48,13 @@ import robocode.peer.robot.RobotStatistics;
 import robocode.util.Constants;
 import robocode.util.Utils;
 
-import javax.swing.JFileChooser;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import javax.swing.*;
+import java.io.*;
 import java.rmi.RemoteException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Vector;
-import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -171,14 +162,107 @@ public class GPBattleManager extends BattleManager {
                 sample.TrackFire.class));
         map.put("Walls", new StandardRobotClassManager(new GPRobotSpecification("Walls", "11"),
                 sample.Walls.class));
-        map.put("Nano", new StandardRobotClassManager(new GPRobotSpecification("Nano", "12"),
+        map.put("Splinter", new StandardRobotClassManager(new GPRobotSpecification("Splinter", "12"),
                 kc.nano.Splinter.class));
-        map.put("Micro", new StandardRobotClassManager(new GPRobotSpecification("Micro", "13"),
+        map.put("RaikoMicro", new StandardRobotClassManager(new GPRobotSpecification("RaikoMicro", "13"),
                 jam.micro.RaikoMicro.class));
-        map.put("Mini", new StandardRobotClassManager(new GPRobotSpecification("Mini", "14"),
+        map.put("Komarious", new StandardRobotClassManager(new GPRobotSpecification("Komarious", "14"),
                 voidious.mini.Komarious.class));
-        map.put("Big", new StandardRobotClassManager(new GPRobotSpecification("Big", "15"),
+        map.put("Dookious", new StandardRobotClassManager(new GPRobotSpecification("Dookious", "15"),
                 voidious.Dookious.class));
+        map.put("NanoAndrew", new StandardRobotClassManager(new GPRobotSpecification("NanoAndrew", "16"),
+                ahf.NanoAndrew.class));
+        map.put("ChumbaWumba", new StandardRobotClassManager(new GPRobotSpecification("ChumbaWumba", "17"),
+                amk.ChumbaWumba.class));
+        map.put("AspidMovement", new StandardRobotClassManager(new GPRobotSpecification("AspidMovement", "18"),
+                apv.AspidMovement.class));      
+        map.put("SilverSurfer", new StandardRobotClassManager(new GPRobotSpecification("SilverSurfer", "20"),
+                axeBots.SilverSurfer.class));
+        map.put("Freya", new StandardRobotClassManager(new GPRobotSpecification("Freya", "21"),
+                bvh.fry.Freya.class));
+        map.put("Wodan", new StandardRobotClassManager(new GPRobotSpecification("Wodan", "22"),
+                bvh.mini.Wodan.class));
+        map.put("Chiva", new StandardRobotClassManager(new GPRobotSpecification("Chiva", "23"),
+                cf.mini.Chiva.class));
+        map.put("Merkava", new StandardRobotClassManager(new GPRobotSpecification("Merkava", "24"),
+                cjk.Merkava.class));
+        map.put("Smoke", new StandardRobotClassManager(new GPRobotSpecification("Smoke", "25"),
+                cx.micro.Smoke.class));
+        map.put("Nimrod", new StandardRobotClassManager(new GPRobotSpecification("Nimrod", "26"),
+                cx.mini.Nimrod.class));
+        map.put("Smog", new StandardRobotClassManager(new GPRobotSpecification("Smog", "27"),
+                cx.nano.Smog.class));
+        map.put("Virgin", new StandardRobotClassManager(new GPRobotSpecification("Virgin", "28"),
+                dft.Virgin.class));
+        map.put("Eve", new StandardRobotClassManager(new GPRobotSpecification("Eve", "29"),
+                dmp.nano.Eve.class));
+        map.put("Evader", new StandardRobotClassManager(new GPRobotSpecification("Evader", "30"),
+                aw.Evader.class));
+        map.put("Bandit", new StandardRobotClassManager(new GPRobotSpecification("Bandit", "31"),
+                fnc.bandit.Bandit.class));
+        map.put("Wolverine", new StandardRobotClassManager(new GPRobotSpecification("Wolverine", "32"),
+                gg.Wolverine.class));
+        map.put("Sonda", new StandardRobotClassManager(new GPRobotSpecification("Sonda", "33"),
+                jasolo.Sonda.class));
+        map.put("Hawkwing", new StandardRobotClassManager(new GPRobotSpecification("Hawkwing", "34"),
+                jep.nano.Hawkwing.class));
+        map.put("Terrible", new StandardRobotClassManager(new GPRobotSpecification("Terrible", "35"),
+                jep.Terrible.class));
+        map.put("PerceptBot", new StandardRobotClassManager(new GPRobotSpecification("PerceptBot", "36"),
+                kcn.percept.PerceptBot.class));
+        map.put("Predator", new StandardRobotClassManager(new GPRobotSpecification("Predator", "37"),
+                lorneswork.Predator.class));
+        map.put("UnderDark", new StandardRobotClassManager(new GPRobotSpecification("UnderDark", "38"),
+                matt.UnderDark3.class));
+        map.put("Pasta", new StandardRobotClassManager(new GPRobotSpecification("Pasta", "39"),
+                md.Pasta.class));
+        map.put("DustBunny", new StandardRobotClassManager(new GPRobotSpecification("DustBunny", "40"),
+                mld.DustBunny.class));
+        map.put("Ascendant", new StandardRobotClassManager(new GPRobotSpecification("Ascendant", "41"),
+                mue.Ascendant.class));
+        map.put("Hyperion", new StandardRobotClassManager(new GPRobotSpecification("Hyperior", "42"),
+                mue.Hyperion.class));
+        map.put("CrazyKitten", new StandardRobotClassManager(new GPRobotSpecification("CrazyKitten", "43"),
+                muf.CrazyKitten.class));
+        map.put("Predator-2", new StandardRobotClassManager(new GPRobotSpecification("Predator-2", "44"),
+                myl.micro.Predator.class));
+        map.put("Movement", new StandardRobotClassManager(new GPRobotSpecification("Movement", "45"),
+                mz.Movement.class));
+        map.put("NanoGod", new StandardRobotClassManager(new GPRobotSpecification("NanoGod", "46"),
+                mz.NanoGod.class));
+        map.put("Ugluk", new StandardRobotClassManager(new GPRobotSpecification("Ugluk", "47"),
+                pedersen.Ugluk.class));
+        map.put("Grumpy", new StandardRobotClassManager(new GPRobotSpecification("Grumpy", "48"),
+                peterPark.StationaryGrumpy.class));
+        map.put("GloomyDark", new StandardRobotClassManager(new GPRobotSpecification("GloomyDark", "49"),
+                pez.gloom.GloomyDark.class));
+        map.put("Mako", new StandardRobotClassManager(new GPRobotSpecification("Mako", "50"),
+                pez.mako.Mako.class));
+        map.put("Ali", new StandardRobotClassManager(new GPRobotSpecification("Ali", "51"),
+                pez.rumble.Ali.class));
+        map.put("DarkFinal", new StandardRobotClassManager(new GPRobotSpecification("DarkFinal", "52"),
+                pi.Dark.class));
+        map.put("Fusion", new StandardRobotClassManager(new GPRobotSpecification("Fusion", "53"),
+                radnor.FUSiON.class));
+        map.put("RamRod", new StandardRobotClassManager(new GPRobotSpecification("RamRod", "54"),
+                radnor.RamRod.class));
+        map.put("Mirror", new StandardRobotClassManager(new GPRobotSpecification("Mirror", "55"),
+                stelo.Mirror.class));
+        map.put("MirrorNano", new StandardRobotClassManager(new GPRobotSpecification("MirrorNano", "56"),
+                stelo.MirrorNano.class));
+        map.put("Squirtle", new StandardRobotClassManager(new GPRobotSpecification("Squirtle", "57"),
+                tobe.micro.Squirtle.class));
+        map.put("Charon", new StandardRobotClassManager(new GPRobotSpecification("Charon", "58"),
+                tobe.mini.Charon.class));
+        map.put("Pandora", new StandardRobotClassManager(new GPRobotSpecification("Pandora", "59"),
+                tobe.Pandora.class));
+        map.put("Squirrel", new StandardRobotClassManager(new GPRobotSpecification("Squirrel", "60"),
+                tobe.Squirrel.class));
+        map.put("TheArtOfWar", new StandardRobotClassManager(new GPRobotSpecification("TheArtOfWar", "61"),
+                tzu.TheArtOfWar.class));
+        map.put("Wisdom", new StandardRobotClassManager(new GPRobotSpecification("Wisdom", "63"),
+                whind.Wisdom.class));
+
         return map;
     }
 
@@ -308,7 +392,6 @@ public class GPBattleManager extends BattleManager {
 
             if (task.done != null && task.done) done = true;
             else {
-
 
                 Utils.log("robot1 = " + task.robot1);
                 if (standardBots.keySet().contains(task.robot1)) {
@@ -672,7 +755,7 @@ public class GPBattleManager extends BattleManager {
         }
 
         Vector<RobotPeer> orderedRobots = new Vector<RobotPeer>(battle.getRobots());
-	    Collections.sort(orderedRobots);
+        Collections.sort(orderedRobots);
 //        Vector<RobotPeer> vr = battle.getRobots();
 //        Vector<RobotPeer> orderedRobots = new Vector<RobotPeer>();
 //        if (vr.elementAt(0).getRobotClassManager() == ralph && vr.elementAt(1).getRobotClassManager() == alice) {

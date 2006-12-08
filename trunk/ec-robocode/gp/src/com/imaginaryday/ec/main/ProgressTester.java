@@ -49,10 +49,10 @@ public class ProgressTester {
 		sampleBots.add("Tracker");
 		sampleBots.add("TrackFire");
 		sampleBots.add("Walls");
-		sampleBots.add("Nano");
-		sampleBots.add("Micro");
-		sampleBots.add("Mini");
-		sampleBots.add("Big");
+		sampleBots.add("Splinter");
+		sampleBots.add("RaikoMicro");
+		sampleBots.add("Komarious");
+		sampleBots.add("Dookious");
 	}
 
 

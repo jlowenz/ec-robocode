@@ -12,7 +12,7 @@ public class GPFitnessCalc {
     private static final double EFFICIENCY_SCALE = 4.0;
     private static final double SHORT_BATTLE_SCALE = 1.1;
 	private static final double SURVIVAL_SCALE = 2.0;
-    private static final double BULLET_PENALTY_SCALE = -1;
+    private static final double BULLET_PENALTY_SCALE = -1.0;
     private static final double MOVEMENT_PENALTY = -0.01;
 
     private static double minBattleLength = Double.MAX_VALUE;
@@ -20,8 +20,9 @@ public class GPFitnessCalc {
     public static double getFitness(int numGenerations, RobotResults robot, RobotResults opponent)
 	{
         minBattleLength = Math.min(minBattleLength, robot.getBattleLength());
-		return getScanFitness(numGenerations, robot, opponent);
-	}
+//		return getScanFitness(numGenerations, robot, opponent);
+        return getJasonsFitness(numGenerations, robot, opponent);
+    }
 
     private static double getScanFitness(int numGenerations, RobotResults robot, RobotResults opponent) {
         // Add a bonus for accuracy
@@ -90,7 +91,7 @@ public class GPFitnessCalc {
 	    double scanEfficiencyBonus = EFFICIENCY_SCALE * scanEfficiency * (robot.getBulletDamage() + (robot.getNumScanEvents() > 0 ? 100 : 0));
 
 		// bonus for survival
-		double survivalBonus = SURVIVAL_SCALE * robot.getEnergy() * 0.05 * robot.getBulletDamage(); // they start with 100,
+		double survivalBonus = SURVIVAL_SCALE * robot.getEnergy() * 0.01 * robot.getBulletDamage(); // they start with 100,
         double bulletHitPenalty = BULLET_PENALTY_SCALE * opponent.getNumBulletHits();
 
         // penalty for not moving...

@@ -101,7 +101,7 @@ public class Driver implements Runnable {
             nf.loadNode(VectorFromHeading.class);
             nf.loadNode(GoingForward.class);
             nf.loadNode(MySpeed.class);
-            nf.loadNode(CurrentVector.class);
+//            nf.loadNode(CurrentVector.class);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -121,7 +121,7 @@ public class Driver implements Runnable {
     private Date endDate;
 
     private static DecimalFormat df = new DecimalFormat("00");
-    private int numGenerations = 601;
+    private int numGenerations = 61;
     private int numRandomGenerations = 0;
     private int generationCount = 0;
     private int treeDepth = 5;
@@ -129,10 +129,10 @@ public class Driver implements Runnable {
     private final double beta = 1.5;
 	private int eliteCount = 1;
     private int cullCount = 2;
-    private double crossoverProbability = 0.9;
-    private double mutationProbability = 0.05;
+    private double crossoverProbability = 0.95;
+    private double mutationProbability = 0.10;
     private int testFreq = 5;
-    private int populationSize = 25;
+    private int populationSize = 80;
     private boolean readPopulation = false;
     private String popFile = "";
     private String progLogFile = System.getProperty("user.home") + System.getProperty("file.separator") + "progress.log";
@@ -335,7 +335,9 @@ public class Driver implements Runnable {
         }
 
         // Test the population against the entire set of bots.
+        logger.info("Starting final test");
         finalBotTester.testProgress(population, generationCount);
+        logger.info("Done with final test");
 
         try {
             battleWriter.close();

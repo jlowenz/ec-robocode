@@ -38,3 +38,8 @@ Run #8
 + add random member creation and cull lowest 2 forests
 + reduce mutation rate back to 5%
 + keep crossover at 90%
+
+Run #9
++ raise pop size to 80
++ raise cross/mut 95%/10%
++ 60 gens

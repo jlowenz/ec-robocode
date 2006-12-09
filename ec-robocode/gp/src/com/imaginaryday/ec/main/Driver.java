@@ -128,7 +128,7 @@ public class Driver implements Runnable {
     private final double alpha = .5;
     private final double beta = 1.5;
 	private int eliteCount = 1;
-    private int cullCount = 2;
+    private int cullCount = 0;
     private double crossoverProbability = 0.95;
     private double mutationProbability = 0.10;
     private int testFreq = 5;
@@ -293,6 +293,9 @@ public class Driver implements Runnable {
             generationCount = 1;
         }
 
+        /*
+         * Do random generations creation
+         */
         while (generationCount < numRandomGenerations) {
             long start = System.currentTimeMillis();
             logger.info("Calculating new random population...");

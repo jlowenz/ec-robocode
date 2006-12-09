@@ -37,7 +37,7 @@ public class VectorUtils {
     }
 
     public static VectorFloat64 vecFromDir(double headingRadians) {
-        return VectorFloat64.valueOf(clampZero(Math.sin(headingRadians)), clampZero(Math.cos(headingRadians)));
+        return VectorFloat64.valueOf(clampZero(Math.sin(Stuff.modHeading(headingRadians))), clampZero(Math.cos(Stuff.modHeading(headingRadians))));
     }
 
     public static double vecLength(VectorFloat64 vec) {

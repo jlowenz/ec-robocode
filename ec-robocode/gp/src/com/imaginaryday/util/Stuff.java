@@ -43,4 +43,7 @@ public class Stuff {
         return l;
     }
 
+    public static boolean close(double val, double val1) {
+        return Math.abs(val-val1) < 0.0001;
+    }
 }

@@ -1,0 +1,155 @@
+WARNING: POSSIBLE BUGS.  We have tried to do our best to convert ECJ15
+over to the renamed clone() mechanism, but there were lots of little
+wires here and there that had to be trimmed, and not all of it could
+be done with automatic refactoring; much had to be done from hand.  We
+may have missed an item.  We would greatly appreciate an example
+showing DIFFERENT RESULTS between ECJ15 and ECJ14.
+
+
+
+ECJ 15 differs from ECJ 14 almost entirely in that it has a heavily
+revised clone() structure.  We have avoided this overhaul for quite a
+while in the name of backwards-compatibility.  But it is long overdue. 
+We are providing both ECJ 14 and ECJ 15 at the same time so you can take
+advantage of all the improvements in ECJ 15 without having to upgrade
+your code to the new structure.  Hopefully this will give you some
+breathing room.
+
+Some history from Sean: In 1997, when ECJ was devised, many java virtual
+machines exacted a fairly serious penalty for wrapping code in a try {
+... } statement.  Or so I remember strongly believing at the time.  At
+any rate, nowadays there is essentially no penalty for wrapping code in
+a try { ... } except that functions with try { ... } statements in them
+typically cannot be inlined.  For our purposes, that's not an issue.
+Additionally, if I recall correctly, clone()'s contract had not been
+exactly formalized with regard to guarantees of deep- versus
+light-cloning.  At any rate, for these reasons, whether dead-on or
+mistaken, I decided to use an ornate cover facility for cloning
+Prototype objects, consisting of two functions, protoClone() and
+protoCloneSimple().  protoClone() would (usually) perform deep cloning
+-- except for Individual and GPTree -- but would not catch the spurious
+CloneNotSupportedException that super.clone() theoretically throws. 
+protoCloneSimple() would call protoClone(), catching the exception. 
+protoClone() would typically call super.protoClone(), except at the top
+of the chain, which would then call clone().  Thus methods could call
+protoCloneSimple() for convenience, or if they were going to make lots
+of clones, they could wrap a loop of protoClone() declarations in a
+single try { ... } catching the CloneNotSupportedException.
+
+Additionally, protoClone() for GPIndividuals and GPTrees wasn't a deep
+clone.  It was a light clone.  This inconsistency later necessitated the
+creation of an additional deepClone() method call for Individual and
+subclasses, and for GPTree.
+
+Also, Group.emptyClone() and MersenneTwister[Fast].clone accidentally
+threw CloneNotSupportedException, though they weren't supposed to need
+it.
+
+Last, GPNode has many variants on tree builders using clone().  Many of
+them had "Simple" versions which wrapped the original function in a try
+{ ... } much as protoCloneSimple() wrapped protoClone().
+
+
+
+
+protoClone() and protoCloneSimple() are all nonsense now.  They're
+baroque and unneccessary.  In ECJ15 we have finally bitten the bullet
+and have cleaned house.  Here's what we have changed to:
+
+1. Prototypes no longer have protoClone() or protoCloneSimple().  They
+only have clone().  clone() does not throw any exceptions and will
+always produce a new object.  Thus a Prototype's clone() implementation
+must wrap super.clone() in a try { ... } if super.clone() itself throws a
+CloneNotSupportedException (which is only the case for Object.clone()).
+
+2. clone() on Prototypes will ALWAYS produce a deep-cloned object. 
+GPIndividual and GPTree have a function called lightClone() which
+performs the previous operation that protoClone() had performed for
+those classes.  deepClone() has been eliminated.
+
+3. All functions which previously were declared to throw
+CloneNotSupportedException have had that exception removed as it is now
+unnecessary.  Functions which wrapped a try { ... } for that exception
+have had the try { ... } removed when it is now superfluous.
+
+4. Group.emptyClone() no longer throws CloneNotSupportedException.
+
+5. MersenneTwister[Fast].clone() no longer throws CloneNotSupportedException.
+
+This results, as you will discover, in much cleaner and simpler code.
+
+
+
+How to convert your code.  
+
+0. If you called GPIndividual.protoClone(), GPIndividual.protoCloneSimple(), 
+GPTree.protoClone(), or GPTree.protoCloneSimple() expecting a light clone, 
+you must change these all to lightClone().
+
+1. If in other cases you called protoClone() or protoCloneSimple(), with
+the expectation of a deep clone, you should now just call clone(). 
+
+2. In all cases if you previously called protoClone(), you will likely
+also need to convert constructs like this:
+
+|  try
+|  	{
+|  	-- blah blah blah --
+|  	}
+|  catch (CloneNotSupportedException e) { -- junk -- }
+
+...to just...
+
+|  	-- blah blah blah --
+
+This structure may also need to be removed if you call
+Group.emptyClone() or MersenneTwister[Fast].clone()
+
+3. If you previously called deepClone(), you should now call clone().
+
+4. If you previously called any of the Simple variants on clone in
+GPNode, you should just call the standard variant instead.  You will
+also need to remove CloneNotSupportedException constructs as well.
+
+5. If you implemented protoClone() in this form:
+
+|	public Object protoClone() throws CloneNotSupportedException
+|		{
+|		Object obj = super.clone();
+|		-- blah blah blah --
+|		return obj;
+|		}
+
+... AND super.clone() was Object.clone(), you should convert this to:
+
+|       public Object clone()
+|               {
+|		try
+|			{
+|			Object obj = super.clone();
+|       	        -- blah blah blah --
+|			return obj;
+|	               }
+|		catch (CloneNotSupportedException e) 
+|			{ throw new InternalError(); }  // shouldn't happen
+|		}
+
+If super.clone() was NOT Object.clone(), then the superclass has already
+wrapped out the CloneNotSupportedException, and it suffices to just say
+
+|       public Object clone()
+|               {
+|               Object obj = super.clone();
+|               -- blah blah blah --
+|               return obj;
+|               }
+
+6. You ought to remove all "throws CloneNotSupportedException"
+declarations from your code.
+
+
+[ Here's hoping that's correct!  :-) If you have difficulties converting
+over, see the ECJ mailing list archives for other peoples' comments, and
+if there isn't anything sufficient, post a question.  We're pretty
+responsive. ]
+

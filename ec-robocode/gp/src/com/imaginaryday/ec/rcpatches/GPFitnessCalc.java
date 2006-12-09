@@ -20,8 +20,8 @@ public class GPFitnessCalc {
     public static double getFitness(int numGenerations, RobotResults robot, RobotResults opponent)
 	{
         minBattleLength = Math.min(minBattleLength, robot.getBattleLength());
-//		return getScanFitness(numGenerations, robot, opponent);
-        return getJasonsFitness(numGenerations, robot, opponent);
+		return getScanFitness(numGenerations, robot, opponent);
+//        return getJasonsFitness(numGenerations, robot, opponent);
     }
 
     private static double getScanFitness(int numGenerations, RobotResults robot, RobotResults opponent) {

@@ -45,6 +45,7 @@ public class RobotResults {
 	private double energy;
     private int movementPenalty;
     private int cellsEntered;
+    private int maxUnrespondedHits;
 
 
     public double getEnergy() {
@@ -129,6 +130,7 @@ public class RobotResults {
 	    this.energy = stats.getEnergy();
         this.movementPenalty = stats.getMovementPenalty();
         this.cellsEntered = stats.getCellsEntered();
+        this.maxUnrespondedHits = stats.getMaxUnrespondedHits();
     }
 
 
@@ -256,5 +258,9 @@ public class RobotResults {
 
     public void setCellsEntered(int cellsEntered) {
         this.cellsEntered = cellsEntered;
+    }
+
+    public int getMaxUnrespondedHits() {
+        return maxUnrespondedHits;
     }
 }

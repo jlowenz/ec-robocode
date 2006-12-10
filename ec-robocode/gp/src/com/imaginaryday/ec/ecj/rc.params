@@ -1,0 +1,161 @@
+# ec.Evolve
+# ==============================
+
+# we want store announcements in memory, so...
+store =                     true
+
+# totally verbose
+verbosity = 				0
+
+# flush output immediately, don't buffer it
+flush = 				    true
+
+# one thread
+evalthreads = 				1
+breedthreads = 				1
+
+# a good random seed for thread 0
+seed.0 = 				    time
+
+
+
+
+# ec.EvolutionState
+# ==============================
+
+# We're not writing checkpoint files.  If we were, we'd do it every
+# generation, and the prefix to all the files would be "ec.*"
+checkpoint =				true
+checkpoint-modulo =         1
+prefix = 				    rc
+
+#
+# The following parameter file will set up a very basic form
+# of evolution, single-threaded, no coevolution, no exchanging,
+# no cross-population breeding, using generational evolution,
+# simple fitness, popsize=1024, etc.
+# You'll need to fill in some of the gaps.
+#
+
+# ec.Evolve
+# ==============================
+
+# simple generational evolution
+state = 				ec.simple.SimpleEvolutionState
+
+# ec.EvolutionState
+# ==============================
+
+# We're using the standard initialization method
+init = 					ec.gp.GPInitializer
+
+# We're using the standard (empty) finalization method
+finish = 	        	ec.simple.SimpleFinisher
+
+# We're using the standard (empty) exchange method
+exch = 					ec.simple.SimpleExchanger
+
+# We're using standard breeding -- no cross-population breeding
+breed =					ec.simple.SimpleBreeder
+
+# We're using standard evaluation -- no coevolution
+eval =					ec.simple.SimpleEvaluator
+
+# We're using simple statistics
+stat =					ec.simple.SimpleStatistics
+
+# run for 51 generations, quit prematurely if I find something ideal
+generations =				51
+quit-on-run-complete =			true
+
+eval.problem                    = com.imaginaryday.ec.ecj.RobocodeProblem
+
+# ec.gp.GPData
+# ==============================
+
+# set this elsewhere!
+# gp.gpdata =
+
+
+# ec.Subpopulation
+# ==============================
+
+pop.subpop.0.fitness = com.imaginaryday.ec.ecj.RobocodeFitness
+
+# You might change this, but it must be a GPSpeciesForm!
+pop.subpop.0.species = 			ec.gp.GPSpecies
+
+# We retry 100 times for duplicates (this is the lil-gp default)
+# in our subpopulation 0
+pop.subpop.0.duplicate-retries = 100
+
+
+# ec.Species
+# ==============================
+
+pop.subpop.0.species.ind = 		com.imaginaryday.ec.ecj.RobocodeIndividual
+
+#You need to provide a basic pipe -- if you want to pick from among
+#pipes (like Koza does, 10% reproduction and 90% crossover), see
+#ec.breed.MultiBreedingPipeline
+#pop.subpop.0.species.pipe =
+#...
+
+
+# ec.GPIndividual
+# ==============================
+
+# We'll define a single tree -- you might want to change its class
+pop.subpop.0.species.ind.numtrees =	4
+pop.subpop.0.species.ind.tree.0     = com.imaginaryday.ec.ecj.RobocodeTree
+pop.subpop.0.species.ind.tree.1     = com.imaginaryday.ec.ecj.RobocodeTree
+pop.subpop.0.species.ind.tree.2     = com.imaginaryday.ec.ecj.RobocodeTree
+pop.subpop.0.species.ind.tree.3     = com.imaginaryday.ec.ecj.RobocodeTree
+
+
+# ec.GPTree
+# ==============================
+
+
+
+# ec.SimpleStatistics
+# ==============================
+
+# output statistics to the file "out.stat" in the directory
+# the run was started in
+stat.file				    = $out.stat
+
+# GPTypes
+gp.type.a.size              = 4
+gp.type.a.0.name            = Number
+gp.type.a.1.name            = Boolean
+gp.type.a.2.name            = FiringPair
+gp.type.a.3.name            = DirectionPair
+
+# GPNodeConstraints
+gp.nc
+
+
+# GPTreeConstraints
+gp.tc.size          = 3
+gp.tc.0.name        = NumberTC
+gp.tc.0.returns     = Number
+gp.tc.0.fset        = Robocode
+gp.tc.0.init        = ec.gp.koza.HalfBuilder
+
+gp.tc.1.name        = FiringPairTC
+gp.tc.1.returns     = FiringPair
+gp.tc.1.fset        = Robocode
+gp.tc.1.init        = ec.gp.koza.HalfBuilder
+
+gp.tc.2.name        = DirectionPairTC
+gp.tc.2.returns     = DirectionPair
+gp.tc.2.fset        = Robocode
+gp.tc.2.init        = ec.gp.koza.HalfBuilder
+
+gp.koza.half.min-depth = 2
+gp.koza.half.max-depth = 6
+gp.koza.half.growp = 0.5
+
+# GPFunctionSets
+gp.fs

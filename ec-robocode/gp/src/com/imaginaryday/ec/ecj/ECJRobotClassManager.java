@@ -1,6 +1,8 @@
 package com.imaginaryday.ec.ecj;
 import com.imaginaryday.ec.rcpatches.GPRobotSpecification;
 import ec.ECJAgent;
+import ec.EvolutionState;
+import ec.Problem;
 import ec.gp.GPTree;
 import robocode.Robot;
 import robocode.peer.robot.RobotClassManager;
@@ -23,8 +25,11 @@ public class ECJRobotClassManager extends RobotClassManager {
     private GPTree shootProgram;
 
     private RobotSpecification robotSpecification;
+    private EvolutionState state;
+    private Problem prob;
+    private int thread;
 
-    public ECJRobotClassManager(RobocodeIndividual ind)
+    public ECJRobotClassManager(RobocodeIndividual ind, EvolutionState state, int thread, Problem prob)
     {
         super(new GPRobotSpecification("ECJBot", "sadasd"));
         setRobotClass(ECJAgent.class);
@@ -34,6 +39,9 @@ public class ECJRobotClassManager extends RobotClassManager {
         turretProgram = ind.trees[1];
         radarProgram = ind.trees[2];
         shootProgram = ind.trees[3];
+        this.state = state;
+        this.thread = thread;
+        this.prob = prob;
     }
 
     public GPTree getTurretProgram() {
@@ -61,8 +69,9 @@ public class ECJRobotClassManager extends RobotClassManager {
 
         Class<ECJAgent> c = getRobotClass();
         try {
-            Constructor<ECJAgent> ctor = c.getConstructor(GPTree.class,GPTree.class,GPTree.class,GPTree.class);
-            robot = ctor.newInstance(radarProgram, turretProgram, shootProgram, moveProgram);
+            Constructor<ECJAgent> ctor = c.getConstructor(RobocodeIndividual.class, GPTree.class,GPTree.class,GPTree.class,GPTree.class);
+            robot = ctor.newInstance(ind, radarProgram, turretProgram, shootProgram, moveProgram);
+            robot.initializeRun(state, thread, prob);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

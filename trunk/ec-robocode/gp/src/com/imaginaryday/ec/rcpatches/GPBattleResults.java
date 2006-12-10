@@ -37,7 +37,7 @@ public class GPBattleResults implements Entry {
     public Integer seconds1;
     public Integer battleLength1;
     public Integer movementPenalty1;
-
+    public Integer cellsEntered1;
 
     public Integer rank2;
     public Integer score2;
@@ -59,6 +59,7 @@ public class GPBattleResults implements Entry {
     public Double energy1;
     public Double energy2;
     public Integer movementPenalty2;
+    public Integer cellsEntered2;
 
 
     public GPBattleResults() {
@@ -96,7 +97,7 @@ public class GPBattleResults implements Entry {
         this.battleLength1 = results1.getBattleLength();
         this.energy1 = results1.getEnergy();
         this.movementPenalty1 = results1.getMovementPenalty();
-
+        this.cellsEntered1 = results1.getCellsEntered();
 
         this.rank2 = results2.getRank();
         this.score2 = results2.getScore();
@@ -117,11 +118,10 @@ public class GPBattleResults implements Entry {
         this.battleLength2 = results2.getBattleLength();
         this.energy2 = results2.getEnergy();
         this.movementPenalty2 = results2.getMovementPenalty();
-
+        this.cellsEntered2 = results2.getCellsEntered();
 
         System.err.println(this);
     }
-
 
 
     public int getGeneration() {
@@ -161,7 +161,7 @@ public class GPBattleResults implements Entry {
     }
 
     public String getSummary_CSV() {
-      StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.append(generation).append(',').append(robot1).append(',').append(robot2);
         sb.append(',').append(fitness1).append(',').append(fitness2);
         sb.append(',').append(score1).append(',').append(score2);
@@ -183,6 +183,7 @@ public class GPBattleResults implements Entry {
         sb.append(",").append(battleLength1).append(",").append(battleLength2);
         sb.append(",").append(energy1).append(",").append(energy2);
         sb.append(",").append(movementPenalty1).append(",").append(movementPenalty2);
+        sb.append(",").append(cellsEntered1).append(",").append(cellsEntered2);                
         sb.append(",").append(minBattleLength);
         return sb.toString();
     }

@@ -8,7 +8,7 @@ import robocode.control.RobotResults;
  *         Time: 9:35:54 PM
  */
 public class GPFitnessCalc {
-    private static final double ACCURACY_SCALE = 100;
+    private static final double ACCURACY_SCALE = 200;
     private static final double EFFICIENCY_SCALE = 100;
     private static final double SHORT_BATTLE_SCALE = 1.1;
     private static final double SURVIVAL_SCALE = 2.0;
@@ -43,8 +43,7 @@ public class GPFitnessCalc {
         }
         double scanEfficiencyBonus = EFFICIENCY_SCALE * scanEfficiency;
 
-        double coverageFraction;
-        coverageFraction = robot.getCellsEntered() / 48;
+        double coverageFraction = (double)robot.getCellsEntered() / 48.0;
         double motionBonus = coverageFraction * CELL_VISITING_SCALE;
 
         double damageFitness = robot.getBulletDamage() + robot.getBulletDamageBonus() + robot.getRamDamage()

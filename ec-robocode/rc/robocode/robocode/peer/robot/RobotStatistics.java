@@ -415,12 +415,6 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
         cellsEntered[index] = true;
     }
 
-    public boolean wasCellEntered(double x, double y) {
-        int xi = (int)Math.floor(x);
-        int yi = (int)Math.floor(y);
-        int index = (xi / 100) * 6 + (yi / 100);
-        return cellsEntered[index];
-    }
 
     public void hit() {
         unrespondedHits++;

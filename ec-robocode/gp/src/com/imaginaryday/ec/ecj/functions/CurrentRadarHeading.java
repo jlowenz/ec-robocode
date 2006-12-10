@@ -18,6 +18,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class CurrentRadarHeading extends GPRoboNode {
+    private static final long serialVersionUID = 2133851521962050183L;
 
     public String toString() {
         return "currentRadarHeading";

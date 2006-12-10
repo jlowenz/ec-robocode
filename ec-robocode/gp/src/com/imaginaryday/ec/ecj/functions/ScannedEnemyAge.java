@@ -16,6 +16,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class ScannedEnemyAge extends GPRoboNode {
+    private static final long serialVersionUID = -6259932230804979017L;
 
     public String toString() {
         return "scannedEnemyAge";

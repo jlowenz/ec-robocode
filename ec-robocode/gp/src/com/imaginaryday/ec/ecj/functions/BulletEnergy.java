@@ -17,6 +17,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class BulletEnergy extends GPRoboNode {
+    private static final long serialVersionUID = -9071727888432801477L;
 
     public String toString() {
         return "bulletEnergy";

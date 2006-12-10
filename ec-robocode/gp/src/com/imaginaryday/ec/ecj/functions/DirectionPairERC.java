@@ -22,6 +22,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  */
 public class DirectionPairERC extends GPRoboERC {
     DirectionPair val;
+    private static final long serialVersionUID = -8800412517483351677L;
 
     public String name() {
         return "dirPairConst";

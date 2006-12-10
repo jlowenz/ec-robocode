@@ -17,6 +17,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class RammerBearing extends GPRoboNode {
+    private static final long serialVersionUID = -2283803305782288394L;
 
     public String toString() {
         return "rammerBearing";

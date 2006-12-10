@@ -16,6 +16,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class Rammed extends GPRoboNode {
+    private static final long serialVersionUID = -5859082610873132687L;
 
     public String toString() {
         return "rammed";

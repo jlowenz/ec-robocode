@@ -16,6 +16,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class IsRadarMoving extends GPRoboNode {
+    private static final long serialVersionUID = 5215319771649409834L;
 
     public String toString() {
         return "isRadarMoving";

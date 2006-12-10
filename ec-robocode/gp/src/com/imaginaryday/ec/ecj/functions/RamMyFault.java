@@ -16,6 +16,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class RamMyFault extends GPRoboNode {
+    private static final long serialVersionUID = 6204871657273794744L;
 
     public String toString() {
         return "ramMyFault";

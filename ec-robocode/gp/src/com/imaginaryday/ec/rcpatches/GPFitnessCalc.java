@@ -8,21 +8,62 @@ import robocode.control.RobotResults;
  *         Time: 9:35:54 PM
  */
 public class GPFitnessCalc {
-    private static final double ACCURACY_SCALE = 5.0;
-    private static final double EFFICIENCY_SCALE = 4.0;
+    private static final double ACCURACY_SCALE = 100;
+    private static final double EFFICIENCY_SCALE = 100;
     private static final double SHORT_BATTLE_SCALE = 1.1;
     private static final double SURVIVAL_SCALE = 2.0;
     private static final double BULLET_PENALTY_SCALE = -1.0;
     private static final double MOVEMENT_PENALTY = -0.01;
-    private static final double UNRESPONDING_PENALTY_SCALE = 1000;
-    private static final double CELL_VISITING_SCALE = 3;
+    private static final double UNRESPONDING_PENALTY_SCALE = 100;
+    private static final double CELL_VISITING_SCALE = 100;
 
     private static double minBattleLength = Double.MAX_VALUE;
 
     public static double getFitness(int numGenerations, RobotResults robot, RobotResults opponent) {
         minBattleLength = Math.min(minBattleLength, robot.getBattleLength());
-        return getLastFitness(numGenerations, robot, opponent);
-//        return getJasonsFitness(numGenerations, robot, opponent);
+        return getNewFitness(numGenerations, robot, opponent);
+    }
+
+    private static double getNewFitness(int numGenerations, RobotResults robot, RobotResults opponent) {
+        // Add a bonus for accuracy
+        double accuracy = 0.0;
+        if (robot.getNumBulletsFired() > 0) {
+            accuracy = (double) robot.getNumBulletHits() / (double) robot.getNumBulletsFired();
+        }
+        double accuracyBonus = ACCURACY_SCALE * accuracy;
+
+        /*
+             * Add a bonus for scan efficiency.
+           * Efficiency is getting one scan even per battle "tick"
+           */
+        double scanEfficiency = 0.0;
+        if (robot.getNumScanEvents() > 0 && robot.getBattleLength() > 0) {
+            double revs = robot.getBattleLength();
+            scanEfficiency = (double) robot.getNumScanEvents() / revs;
+        }
+        double scanEfficiencyBonus = EFFICIENCY_SCALE * scanEfficiency;
+
+        double coverageFraction;
+        coverageFraction = robot.getCellsEntered() / 48;
+        double motionBonus = coverageFraction * CELL_VISITING_SCALE;
+
+        double damageFitness = robot.getBulletDamage() + robot.getBulletDamageBonus() + robot.getRamDamage()
+                + robot.getRamDamageBonus() + accuracyBonus + scanEfficiencyBonus + motionBonus;
+
+        double d = (robot.getDistanceTravelled() < 1) ? 1.0 : robot.getDistanceTravelled();
+        double b = (robot.getNumBulletsFired() < 1) ? 1.0 : robot.getNumBulletsFired();
+        double s = (robot.getNumScanEvents() < 1) ? 1.0 : robot.getNumScanEvents();
+
+        double tweekFitness = Math.log(d) + Math.log(b) + Math.log(s);
+
+        double doSomethingBonus = 0.0;
+        if ((robot.getDistanceTravelled() > 0 ||
+                robot.getNumBulletsFired() > 0 ||
+                robot.getNumScanEvents() > 0)) doSomethingBonus = 5.0;
+
+        double unrespondingPenalty = (robot.getMaxUnrespondedHits() - 1) * UNRESPONDING_PENALTY_SCALE;
+
+        return damageFitness + tweekFitness + doSomethingBonus - unrespondingPenalty;
     }
 
     private static double getScanFitness(int numGenerations, RobotResults robot, RobotResults opponent) {

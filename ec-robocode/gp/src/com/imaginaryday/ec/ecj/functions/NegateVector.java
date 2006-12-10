@@ -17,6 +17,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  * </b>
  */
 public class NegateVector extends GPRoboNode {
+    private static final long serialVersionUID = 7320127197932535096L;
 
     public String toString() {
         return "negateVec";

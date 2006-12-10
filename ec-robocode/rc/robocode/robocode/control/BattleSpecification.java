@@ -12,7 +12,7 @@
 package robocode.control;
 
 
-import robocode.battle.*;
+import robocode.battle.BattleProperties;
 
 
 /**
@@ -29,8 +29,8 @@ public class BattleSpecification {
 	 * Creates a BattleSpecification with the given number of rounds, battlefield, and robots
 	 * inactivityTime defaults to 450.  gunCoolingRate defaults to .1
 	 * @param numRounds Number of rounds in this battle
-	 * @param battlefieldSpecification The battlefield
 	 * @param robotSpecifications Robots in this battle
+     * @param battlefield asdasd
 	 */
 	public BattleSpecification(int numRounds, BattlefieldSpecification battlefield, RobotSpecification robotSpecifications[]) {
 		this(numRounds, 450, .1, battlefield, robotSpecifications);
@@ -41,8 +41,8 @@ public class BattleSpecification {
 	 * @param numRounds Number of rounds in this battle
 	 * @param inactivityTime Number of ticks in which 10 energy must be lost
 	 * @param gunCoolingRate Gun cooling rate
-	 * @param battlefieldSpecification The battlefield
-	 * @param robotSpecifications Robots in this battle
+     * @param battlefield asdasd
+     * @param robots asdasd
 	 */
 	public BattleSpecification(int numRounds, long inactivityTime, double gunCoolingRate, BattlefieldSpecification battlefield, RobotSpecification robots[]) {
 		battleProperties = new BattleProperties();

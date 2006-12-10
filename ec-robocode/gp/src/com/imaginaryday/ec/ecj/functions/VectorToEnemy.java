@@ -18,6 +18,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  * </b>
  */
 public class VectorToEnemy extends GPRoboNode {
+    private static final long serialVersionUID = 4664716589107771314L;
 
     public String toString() {
         return "vecToEnemy";

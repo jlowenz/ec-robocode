@@ -16,6 +16,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class GoingForward extends GPRoboNode {
+    private static final long serialVersionUID = 2711177625681960811L;
 
     public String toString() {
         return "goingForward";

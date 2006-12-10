@@ -19,6 +19,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  * </b>
  */
 public class ScaleVector extends GPRoboNode {
+    private static final long serialVersionUID = -5000480310973752067L;
 
     public String toString() {
         return "scaleVec";

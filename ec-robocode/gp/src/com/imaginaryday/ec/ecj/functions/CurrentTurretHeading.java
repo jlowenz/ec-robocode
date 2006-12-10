@@ -17,6 +17,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class CurrentTurretHeading extends GPRoboNode {
+    private static final long serialVersionUID = -1827957969642428634L;
 
     public String toString() {
         return "currentTurretHeading";

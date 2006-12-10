@@ -16,6 +16,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class MySpeed extends GPRoboNode {
+    private static final long serialVersionUID = -4135101325322714337L;
 
     public String toString() {
         return "mySpeed";

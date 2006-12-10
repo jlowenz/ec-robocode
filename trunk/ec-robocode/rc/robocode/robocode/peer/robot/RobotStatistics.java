@@ -66,6 +66,7 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 
 	private double robotDamage[] = null;
     private int movementPenalty = 0;
+    private boolean cellsEntered[];
 
     /**
 	 * RobotStatistics constructor comment.
@@ -74,7 +75,8 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 		super();
 		this.robotPeer = robotPeer;
 		this.teamPeer = robotPeer.getTeamPeer();
-	}
+        this.cellsEntered = new boolean[48];
+    }
 
 	public void damagedByBullet(double damage) {
 		bulletDamageReceived += damage;
@@ -378,5 +380,27 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 	}
     public void scoreMovementPenalty() {
         movementPenalty++;
+    }
+
+    public int getCellsEntered() {
+        int count = 0;
+        for (boolean b : cellsEntered) {
+            if (b) ++count;
+        }
+        return count;
+    }
+
+    public void cellEntered(double x, double y) {
+        int xi = (int)Math.floor(x);
+        int yi = (int)Math.floor(y);
+        int index = (xi / 100) * 6 + (yi / 100);
+        cellsEntered[index] = true;
+    }
+
+    public boolean wasCellEntered(double x, double y) {
+        int xi = (int)Math.floor(x);
+        int yi = (int)Math.floor(y);
+        int index = (xi / 100) * 6 + (yi / 100);
+        return cellsEntered[index];
     }
 }

@@ -52,13 +52,14 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 	private double totalRammingDamageReceived;
     public double scanRadians;
 
-	private double energy = 0.0;
+    private double energy = 0.0;
     private int battleLength = 0;
     private double distanceTravelled;
     private int numScanEvents;
     private int numBulletsFired;
     private int numBulletHits;
     private int numWallsHit;
+    private int lastIndex;
 
     private int totalFirsts;
 	private int totalSeconds;
@@ -67,24 +68,30 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 	private double robotDamage[] = null;
     private int movementPenalty = 0;
     private boolean cellsEntered[];
+    private int unrespondedHits;
+    private int maxUnrespondedHits;
+
 
     /**
-	 * RobotStatistics constructor comment.
-	 */
-	public RobotStatistics(RobotPeer robotPeer) {
-		super();
-		this.robotPeer = robotPeer;
-		this.teamPeer = robotPeer.getTeamPeer();
+     * RobotStatistics constructor comment.
+     */
+    public RobotStatistics(RobotPeer robotPeer) {
+        super();
+        this.robotPeer = robotPeer;
+        this.teamPeer = robotPeer.getTeamPeer();
         this.cellsEntered = new boolean[48];
+        lastIndex = -1;
     }
 
 	public void damagedByBullet(double damage) {
 		bulletDamageReceived += damage;
-	}
+        this.hit();
+    }
 
 	public void damagedByRamming(double damage) {
 		rammingDamageReceived += damage;
-	}
+        this.hit();
+    }
 
 
     public int getMovementPenalty() {
@@ -342,13 +349,20 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
 
     public void scoreBulletFired() {
         numBulletsFired++;
+        resetUnrespondedHits();
+    }
+
+    private void resetUnrespondedHits() {
+        maxUnrespondedHits = (unrespondedHits > maxUnrespondedHits) ?
+                unrespondedHits : maxUnrespondedHits;
+        unrespondedHits = 0;
     }
 
     public void scoreFirsts() {
-		if (!noScoring) {
-			totalFirsts++;
-		}
-	}
+        if (!noScoring) {
+            totalFirsts++;
+        }
+    }
 
 	public void setNoScoring(boolean noScoring) {
 		this.noScoring = noScoring;
@@ -394,6 +408,10 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
         int xi = (int)Math.floor(x);
         int yi = (int)Math.floor(y);
         int index = (xi / 100) * 6 + (yi / 100);
+        if (index != lastIndex) {
+            resetUnrespondedHits();
+            lastIndex = index;
+        }
         cellsEntered[index] = true;
     }
 
@@ -402,5 +420,13 @@ public class RobotStatistics implements robocode.peer.ContestantStatistics {
         int yi = (int)Math.floor(y);
         int index = (xi / 100) * 6 + (yi / 100);
         return cellsEntered[index];
+    }
+
+    public void hit() {
+        unrespondedHits++;
+    }
+
+    public int getMaxUnrespondedHits() {
+        return maxUnrespondedHits;
     }
 }

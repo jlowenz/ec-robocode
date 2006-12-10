@@ -155,7 +155,7 @@ public class MasterProblemServer
     /**
      * Writes the slaves' random states to the checkpoint file.
      * 
-     * @param s checkpoint file output stream
+     * @param out checkpoint file output stream
      * @throws IOException
      */
     private void writeObject(ObjectOutputStream out) throws IOException
@@ -167,7 +167,7 @@ public class MasterProblemServer
     /**
      * Restores the slaves random states from the checkpoint file.
      * 
-     * @param s checkpoint file input stream.
+     * @param in checkpoint file input stream.
      * @throws IOException
      * @throws ClassNotFoundException
      */

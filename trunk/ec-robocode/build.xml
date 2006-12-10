@@ -126,6 +126,23 @@
     </target>
 
 
+    <!--  MODULE ECJ -->
+
+    <property name="module.ecj.basedir" value="${basedir}/ecj"/>
+    <property name="ecj.output.dir" value="${module.ecj.basedir}/build"/>
+    <path id="ecj.module.classpath">
+        <pathelement location="${module.gp.basedir}/lib/jcommon-1.0.6.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jfreechart-1.0.3-experimental.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/jfreechart-1.0.3.jar"/>
+        <pathelement location="${module.gp.basedir}/lib/itext-1.4.6.jar"/>
+    </path>
+    <path id="ecj.module.sourcepath">
+        <dirset dir="${module.ecj.basedir}">
+            <include name="src"/>
+        </dirset>
+    </path>
+
+
     <!-- Module gp -->
 
 
@@ -152,6 +169,7 @@
         <pathelement location="${module.gp.basedir}/lib/jini/jsk-policy.jar"/>
         <pathelement location="${module.gp.basedir}/lib/rio/rio.jar"/>
         <pathelement location="${rc.output.dir}"/>
+        <pathelement location="${ecj.output.dir}"/>
         <pathelement location="${module.gp.basedir}/lib/javassist.jar"/>
         <pathelement location="${module.gp.basedir}/lib/jam.micro.RaikoMicro_1.44.jar"/>
         <pathelement location="${module.gp.basedir}/lib/kc.nano.Splinter_1.1.jar"/>
@@ -229,7 +247,7 @@
     <target name="compile.module.gp" depends="compile.module.gp.production,compile.module.gp.tests"
             description="Compile module gp"/>
 
-    <target name="compile.module.gp.production" depends="compile.module.rc"
+    <target name="compile.module.gp.production" depends="compile.module.rc,compile.module.ecj"
             description="Compile module gp; production classes">
         <mkdir dir="${gp.output.dir}"/>
         <javac destdir="${gp.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
@@ -253,6 +271,29 @@
         </copy>
     </target>
 
+    <target name="compile.module.ecj" depends="compile.module.ecj.production"
+            description="Compile module ecj"/>
+
+    <target name="compile.module.ecj.production"
+            description="Compile module ecj; production classes">
+        <mkdir dir="${ecj.output.dir}"/>
+        <javac destdir="${ecj.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+               memorymaximumsize="${compiler.max.memory}" fork="true">
+            <compilerarg line="${compiler.args.gp}"/>
+            <classpath refid="ecj.module.classpath"/>
+            <src refid="ecj.module.sourcepath"/>
+            <!--<patternset refid="excluded.from.compilation.gp"/>-->
+        </javac>
+
+        <copy todir="${ecj.output.dir}">
+            <fileset dir="${module.ecj.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+
     <target name="compile.module.gp.tests" depends="compile.module.gp.production"
             description="compile module gp; test classes" unless="skip.tests"/>
 
@@ -261,7 +302,7 @@
         <delete dir="${gp.testoutput.dir}"/>
     </target>
 
-    <target name="dist" depends="compile.module.rc, compile.module.gp">
+    <target name="dist" depends="compile.module.rc, compile.module.gp, compile.module.ecj">
         <delete dir="${gp.build.dir}"/>
         <mkdir dir="${gp.build.dir}"/>
         <jar destfile="${gp.build.dir}/gp.jar">
@@ -272,6 +313,7 @@
             </manifest>
             <fileset dir="${gp.output.dir}"/>
             <fileset dir="${rc.output.dir}"/>
+            <fileset dir="${ecj.output.dir}"/>
         </jar>
         <copy todir="${gp.build.dir}" flatten="true">
             <fileset dir="${module.gp.basedir}/lib">

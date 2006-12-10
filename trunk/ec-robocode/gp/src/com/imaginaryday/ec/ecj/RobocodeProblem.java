@@ -36,8 +36,7 @@ import java.util.Map;
 public class RobocodeProblem extends Problem implements GroupedProblemForm {
     private transient GPRobocodeManager manager;
     private transient BattleProperties battleProperties;
-
-    private Battle battle;
+    private transient Battle battle;
 
     public void preprocessPopulation(final EvolutionState state, Population pop) {
         if (manager == null) {
@@ -66,7 +65,9 @@ public class RobocodeProblem extends Problem implements GroupedProblemForm {
     }
 
     public void postprocessPopulation(final EvolutionState state, Population pop) {
-        
+
+        // run the test against a whole bunch of human-coded bots
+
     }
 
     private void startNewBattle(List<ECJRobotClassManager> battlingRobotsVector) {
@@ -124,10 +125,11 @@ public class RobocodeProblem extends Problem implements GroupedProblemForm {
         results = null;
         List<ECJRobotClassManager> robots = new ArrayList<ECJRobotClassManager>();
         Map<String, Tuple.Two<RobocodeIndividual,Boolean>> blah = new HashMap<String, Tuple.Two<RobocodeIndividual, Boolean>>();
+
         blah.put(((RobocodeIndividual)ind[0]).getName(), Tuple.two((RobocodeIndividual) ind[0], updateFitness[0]));
         blah.put(((RobocodeIndividual)ind[1]).getName(), Tuple.two((RobocodeIndividual) ind[1], updateFitness[1]));
-        robots.add(new ECJRobotClassManager((RobocodeIndividual) ind[0]));
-        robots.add(new ECJRobotClassManager((RobocodeIndividual) ind[1]));
+        robots.add(new ECJRobotClassManager((RobocodeIndividual) ind[0], state, threadnum, this));
+        robots.add(new ECJRobotClassManager((RobocodeIndividual) ind[1], state, threadnum, this));
 
         // run the battle
         startNewBattle(robots); // this blocks until the battle thread is complete
@@ -155,12 +157,13 @@ public class RobocodeProblem extends Problem implements GroupedProblemForm {
 
     private class ECJRobocodeListener implements RobocodeListener {
         public void battleComplete(BattleSpecification battle, RobotResults[] results) {
-
+            RobocodeProblem.this.results = results;
         }
         public void battleAborted(BattleSpecification battle) {
-            
+            System.err.println("Battle was aborted!?!");
         }
         public void battleMessage(String message) {
+            System.out.println(message);
         }
     }
 }

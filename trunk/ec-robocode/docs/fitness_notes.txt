@@ -40,6 +40,14 @@ Run #8
 + keep crossover at 90%
 
 Run #9
++ jason's function
 + raise pop size to 80
 + raise cross/mut 95%/10%
 + 60 gens
+
+Run #10
++ scan function
+
+Run #11
++ using new fitness
++ values back to 600,95,5,1 elite,1 cull,no random

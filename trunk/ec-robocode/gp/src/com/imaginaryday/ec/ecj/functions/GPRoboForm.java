@@ -9,7 +9,7 @@ import ec.ECJAgent;
  * Time: 12:37:19 PM<br>
  * </b>
  */
-public interface GPRoboForm {
+public interface GPRoboForm  {
     void setAgent(ECJAgent agent);
     ECJAgent getAgent();
 }

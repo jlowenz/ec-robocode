@@ -1,32 +1,14 @@
 package ec;
 
-import com.imaginaryday.ec.gp.AbstractNode;
-import com.imaginaryday.ec.gp.Node;
-import com.imaginaryday.ec.gp.nodes.Add;
-import com.imaginaryday.ec.gp.nodes.And;
-import com.imaginaryday.ec.gp.nodes.BooleanConstant;
-import com.imaginaryday.ec.gp.nodes.Constant;
-import com.imaginaryday.ec.gp.nodes.GreaterThan;
-import com.imaginaryday.ec.gp.nodes.IfThenElse;
-import com.imaginaryday.ec.gp.nodes.LessThan;
-import com.imaginaryday.ec.gp.nodes.Not;
+import com.imaginaryday.ec.ecj.PolyData;
+import com.imaginaryday.ec.ecj.RobocodeIndividual;
+import com.imaginaryday.ec.ecj.RobocodeTree;
 import com.imaginaryday.ec.main.nodes.DirectionPair;
-import com.imaginaryday.ec.main.nodes.DotProduct;
-import com.imaginaryday.ec.main.nodes.EnemyHeading;
 import com.imaginaryday.ec.main.nodes.FiringPair;
-import com.imaginaryday.ec.main.nodes.MakeDirectionPair;
-import com.imaginaryday.ec.main.nodes.MakeFiringPair;
-import com.imaginaryday.ec.main.nodes.Rammed;
-import com.imaginaryday.ec.main.nodes.RammedAge;
-import com.imaginaryday.ec.main.nodes.ScannedEnemy;
-import com.imaginaryday.ec.main.nodes.ScannedEnemyAge;
-import com.imaginaryday.ec.main.nodes.VectorFromHeading;
-import com.imaginaryday.ec.main.nodes.VectorHeading;
-import com.imaginaryday.ec.main.nodes.VectorLength;
-import com.imaginaryday.ec.main.nodes.VectorToEnemy;
 import com.imaginaryday.util.Stuff;
 import com.imaginaryday.util.Tuple;
 import com.imaginaryday.util.VectorUtils;
+import ec.gp.GPTree;
 import javolution.context.PoolContext;
 import org.jscience.mathematics.numbers.Float64;
 import org.jscience.mathematics.vectors.VectorFloat64;
@@ -54,10 +36,10 @@ public class ECJAgent extends AdvancedRobot {
 //        GPAgent.log.setLevel(Level.FINEST);
 //    }
 
-    private Node radarTree;
-    private Node turretTree;
-    private Node firingTree;
-    private Node directionTree;
+    private RobocodeTree radarTree;
+    private RobocodeTree turretTree;
+    private RobocodeTree firingTree;
+    private RobocodeTree directionTree;
     private boolean alive = true;
     private VectorFloat64 vectorToEnemy = VectorFloat64.valueOf(0, 1);
     private int scannedEnemyAge = 0;
@@ -83,84 +65,89 @@ public class ECJAgent extends AdvancedRobot {
     private static final int RAMMED_AGE_LIMIT = 50;
     private static final int SCANNED_AGE_LIMIT = 50;
     private boolean forward;
+    private RobocodeIndividual individual;
+    private EvolutionState state;
+    private int thread;
+    private Problem prob;
 
-    public ECJAgent() {
-        radarTree = initRadarTree();
-        turretTree = initTurretTree();
-        firingTree = initFiringTree();
-        directionTree = initDirectionTree();
+//    public ECJAgent() {
+//        radarTree = initRadarTree();
+//        turretTree = initTurretTree();
+//        firingTree = initFiringTree();
+//        directionTree = initDirectionTree();
+//
+//        if (radarTree != null) this.radarTree.setOwner(this);
+//        if (turretTree != null) this.turretTree.setOwner(this);
+//        if (firingTree != null) this.firingTree.setOwner(this);
+//        if (directionTree != null) this.directionTree.setOwner(this);
+//    }
 
-        if (radarTree != null) this.radarTree.setOwner(this);
-        if (turretTree != null) this.turretTree.setOwner(this);
-        if (firingTree != null) this.firingTree.setOwner(this);
-        if (directionTree != null) this.directionTree.setOwner(this);
+//    protected Node initDirectionTree() {
+//        return new MakeDirectionPair()
+//                .attach(0,new VectorToEnemy())
+//                .attach(1,new IfThenElse()
+//                        .attach(0,new Not().attach(0,new Rammed()))
+//                        .attach(1,new BooleanConstant(true))
+//                        .attach(2,new IfThenElse()
+//                                .attach(0,new LessThan()
+//                                            .attach(0,new RammedAge())
+//                                            .attach(1,new Constant(10)))
+//                                .attach(1,new BooleanConstant(false))
+//                                .attach(2,new BooleanConstant(true))));
+//    }
+//
+//    protected Node initFiringTree() {
+//        return new MakeFiringPair()
+//                .attach(0, new And()
+//                            .attach(0, new ScannedEnemy())
+//                            .attach(1, new LessThan()
+//                                        .attach(0,new VectorLength().attach(0, new VectorToEnemy()))
+//                                        .attach(1,new Constant(100))))
+//                .attach(1, new Constant(3));
+//    }
+//
+//    protected Node initTurretTree() {
+//        return new VectorHeading().attach(0,new VectorToEnemy());
+//    }
+//    protected Node initRadarTree() {
+//        return new IfThenElse()
+//                .attach(0, new Not().attach(0,new ScannedEnemy()))
+//                .attach(1, new Constant(6*Math.PI))
+//                .attach(2, new IfThenElse()
+//                    .attach(0, new GreaterThan()
+//                                .attach(0,new ScannedEnemyAge())
+//                                .attach(1,new Constant(2)))
+//                    .attach(1, new Add()
+//                                .attach(0,new VectorHeading().attach(0,new VectorToEnemy()))
+//                                .attach(1,new IfThenElse()
+//                                            .attach(0,new GreaterThan()
+//                                                        .attach(0,new DotProduct()
+//                                                                    .attach(0, new VectorFromHeading()
+//                                                                                .attach(0,new EnemyHeading()))
+//                                                                    .attach(1, new VectorToEnemy()))
+//                                                        .attach(1,new Constant(0)))
+//                                            .attach(1,new Constant(0.1))
+//                                            .attach(2,new Constant(-0.1))))
+//                    .attach(2, new VectorHeading().attach(0,new VectorToEnemy())));
+//    }
+
+    public ECJAgent(RobocodeIndividual ind, GPTree radarTree, GPTree turretTree, GPTree firingTree, GPTree directionTree) {
+        this.individual = ind;
+        this.radarTree = (RobocodeTree) radarTree;
+        this.turretTree = (RobocodeTree) turretTree;
+        this.firingTree = (RobocodeTree) firingTree;
+        this.directionTree = (RobocodeTree) directionTree;
+
+        if (radarTree != null) this.radarTree.getRoot().setAgent(this);
+        if (turretTree != null) this.turretTree.getRoot().setAgent(this);
+        if (firingTree != null) this.firingTree.getRoot().setAgent(this);
+        if (directionTree != null) this.directionTree.getRoot().setAgent(this);
     }
 
-    protected Node initDirectionTree() {
-        return new MakeDirectionPair()
-                .attach(0,new VectorToEnemy())
-                .attach(1,new IfThenElse()
-                        .attach(0,new Not().attach(0,new Rammed()))
-                        .attach(1,new BooleanConstant(true))
-                        .attach(2,new IfThenElse()
-                                .attach(0,new LessThan()
-                                            .attach(0,new RammedAge())
-                                            .attach(1,new Constant(10)))
-                                .attach(1,new BooleanConstant(false))
-                                .attach(2,new BooleanConstant(true))));
-    }
-
-    protected Node initFiringTree() {
-        return new MakeFiringPair()
-                .attach(0, new And()
-                            .attach(0, new ScannedEnemy())
-                            .attach(1, new LessThan()
-                                        .attach(0,new VectorLength().attach(0, new VectorToEnemy()))
-                                        .attach(1,new Constant(100))))
-                .attach(1, new Constant(3));
-    }
-
-    protected Node initTurretTree() {
-        return new VectorHeading().attach(0,new VectorToEnemy());
-    }
-    protected Node initRadarTree() {
-        return new IfThenElse()
-                .attach(0, new Not().attach(0,new ScannedEnemy()))
-                .attach(1, new Constant(6*Math.PI))
-                .attach(2, new IfThenElse()
-                    .attach(0, new GreaterThan()
-                                .attach(0,new ScannedEnemyAge())
-                                .attach(1,new Constant(2)))
-                    .attach(1, new Add()
-                                .attach(0,new VectorHeading().attach(0,new VectorToEnemy()))
-                                .attach(1,new IfThenElse()
-                                            .attach(0,new GreaterThan()
-                                                        .attach(0,new DotProduct()
-                                                                    .attach(0, new VectorFromHeading()
-                                                                                .attach(0,new EnemyHeading()))
-                                                                    .attach(1, new VectorToEnemy()))
-                                                        .attach(1,new Constant(0)))
-                                            .attach(1,new Constant(0.1))
-                                            .attach(2,new Constant(-0.1))))
-                    .attach(2, new VectorHeading().attach(0,new VectorToEnemy())));
-    }
-
-    public ECJAgent(Node radarTree, Node turretTree, Node firingTree, Node directionTree) {
-        this.radarTree = radarTree;
-        this.turretTree = turretTree;
-        this.firingTree = firingTree;
-        this.directionTree = directionTree;
-
-        if (radarTree != null) this.radarTree.setOwner(this);
-        if (turretTree != null) this.turretTree.setOwner(this);
-        if (firingTree != null) this.firingTree.setOwner(this);
-        if (directionTree != null) this.directionTree.setOwner(this);
-    }
-
-    public Node getRadarTree() { return radarTree;}
-    public Node getTurretTree() {return turretTree;}
-    public Node getFiringTree() {return firingTree;}
-    public Node getDirectionTree() {return directionTree;}
+    public GPTree getRadarTree() { return radarTree;}
+    public GPTree getTurretTree() {return turretTree;}
+    public GPTree getFiringTree() {return firingTree;}
+    public GPTree getDirectionTree() {return directionTree;}
 
 //    public VectorFloat64 getCurrentVector() {return movementVector;}
 
@@ -233,6 +220,12 @@ public class ECJAgent extends AdvancedRobot {
         return _min;
     }
 
+    public void initializeRun(EvolutionState state, int thread, Problem prob) {
+        this.state = state;
+        this.thread = thread;
+        this.prob = prob;
+    }
+
     @SuppressWarnings("unchecked")
     public void run() {
         log.fine("run()");
@@ -282,37 +275,42 @@ public class ECJAgent extends AdvancedRobot {
                 double turretDirection = 0;
                 Tuple.Two<Boolean, Number> firing;
 
+                PolyData data = new PolyData();
                 try {
-                    radarDirection = ((Number) radarTree.evaluate()).doubleValue();
+                    radarTree.getRoot().eval(state, thread, data, null, individual, prob);
+                    radarDirection = data.d;
                 } catch (Throwable e) {
                     e.printStackTrace();
-                    log.finest(((AbstractNode) radarTree).toStringEval());
+                    log.finest(radarTree.toString());
                 }
 
                 // get absolute turret heading
                 try {
-                    turretDirection = ((Number) turretTree.evaluate()).doubleValue();
+                    turretTree.getRoot().eval(state, thread, data, null, individual, prob);
+                    turretDirection = data.d;
                 } catch (Throwable e) {
                     e.printStackTrace();
-                    log.finest(((AbstractNode) turretTree).toStringEval());
+                    log.finest(turretTree.toString());
                 }
 
                 // determine if we need to fire
                 try {
-                    firing = (FiringPair) firingTree.evaluate();
+                    firingTree.getRoot().eval(state, thread, data, null, individual, prob);
+                    firing = data.fp;
                 } catch (Throwable t ) {
                     t.printStackTrace();
-                    log.finest(((AbstractNode) firingTree).toStringEval());
+                    log.finest(firingTree.toString());
                     firing = new FiringPair(false, 0.0);
                 }
 
                 // get absolute robot heading and velocity
                 DirectionPair movementPair = null;
                 try {
-                    movementPair = (DirectionPair) directionTree.evaluate();
+                    directionTree.getRoot().eval(state, thread, data, null, individual, prob);
+                    movementPair = data.dp;
                 } catch (Throwable t ) {
 	                t.printStackTrace();
-                    log.finest(((AbstractNode) directionTree).toStringEval());
+                    log.finest((directionTree.toString()));
                 }
 
                 // process firing directive
@@ -321,7 +319,7 @@ public class ECJAgent extends AdvancedRobot {
                 }
 
                 // process radar directive
-                ECJAgent.p<Double, Turn> r = calculateTurn(getRadarHeadingRadians(), radarDirection);
+                p<Double, Turn> r = calculateTurn(getRadarHeadingRadians(), radarDirection);
                 switch (r.second) {
                     case LEFT:
                         setTurnRadarLeftRadians(r.first);

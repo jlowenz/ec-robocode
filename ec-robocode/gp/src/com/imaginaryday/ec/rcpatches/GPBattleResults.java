@@ -38,6 +38,7 @@ public class GPBattleResults implements Entry {
     public Integer battleLength1;
     public Integer movementPenalty1;
     public Integer cellsEntered1;
+    public Integer maxUnrespondedHits1;
 
     public Integer rank2;
     public Integer score2;
@@ -60,6 +61,7 @@ public class GPBattleResults implements Entry {
     public Double energy2;
     public Integer movementPenalty2;
     public Integer cellsEntered2;
+    public Integer maxUnrespondedHits2;
 
 
     public GPBattleResults() {
@@ -98,6 +100,7 @@ public class GPBattleResults implements Entry {
         this.energy1 = results1.getEnergy();
         this.movementPenalty1 = results1.getMovementPenalty();
         this.cellsEntered1 = results1.getCellsEntered();
+        this.maxUnrespondedHits1 = results1.getMaxUnrespondedHits();
 
         this.rank2 = results2.getRank();
         this.score2 = results2.getScore();
@@ -119,6 +122,7 @@ public class GPBattleResults implements Entry {
         this.energy2 = results2.getEnergy();
         this.movementPenalty2 = results2.getMovementPenalty();
         this.cellsEntered2 = results2.getCellsEntered();
+        this.maxUnrespondedHits2 = results2.getMaxUnrespondedHits();
 
         System.err.println(this);
     }
@@ -183,7 +187,8 @@ public class GPBattleResults implements Entry {
         sb.append(",").append(battleLength1).append(",").append(battleLength2);
         sb.append(",").append(energy1).append(",").append(energy2);
         sb.append(",").append(movementPenalty1).append(",").append(movementPenalty2);
-        sb.append(",").append(cellsEntered1).append(",").append(cellsEntered2);                
+        sb.append(",").append(cellsEntered1).append(",").append(cellsEntered2);
+        sb.append(",").append(maxUnrespondedHits1).append(",").append(maxUnrespondedHits2);
         sb.append(",").append(minBattleLength);
         return sb.toString();
     }

@@ -17,6 +17,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class EnemyHeading extends GPRoboNode {
+    private static final long serialVersionUID = -5748190046047330831L;
 
     public String toString() {
         return "enemyHeading";

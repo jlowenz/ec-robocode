@@ -17,6 +17,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class EnemySpeed extends GPRoboNode {
+    private static final long serialVersionUID = -8382109080969617132L;
 
     public String toString() {
         return "enemySpeed";

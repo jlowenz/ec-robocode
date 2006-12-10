@@ -18,6 +18,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  * </b>
  */
 public class VectorToForwardWall extends GPRoboNode {
+    private static final long serialVersionUID = 4130571782887319041L;
 
     public String toString() {
         return "vecToFwdWall";

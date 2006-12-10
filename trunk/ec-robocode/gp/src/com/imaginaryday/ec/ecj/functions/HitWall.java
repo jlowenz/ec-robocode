@@ -16,6 +16,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class HitWall extends GPRoboNode {
+    private static final long serialVersionUID = -3010344481443580672L;
 
     public String toString() {
         return "hitWall";

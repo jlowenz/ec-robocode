@@ -19,6 +19,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  * </b>
  */
 public class VectorLength extends GPRoboNode {
+    private static final long serialVersionUID = 9216368563472469795L;
 
     public String toString() {
         return "vecLength";

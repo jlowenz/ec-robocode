@@ -18,6 +18,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  * </b>
  */
 public class MakeDirectionPair extends GPRoboNode {
+    private static final long serialVersionUID = -8076097092314663144L;
 
     public String toString() {
         return "makeDirPair";

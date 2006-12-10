@@ -20,6 +20,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  * </b>
  */
 public class RotateVector extends GPRoboNode {
+    private static final long serialVersionUID = -8232280374470603373L;
 
     public String toString() {
         return "rotateVector";

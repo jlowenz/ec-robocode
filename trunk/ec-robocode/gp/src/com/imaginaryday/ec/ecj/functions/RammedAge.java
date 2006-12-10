@@ -16,6 +16,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class RammedAge extends GPRoboNode {
+    private static final long serialVersionUID = -4604213295011038617L;
 
     public String toString() {
         return "rammedAge";

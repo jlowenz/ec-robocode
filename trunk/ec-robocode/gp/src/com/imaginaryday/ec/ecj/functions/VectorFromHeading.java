@@ -17,6 +17,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class VectorFromHeading extends GPRoboNode {
+    private static final long serialVersionUID = -7577892077371543080L;
 
     public String toString() {
         return "vecFromHeading";

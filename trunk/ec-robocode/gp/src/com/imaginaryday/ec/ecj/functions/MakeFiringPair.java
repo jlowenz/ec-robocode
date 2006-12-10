@@ -17,6 +17,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class MakeFiringPair extends GPRoboNode {
+    private static final long serialVersionUID = -3063284762244811372L;
 
     public String toString() {
         return "makeFiringPair";

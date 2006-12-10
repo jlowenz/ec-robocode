@@ -17,6 +17,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class EnergyLevel extends GPRoboNode {
+    private static final long serialVersionUID = 5958467416195970083L;
 
     public String toString() {
         return "energyLevel";

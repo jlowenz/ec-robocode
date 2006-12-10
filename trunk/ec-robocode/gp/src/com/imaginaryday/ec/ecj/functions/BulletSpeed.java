@@ -17,6 +17,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class BulletSpeed extends GPRoboNode {
+    private static final long serialVersionUID = 270858899852771221L;
 
     public String toString() {
         return "bulletSpeed";

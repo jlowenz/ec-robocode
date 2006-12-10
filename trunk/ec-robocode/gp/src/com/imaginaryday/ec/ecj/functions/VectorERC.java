@@ -22,6 +22,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
 public class VectorERC extends GPRoboERC {
 
     VectorFloat64 vec;
+    private static final long serialVersionUID = 2079456050321716225L;
     public String name() {
         return "vectConst";
     }

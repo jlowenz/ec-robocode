@@ -154,7 +154,8 @@ public class RobocodeEngine {
 
 	/**
 	 * Runs a battle
-	 */
+     * @param battle asdasd
+     */
 	public void runBattle(BattleSpecification battle) {
 		Utils.setLogListener(listener);
 		manager.getBattleManager().startNewBattle(battle);

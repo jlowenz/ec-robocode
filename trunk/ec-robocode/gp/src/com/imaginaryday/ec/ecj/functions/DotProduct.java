@@ -18,6 +18,7 @@ import org.jscience.mathematics.vectors.VectorFloat64;
  * </b>
  */
 public class DotProduct extends GPRoboNode {
+    private static final long serialVersionUID = -6364220675654652647L;
 
     public String toString() {
         return "dotProduct";

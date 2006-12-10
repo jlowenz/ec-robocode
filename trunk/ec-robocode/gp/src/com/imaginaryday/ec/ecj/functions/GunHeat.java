@@ -17,6 +17,7 @@ import ec.util.Parameter;
  * </b>
  */
 public class GunHeat extends GPRoboNode {
+    private static final long serialVersionUID = -1456391828393656956L;
 
     public String toString() {
         return "gunHeat";

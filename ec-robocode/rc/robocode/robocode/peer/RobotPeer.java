@@ -258,8 +258,9 @@ public class RobotPeer implements Runnable, ContestantPeer {
 						this.inCollision = true;
 						x -= movedx;
 						y -= movedy;
+                        statistics.cellEntered(x,y);
 
-						if (r.energy == 0) {
+                        if (r.energy == 0) {
 							if (!r.isDead) {
 								r.setDead(true);
 								statistics.scoreKilledEnemyRamming(i);
@@ -280,8 +281,9 @@ public class RobotPeer implements Runnable, ContestantPeer {
 						this.inCollision = true;
 						x -= movedx;
 						y -= movedy;
+                        statistics.cellEntered(x,y);
 
-						if (r.energy == 0) {
+                        if (r.energy == 0) {
 							if (!r.isDead) {
 								r.setDead(true);
 								statistics.scoreKilledEnemyRamming(i);
@@ -374,6 +376,7 @@ public class RobotPeer implements Runnable, ContestantPeer {
 
 			x += dx;
 			y += dy;
+            statistics.cellEntered(x,y);
 
             statistics.scoreDistanceTravelled(-Math.sqrt(dx*dx + dy*dy));
 

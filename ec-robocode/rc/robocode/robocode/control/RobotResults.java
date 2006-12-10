@@ -44,6 +44,7 @@ public class RobotResults {
     private int battleLength;
 	private double energy;
     private int movementPenalty;
+    private int cellsEntered;
 
 
     public double getEnergy() {
@@ -127,6 +128,7 @@ public class RobotResults {
         this.battleLength = stats.getBattleLength();
 	    this.energy = stats.getEnergy();
         this.movementPenalty = stats.getMovementPenalty();
+        this.cellsEntered = stats.getCellsEntered();
     }
 
 
@@ -246,5 +248,13 @@ public class RobotResults {
      */
     public int getThirds() {
         return thirds;
+    }
+
+    public int getCellsEntered() {
+        return cellsEntered;
+    }
+
+    public void setCellsEntered(int cellsEntered) {
+        this.cellsEntered = cellsEntered;
     }
 }

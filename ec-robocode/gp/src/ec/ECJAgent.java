@@ -277,7 +277,7 @@ public class ECJAgent extends AdvancedRobot {
 
                 PolyData data = new PolyData();
                 try {
-                    radarTree.getRoot().eval(state, thread, data, null, individual, prob);
+                    radarTree.child.eval(state, thread, data, null, individual, prob);
                     radarDirection = data.d;
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -286,7 +286,7 @@ public class ECJAgent extends AdvancedRobot {
 
                 // get absolute turret heading
                 try {
-                    turretTree.getRoot().eval(state, thread, data, null, individual, prob);
+                    turretTree.child.eval(state, thread, data, null, individual, prob);
                     turretDirection = data.d;
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -295,7 +295,7 @@ public class ECJAgent extends AdvancedRobot {
 
                 // determine if we need to fire
                 try {
-                    firingTree.getRoot().eval(state, thread, data, null, individual, prob);
+                    firingTree.child.eval(state, thread, data, null, individual, prob);
                     firing = data.fp;
                 } catch (Throwable t ) {
                     t.printStackTrace();
@@ -306,7 +306,7 @@ public class ECJAgent extends AdvancedRobot {
                 // get absolute robot heading and velocity
                 DirectionPair movementPair = null;
                 try {
-                    directionTree.getRoot().eval(state, thread, data, null, individual, prob);
+                    directionTree.child.eval(state, thread, data, null, individual, prob);
                     movementPair = data.dp;
                 } catch (Throwable t ) {
 	                t.printStackTrace();

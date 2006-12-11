@@ -20,8 +20,8 @@ import ec.util.DecodeReturn;
  * </b>
  */
 public class FiringPairERC extends GPRoboERC {
-    private boolean toFire;
-    private double energy;
+    private boolean toFire = false;
+    private double energy = 1.0;
     private static final long serialVersionUID = 4503288319704350517L;
 
     public String name() {

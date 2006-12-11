@@ -19,9 +19,10 @@ import ec.util.DecodeReturn;
  * </b>
  */
 public class NumberERC extends GPRoboERC {
-    private static double min = -10, max = 10;
-    private double val;
     private static final long serialVersionUID = 8532391175442629572L;
+    private static final double min = -10, max = 10;
+
+    private double val = 0.0;
 
     public String name() {
         return "const";

@@ -122,7 +122,7 @@ public class Driver implements Runnable {
 
     private static DecimalFormat df = new DecimalFormat("00");
     private int numGenerations = 601;
-    private int numRandomGenerations = 0;
+    private int numRandomGenerations = 24;
     private int generationCount = 0;
     private int treeDepth = 5;
     private final double alpha = .5;

@@ -6,7 +6,6 @@ import ec.Problem;
 import ec.gp.GPTree;
 import robocode.Robot;
 import robocode.peer.robot.RobotClassManager;
-import robocode.repository.RobotSpecification;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +23,6 @@ public class ECJRobotClassManager extends RobotClassManager {
     private GPTree radarProgram;
     private GPTree shootProgram;
 
-    private RobotSpecification robotSpecification;
     private EvolutionState state;
     private Problem prob;
     private int thread;
@@ -69,7 +67,7 @@ public class ECJRobotClassManager extends RobotClassManager {
 
         Class<ECJAgent> c = getRobotClass();
         try {
-            Constructor<ECJAgent> ctor = c.getConstructor(RobocodeIndividual.class, GPTree.class,GPTree.class,GPTree.class,GPTree.class);
+            Constructor<ECJAgent> ctor = c.getConstructor(RobocodeIndividual.class,GPTree.class,GPTree.class,GPTree.class,GPTree.class);
             robot = ctor.newInstance(ind, radarProgram, turretProgram, shootProgram, moveProgram);
             robot.initializeRun(state, thread, prob);
         } catch (NoSuchMethodException e) {
@@ -79,10 +77,5 @@ public class ECJRobotClassManager extends RobotClassManager {
         }
         return robot;
     }
-
-    public RobotSpecification getRobotSpecification() {
-        return this.robotSpecification;
-    }
-
 
 }

@@ -1,6 +1,6 @@
 package com.imaginaryday.ec.ecj;
 
-import com.imaginaryday.ec.ecj.functions.GPRoboNode;
+import com.imaginaryday.ec.ecj.functions.GPRoboForm;
 import ec.gp.GPTree;
 
 /**
@@ -11,7 +11,7 @@ import ec.gp.GPTree;
  * </b>
  */
 public class RobocodeTree extends GPTree {
-    public GPRoboNode getRoot() {
-        return (GPRoboNode) child;
+    public GPRoboForm getRoot() {
+        return (GPRoboForm) child;
     }
 }

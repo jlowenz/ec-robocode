@@ -36,49 +36,29 @@ import java.util.Map;
 public class RobocodeProblem extends Problem implements GroupedProblemForm {
     private transient GPRobocodeManager manager;
     private transient BattleProperties battleProperties;
-    private transient Battle battle;
 
     public void preprocessPopulation(final EvolutionState state, Population pop) {
-        if (manager == null) {
-            manager = new GPRobocodeManager(false, new ECJRobocodeListener());
-            battleProperties = new BattleProperties();
-            try {
-                if (System.getProperty("WORKINGDIRECTORY") != null) {
-                    Constants.setWorkingDirectory(new File(System.getProperty("WORKINGDIRECTORY")));
-                }
-                Thread.currentThread().setName("Application Thread");
-                System.setSecurityManager(new RMISecurityManager());
-
-                SecurePrintStream sysout = new SecurePrintStream(System.out, true, "System.out");
-                SecurePrintStream syserr = new SecurePrintStream(System.err, true, "System.err");
-                SecureInputStream sysin = new SecureInputStream(System.in, "System.in");
-
-                System.setOut(sysout);
-                if (!System.getProperty("debug", "false").equals("true")) {
-                    System.setErr(syserr);
-                }
-                System.setIn(sysin);
-            } catch (Throwable e) {
-                Utils.log(e);
-            }
-        }
+        System.out.println("Preprocessing pop...");
     }
 
     public void postprocessPopulation(final EvolutionState state, Population pop) {
-
+        System.out.println("Postprocessing pop...");
         // run the test against a whole bunch of human-coded bots
+    }
 
+
+    @Override
+    public Object clone() {
+        RobocodeProblem p = (RobocodeProblem) super.clone();
+        return p;
     }
 
     private void startNewBattle(List<ECJRobotClassManager> battlingRobotsVector) {
         Utils.log("Preparing battle...");
-        if (battle != null) {
-            battle.stop();
-        }
 
         BattleField battleField = new DefaultBattleField(800,600);
 
-        battle = new Battle(battleField, manager);
+        Battle battle = new Battle(battleField, manager);
         battle.setExitOnComplete(false);
 
         // Only used when controlled by RobocodeEngine
@@ -122,6 +102,31 @@ public class RobocodeProblem extends Problem implements GroupedProblemForm {
                          final boolean[] updateFitness,  // should this individuals' fitness be updated?
                          final boolean countVictoriesOnly,  // update fitnesses only to reflect victories, rather than spreads
                          final int threadnum) {
+        if (manager == null) {
+            manager = new GPRobocodeManager(false, new ECJRobocodeListener());
+            battleProperties = new BattleProperties();
+            try {
+                if (System.getProperty("WORKINGDIRECTORY") != null) {
+                    Constants.setWorkingDirectory(new File(System.getProperty("WORKINGDIRECTORY")));
+                }
+                Thread.currentThread().setName("Application Thread");
+                System.setSecurityManager(new RMISecurityManager());
+
+                SecurePrintStream sysout = new SecurePrintStream(System.out, true, "System.out");
+                SecurePrintStream syserr = new SecurePrintStream(System.err, true, "System.err");
+                SecureInputStream sysin = new SecureInputStream(System.in, "System.in");
+
+                System.setOut(sysout);
+                if (!System.getProperty("debug", "false").equals("true")) {
+                    System.setErr(syserr);
+                }
+                System.setIn(sysin);
+            } catch (Throwable e) {
+                Utils.log(e);
+            }
+        }
+
+        System.out.println("Evaluating...");                
         results = null;
         List<ECJRobotClassManager> robots = new ArrayList<ECJRobotClassManager>();
         Map<String, Tuple.Two<RobocodeIndividual,Boolean>> blah = new HashMap<String, Tuple.Two<RobocodeIndividual, Boolean>>();
@@ -132,7 +137,11 @@ public class RobocodeProblem extends Problem implements GroupedProblemForm {
         robots.add(new ECJRobotClassManager((RobocodeIndividual) ind[1], state, threadnum, this));
 
         // run the battle
+        long start = System.currentTimeMillis();
+        System.err.println("********* starting a battle **********");
         startNewBattle(robots); // this blocks until the battle thread is complete
+        long diff = System.currentTimeMillis() - start;
+        System.err.println("********* ending a battle **********: " + diff);
 
         // the listener should have been called here
         if (results != null)

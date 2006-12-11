@@ -1,9 +1,14 @@
 package com.imaginaryday.ec.ecj;
 
 import com.imaginaryday.util.Stuff;
+import ec.EvolutionState;
 import ec.Fitness;
 import ec.util.Parameter;
 import robocode.control.RobotResults;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 /**
  * <b>
@@ -38,5 +43,17 @@ public class RobocodeFitness extends Fitness {
 
     public Parameter defaultBase() {
         return new Parameter("rfit");
+    }
+
+    @Override
+    public void writeFitness(final EvolutionState state, final DataOutput dataOutput) throws IOException {
+        dataOutput.writeDouble(cumulativeFitness);
+        dataOutput.writeInt(numBattles);
+    }
+
+    @Override
+    public void readFitness(final EvolutionState state, final DataInput dataInput) throws IOException {
+        cumulativeFitness = dataInput.readDouble();
+        numBattles = dataInput.readInt();
     }
 }

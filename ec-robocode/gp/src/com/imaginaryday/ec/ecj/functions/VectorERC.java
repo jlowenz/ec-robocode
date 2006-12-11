@@ -12,6 +12,10 @@ import ec.util.Code;
 import ec.util.DecodeReturn;
 import org.jscience.mathematics.vectors.VectorFloat64;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 /**
  * <b>
  * User: jlowens<br>
@@ -61,5 +65,16 @@ public class VectorERC extends GPRoboERC {
     public void eval(final EvolutionState state, final int thread, final GPData input, final ADFStack stack, final GPIndividual individual, final Problem problem) {
         PolyData data = (PolyData) input;
         data.v = vec;
+    }
+
+
+    @Override
+    public void writeNode(final EvolutionState state, final DataOutput dataOutput) throws IOException {
+        dataOutput.writeDouble(vec.getValue(0));
+        dataOutput.writeDouble(vec.getValue(1));
+    }
+    @Override
+    public void readNode(final EvolutionState state, final DataInput dataInput) throws IOException {
+        vec = VectorFloat64.valueOf(dataInput.readDouble(), dataInput.readDouble());
     }
 }

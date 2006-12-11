@@ -21,9 +21,6 @@ seed.2 = 				    time
 seed.3 = 				    time
 seed.4 = 				    time
 
-
-
-
 # ec.EvolutionState
 # ==============================
 
@@ -539,6 +536,7 @@ gp.tc.2.init        = ec.gp.koza.HalfBuilder
 gp.koza.half.min-depth = 2
 gp.koza.half.max-depth = 6
 gp.koza.half.growp = 0.5
+
 
 
 

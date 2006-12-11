@@ -10,6 +10,10 @@ import ec.gp.GPNode;
 import ec.util.Code;
 import ec.util.DecodeReturn;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 /**
  * <b>
  * User: jlowens<br>
@@ -55,5 +59,15 @@ public class BooleanERC extends GPRoboERC {
         Code.decode(dret);
         val = dret.l != 0;
         return true;
+    }
+
+
+    @Override
+    public void writeNode(final EvolutionState state, final DataOutput dataOutput) throws IOException {
+        dataOutput.writeBoolean(val);
+    }
+    @Override
+    public void readNode(final EvolutionState state, final DataInput dataInput) throws IOException {
+        val = dataInput.readBoolean();
     }
 }

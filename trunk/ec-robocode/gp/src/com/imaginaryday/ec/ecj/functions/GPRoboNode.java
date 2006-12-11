@@ -24,4 +24,5 @@ public abstract class GPRoboNode extends GPNode implements GPRoboForm {
     public ECJAgent getAgent() {
         return agent;
     }
+
 }

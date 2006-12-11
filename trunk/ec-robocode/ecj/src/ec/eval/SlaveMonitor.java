@@ -104,7 +104,9 @@ public class SlaveMonitor
 	/**
 		Schedules a job for execution on one of the available slaves.  The monitor waits until at least one
 		slave is available to perform the job.
-	*/
+     * @param state
+     * @param toEvaluate
+     */
     public synchronized void scheduleJobForEvaluation( final EvolutionState state, EvaluationData toEvaluate )
         {
         while( availableSlaves.isEmpty() )

@@ -1,20 +1,20 @@
 package com.imaginaryday.ec.main;
 
 import com.imaginaryday.ec.gp.AbstractNode;
+import ec.AgentBrains;
 import ec.GPAgent;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.CtNewMethod;
-import javassist.Modifier;
 import javassist.NotFoundException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +27,17 @@ import java.util.Set;
  * </b>
  */
 public class ExtractBots {
+
+    private static void write(String filename, AgentBrains brains) {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename));
+            oos.writeObject(brains);
+            oos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String args[]) {
         if (args.length < 2) {
             System.out.println("Usage: ExtractBots <pop_file> <to_dir>");
@@ -63,53 +74,28 @@ public class ExtractBots {
             for (Member m : members) {
                 CtClass gpagent = pool.get("ec.GPAgent");
                 CtClass node = pool.get("com.imaginaryday.ec.gp.Node");
-                CtClass cc = pool.makeClass("ec." + botName +"_" + m.getGeneration() + "_" + m.getId(), gpagent);
-                cc.getClassPool().importPackage("ec");                        
+                CtClass cc = pool.makeClass("ec." + botName + "_" + m.getGeneration() + "_" + m.getId(), gpagent);
+                cc.getClassPool().importPackage("ec");
 
                 System.out.println("Creating class: " + cc.getName());
 
                 Set<Class> imports = new HashSet<Class>();
 
-                String expr = ((AbstractNode)m.getRadarProgram()).toCodeString(imports);
+                ((AbstractNode) m.getRadarProgram()).toCodeString(imports);
+                ((AbstractNode) m.getTurretProgram()).toCodeString(imports);
+                ((AbstractNode) m.getShootProgram()).toCodeString(imports);
+                ((AbstractNode) m.getMoveProgram()).toCodeString(imports);
                 for (Class c : imports) cc.getClassPool().importPackage(c.getPackage().getName());
-                CtMethod radar = CtNewMethod.make(Modifier.PROTECTED,
-                        node,
-                        "initRadarTree",
-                        new CtClass[0],
-                        new CtClass[0],
-                        "{ return " + expr + "; }", cc);
-                cc.addMethod(radar);
-
-                expr = ((AbstractNode)m.getTurretProgram()).toCodeString(imports);
-                for (Class c : imports) cc.getClassPool().importPackage(c.getPackage().getName());
-                CtMethod turret = CtNewMethod.make(Modifier.PROTECTED,
-                        node,
-                        
-                        "initTurretTree",
-                        new CtClass[0],
-                        new CtClass[0],
-                        "{ return " + expr + "; }", cc);
-                cc.addMethod(turret);
-
-                expr = ((AbstractNode)m.getShootProgram()).toCodeString(imports);
-                for (Class c : imports) cc.getClassPool().importPackage(c.getPackage().getName());
-                CtMethod firing = CtNewMethod.make(Modifier.PROTECTED,
-                        node,
-                        "initFiringTree",
-                        new CtClass[0],
-                        new CtClass[0],
-                        "{ return " + expr + "; }", cc);
-                cc.addMethod(firing);
-
-                expr = ((AbstractNode)m.getMoveProgram()).toCodeString(imports);
-                for (Class c : imports) cc.getClassPool().importPackage(c.getPackage().getName());
-                CtMethod direction = CtNewMethod.make(Modifier.PROTECTED,
-                        node,
-                        "initDirectionTree",
-                        new CtClass[0],
-                        new CtClass[0],
-                        "{ return " + expr + "; }", cc);
-                cc.addMethod(direction);
+                write(dest.getPath() +
+                        System.getProperty("file.separator") + 
+                        "ec" +
+                        System.getProperty("file.separator") +
+                        cc.getName() +
+                        ".obj",
+                        new AgentBrains(m.getRadarProgram(),
+                                m.getTurretProgram(),
+                                m.getShootProgram(),
+                                m.getMoveProgram()));
 
                 cc.stopPruning(true);
                 Class c = pool.toClass(cc);

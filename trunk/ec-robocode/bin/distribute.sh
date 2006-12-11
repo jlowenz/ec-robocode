@@ -1,7 +1,5 @@
 #!/bin/bash
 
-BLAH[server]=1
-echo $BLAH[server]
 # copy files to target machines
 MACHINES=$1
 NUMPROCS=$2

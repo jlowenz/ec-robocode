@@ -40,6 +40,9 @@ import robocode.ScannedRobotEvent;
 import robocode.SkippedTurnEvent;
 import robocode.WinEvent;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.logging.Logger;
 
 /**
@@ -86,10 +89,24 @@ public class GPAgent extends AdvancedRobot {
     private boolean forward;
 
     public GPAgent() {
-        radarTree = initRadarTree();
-        turretTree = initTurretTree();
-        firingTree = initFiringTree();
-        directionTree = initDirectionTree();
+//        radarTree = initRadarTree();
+//        turretTree = initTurretTree();
+//        firingTree = initFiringTree();
+//        directionTree = initDirectionTree();
+        try {
+            String path = "/Users/jlowens/dev/workspace/ec-robocode/ec-robocode/gp/bots/ec/" + getClass().getName() + ".obj";
+            System.err.println(path);
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
+            AgentBrains ab = (AgentBrains) in.readObject();
+            radarTree = ab.radarTree;
+            turretTree = ab.turretTree;
+            firingTree = ab.firingTree;
+            directionTree = ab.directionTree;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         if (radarTree != null) this.radarTree.setOwner(this);
         if (turretTree != null) this.turretTree.setOwner(this);

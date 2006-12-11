@@ -13,6 +13,10 @@ import ec.util.Code;
 import ec.util.DecodeReturn;
 import org.jscience.mathematics.vectors.VectorFloat64;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 /**
  * <b>
  * User: jlowens<br>
@@ -78,5 +82,17 @@ public class DirectionPairERC extends GPRoboERC {
     public void eval(final EvolutionState state, final int thread, final GPData input, final ADFStack stack, final GPIndividual individual, final Problem problem) {
         PolyData data = (PolyData) input;
         data.dp = val;
+    }
+
+
+    @Override
+    public void readNode(final EvolutionState state, final DataInput dataInput) throws IOException {
+        val = new DirectionPair(VectorFloat64.valueOf(dataInput.readDouble(), dataInput.readDouble()), dataInput.readBoolean());
+    }
+    @Override
+    public void writeNode(final EvolutionState state, final DataOutput dataOutput) throws IOException {
+        dataOutput.writeDouble(val.first().getValue(0));
+        dataOutput.writeDouble(val.first().getValue(1));
+        dataOutput.writeBoolean(val.second());        
     }
 }

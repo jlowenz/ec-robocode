@@ -5,7 +5,7 @@
 store =                     true
 
 # totally verbose
-verbosity = 				0
+verbosity = 				1
 
 # flush output immediately, don't buffer it
 flush = 				    true
@@ -16,6 +16,10 @@ breedthreads = 				1
 
 # a good random seed for thread 0
 seed.0 = 				    time
+seed.1 = 				    time
+seed.2 = 				    time
+seed.3 = 				    time
+seed.4 = 				    time
 
 
 
@@ -57,84 +61,463 @@ exch = 					ec.simple.SimpleExchanger
 
 # We're using standard breeding -- no cross-population breeding
 breed =					ec.simple.SimpleBreeder
+breed.elite.0           = 1
 
-# We're using standard evaluation -- no coevolution
-eval =					ec.simple.SimpleEvaluator
+eval =					ec.coevolve.CompetitiveEvaluator
+eval.style              = round-robin
 
 # We're using simple statistics
 stat =					ec.simple.SimpleStatistics
 
 # run for 51 generations, quit prematurely if I find something ideal
-generations =				51
-quit-on-run-complete =			true
+generations                     = 201
+quit-on-run-complete            = true
 
 eval.problem                    = com.imaginaryday.ec.ecj.RobocodeProblem
 
-# ec.gp.GPData
+# KozaStatistics
 # ==============================
 
-# set this elsewhere!
-# gp.gpdata =
+# output statistics to the file "out.stat" in the directory
+# the run was started in
+stat.file				    = $kozastats.log
 
+
+# ec.Initializer
+# ==============================
+pop                         = ec.Population
+
+
+# ec.Population
+# ==============================
+# No multiple populations
+pop.subpops                 = 1
+pop.subpop.0                = ec.Subpopulation
+pop.subpop.0.size           = 25
 
 # ec.Subpopulation
 # ==============================
 
-pop.subpop.0.fitness = com.imaginaryday.ec.ecj.RobocodeFitness
+pop.subpop.0.fitness            = com.imaginaryday.ec.ecj.RobocodeFitness
 
 # You might change this, but it must be a GPSpeciesForm!
-pop.subpop.0.species = 			ec.gp.GPSpecies
+pop.subpop.0.species            = ec.gp.GPSpecies
 
 # We retry 100 times for duplicates (this is the lil-gp default)
 # in our subpopulation 0
-pop.subpop.0.duplicate-retries = 100
+pop.subpop.0.duplicate-retries  = 50
 
 
 # ec.Species
 # ==============================
 
-pop.subpop.0.species.ind = 		com.imaginaryday.ec.ecj.RobocodeIndividual
+pop.subpop.0.species.ind                = com.imaginaryday.ec.ecj.RobocodeIndividual
 
-#You need to provide a basic pipe -- if you want to pick from among
-#pipes (like Koza does, 10% reproduction and 90% crossover), see
-#ec.breed.MultiBreedingPipeline
-#pop.subpop.0.species.pipe =
-#...
+# The GPSpecies has 2 pipelines, Crossover and Reproduction,
+# chosen with 0.9 and 0.1 likelihood respectively.
+
+pop.subpop.0.species.pipe               = ec.breed.MultiBreedingPipeline
+# Koza's decision here was odd...
+pop.subpop.0.species.pipe.generate-max  = false
+# Subsidiary pipelines:
+pop.subpop.0.species.pipe.num-sources   = 2
+pop.subpop.0.species.pipe.source.0      = ec.gp.koza.CrossoverPipeline
+pop.subpop.0.species.pipe.source.0.prob = 0.95
+pop.subpop.0.species.pipe.source.1      = ec.gp.koza.MutationPipeline
+pop.subpop.0.species.pipe.source.1.prob = 0.05
+
+# Here we define the default values for Crossover,
+# Reproduction, Mutation, as well as our selection
+# approaches (Koza I).  These can be overridden on a per-species
+# level of course.
+
+# Crossover will use Tournament Selection, try only 1
+# time, have a max depth of 17, and use KozaNodeSelector
+gp.koza.xover.source.0                  = ec.select.TournamentSelection
+gp.koza.xover.source.1                  = same
+gp.koza.xover.ns.0                      = ec.gp.koza.KozaNodeSelector
+gp.koza.xover.ns.1                      = same
+gp.koza.xover.maxdepth                  = 12
+# This is the default for Koza and lil-gp, though it's
+# a little wimpy; on the other hand, a higher number can
+# make things really slow
+gp.koza.xover.tries                     = 3
+
+# Point Mutation will use Tournament Selection, try only 1
+# time, have a max depth of 17, and use KozaNodeSelector
+# and GROW for building.  Also, Point Mutation uses a GrowBuilder
+# by default, with a default of min-depth=max-depth=5
+# as shown a ways below
+gp.koza.mutate.source.0                 = ec.select.TournamentSelection
+gp.koza.mutate.ns.0                     = ec.gp.koza.KozaNodeSelector
+gp.koza.mutate.build.0                  = ec.gp.koza.HalfBuilder
+gp.koza.mutate.maxdepth                 = 12
+
+# This is the default for Koza and lil-gp, though it's
+# a little wimpy; on the other hand, a higher number can
+# make things really slow
+gp.koza.mutate.tries                    = 3
+
+#
+# The default tournament size for TournamentSelection is 7
+#
+select.tournament.size                  = 7
+
+# Configure the node selector
+gp.koza.ns.terminals                    = 0.45
+gp.koza.ns.nonterminals                 = 0.5
+gp.koza.ns.root                         = 0.05
 
 
 # ec.GPIndividual
 # ==============================
-
 # We'll define a single tree -- you might want to change its class
 pop.subpop.0.species.ind.numtrees =	4
+# radar
 pop.subpop.0.species.ind.tree.0     = com.imaginaryday.ec.ecj.RobocodeTree
+pop.subpop.0.species.ind.tree.0.tc  = NumberTC
+# turret
 pop.subpop.0.species.ind.tree.1     = com.imaginaryday.ec.ecj.RobocodeTree
+pop.subpop.0.species.ind.tree.1.tc  = NumberTC
+# firing
 pop.subpop.0.species.ind.tree.2     = com.imaginaryday.ec.ecj.RobocodeTree
+pop.subpop.0.species.ind.tree.2.tc  = FiringPairTC
+# direction
 pop.subpop.0.species.ind.tree.3     = com.imaginaryday.ec.ecj.RobocodeTree
+pop.subpop.0.species.ind.tree.3.tc  = DirectionPairTC
 
 
 # ec.GPTree
 # ==============================
 
 
-
-# ec.SimpleStatistics
-# ==============================
-
-# output statistics to the file "out.stat" in the directory
-# the run was started in
-stat.file				    = $out.stat
-
 # GPTypes
-gp.type.a.size              = 4
+gp.type.a.size              = 5
 gp.type.a.0.name            = Number
 gp.type.a.1.name            = Boolean
 gp.type.a.2.name            = FiringPair
 gp.type.a.3.name            = DirectionPair
+gp.type.a.4.name            = Vector
 
 # GPNodeConstraints
-gp.nc
+gp.nc.size                  = 21
 
+gp.nc.0                     = ec.gp.GPNodeConstraints
+gp.nc.0.name                = NumberBinaryNumber
+gp.nc.0.returns             = Number
+gp.nc.0.size                = 2
+gp.nc.0.child.0             = Number
+gp.nc.0.child.1             = Number
+
+gp.nc.1                     = ec.gp.GPNodeConstraints
+gp.nc.1.name                = BooleanBinaryBoolean
+gp.nc.1.returns             = Boolean
+gp.nc.1.size                = 2
+gp.nc.1.child.0             = Boolean
+gp.nc.1.child.1             = Boolean
+
+gp.nc.2                     = ec.gp.GPNodeConstraints
+gp.nc.2.name                = BooleanBinaryNumber
+gp.nc.2.returns             = Boolean
+gp.nc.2.size                = 2
+gp.nc.2.child.0             = Number
+gp.nc.2.child.1             = Number
+
+gp.nc.3                     = ec.gp.GPNodeConstraints
+gp.nc.3.name                = BooleanUnaryBoolean
+gp.nc.3.returns             = Boolean
+gp.nc.3.size                = 1
+gp.nc.3.child.0             = Boolean
+
+gp.nc.4                     = ec.gp.GPNodeConstraints
+gp.nc.4.name                = BooleanTerminal
+gp.nc.4.returns             = Boolean
+gp.nc.4.size                = 0
+
+gp.nc.5                     = ec.gp.GPNodeConstraints
+gp.nc.5.name                = NumberTerminal
+gp.nc.5.returns             = Number
+gp.nc.5.size                = 0
+
+gp.nc.6                     = ec.gp.GPNodeConstraints
+gp.nc.6.name                = FiringPairTerminal
+gp.nc.6.returns             = FiringPair
+gp.nc.6.size                = 0
+
+gp.nc.7                     = ec.gp.GPNodeConstraints
+gp.nc.7.name                = DirectionPairTerminal
+gp.nc.7.returns             = DirectionPair
+gp.nc.7.size                = 0
+
+gp.nc.8                     = ec.gp.GPNodeConstraints
+gp.nc.8.name                = VectorTerminal
+gp.nc.8.returns             = Vector
+gp.nc.8.size                = 0
+
+gp.nc.9                     = ec.gp.GPNodeConstraints
+gp.nc.9.name                = NumberBinaryVector
+gp.nc.9.returns             = Number
+gp.nc.9.size                = 2
+gp.nc.9.child.0             = Vector
+gp.nc.9.child.1             = Vector
+
+gp.nc.10                     = ec.gp.GPNodeConstraints
+gp.nc.10.name                = VectorUnaryVector
+gp.nc.10.returns             = Vector
+gp.nc.10.size                = 1
+gp.nc.10.child.0             = Vector
+
+gp.nc.11                     = ec.gp.GPNodeConstraints
+gp.nc.11.name                = MakeDirPair
+gp.nc.11.returns             = DirectionPair
+gp.nc.11.size                = 2
+gp.nc.11.child.0             = Vector
+gp.nc.11.child.1             = Boolean
+
+gp.nc.12                     = ec.gp.GPNodeConstraints
+gp.nc.12.name                = MakeFirePair
+gp.nc.12.returns             = FiringPair
+gp.nc.12.size                = 2
+gp.nc.12.child.0             = Boolean
+gp.nc.12.child.1             = Number
+
+gp.nc.13                     = ec.gp.GPNodeConstraints
+gp.nc.13.name                = IfNumber
+gp.nc.13.returns             = Number
+gp.nc.13.size                = 3
+gp.nc.13.child.0             = Boolean
+gp.nc.13.child.1             = Number
+gp.nc.13.child.2             = Number
+
+gp.nc.14                     = ec.gp.GPNodeConstraints
+gp.nc.14.name                = IfBoolean
+gp.nc.14.returns             = Boolean
+gp.nc.14.size                = 3
+gp.nc.14.child.0             = Boolean
+gp.nc.14.child.1             = Boolean
+gp.nc.14.child.2             = Boolean
+
+gp.nc.15                     = ec.gp.GPNodeConstraints
+gp.nc.15.name                = IfVector
+gp.nc.15.returns             = Vector
+gp.nc.15.size                = 3
+gp.nc.15.child.0             = Boolean
+gp.nc.15.child.1             = Vector
+gp.nc.15.child.2             = Vector
+
+gp.nc.16                     = ec.gp.GPNodeConstraints
+gp.nc.16.name                = IfFiringPair
+gp.nc.16.returns             = FiringPair
+gp.nc.16.size                = 3
+gp.nc.16.child.0             = Boolean
+gp.nc.16.child.1             = FiringPair
+gp.nc.16.child.2             = FiringPair
+
+gp.nc.17                     = ec.gp.GPNodeConstraints
+gp.nc.17.name                = IfDirectionPair
+gp.nc.17.returns             = DirectionPair
+gp.nc.17.size                = 3
+gp.nc.17.child.0             = Boolean
+gp.nc.17.child.1             = DirectionPair
+gp.nc.17.child.2             = DirectionPair
+
+gp.nc.18                     = ec.gp.GPNodeConstraints
+gp.nc.18.name                = VectorBinaryVecNum
+gp.nc.18.returns             = Vector
+gp.nc.18.size                = 2
+gp.nc.18.child.0             = Vector
+gp.nc.18.child.1             = Number
+
+gp.nc.19                     = ec.gp.GPNodeConstraints
+gp.nc.19.name                = VectorUnaryNumber
+gp.nc.19.returns             = Vector
+gp.nc.19.size                = 1
+gp.nc.19.child.0             = Number
+
+gp.nc.20                     = ec.gp.GPNodeConstraints
+gp.nc.20.name                = NumberUnaryVector
+gp.nc.20.returns             = Number
+gp.nc.20.size                = 1
+gp.nc.20.child.0             = Vector
+
+# GPFunctionSets
+gp.fs.size          = 1
+
+gp.fs.0             = ec.gp.GPFunctionSet
+gp.fs.0.name        = Robocode
+gp.fs.0.info        = ec.gp.GPFuncInfo
+gp.fs.0.size        = 57
+
+gp.fs.0.func.0      = com.imaginaryday.ec.ecj.functions.Add
+gp.fs.0.func.0.nc   = NumberBinaryNumber
+
+gp.fs.0.func.1      = com.imaginaryday.ec.ecj.functions.Subtract
+gp.fs.0.func.1.nc   = NumberBinaryNumber
+
+gp.fs.0.func.2      = com.imaginaryday.ec.ecj.functions.Divide
+gp.fs.0.func.2.nc   = NumberBinaryNumber
+
+gp.fs.0.func.3      = com.imaginaryday.ec.ecj.functions.Multiply
+gp.fs.0.func.3.nc   = NumberBinaryNumber
+
+gp.fs.0.func.4      = com.imaginaryday.ec.ecj.functions.And
+gp.fs.0.func.4.nc   = BooleanBinaryBoolean
+
+gp.fs.0.func.5      = com.imaginaryday.ec.ecj.functions.Add
+gp.fs.0.func.5.nc   = BooleanBinaryBoolean
+
+gp.fs.0.func.6      = com.imaginaryday.ec.ecj.functions.Or
+gp.fs.0.func.6.nc   = BooleanBinaryBoolean
+
+gp.fs.0.func.7      = com.imaginaryday.ec.ecj.functions.LessThan
+gp.fs.0.func.7.nc   = BooleanBinaryNumber
+
+gp.fs.0.func.8      = com.imaginaryday.ec.ecj.functions.GreaterThan
+gp.fs.0.func.8.nc   = BooleanBinaryNumber
+
+gp.fs.0.func.9      = com.imaginaryday.ec.ecj.functions.Not
+gp.fs.0.func.9.nc   = BooleanUnaryBoolean
+
+gp.fs.0.func.10     = com.imaginaryday.ec.ecj.functions.BooleanERC
+gp.fs.0.func.10.nc  = BooleanTerminal
+
+gp.fs.0.func.11     = com.imaginaryday.ec.ecj.functions.VectorERC
+gp.fs.0.func.11.nc  = VectorTerminal
+
+gp.fs.0.func.12     = com.imaginaryday.ec.ecj.functions.DirectionPairERC
+gp.fs.0.func.12.nc  = DirectionPairTerminal
+
+gp.fs.0.func.13     = com.imaginaryday.ec.ecj.functions.FiringPairERC
+gp.fs.0.func.13.nc  = FiringPairTerminal
+
+gp.fs.0.func.56     = com.imaginaryday.ec.ecj.functions.BulletBearing
+gp.fs.0.func.56.nc  = NumberTerminal
+
+gp.fs.0.func.14     = com.imaginaryday.ec.ecj.functions.BulletEnergy
+gp.fs.0.func.14.nc  = NumberTerminal
+
+gp.fs.0.func.15     = com.imaginaryday.ec.ecj.functions.BulletSpeed
+gp.fs.0.func.15.nc  = NumberTerminal
+
+gp.fs.0.func.16     = com.imaginaryday.ec.ecj.functions.CurrentRadarHeading
+gp.fs.0.func.16.nc  = NumberTerminal
+
+gp.fs.0.func.17     = com.imaginaryday.ec.ecj.functions.CurrentTurretHeading
+gp.fs.0.func.17.nc  = NumberTerminal
+
+gp.fs.0.func.18     = com.imaginaryday.ec.ecj.functions.DotProduct
+gp.fs.0.func.18.nc  = NumberBinaryVector
+
+gp.fs.0.func.19     = com.imaginaryday.ec.ecj.functions.EnemyEnergy
+gp.fs.0.func.19.nc  = NumberTerminal
+
+gp.fs.0.func.20     = com.imaginaryday.ec.ecj.functions.EnemyHeading
+gp.fs.0.func.20.nc  = NumberTerminal
+
+gp.fs.0.func.21     = com.imaginaryday.ec.ecj.functions.EnemySpeed
+gp.fs.0.func.21.nc  = NumberTerminal
+
+gp.fs.0.func.22     = com.imaginaryday.ec.ecj.functions.EnergyLevel
+gp.fs.0.func.22.nc  = NumberTerminal
+
+gp.fs.0.func.23     = com.imaginaryday.ec.ecj.functions.GoingForward
+gp.fs.0.func.23.nc  = BooleanTerminal
+
+gp.fs.0.func.24     = com.imaginaryday.ec.ecj.functions.GunHeat
+gp.fs.0.func.24.nc  = NumberTerminal
+
+gp.fs.0.func.25     = com.imaginaryday.ec.ecj.functions.HitByBullet
+gp.fs.0.func.25.nc  = BooleanTerminal
+
+gp.fs.0.func.26     = com.imaginaryday.ec.ecj.functions.HitByBulletAge
+gp.fs.0.func.26.nc  = NumberTerminal
+
+gp.fs.0.func.27     = com.imaginaryday.ec.ecj.functions.HitWall
+gp.fs.0.func.27.nc  = BooleanTerminal
+
+gp.fs.0.func.28     = com.imaginaryday.ec.ecj.functions.HitWallAge
+gp.fs.0.func.28.nc  = NumberTerminal
+
+gp.fs.0.func.29     = com.imaginaryday.ec.ecj.functions.IfThenElse
+gp.fs.0.func.29.nc  = IfNumber
+
+gp.fs.0.func.30     = com.imaginaryday.ec.ecj.functions.IfThenElse
+gp.fs.0.func.30.nc  = IfBoolean
+
+gp.fs.0.func.31     = com.imaginaryday.ec.ecj.functions.IfThenElse
+gp.fs.0.func.31.nc  = IfVector
+
+gp.fs.0.func.32     = com.imaginaryday.ec.ecj.functions.IfThenElse
+gp.fs.0.func.32.nc  = IfFiringPair
+
+gp.fs.0.func.33     = com.imaginaryday.ec.ecj.functions.IfThenElse
+gp.fs.0.func.33.nc  = IfDirectionPair
+
+gp.fs.0.func.34     = com.imaginaryday.ec.ecj.functions.IsMoving
+gp.fs.0.func.34.nc  = BooleanTerminal
+
+gp.fs.0.func.35     = com.imaginaryday.ec.ecj.functions.IsRadarMoving
+gp.fs.0.func.35.nc  = BooleanTerminal
+
+gp.fs.0.func.36     = com.imaginaryday.ec.ecj.functions.IsTurretMoving
+gp.fs.0.func.36.nc  = BooleanTerminal
+
+gp.fs.0.func.37     = com.imaginaryday.ec.ecj.functions.MakeDirectionPair
+gp.fs.0.func.37.nc  = MakeDirPair
+
+gp.fs.0.func.38     = com.imaginaryday.ec.ecj.functions.MakeFiringPair
+gp.fs.0.func.38.nc  = MakeFirePair
+
+gp.fs.0.func.39     = com.imaginaryday.ec.ecj.functions.MySpeed
+gp.fs.0.func.39.nc  = NumberTerminal
+
+gp.fs.0.func.40     = com.imaginaryday.ec.ecj.functions.NegateVector
+gp.fs.0.func.40.nc  = VectorUnaryVector
+
+gp.fs.0.func.41     = com.imaginaryday.ec.ecj.functions.NumberERC
+gp.fs.0.func.41.nc  = NumberTerminal
+
+gp.fs.0.func.42     = com.imaginaryday.ec.ecj.functions.Rammed
+gp.fs.0.func.42.nc  = BooleanTerminal
+
+gp.fs.0.func.43     = com.imaginaryday.ec.ecj.functions.RammedAge
+gp.fs.0.func.43.nc  = NumberTerminal
+
+gp.fs.0.func.44     = com.imaginaryday.ec.ecj.functions.RammerBearing
+gp.fs.0.func.44.nc  = NumberTerminal
+
+gp.fs.0.func.45     = com.imaginaryday.ec.ecj.functions.RamMyFault
+gp.fs.0.func.45.nc  = BooleanTerminal
+
+gp.fs.0.func.46     = com.imaginaryday.ec.ecj.functions.RotateVector
+gp.fs.0.func.46.nc  = VectorBinaryVecNum
+
+gp.fs.0.func.47     = com.imaginaryday.ec.ecj.functions.ScaleVector
+gp.fs.0.func.47.nc  = VectorBinaryVecNum
+
+gp.fs.0.func.48     = com.imaginaryday.ec.ecj.functions.ScannedEnemy
+gp.fs.0.func.48.nc  = BooleanTerminal
+
+gp.fs.0.func.49     = com.imaginaryday.ec.ecj.functions.ScannedEnemyAge
+gp.fs.0.func.49.nc  = NumberTerminal
+
+gp.fs.0.func.50     = com.imaginaryday.ec.ecj.functions.VectorFromHeading
+gp.fs.0.func.50.nc  = VectorUnaryNumber
+
+gp.fs.0.func.51     = com.imaginaryday.ec.ecj.functions.VectorHeading
+gp.fs.0.func.51.nc  = NumberUnaryVector
+
+gp.fs.0.func.52     = com.imaginaryday.ec.ecj.functions.VectorLength
+gp.fs.0.func.52.nc  = NumberUnaryVector
+
+gp.fs.0.func.53     = com.imaginaryday.ec.ecj.functions.VectorToEnemy
+gp.fs.0.func.53.nc  = VectorTerminal
+
+gp.fs.0.func.54     = com.imaginaryday.ec.ecj.functions.VectorToForwardWall
+gp.fs.0.func.54.nc  = VectorTerminal
+
+gp.fs.0.func.55     = com.imaginaryday.ec.ecj.functions.VectorToNearestWall
+gp.fs.0.func.55.nc  = VectorTerminal
 
 # GPTreeConstraints
 gp.tc.size          = 3
@@ -157,5 +540,6 @@ gp.koza.half.min-depth = 2
 gp.koza.half.max-depth = 6
 gp.koza.half.growp = 0.5
 
-# GPFunctionSets
-gp.fs
+
+
+

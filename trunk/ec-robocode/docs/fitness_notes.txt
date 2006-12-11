@@ -51,3 +51,6 @@ Run #10
 Run #11
 + using new fitness
 + values back to 600,95,5,1 elite,1 cull,no random
+
+Run #12
++ random gens

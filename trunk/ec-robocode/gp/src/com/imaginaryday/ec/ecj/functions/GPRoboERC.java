@@ -18,7 +18,7 @@ public abstract class GPRoboERC extends ERC implements GPRoboForm {
     public void setAgent(ECJAgent agent) {
         this.agent = agent;
         for (GPNode aChildren : children) {
-            ((GPRoboNode) aChildren).setAgent(agent);
+            ((GPRoboForm) aChildren).setAgent(agent);
         }
     }
 
